@@ -2,16 +2,19 @@
   "name": "mia-experiment-api",
   "version": "0.0.0",
   "description": "MIA Experiment API",
-  "main": "app.js",
+  "main": "index.js",
   "dependencies": {
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "sqlite3": "^4.1.0"
   },
   "scripts": {
-    "start": "node app.js"
+    "start": "nodemon index.js"
   },
   "author": {
     "name": "Shan Rauf"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.4"
   }
 }

@@ -37,7 +37,7 @@ app.post("/api/users", function(req, res) {
 });
 
 app.get("/api/users/:user", function(req, res) {
-  let user = req.params.id;
+  let user = req.params.user;
   // let query = "select * from [user]";
   res.send(user);
 });
