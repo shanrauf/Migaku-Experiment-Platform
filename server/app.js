@@ -1,7 +1,24 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
+const path = require("path");
+const DIST_DIR = __dirname;
+const HTML_FILE = path.join(DIST_DIR, "index.html");
 
+const webpack = require("webpack");
+const webpackDevMiddleware = require("webpack-dev-middleware");
+const config = require("../webpack.config.js");
+const compiler = webpack(config);
+
+// Tell express to use the webpack-dev-middleware and use the webpack.config.js
+// configuration file as a base.
+app.use(
+  webpackDevMiddleware(compiler, {
+    publicPath: config.output.publicPath
+  })
+);
+
+app.use(express.static(DIST_DIR));
 app.use(bodyParser.json());
 
 // CORS Middleware
@@ -16,7 +33,7 @@ app.use(function(req, res, next) {
 });
 
 //Set up server
-let server = app.listen(process.env.PORT || 8080, function() {
+let server = app.listen(process.env.PORT || 3000, function() {
   let port = server.address().port;
   console.log("App now running on port", port);
 });
@@ -40,4 +57,8 @@ app.get("/api/users/:user", function(req, res) {
   let user = req.params.user;
   // let query = "select * from [user]";
   res.send(user);
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(HTML_FILE);
 });
