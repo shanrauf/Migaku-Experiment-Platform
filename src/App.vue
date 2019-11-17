@@ -2,16 +2,11 @@
   <div id="app">
     <v-app id="vuetify">
       <v-content>
-        <BaseNav />
-        <v-container>
-          <v-layout justify-center>
-            <v-flex>
-              <transition name="fade" mode="out-in">
-                <router-view />
-              </transition>
-            </v-flex>
-          </v-layout>
-        </v-container>
+        <div class="form-banner" />
+
+        <transition name="fade" mode="out-in">
+          <router-view />
+        </transition>
       </v-content>
       <BaseFooter />
     </v-app>
@@ -19,13 +14,11 @@
 </template>
 
 <script>
-import BaseNav from "@/components/BaseNav.vue";
 import BaseFooter from "@/components/BaseFooter.vue";
 
 export default {
   name: "App",
   components: {
-    BaseNav,
     BaseFooter
   }
 };
@@ -39,6 +32,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: #fafafa;
 }
+.form-banner {
+  height: 200px;
+  background-color: #204f70;
+}
+
 /* Router transitions */
 .fade-enter-active,
 .fade-leave-active {

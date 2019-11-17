@@ -1,6 +1,11 @@
 <template>
-  <div>
+  <div class="survey-container">
+    <aside class="side-navigation-bar">Side Nav</aside>
     <h1>MIA Mid-Experiment Survey #1</h1>
+
+    <br />
+
+    <SurveySection />
 
     <br />
 
@@ -83,14 +88,26 @@
 </template>
 
 <script>
+import SurveySection from "@/components/SurveySection.vue";
 const CardTypeSurvey = () => import("@/components/CardTypeSurvey.vue");
-
 export default {
   components: {
-    CardTypeSurvey
+    CardTypeSurvey,
+    SurveySection
   },
   data() {
     return {
+      surveySections: [
+        {
+          sectionName: "Basic Information"
+        },
+        {
+          sectionName: "Immersion Stats"
+        },
+        {
+          sectionName: ""
+        }
+      ],
       validPageOne: false,
       stepperPage: 1,
       preferredCardType: "",
@@ -157,4 +174,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.survey-container {
+  margin: auto;
+  width: 650px;
+}
+.side-navigation-bar {
+  position: fixed;
+  left: 0;
+  top: 350px;
+}
 </style>
