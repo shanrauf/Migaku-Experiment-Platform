@@ -1,6 +1,6 @@
 <template>
   <div class="survey-container">
-    <aside class="side-navigation-bar">Side Nav</aside>
+    <aside class="side-navigation-bar">Side Navigation</aside>
     <h1>MIA Mid-Experiment Survey #1</h1>
 
     <br />
@@ -180,7 +180,7 @@ export default {
 }
 .side-navigation-bar {
   position: fixed;
-  left: 0;
+  left: 15px;
   top: 350px;
 }
 </style>

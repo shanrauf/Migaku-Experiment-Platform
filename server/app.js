@@ -14,9 +14,13 @@ const compiler = webpack(config);
 // configuration file as a base.
 app.use(
   webpackDevMiddleware(compiler, {
+    noInfo: true,
     publicPath: config.output.publicPath
   })
 );
+
+// Webpack HMR
+app.use(require("webpack-hot-middleware")(compiler));
 
 app.use(express.static(DIST_DIR));
 app.use(bodyParser.json());
@@ -38,9 +42,6 @@ let server = app.listen(process.env.PORT || 3000, function() {
   console.log("App now running on port", port);
 });
 
-// Initialize database
-// ...
-
 //GET API
 app.get("/api/users", function(req, res) {
   // let query = "select * from users";
@@ -59,6 +60,6 @@ app.get("/api/users/:user", function(req, res) {
   res.send(user);
 });
 
-app.get("*", (req, res) => {
+app.get("/", (req, res) => {
   res.sendFile(HTML_FILE);
 });

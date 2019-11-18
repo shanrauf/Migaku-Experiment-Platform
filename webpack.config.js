@@ -6,7 +6,7 @@ const FriendlyErrorsPlugin = require("friendly-errors-webpack-plugin");
 const VuetifyLoaderPlugin = require("vuetify-loader/lib/plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+// const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
 //   .BundleAnalyzerPlugin;
 
 function ifUtil(NODE_ENV) {
@@ -22,7 +22,7 @@ function ifUtil(NODE_ENV) {
 const ifDevElseProd = ifUtil(process.env.NODE_ENV);
 
 module.exports = {
-  mode: process.env.NODE_ENV,
+  mode: ifDevElseProd("development", "production"),
   target: "web",
   devtool: "cheap-module-eval-source-map",
   devServer: {
@@ -43,7 +43,8 @@ module.exports = {
       builtAt: false,
       errorDetails: false,
       entrypoints: false,
-      warnings: false,
+      warnings: ifDevElseProd(false, true),
+      performance: { hints: ifDevElseProd(false, true) },
       publicPath: false
     },
     port: 8080,
@@ -52,7 +53,10 @@ module.exports = {
     quiet: true
   },
   entry: {
-    main: "./src/main.js"
+    main: [
+      "webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000",
+      "./src/main.js"
+    ]
   },
   resolve: {
     extensions: [".js", ".vue"],
@@ -69,12 +73,9 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        include: path.resolve(__dirname, "src"),
         use: {
-          loader: "babel-loader",
-          options: {
-            presets: ["@babel/preset-env"]
-          }
+          loader: "babel-loader"
         }
       },
       {
@@ -122,7 +123,8 @@ module.exports = {
       hash: true
     })
     // new BundleAnalyzerPlugin({
-    //   openAnalyzer: false,
+    //   openAnalyzer: true,
+    //   analyzerPort: 9999,
     //   generateStatsFile: false,
     //   statsOptions: {
     //     exclude: /node_modules/,
@@ -136,8 +138,9 @@ module.exports = {
     // })
   ],
   output: {
+    path: path.resolve(__dirname, "./dist"),
     pathinfo: false,
-    filename: "[name].js",
+    filename: "[name].bundle.js",
     chunkFilename: "chunks/[chunkhash].chunk.js",
     publicPath: "/"
   },
@@ -162,7 +165,8 @@ module.exports = {
           comments: false,
           compress: {
             drop_console: ifDevElseProd(false, true),
-            inline: false
+            inline: false,
+            collapse_vars: ifDevElseProd(false, true)
           },
           parse: {},
           mangle: true,
