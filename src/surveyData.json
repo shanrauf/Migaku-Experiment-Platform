@@ -1,6 +1,6 @@
 {
   "title": "MIA Mid-Experiment Survey #1",
-  "description": "This is the first weekly survey to gauge your progress throughout the experiment.",
+  "description": "This is the first weekly survey to gauge your progress during the experiment.",
   "sections": [
     {
       "id": 1,
@@ -59,7 +59,7 @@
           "key": "daysOfActiveImmersionMissed",
           "label": "Days of Active Immersion Missed",
           "type": "number",
-          "question": "How many days of active immersion did you miss this week?",
+          "question": "How many days of active immersion did you miss this week? (NOTE: If you immersed a bit less than your average immersion time, you can still count that as a day of immersion.)",
           "value": 0,
           "items": "daysInAWeek"
         },

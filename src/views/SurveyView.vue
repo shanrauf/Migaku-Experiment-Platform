@@ -1,34 +1,22 @@
 <template>
   <div class="survey-container">
-    <aside class="side-navigation-bar">
-      <v-card>
-        <v-row
-          justify="center"
-          v-for="section in getSurveyData.sections"
-          :key="section.title"
-        >
-          <a>
-            {{ section.title }}
-          </a>
-        </v-row>
-      </v-card>
-    </aside>
-
+    <SideNavigation :sections="getSurveySectionTitles" />
     <br />
-
     <FormBuilder :surveyData="getSurveyData" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import SideNavigation from "@/components/SideNavigation.vue";
 import FormBuilder from "@/components/FormBuilder.vue";
 export default {
   components: {
-    FormBuilder
+    FormBuilder,
+    SideNavigation
   },
   computed: {
-    ...mapGetters(["getSurveyData"])
+    ...mapGetters(["getSurveyData", "getSurveySectionTitles"])
   }
 };
 </script>
@@ -36,13 +24,7 @@ export default {
 <style lang="scss" scoped>
 .survey-container {
   margin: auto;
-  margin-top: -80px;
-  width: 800px;
-}
-.side-navigation-bar {
-  position: fixed;
-  width: 200px;
-  left: 30px;
-  top: 350px;
+  margin-top: -112px;
+  width: 750px;
 }
 </style>

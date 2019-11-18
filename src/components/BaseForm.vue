@@ -1,13 +1,7 @@
 <template>
   <v-form class="form" lazy-validation>
-    <div class="section-label">
-      <div class="section-label-text-container">
-        <div class="section-label-text">Section 1</div>
-      </div>
-    </div>
     <div v-for="question in questions" :key="question.key">
-      <h2>{{ question.question }}</h2>
-
+      <h3>{{ question.question }}</h3>
       <component
         :is="typeToComponent(question.type)"
         :loading="!question.question"
@@ -65,7 +59,7 @@ export default {
   },
   methods: {
     typeToComponent(questionType) {
-      if (["text", "number"].includes(questionType)) {
+      if (questionType == "text") {
         return "BaseTextField";
       } else {
         return "BaseSelect";
@@ -80,6 +74,7 @@ export default {
       }
     },
     parseQuery(queryString) {
+      // returns key-value pairs object: {"key1": "val1", "key2": "val2"}
       let keyValueArray = queryString.replace(/^\?/, "").split("&");
       let queryObject = {};
       for (let pair of keyValueArray) {
@@ -90,6 +85,7 @@ export default {
       return queryObject;
     },
     getRules(questionRulesParams) {
+      // generate array of rule functions for form inputs
       if (questionRulesParams === undefined) {
         return [];
       }
@@ -113,46 +109,4 @@ export default {
 .form {
   margin: 20px;
 }
-.section-label {
-  flex-grow: 1;
-  -webkit-box-align: start;
-  align-items: flex-start;
-  background-color: #fff;
-  display: flex;
-  height: 40px;
-  overflow-y: visible;
-  padding-right: 2px;
-}
-.section-label-text-container {
-  background-color: #204f70;
-  color: white;
-  min-width: 0%;
-  display: block;
-}
-.section-label-text {
-  padding: 8px 8px 8px 42px;
-}
-.freebirdMaterialHeaderbannerSectionTriangleContainer {
-  -webkit-flex-shrink: 0;
-  flex-shrink: 0;
-  overflow: hidden;
-  position: relative;
-  width: 18px;
-}
-.freebirdMaterialHeaderbannerSectionTriangle {
-  height: 100%;
-  overflow: visible;
-  position: absolute;
-  width: 90%;
-}
-// .freebirdMaterialHeaderbannerSectionTriangle > polygon {
-//   stroke-width: 1;
-// }
-// .freebirdSolidFill {
-//   fill: rgb(103, 58, 183);
-//   stroke: rgb(103, 58, 183);
-// }
-// :not(svg) {
-//   transform-origin: 0px 0px;
-// }
 </style>

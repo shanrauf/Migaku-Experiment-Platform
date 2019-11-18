@@ -8,7 +8,14 @@ const state = () => {
 };
 
 const getters = {
-  getSurveyData: state => state.surveyData
+  getSurveyData: state => state.surveyData,
+  getSurveySectionTitles: state => {
+    let sectionTitles = [];
+    state.surveyData.sections.forEach(section =>
+      sectionTitles.push(section.title)
+    );
+    return sectionTitles;
+  }
 };
 
 const actions = {
@@ -28,7 +35,6 @@ const mutations = {
   editQuestionValue(state, question, newValue) {
     console.log(question);
     console.log(newValue);
-
     // question.value = newValue;
     // console.log(question);
   }
