@@ -1,0 +1,158 @@
+{
+  "title": "MIA Mid-Experiment Survey #1",
+  "description": "This is the first weekly survey to gauge your progress throughout the experiment.",
+  "sections": [
+    {
+      "id": 1,
+      "sectionName": "Basic Information",
+      "questions": [
+        {
+          "key": "name",
+          "label": "Name",
+          "type": "text",
+          "question": "What is your name?",
+          "value": ""
+        },
+        {
+          "key": "email",
+          "label": "Email",
+          "type": "email",
+          "question": "What is your email?",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "sectionName": "Immersion Stats",
+      "description": "This section will help us understand how you study Japanese. Don't feel bad if your answer to any of these questions is zero XD",
+      "questions": [
+        {
+          "key": "avgActiveListening",
+          "label": "Average Hours of Active Listening",
+          "type": "number",
+          "question": "How many hours of active listening did you do this week?",
+          "value": 0
+        },
+        {
+          "key": "avgPassiveListening",
+          "label": "Average Hours of Passive Listening",
+          "type": "number",
+          "question": "How many hours of passive listening did you do this week?",
+          "value": 0
+        },
+        {
+          "key": "avgReading",
+          "label": "Average Hours of Reading",
+          "type": "number",
+          "question": "How many hours of reading did you do this week?",
+          "value": 0
+        },
+        {
+          "key": "daysOfActiveImmersionMissed",
+          "label": "Days of Active Immersion Missed",
+          "type": "number",
+          "question": "How many days of active immersion did you miss this week?",
+          "value": 0
+        },
+        {
+          "key": "daysOfReadingMissed",
+          "label": "Days of Reading Missed",
+          "type": "number",
+          "question": "How many days of reading did you miss this week?",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "sectionName": "Card Types",
+      "subsections": [
+        {
+          "name": "Card Type 1",
+          "image": "",
+          "questions": [
+            {
+              "key": "difficultyToLearnNewCards",
+              "label": "Difficulty to Learn New Cards",
+              "type": "number",
+              "question": "On a scale of 1-5, how difficult is it to learn new cards?",
+              "value": 0
+            },
+            {
+              "key": "difficultyToRememberLearnedCards",
+              "label": "Difficulty to Remember Learned Cards",
+              "type": "number",
+              "question": "On a scale of 1-5, how difficult is it to remember learned cards (cards you have already seen once)?",
+              "value": 0
+            },
+            {
+              "key": "howEnjoyableIsReviewing",
+              "label": "How enjoyable is reviewing this card type?",
+              "type": "number",
+              "question": "On a scale of 1-5, how difficult is it to remember learned cards (cards you have already seen once)?",
+              "value": 0
+            },
+            {
+              "key": "cardLeadsToUnderstandingInImmersion",
+              "label": "On a scale of 1-5, how well would you say this card type leads to improved understanding in immersion?",
+              "type": "number",
+              "question": "On a scale of 1-5, how difficult is it to remember learned cards (cards you have already seen once)?",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "name": "Card Type 2",
+          "image": "",
+          "questions": [
+            {
+              "key": "difficultyToLearnNewCards",
+              "label": "Difficulty to Learn New Cards",
+              "type": "number",
+              "question": "On a scale of 1-5, how difficult is it to learn new cards?",
+              "value": 0
+            },
+            {
+              "key": "difficultyToRememberLearnedCards",
+              "label": "Difficulty to Remember Learned Cards",
+              "type": "number",
+              "question": "On a scale of 1-5, how difficult is it to remember learned cards (cards you have already seen once)?",
+              "value": 0
+            },
+            {
+              "key": "howEnjoyableIsReviewing",
+              "label": "How enjoyable is reviewing this card type?",
+              "type": "number",
+              "question": "On a scale of 1-5, how difficult is it to remember learned cards (cards you have already seen once)?",
+              "value": 0
+            },
+            {
+              "key": "cardLeadsToUnderstandingInImmersion",
+              "label": "On a scale of 1-5, how well would you say this card type leads to improved understanding in immersion?",
+              "type": "number",
+              "question": "On a scale of 1-5, how difficult is it to remember learned cards (cards you have already seen once)?",
+              "value": 0
+            }
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "key": "difficultyOfCardTypes",
+          "label": "Difficulty of Card Types",
+          "type": "number",
+          "question": "On a scale of 1-5, how dificult are the card types we're testing?",
+          "value": 0
+        },
+        {
+          "key": "preferredCardType",
+          "label": "Preferred Card Type",
+          "type": "select",
+          "question": "Which of the card types do you prefer to review in Anki?",
+          "value": ""
+        }
+      ]
+    }
+  ]
+}
