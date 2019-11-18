@@ -1,24 +1,16 @@
 <template>
   <v-card raised>
-    <v-card-title v-if="title">{{ title }}</v-card-title>
-    <v-card-text v-if="description">{{ description }}</v-card-text>
-    <slot></slot>
+    <h1 style="text-align: center">
+      <slot name="title"></slot>
+    </h1>
+    <br />
+    <p style="text-align: center">
+      <slot name="description"></slot>
+    </p>
+    <slot name="body"></slot>
   </v-card>
 </template>
 
-<script>
-export default {
-  props: {
-    title: {
-      type: String,
-      required: false
-    },
-    description: {
-      type: String,
-      required: false
-    }
-  }
-};
-</script>
+<script></script>
 
 <style lang="scss" scoped></style>

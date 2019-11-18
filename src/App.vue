@@ -3,7 +3,6 @@
     <v-app id="vuetify">
       <v-content>
         <div class="form-banner" />
-
         <transition name="fade" mode="out-in">
           <router-view />
         </transition>
@@ -25,12 +24,12 @@ export default {
 </script>
 
 <style>
-body {
+#vuetify {
   font-size: 100%;
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #fafafa;
+  background-color: #f2f3f4;
 }
 .form-banner {
   height: 200px;

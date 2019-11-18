@@ -5,10 +5,10 @@
         <v-row
           justify="center"
           v-for="section in getSurveyData.sections"
-          :key="section.sectionName"
+          :key="section.title"
         >
           <a>
-            {{ section.sectionName }}
+            {{ section.title }}
           </a>
         </v-row>
       </v-card>
@@ -37,7 +37,7 @@ export default {
 .survey-container {
   margin: auto;
   margin-top: -80px;
-  width: 850px;
+  width: 800px;
 }
 .side-navigation-bar {
   position: fixed;

@@ -4,19 +4,23 @@
   "sections": [
     {
       "id": 1,
-      "sectionName": "Basic Information",
+      "title": "Basic Information",
+      "description": "This section is simply for us to identify who is filling out the survey.",
       "questions": [
         {
           "key": "name",
           "label": "Name",
           "type": "text",
+          "rules": "maxChar=100&minChar=1",
           "question": "What is your name?",
-          "value": ""
+          "value": "",
+          "required": true
         },
         {
           "key": "email",
           "label": "Email",
-          "type": "email",
+          "type": "text",
+          "rules": "maxChar=100&minChar=1&email=true",
           "question": "What is your email?",
           "value": ""
         }
@@ -24,7 +28,7 @@
     },
     {
       "id": 2,
-      "sectionName": "Immersion Stats",
+      "title": "Immersion Stats",
       "description": "This section will help us understand how you study Japanese. Don't feel bad if your answer to any of these questions is zero XD",
       "questions": [
         {
@@ -32,41 +36,47 @@
           "label": "Average Hours of Active Listening",
           "type": "number",
           "question": "How many hours of active listening did you do this week?",
-          "value": 0
+          "value": 0,
+          "items": "hoursInAWeek"
         },
         {
           "key": "avgPassiveListening",
           "label": "Average Hours of Passive Listening",
           "type": "number",
           "question": "How many hours of passive listening did you do this week?",
-          "value": 0
+          "value": 0,
+          "items": "hoursInAWeek"
         },
         {
           "key": "avgReading",
           "label": "Average Hours of Reading",
           "type": "number",
           "question": "How many hours of reading did you do this week?",
-          "value": 0
+          "value": 0,
+          "items": "hoursInAWeek"
         },
         {
           "key": "daysOfActiveImmersionMissed",
           "label": "Days of Active Immersion Missed",
           "type": "number",
           "question": "How many days of active immersion did you miss this week?",
-          "value": 0
+          "value": 0,
+          "items": "daysInAWeek"
         },
         {
           "key": "daysOfReadingMissed",
           "label": "Days of Reading Missed",
           "type": "number",
           "question": "How many days of reading did you miss this week?",
-          "value": 0
+          "value": 0,
+          "items": "daysInAWeek"
         }
       ]
     },
     {
       "id": 3,
-      "sectionName": "Card Types",
+      "title": "Card Types",
+      "description": "This section is for us to understand your feelings about the card types we are testing.",
       "subsections": [
         {
           "name": "Card Type 1",
@@ -77,28 +87,32 @@
               "label": "Difficulty to Learn New Cards",
               "type": "number",
               "question": "On a scale of 1-5, how difficult is it to learn new cards?",
-              "value": 0
+              "value": 0,
+              "items": "oneToFiveScale"
             },
             {
               "key": "difficultyToRememberLearnedCards",
               "label": "Difficulty to Remember Learned Cards",
               "type": "number",
               "question": "On a scale of 1-5, how difficult is it to remember learned cards (cards you have already seen once)?",
-              "value": 0
+              "value": 0,
+              "items": "oneToFiveScale"
             },
             {
               "key": "howEnjoyableIsReviewing",
               "label": "How enjoyable is reviewing this card type?",
               "type": "number",
               "question": "On a scale of 1-5, how difficult is it to remember learned cards (cards you have already seen once)?",
-              "value": 0
+              "value": 0,
+              "items": "oneToFiveScale"
             },
             {
               "key": "cardLeadsToUnderstandingInImmersion",
               "label": "On a scale of 1-5, how well would you say this card type leads to improved understanding in immersion?",
               "type": "number",
               "question": "On a scale of 1-5, how difficult is it to remember learned cards (cards you have already seen once)?",
-              "value": 0
+              "value": 0,
+              "items": "oneToFiveScale"
             }
           ]
         },
@@ -111,28 +125,32 @@
               "label": "Difficulty to Learn New Cards",
               "type": "number",
               "question": "On a scale of 1-5, how difficult is it to learn new cards?",
-              "value": 0
+              "value": 0,
+              "items": "oneToFiveScale"
             },
             {
               "key": "difficultyToRememberLearnedCards",
               "label": "Difficulty to Remember Learned Cards",
               "type": "number",
               "question": "On a scale of 1-5, how difficult is it to remember learned cards (cards you have already seen once)?",
-              "value": 0
+              "value": 0,
+              "items": "oneToFiveScale"
             },
             {
               "key": "howEnjoyableIsReviewing",
               "label": "How enjoyable is reviewing this card type?",
               "type": "number",
               "question": "On a scale of 1-5, how difficult is it to remember learned cards (cards you have already seen once)?",
-              "value": 0
+              "value": 0,
+              "items": "oneToFiveScale"
             },
             {
               "key": "cardLeadsToUnderstandingInImmersion",
               "label": "On a scale of 1-5, how well would you say this card type leads to improved understanding in immersion?",
               "type": "number",
               "question": "On a scale of 1-5, how difficult is it to remember learned cards (cards you have already seen once)?",
-              "value": 0
+              "value": 0,
+              "items": "oneToFiveScale"
             }
           ]
         }
@@ -143,7 +161,8 @@
           "label": "Difficulty of Card Types",
           "type": "number",
           "question": "On a scale of 1-5, how dificult are the card types we're testing?",
-          "value": 0
+          "value": 0,
+          "items": "oneToFiveScale"
         },
         {
           "key": "preferredCardType",
