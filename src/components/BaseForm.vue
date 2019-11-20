@@ -1,6 +1,8 @@
 <template>
   <v-form class="form" lazy-validation>
-    <div v-for="question in questions" :key="question.key">
+    <h1 style="margin: 20px 20px 5px 0">{{ section.title }}</h1>
+    <p style="margin: 0 20px 20px 0">{{ section.description }}</p>
+    <div v-for="question in section.questions" :key="question.key">
       <h3>{{ question.question }}</h3>
       <component
         :is="typeToComponent(question.type)"
@@ -11,34 +13,40 @@
         :rules="getRules(question.rules)"
       />
     </div>
+    <v-row v-if="section.subsections">
+      <v-col v-for="subsection in section.subsections" :key="subsection.name">
+        <BaseForm :section="subsection" />
+      </v-col>
+    </v-row>
   </v-form>
 </template>
 
 <script>
+const BaseForm = () => import("@/components/BaseForm.vue"); // recursive calls for subsections
 const BaseTextField = () => import("@/components/BaseTextField.vue");
 const BaseSelect = () => import("@/components/BaseSelect.vue");
 
 export default {
   props: {
-    questions: {
-      type: Array,
+    section: {
+      type: Object,
       required: true
     }
   },
   components: {
+    BaseForm,
     BaseTextField,
     BaseSelect
   },
   data() {
     return {
-      hoursInADay: [...Array(25).keys()],
-      hoursInAWeek: [...Array(169).keys()],
-      oneToFiveScale: [...Array(6).keys()],
-      daysInAWeek: [...Array(8).keys()],
-      textRules: [
-        v => (v && v.length <= 50) || "Name must be less than 10 characters"
-      ],
-      rules: {
+      items: {
+        hoursInADay: [...Array(25).keys()],
+        hoursInAWeek: [...Array(169).keys()],
+        oneToFiveScale: [...Array(6).keys()],
+        daysInAWeek: [...Array(8).keys()]
+      },
+      ruleGenerators: {
         maxChar: val => v =>
           (v && v.length <= val) || `Must be less than ${val} characters`,
         minChar: val => v =>
@@ -50,11 +58,7 @@ export default {
             return undefined;
           }
         }
-      },
-      emailRules: [
-        v => !!v || "E-mail is required",
-        v => /.+@.+\..+/.test(v) || "E-mail must be valid"
-      ]
+      }
     };
   },
   methods: {
@@ -66,11 +70,15 @@ export default {
       }
     },
     getItems(questionItems) {
-      let items = this[questionItems];
-      if (items === undefined) {
-        return [];
-      } else {
-        return items;
+      if (typeof questionItems == "string") {
+        let items = this.items[questionItems];
+        if (items === undefined) {
+          return [];
+        } else {
+          return items;
+        }
+      } else if (typeof questionItems == "object") {
+        return questionItems;
       }
     },
     parseQuery(queryString) {
@@ -95,9 +103,9 @@ export default {
       }
       let rulesArray = [];
       for (let key in queryObject) {
-        // e.x if queryObject = {"test1": 1}, then key = "test1" and queryObject[key] = 1
-        let ruleFunction = this.rules[key];
-        rulesArray.push(ruleFunction(queryObject[key]));
+        // e.x if queryObject = {"maxChar": 50}, then key = "maxChar" and queryObject[key] = 50
+        let ruleFunctionGenerator = this.ruleGenerators[key];
+        rulesArray.push(ruleFunctionGenerator(queryObject[key]));
       }
       return rulesArray;
     }

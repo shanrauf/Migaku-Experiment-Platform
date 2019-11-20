@@ -45,7 +45,6 @@ export default {
     window.onscroll = e => {
       this.sideNavigationCSS.top = this.originalTop + window.pageYOffset + "px";
     };
-    console.log(this.camelCase(this.sections[0]));
   },
   methods: {
     camelCase(str) {

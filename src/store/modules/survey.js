@@ -9,6 +9,7 @@ const state = () => {
 
 const getters = {
   getSurveyData: state => state.surveyData,
+  getNumberOfSections: state => state.surveyData.sections.length,
   getSurveySectionTitles: state => {
     let sectionTitles = [];
     state.surveyData.sections.forEach(section =>

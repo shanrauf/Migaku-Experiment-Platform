@@ -8,11 +8,11 @@ Vue.config.performance = true;
 
 import Vuetify from "vuetify/lib/framework";
 import "vuetify/dist/vuetify.min.css";
-// import "material-icons";
+import "material-icons";
 // import "@mdi/font/css/materialdesignicons.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 
-// necessary for index.html
+// necessary for Webpack to bundle favicon for index.html
 require("@/assets/images/favicon.ico");
 
 const opts = {

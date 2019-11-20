@@ -1,29 +1,25 @@
 <template>
   <div>
-    <div :id="camelCase(section.title)" v-for="section in surveyData.sections" :key="section.id">
-      <BaseCard>
-        <div v-if="section.id == 1">
-          <h1 style="text-align: center">{{surveyData.title}}</h1>
-          <p style="text-align: center">{{surveyData.description}}</p>
-        </div>
-        <div class="section-label">
-          <div class="section-label-text-container">
-            <div class="section-label-text">Section {{section.id}} of {{surveyData.sections.length}}</div>
-          </div>
-          <div class="triangle"></div>
-        </div>
-        <h1 style="margin: 20px 20px 5px 20px">{{ section.title }}</h1>
-        <p style="margin: 0 20px 20px 20px">{{ section.description }}</p>
-        <BaseForm :questions="section.questions" />
-      </BaseCard>
-      <br v-if="section.id != surveyData.sections.length" />
-    </div>
+    <BaseCard
+      :id="camelCase(section.title)"
+      v-for="section in surveyData.sections"
+      :key="section.id"
+    >
+      <div v-if="section.id == 1">
+        <h1 style="text-align: center">{{surveyData.title}}</h1>
+        <p style="text-align: center">{{surveyData.description}}</p>
+      </div>
+      <SectionBanner :sectionId="section.id" :numberOfSections="getNumberOfSections" />
+      <BaseForm :section="section" />
+    </BaseCard>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import BaseForm from "@/components/BaseForm.vue";
 import BaseCard from "@/components/BaseCard.vue";
+import SectionBanner from "@/components/SectionBanner.vue";
 
 export default {
   props: {
@@ -34,7 +30,8 @@ export default {
   },
   components: {
     BaseCard,
-    BaseForm
+    BaseForm,
+    SectionBanner
   },
   created() {
     // create survey data when calling from server
@@ -46,8 +43,10 @@ export default {
         offset: 0,
         easing: "easeInCubic"
       }
-      // easings: Object.keys(easings)
     };
+  },
+  computed: {
+    ...mapGetters(["getNumberOfSections"])
   },
   methods: {
     camelCase(str) {
@@ -60,32 +59,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.section-label {
-  flex-grow: 1;
-  -webkit-box-align: start;
-  align-items: flex-start;
-  background-color: #fff;
-  display: flex;
-  height: 40px;
-  overflow-y: visible;
-  padding-right: 2px;
-}
-.section-label-text-container {
-  background-color: #204f70;
-  color: white;
-  min-width: 0%;
-  display: block;
-}
-.section-label-text {
-  padding: 8px 8px 8px 42px;
-}
-.triangle {
-  margin: 0px;
-  padding: 0px;
-  display: inline-block;
-  border-top: 40px solid #204f70;
-  border-right: 30px solid transparent;
-}
-</style>
