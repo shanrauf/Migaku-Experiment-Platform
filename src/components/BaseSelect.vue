@@ -1,6 +1,7 @@
 <template>
   <v-skeleton-loader transition="fade-transition" :loading="loading" type="heading">
     <v-select
+      v-model="inputValue"
       menu-props="menuProps"
       hide-selected
       :items="items"
@@ -8,6 +9,7 @@
       :value="initialValue"
       :rules="rules"
       :label="label || 'Select one:'"
+      @input="$emit('update', inputValue)"
     ></v-select>
   </v-skeleton-loader>
 </template>
@@ -47,7 +49,8 @@ export default {
         closeOnContentClick: true,
         openOnClick: true,
         transition: true
-      }
+      },
+      inputValue: ""
     };
   }
 };
