@@ -21,8 +21,8 @@
     </v-row>
 
     <div v-if="section.id == getNumberOfSections">
-      <v-btn>Back</v-btn>
-      <v-btn color="primary">Submit</v-btn>
+      <v-btn style="margin: 10px">Back</v-btn>
+      <v-btn style="margin: 10px" color="primary">Submit</v-btn>
     </div>
   </v-form>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <v-card :style="sideNavigationCSS" class="side-nav-transition">
+  <v-card :style="sideNavigationCSS" class="side-nav-transition" v-resize="onResize">
     <v-tabs
       v-model="currentSection"
       background-color="transparent"
@@ -42,11 +42,17 @@ export default {
     };
   },
   mounted() {
+    this.onResize();
     window.onscroll = e => {
       this.sideNavigationCSS.top = this.originalTop + window.pageYOffset + "px";
     };
   },
   methods: {
+    onResize() {
+      // either create breakpoints or derive a better function to move the side nav, or find way to move the sidenav relative to FormBuilder
+      this.sideNavigationCSS.left =
+        Math.round(window.innerWidth * 0.1 - 50, 1) + "px";
+    },
     camelCase(str) {
       return str
         .replace(/(?:^\w|[A-Z]|\b\w)/g, function(word, index) {
