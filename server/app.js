@@ -48,6 +48,13 @@ app.get("/api/users", function(req, res) {
   res.send("Hiya!");
 });
 
+// get latest survey in db
+// parse url for query params (grab that function from src/mixins)
+app.get("/api/surveys", function(req, res) {
+  // let query = "select * from users";
+  res.send("Hiya!");
+});
+
 // create user
 app.post("/api/users", function(req, res) {
   // let query = "select * from users";

@@ -4,3 +4,5 @@ node_modules/
 
 # Webpack output folder
 dist/
+
+src/surveyData.json
