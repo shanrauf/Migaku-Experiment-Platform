@@ -1,7 +1,6 @@
 <template>
   <div class="survey-container">
     <SideNavigation :sections="getSurveySectionTitles" />
-    <br />
     <FormBuilder :surveyData="getSurveyData" />
   </div>
 </template>
@@ -14,6 +13,9 @@ export default {
   components: {
     FormBuilder,
     SideNavigation
+  },
+  created() {
+    this.$store.dispatch("createSurveyData");
   },
   computed: {
     ...mapGetters(["getSurveyData", "getSurveySectionTitles"])

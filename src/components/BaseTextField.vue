@@ -1,15 +1,13 @@
 <template>
-  <v-skeleton-loader
-    transition="fade-transition"
-    :loading="loading"
-    type="heading"
-  >
+  <v-skeleton-loader transition="fade-transition" :loading="loading" type="heading">
     <v-text-field
+      v-model="inputValue"
       :rules="rules"
       :placeholder="placeholder"
-      :value="value"
+      :value="initialValue"
       :label="label"
       :required="required"
+      @input="$emit('update', inputValue)"
     ></v-text-field>
   </v-skeleton-loader>
 </template>
@@ -25,7 +23,7 @@ export default {
       type: String,
       required: false
     },
-    value: {
+    initialValue: {
       type: String | Number,
       required: true
     },
@@ -41,6 +39,11 @@ export default {
       type: Boolean,
       required: false
     }
+  },
+  data() {
+    return {
+      inputValue: ""
+    };
   }
 };
 </script>

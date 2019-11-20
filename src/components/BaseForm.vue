@@ -7,10 +7,11 @@
       <component
         :is="typeToComponent(question.type)"
         :loading="!question.question"
-        :value.sync="question.value"
+        :initialValue="question.value"
         :label="question.label"
         :items="getItems(question.items)"
         :rules="getRules(question.rules)"
+        @update="(...args) => updateQuestion(question, ...args)"
       />
     </div>
     <v-row v-if="section.subsections">
@@ -18,10 +19,16 @@
         <BaseForm :section="subsection" />
       </v-col>
     </v-row>
+
+    <div v-if="section.id == getNumberOfSections">
+      <v-btn>Back</v-btn>
+      <v-btn color="primary">Submit</v-btn>
+    </div>
   </v-form>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 const BaseForm = () => import("@/components/BaseForm.vue"); // recursive calls for subsections
 const BaseTextField = () => import("@/components/BaseTextField.vue");
 const BaseSelect = () => import("@/components/BaseSelect.vue");
@@ -61,7 +68,17 @@ export default {
       }
     };
   },
+  computed: {
+    ...mapGetters(["getNumberOfSections"])
+  },
   methods: {
+    updateQuestion(question, newValue) {
+      this.$store.commit({
+        type: "updateQuestionValue",
+        question: question,
+        newValue: newValue
+      });
+    },
     typeToComponent(questionType) {
       if (questionType == "text") {
         return "BaseTextField";

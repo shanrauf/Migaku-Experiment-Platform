@@ -3,7 +3,7 @@ const surveyData = require("@/surveyData.json");
 
 const state = () => {
   return {
-    surveyData: surveyData
+    surveyData: {}
   };
 };
 
@@ -30,14 +30,11 @@ const actions = {
 
 const mutations = {
   setSurveyData(state, payload) {
-    console.log(payload.surveyData);
     state.surveyData = payload.surveyData;
   },
-  editQuestionValue(state, question, newValue) {
-    console.log(question);
-    console.log(newValue);
-    // question.value = newValue;
-    // console.log(question);
+  updateQuestionValue(_, payload) {
+    // don't need state param since question is a reference to that value in state
+    payload.question.value = payload.newValue;
   }
 };
 

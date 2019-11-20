@@ -1,15 +1,11 @@
 <template>
-  <v-skeleton-loader
-    transition="fade-transition"
-    :loading="loading"
-    type="heading"
-  >
+  <v-skeleton-loader transition="fade-transition" :loading="loading" type="heading">
     <v-select
       menu-props="menuProps"
       hide-selected
       :items="items"
       :placeholder="placeholder"
-      :value="value"
+      :value="initialValue"
       :rules="rules"
       :label="label || 'Select one:'"
     ></v-select>
@@ -27,7 +23,7 @@ export default {
       type: String,
       required: false
     },
-    value: {
+    initialValue: {
       type: String | Number,
       required: true
     },
