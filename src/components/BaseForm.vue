@@ -29,11 +29,14 @@
 
 <script>
 import { mapGetters } from "vuex";
+
+import { formMixin } from "@/mixins/formMixin.js";
 const BaseForm = () => import("@/components/BaseForm.vue"); // recursive calls for subsections
 const BaseTextField = () => import("@/components/BaseTextField.vue");
 const BaseSelect = () => import("@/components/BaseSelect.vue");
 
 export default {
+  mixins: [formMixin],
   props: {
     section: {
       type: Object,
@@ -79,13 +82,6 @@ export default {
         newValue: newValue
       });
     },
-    typeToComponent(questionType) {
-      if (questionType == "text") {
-        return "BaseTextField";
-      } else {
-        return "BaseSelect";
-      }
-    },
     getItems(questionItems) {
       if (typeof questionItems == "string") {
         let items = this.items[questionItems];
@@ -97,17 +93,6 @@ export default {
       } else if (typeof questionItems == "object") {
         return questionItems;
       }
-    },
-    parseQuery(queryString) {
-      // returns key-value pairs object: {"key1": "val1", "key2": "val2"}
-      let keyValueArray = queryString.replace(/^\?/, "").split("&");
-      let queryObject = {};
-      for (let pair of keyValueArray) {
-        let key = pair.split("=")[0];
-        let value = pair.split("=")[1];
-        queryObject[key] = value;
-      }
-      return queryObject;
     },
     getRules(questionRulesParams) {
       // generate array of rule functions for form inputs

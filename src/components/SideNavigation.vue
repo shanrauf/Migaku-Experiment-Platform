@@ -5,7 +5,7 @@
       background-color="transparent"
       fixed-tabs
       vertical
-      slider-color="indigo"
+      slider-color="#204f70"
     >
       <v-tab
         v-for="section in sections"
@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import { camelCase } from "@/utils/index.js";
 export default {
   props: {
     sections: {
@@ -48,17 +49,11 @@ export default {
     };
   },
   methods: {
+    camelCase,
     onResize() {
       // either create breakpoints or derive a better function to move the side nav, or find way to move the sidenav relative to FormBuilder
       this.sideNavigationCSS.left =
         Math.round(window.innerWidth * 0.1 - 50, 1) + "px";
-    },
-    camelCase(str) {
-      return str
-        .replace(/(?:^\w|[A-Z]|\b\w)/g, function(word, index) {
-          return index == 0 ? word.toLowerCase() : word.toUpperCase();
-        })
-        .replace(/\s+/g, "");
     }
   }
 };

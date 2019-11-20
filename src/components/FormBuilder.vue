@@ -33,18 +33,6 @@ export default {
     BaseForm,
     SectionBanner
   },
-  created() {
-    // create survey data when calling from server
-  },
-  data() {
-    return {
-      options: {
-        duration: 800,
-        offset: 0,
-        easing: "easeInCubic"
-      }
-    };
-  },
   computed: {
     ...mapGetters(["getNumberOfSections"])
   },
