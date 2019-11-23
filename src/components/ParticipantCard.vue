@@ -1,19 +1,27 @@
 <template>
   <FlipCard :flipped="flipped">
     <template v-slot:front>
-      <div>test</div>
-      <v-btn @click="flipped = true">Flip</v-btn>
+      <v-card width="550px" height="500px"
+        ><h1>{{ participant.name }}</h1>
+        <p>{{ participant.email }}</p>
+        <p>
+          Studying Japanese for {{ participant.timeStudyingJapanese }} months
+        </p>
+        <p>Doing MIA for {{ participant.timeDoingMIA }} months</p>
+        <v-btn @click="flipped = true">Flip</v-btn></v-card
+      >
     </template>
     <template v-slot:back>
-      <h1 style="text-align: center">Weekly Stats</h1>
-      <VueApexCharts
-        v-if="query"
-        type="radar"
-        height="500"
-        :options="chartOptions"
-        :series="series"
-      />
-      <v-btn @click="flipped = false">Flip</v-btn>
+      <v-card width="550px" height="500px">
+        <h1 style="text-align: center">Weekly Stats</h1>
+        <VueApexCharts
+          v-if="query"
+          type="radar"
+          :options="chartOptions"
+          :series="series"
+        />
+        <v-btn @click="flipped = false">Flip</v-btn>
+      </v-card>
     </template>
   </FlipCard>
 </template>
@@ -26,12 +34,23 @@ export default {
     FlipCard,
     VueApexCharts
   },
+  props: {
+    participant: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
       series: [
         {
           name: "Shan",
-          data: [1, 1, 0.5, 4]
+          data: [
+            this.participant.avgActiveImmersion,
+            this.participant.avgPassiveImmersion,
+            this.participant.avgReading,
+            this.participant.avgAnkiReviewing
+          ]
         },
         {
           name: "Matt",
