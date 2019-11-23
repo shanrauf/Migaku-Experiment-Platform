@@ -26,7 +26,7 @@ export default {
 <style lang="scss" scoped>
 .survey-container {
   margin: auto;
-  margin-top: -112px;
+  margin-top: -88px;
   width: 750px;
 }
 </style>
