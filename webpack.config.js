@@ -6,8 +6,6 @@ const FriendlyErrorsPlugin = require("friendly-errors-webpack-plugin");
 const VuetifyLoaderPlugin = require("vuetify-loader/lib/plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-// const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
-//   .BundleAnalyzerPlugin;
 
 function ifUtil(NODE_ENV) {
   return (dev_value, prod_value) => {
@@ -21,37 +19,122 @@ function ifUtil(NODE_ENV) {
 
 const ifDevElseProd = ifUtil(process.env.NODE_ENV);
 
+const plugins = [
+  new CleanWebpackPlugin({
+    // Write Logs to Console
+    verbose: ifDevElseProd(true, false),
+
+    // Automatically remove all unused webpack assets on rebuild
+    cleanStaleWebpackAssets: true,
+
+    // Do not allow removal of current webpack assets
+    protectWebpackAssets: false
+  }),
+  new VuetifyLoaderPlugin(),
+  new webpack.HotModuleReplacementPlugin(),
+  new VueLoaderPlugin(),
+  new webpack.EnvironmentPlugin(["NODE_ENV", "DEBUG"]),
+  new FriendlyErrorsPlugin(),
+  new HtmlWebpackPlugin({
+    template: "src/index.html",
+    filename: "index.html",
+    hash: true
+  })
+];
+
+if (process.env.BUNDLE_ANALYZER) {
+  const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+    .BundleAnalyzerPlugin;
+
+  plugins.push(
+    new BundleAnalyzerPlugin({
+      openAnalyzer: true,
+      analyzerPort: 9999,
+      generateStatsFile: false,
+      statsOptions: {
+        exclude: /node_modules/,
+        errors: false,
+        warnings: false,
+        errorDetails: false,
+        reasons: false,
+        cached: false,
+        cachedAssets: false
+      }
+    })
+  );
+}
+
+const devServer = {
+  historyApiFallback: true,
+  contentBase: path.join(__dirname, "dist"),
+  open: "chrome",
+  stats: {
+    hash: false,
+    version: false,
+    timings: false,
+    assets: false,
+    chunks: false,
+    modules: false,
+    reasons: false,
+    children: false,
+    source: false,
+    errors: false,
+    builtAt: false,
+    errorDetails: false,
+    entrypoints: false,
+    warnings: ifDevElseProd(false, true),
+    performance: { hints: ifDevElseProd(false, true) },
+    publicPath: false
+  },
+  port: 8080,
+  // host: '0.0.0.0', Uncomment when want to host on your router (assuming already port-forwarded)
+  hot: true,
+  quiet: true
+};
+
+const optimization = {
+  minimize: ifDevElseProd(false, true),
+  namedModules: ifDevElseProd(true, false),
+  runtimeChunk: "single",
+  noEmitOnErrors: true,
+  splitChunks: {
+    hidePathInfo: true,
+    chunks: "all",
+    automaticNameDelimiter: "-",
+    maxAsyncRequests: 5,
+    maxInitialRequests: 3
+  },
+  minimizer: [
+    new UglifyJsPlugin({
+      uglifyOptions: {
+        parallel: true,
+        cache: false,
+        warnings: false,
+        comments: false,
+        compress: {
+          drop_console: ifDevElseProd(false, true),
+          inline: false,
+          collapse_vars: ifDevElseProd(false, true)
+        },
+        parse: {},
+        mangle: true,
+        toplevel: false,
+        nameCache: null,
+        ie8: false,
+        keep_fnames: false,
+        output: {
+          comments: false
+        }
+      }
+    })
+  ]
+};
+
 module.exports = {
   mode: ifDevElseProd("development", "production"),
   target: "web",
   devtool: "cheap-module-eval-source-map",
-  devServer: {
-    historyApiFallback: true,
-    contentBase: path.join(__dirname, "dist"),
-    open: "chrome",
-    stats: {
-      hash: false,
-      version: false,
-      timings: false,
-      assets: false,
-      chunks: false,
-      modules: false,
-      reasons: false,
-      children: false,
-      source: false,
-      errors: false,
-      builtAt: false,
-      errorDetails: false,
-      entrypoints: false,
-      warnings: ifDevElseProd(false, true),
-      performance: { hints: ifDevElseProd(false, true) },
-      publicPath: false
-    },
-    port: 8080,
-    // host: '0.0.0.0', Uncomment when want to host on your router (assuming already port-forwarded)
-    hot: true,
-    quiet: true
-  },
+  devServer: devServer,
   entry: {
     main: [
       "webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000",
@@ -101,42 +184,7 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new CleanWebpackPlugin({
-      // Write Logs to Console
-      verbose: ifDevElseProd(true, false),
-
-      // Automatically remove all unused webpack assets on rebuild
-      cleanStaleWebpackAssets: true,
-
-      // Do not allow removal of current webpack assets
-      protectWebpackAssets: false
-    }),
-    new VuetifyLoaderPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
-    new VueLoaderPlugin(),
-    new webpack.EnvironmentPlugin(["NODE_ENV", "DEBUG"]),
-    new FriendlyErrorsPlugin(),
-    new HtmlWebpackPlugin({
-      template: "src/index.html",
-      filename: "index.html",
-      hash: true
-    })
-    // new BundleAnalyzerPlugin({
-    //   openAnalyzer: true,
-    //   analyzerPort: 9999,
-    //   generateStatsFile: false,
-    //   statsOptions: {
-    //     exclude: /node_modules/,
-    //     errors: false,
-    //     warnings: false,
-    //     errorDetails: false,
-    //     reasons: false,
-    //     cached: false,
-    //     cachedAssets: false
-    //   }
-    // })
-  ],
+  plugins: plugins,
   output: {
     path: path.resolve(__dirname, "./dist"),
     pathinfo: false,
@@ -144,41 +192,5 @@ module.exports = {
     chunkFilename: "chunks/[chunkhash].chunk.js",
     publicPath: "/"
   },
-  optimization: {
-    minimize: ifDevElseProd(false, true),
-    namedModules: ifDevElseProd(true, false),
-    runtimeChunk: "single",
-    noEmitOnErrors: true,
-    splitChunks: {
-      hidePathInfo: true,
-      chunks: "all",
-      automaticNameDelimiter: "-",
-      maxAsyncRequests: 5,
-      maxInitialRequests: 3
-    },
-    minimizer: [
-      new UglifyJsPlugin({
-        uglifyOptions: {
-          parallel: true,
-          cache: false,
-          warnings: false,
-          comments: false,
-          compress: {
-            drop_console: ifDevElseProd(false, true),
-            inline: false,
-            collapse_vars: ifDevElseProd(false, true)
-          },
-          parse: {},
-          mangle: true,
-          toplevel: false,
-          nameCache: null,
-          ie8: false,
-          keep_fnames: false,
-          output: {
-            comments: false
-          }
-        }
-      })
-    ]
-  }
+  optimization: ifDevElseProd({}, optimization)
 };

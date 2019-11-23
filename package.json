@@ -7,8 +7,9 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development DEBUG=true nodemon --watch server index.js",
     "dev-client": "cross-env NODE_ENV=development DEBUG=true webpack-dev-server --config webpack.config.js --progress",
-    "build": "cross-env NODE_ENV=development DEBUG=true webpack --config webpack.config.js --progress",
+    "build": "cross-env NODE_ENV=production DEBUG=true webpack --config webpack.config.js --progress",
     "test": "echo 'create test script'",
+    "analyze": "cross-env NODE_ENV=development DEBUG=true BUNDLE_ANALYZER=true nodemon --watch server index.js",
     "deploy": "npm run prod && firebase deploy",
     "lint": "eslint --ext .js,.vue src",
     "lint:fix": "eslint --fix --ext .js,.vue src",
