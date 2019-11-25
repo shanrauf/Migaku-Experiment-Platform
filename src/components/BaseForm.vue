@@ -53,8 +53,9 @@ export default {
       items: {
         hoursInADay: [...Array(25).keys()],
         hoursInAWeek: [...Array(169).keys()],
-        oneToFiveScale: [...Array(6).keys()],
-        daysInAWeek: [...Array(8).keys()]
+        oneToFiveScale: [...Array(6).keys()].splice(1), // splice selects all but "0"
+        daysInAWeek: [...Array(8).keys()],
+        percentages: [...Array(101).keys()]
       },
       ruleGenerators: {
         maxChar: val => v =>
@@ -65,7 +66,23 @@ export default {
           if (val == "true") {
             return v => /.+@.+\..+/.test(v) || "E-mail must be valid";
           } else {
-            return undefined;
+            return true;
+          }
+        },
+        numberOnly: val => {
+          if (val == "true") {
+            return v =>
+              /^[0-9]*$/.test(v) || "Must enter numbers only (no letters)";
+          } else {
+            return true;
+          }
+        },
+        textOnly: val => {
+          if (val == "true") {
+            return v =>
+              /^[a-zA-Z ]*$/.test(v) || "Must enter text only (no numbers)";
+          } else {
+            return true;
           }
         }
       }
@@ -91,6 +108,7 @@ export default {
           return items;
         }
       } else if (typeof questionItems == "object") {
+        // if surveyData provides their own Array of items
         return questionItems;
       }
     },
@@ -107,7 +125,9 @@ export default {
       for (let key in queryObject) {
         // e.x if queryObject = {"maxChar": 50}, then key = "maxChar" and queryObject[key] = 50
         let ruleFunctionGenerator = this.ruleGenerators[key];
-        rulesArray.push(ruleFunctionGenerator(queryObject[key]));
+        if (ruleFunctionGenerator !== undefined) {
+          rulesArray.push(ruleFunctionGenerator(queryObject[key]));
+        }
       }
       return rulesArray;
     }

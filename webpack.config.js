@@ -136,10 +136,7 @@ module.exports = {
   devtool: "cheap-module-eval-source-map",
   devServer: devServer,
   entry: {
-    main: [
-      "webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000",
-      "./src/main.js"
-    ]
+    main: "./src/main.js"
   },
   resolve: {
     extensions: [".js", ".vue"],

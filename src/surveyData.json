@@ -56,6 +56,14 @@
           "items": "hoursInAWeek"
         },
         {
+          "key": "activeListeningWithSubtitles",
+          "label": "Percentage of Active Listening with subtitles",
+          "type": "select",
+          "question": "What percentage of your active listening happened with subtitles (including the time spent mining sentences from subtitles)?",
+          "value": 0,
+          "items": "percentages"
+        },
+        {
           "key": "daysOfActiveImmersionMissed",
           "label": "Days of Active Immersion Missed",
           "type": "select",
