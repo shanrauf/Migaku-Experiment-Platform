@@ -1,8 +1,15 @@
+<<<<<<< HEAD
 .vscode/
 
 node_modules/
+=======
+.vs/
+.vscode/
+.env/
+>>>>>>> visualization/master
 
 # Webpack output folder
 dist/
 
 src/surveyData.json
+node_modules/
