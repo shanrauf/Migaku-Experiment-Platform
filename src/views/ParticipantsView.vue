@@ -1,9 +1,11 @@
 <template>
-  <v-row>
-    <v-col v-for="participant in participants" :key="participant.email">
-      <ParticipantCard class="mx-auto" :participant="participant" />
-    </v-col>
-  </v-row>
+  <v-container>
+    <v-row>
+      <v-col v-for="participant in participants" :key="participant.email">
+        <ParticipantCard class="mx-auto" :participant="participant" />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

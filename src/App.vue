@@ -2,7 +2,7 @@
   <div id="app">
     <v-app id="vuetify">
       <v-content>
-        <div class="form-banner" />
+        <TopNavigation />
         <transition name="fade" mode="out-in">
           <router-view />
         </transition>
@@ -13,12 +13,14 @@
 </template>
 
 <script>
+import TopNavigation from "@/components/TopNavigation.vue";
 import BaseFooter from "@/components/BaseFooter.vue";
 
 export default {
   name: "App",
   components: {
-    BaseFooter
+    BaseFooter,
+    TopNavigation
   }
 };
 </script>
@@ -32,10 +34,6 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #f2f3f4;
-}
-.form-banner {
-  height: 200px;
-  background-color: #204f70;
 }
 
 /* Router transitions */

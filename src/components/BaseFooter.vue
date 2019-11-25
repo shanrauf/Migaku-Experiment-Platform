@@ -2,7 +2,7 @@
   <v-footer padless class="base-footer">
     <v-card class="flex" flat tile>
       <v-card-title>
-        <strong class="subheading">Copyright &copy; 2019 Vue Form Builder</strong>
+        <strong class="subheading">Copyright &copy; 2019 Mass Immersion Approach</strong>
 
         <v-spacer />
 
