@@ -13,7 +13,26 @@ const routes = [
       requiresAuth: true
     },
     component: SurveyView
-  }
+  },
+  {
+    path: "/participants",
+    meta: {
+      name: "participants",
+      title: "Participants | MIA Experiment",
+      requiresAuth: true
+    },
+    component: ParticipantsView
+  },
+  {
+    path: "/custom",
+    meta: {
+      name: "customQuery",
+      title: "Custom Query | MIA Experiment",
+      requiresAuth: true
+    },
+    component: CustomQueryView
+  },
+  { path: "*", component: ErrorView }
 ];
 
 const router = new VueRouter({ mode: "history", routes: routes });
