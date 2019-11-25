@@ -1,25 +1,19 @@
 <template>
   <FlipCard :flipped="flipped">
     <template v-slot:front>
-      <v-card width="550px" height="500px"
-        ><h1>{{ participant.name }}</h1>
+      <v-card width="550px" height="500px">
+        <h1>{{ participant.name }}</h1>
         <p>{{ participant.email }}</p>
-        <p>
-          Studying Japanese for {{ participant.timeStudyingJapanese }} months
-        </p>
-        <p>Doing MIA for {{ participant.timeDoingMIA }} months</p>
-        <v-btn @click="flipped = true">Flip</v-btn></v-card
-      >
+        <p>Studying Japanese for {{ displayMonths(participant.timeStudyingJapanese) }}</p>
+        <p>Doing MIA for {{ displayMonths(participant.timeDoingMIA) }}</p>
+        <p>{{ participant.summaryOfJapaneseStudies }}</p>
+        <v-btn @click="flipped = true">Flip</v-btn>
+      </v-card>
     </template>
     <template v-slot:back>
       <v-card width="550px" height="500px">
         <h1 style="text-align: center">Weekly Stats</h1>
-        <VueApexCharts
-          v-if="query"
-          type="radar"
-          :options="chartOptions"
-          :series="series"
-        />
+        <VueApexCharts v-if="query" type="radar" :options="chartOptions" :series="series" />
         <v-btn @click="flipped = false">Flip</v-btn>
       </v-card>
     </template>
@@ -27,7 +21,7 @@
 </template>
 
 <script>
-import VueApexCharts from "vue-apexcharts";
+const VueApexCharts = () => import("vue-apexcharts");
 import FlipCard from "@/components/FlipCard.vue";
 export default {
   components: {
@@ -68,6 +62,15 @@ export default {
       query: true,
       flipped: false
     };
+  },
+  methods: {
+    displayMonths(numOfMonths) {
+      if (numOfMonths < 12) {
+        return numOfMonths + " months";
+      } else {
+        return parseFloat((numOfMonths / 12).toFixed(2)) + " years.";
+      }
+    }
   }
 };
 </script>

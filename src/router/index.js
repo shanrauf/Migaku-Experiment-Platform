@@ -5,6 +5,7 @@ Vue.use(VueRouter);
 const DashboardView = () => import("@/views/DashboardView.vue");
 const ParticipantsView = () => import("@/views/ParticipantsView.vue");
 const CustomQueryView = () => import("@/views/CustomQueryView.vue");
+const ErrorView = () => import("@/views/ErrorView.vue");
 
 const routes = [
   {
@@ -33,7 +34,8 @@ const routes = [
       requiresAuth: true
     },
     component: CustomQueryView
-  }
+  },
+  { path: "*", component: ErrorView }
 ];
 
 const router = new VueRouter({ mode: "history", routes: routes });

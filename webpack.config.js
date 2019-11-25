@@ -100,15 +100,33 @@ const optimization = {
   splitChunks: {
     hidePathInfo: true,
     chunks: "all",
+    cacheGroups: {
+      vendor: {
+        test: /[\\/]node_modules[\\/]/,
+        name(module) {
+          const packageName = module.context.match(
+            /[\\/]node_modules[\\/](.*?)([\\/]|$)/
+          )[1];
+          return `npm.${packageName.replace("@", "")}`;
+        }
+      },
+      styles: {
+        test: /\.css$/,
+        name: "styles",
+        chunks: "all",
+        enforce: true
+      }
+    },
     automaticNameDelimiter: "-",
     maxAsyncRequests: 5,
-    maxInitialRequests: 3
+    maxInitialRequests: Infinity,
+    minSize: 0
   },
   minimizer: [
     new UglifyJsPlugin({
       uglifyOptions: {
         parallel: true,
-        cache: false,
+        cache: true,
         warnings: false,
         comments: false,
         compress: {
@@ -133,13 +151,12 @@ const optimization = {
 module.exports = {
   mode: ifDevElseProd("development", "production"),
   target: "web",
+  cache: true,
   devtool: "cheap-module-eval-source-map",
+  // devtool: false,
   devServer: devServer,
   entry: {
-    main: [
-      "webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000",
-      "./src/main.js"
-    ]
+    main: "./src/main.js"
   },
   resolve: {
     extensions: [".js", ".vue"],
