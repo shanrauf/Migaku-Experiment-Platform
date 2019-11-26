@@ -1,10 +1,15 @@
 export const formMixin = {
   methods: {
     typeToComponent(questionType) {
-      if (questionType == "text") {
-        return "BaseTextField";
-      } else {
-        return "BaseSelect";
+      switch (questionType) {
+        case "text":
+          return "BaseTextField";
+        case "radio":
+          return "BaseRadioButtons";
+        case "select":
+          return "BaseSelect";
+        default:
+          return "BaseTextField";
       }
     },
     parseQuery(queryString) {

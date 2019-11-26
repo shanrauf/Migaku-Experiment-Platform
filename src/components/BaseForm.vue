@@ -6,7 +6,6 @@
       <h3>{{ question.question }}</h3>
       <component
         :is="typeToComponent(question.type)"
-        :loading="!question.question"
         :initialValue="question.value"
         :label="question.label"
         :items="getItems(question.items)"
@@ -32,8 +31,9 @@ import { mapGetters } from "vuex";
 
 import { formMixin } from "@/mixins/formMixin.js";
 const BaseForm = () => import("@/components/BaseForm.vue"); // recursive calls for subsections
-const BaseTextField = () => import("@/components/BaseTextField.vue");
-const BaseSelect = () => import("@/components/BaseSelect.vue");
+import BaseTextField from "@/components/BaseTextField.vue";
+import BaseSelect from "@/components/BaseSelect.vue";
+import BaseRadioButtons from "@/components/BaseRadioButtons.vue";
 
 export default {
   mixins: [formMixin],
@@ -46,7 +46,8 @@ export default {
   components: {
     BaseForm,
     BaseTextField,
-    BaseSelect
+    BaseSelect,
+    BaseRadioButtons
   },
   data() {
     return {
@@ -107,9 +108,16 @@ export default {
         } else {
           return items;
         }
-      } else if (typeof questionItems == "object") {
+      }
+      // else if (Array.isArray(questionItems) && typeof questionItems[0] == "object") {
+      //   // if surveyData provides an array of objects e.x [{key: "foo", value: "bar"}], "bar" = option label, foo = the value sent to the server
+      //  return questionItems
+      // }
+      else if (typeof questionItems == "object") {
         // if surveyData provides their own Array of items
         return questionItems;
+      } else {
+        return [];
       }
     },
     getRules(questionRulesParams) {

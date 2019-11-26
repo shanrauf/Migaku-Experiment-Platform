@@ -1,26 +1,20 @@
 <template>
-  <v-skeleton-loader transition="fade-transition" :loading="loading" type="heading">
-    <v-select
-      v-model="inputValue"
-      menu-props="menuProps"
-      hide-selected
-      :items="items"
-      :placeholder="placeholder"
-      :value="initialValue"
-      :rules="rules"
-      :label="label || 'Select one:'"
-      @input="$emit('update', inputValue)"
-    ></v-select>
-  </v-skeleton-loader>
+  <v-select
+    v-model="inputValue"
+    menu-props="menuProps"
+    hide-selected
+    :items="items"
+    :placeholder="placeholder"
+    :value="initialValue"
+    :rules="rules"
+    :label="label || 'Select one:'"
+    @input="$emit('update', inputValue)"
+  ></v-select>
 </template>
 
 <script>
 export default {
   props: {
-    loading: {
-      type: Boolean,
-      required: true
-    },
     label: {
       type: String,
       required: false

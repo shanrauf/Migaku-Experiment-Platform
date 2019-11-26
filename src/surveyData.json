@@ -23,6 +23,39 @@
           "rules": "maxChar=100&minChar=1&email=true",
           "question": "What is your email?",
           "value": ""
+        },
+        {
+          "key": "completedRRTK",
+          "label": "Recognition RTK",
+          "type": "radio",
+          "question": "Have you completed RRTK (Recognition RTK, previously known as Lazy Kanji)?",
+          "note": "We forgot to ask this question in the initial survey",
+          "items": [
+            { "key": "yes", "value": "yes" },
+            { "key": "no", "value": "No" }
+          ],
+          "value": ""
+        },
+        {
+          "key": "completedPRTK",
+          "label": "Production RTK",
+          "type": "radio",
+          "question": "Have you completed PRTK (Production RTK, previously known as Traditional RTK)?",
+          "note": "We forgot to ask this question in the initial survey",
+          "items": [
+            { "key": "yes", "value": "yes" },
+            { "key": "no", "value": "No" }
+          ],
+          "value": ""
+        },
+        {
+          "key": "otherKanjiStudies",
+          "label": "Kanji Studies Outside of RTK",
+          "type": "text",
+          "rules": "maxChar=500&minChar=1",
+          "question": "Please describe your Kanji studies outside of RTK (e.x WaniKani, KanjiDamage, Kanji From Zero, etc). You may leave this blank if this does not apply to you",
+          "note": "We forgot to ask this question in the initial survey",
+          "value": ""
         }
       ]
     },

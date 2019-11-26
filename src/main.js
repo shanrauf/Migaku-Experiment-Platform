@@ -19,7 +19,8 @@ const opts = {
   icons: {
     iconfont: "md",
     values: {
-      github: "fab fa-github"
+      github: "fab fa-github",
+      google: "fab fa-google"
     }
   }
 };

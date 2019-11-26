@@ -10,14 +10,6 @@
 
     <v-spacer />
     <v-toolbar-items>
-      <v-btn class="nav-icon" icon>
-        <v-badge v-model="show" color="red">
-          <template v-slot:badge>
-            <span>6</span>
-          </template>
-          <v-icon large>$vuetify.icons.github</v-icon>
-        </v-badge>
-      </v-btn>
       <v-list-item-avatar>
         <img src="@/assets/images/profile.png" alt="Profile Photo" />
       </v-list-item-avatar>
@@ -40,11 +32,6 @@ export default {
   margin-left: 15px;
   width: 50px;
   height: 50px;
-}
-.nav-icon {
-  margin: 0 10px 0 10px;
-  width: 60px;
-  height: 60px;
 }
 
 .avatar {

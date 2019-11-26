@@ -10,13 +10,19 @@
 
       <br />
 
-      <v-btn width="300px">Get Started</v-btn>
+      <AccountForm />
     </v-row>
   </v-container>
 </template>
 
 <script>
-export default {};
+import AccountForm from "@/components/AccountForm.vue";
+
+export default {
+  components: {
+    AccountForm
+  }
+};
 </script>
 
 <style lang="scss" scoped>

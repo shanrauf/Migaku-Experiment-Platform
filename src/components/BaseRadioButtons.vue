@@ -1,13 +1,20 @@
 <template>
-  <v-text-field
+  <v-radio-group
     v-model="inputValue"
     :rules="rules"
     :placeholder="placeholder"
     :value="initialValue"
     :label="label"
-    :required="required"
-    @input="$emit('update', inputValue)"
-  ></v-text-field>
+    :mandatory="required"
+    @change="$emit('update', inputValue)"
+  >
+    <v-radio
+      v-for="item in items"
+      :key="item.key || item"
+      :label="item.value || item"
+      :value="item.key || item"
+    />
+  </v-radio-group>
 </template>
 
 <script>
@@ -32,6 +39,10 @@ export default {
     required: {
       type: Boolean,
       required: false
+    },
+    items: {
+      type: Array,
+      required: true
     }
   },
   data() {
