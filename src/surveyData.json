@@ -22,7 +22,8 @@
           "type": "text",
           "rules": "maxChar=100&minChar=1&email=true",
           "question": "What is your email?",
-          "value": ""
+          "value": "",
+          "required": true
         },
         {
           "key": "completedRRTK",
@@ -34,7 +35,8 @@
             { "key": "yes", "value": "yes" },
             { "key": "no", "value": "No" }
           ],
-          "value": ""
+          "value": "",
+          "required": true
         },
         {
           "key": "completedPRTK",
@@ -46,7 +48,8 @@
             { "key": "yes", "value": "yes" },
             { "key": "no", "value": "No" }
           ],
-          "value": ""
+          "value": "",
+          "required": true
         },
         {
           "key": "otherKanjiStudies",
@@ -55,7 +58,8 @@
           "rules": "maxChar=500&minChar=1",
           "question": "Please describe your Kanji studies outside of RTK (e.x WaniKani, KanjiDamage, Kanji From Zero, etc). You may leave this blank if this does not apply to you",
           "note": "We forgot to ask this question in the initial survey",
-          "value": ""
+          "value": "",
+          "required": false
         }
       ]
     },
@@ -70,7 +74,8 @@
           "type": "select",
           "question": "How many hours of active listening did you do this week?",
           "value": 0,
-          "items": "hoursInAWeek"
+          "items": "hoursInAWeek",
+          "required": true
         },
         {
           "key": "avgPassiveListening",
@@ -78,7 +83,8 @@
           "type": "select",
           "question": "How many hours of passive listening did you do this week?",
           "value": 0,
-          "items": "hoursInAWeek"
+          "items": "hoursInAWeek",
+          "required": true
         },
         {
           "key": "avgReading",
@@ -86,7 +92,8 @@
           "type": "select",
           "question": "How many hours of reading did you do this week?",
           "value": 0,
-          "items": "hoursInAWeek"
+          "items": "hoursInAWeek",
+          "required": true
         },
         {
           "key": "activeListeningWithSubtitles",
@@ -94,7 +101,8 @@
           "type": "select",
           "question": "What percentage of your active listening happened with subtitles (including the time spent mining sentences from subtitles)?",
           "value": 0,
-          "items": "percentages"
+          "items": "percentages",
+          "required": true
         },
         {
           "key": "daysOfActiveImmersionMissed",
@@ -102,7 +110,8 @@
           "type": "select",
           "question": "How many days of active immersion did you miss this week? (NOTE: If you immersed a bit less than your average immersion time, you can still count that as a day of immersion.)",
           "value": 0,
-          "items": "daysInAWeek"
+          "items": "daysInAWeek",
+          "required": true
         },
         {
           "key": "daysOfReadingMissed",
@@ -110,7 +119,8 @@
           "type": "select",
           "question": "How many days of reading did you miss this week?",
           "value": 0,
-          "items": "daysInAWeek"
+          "items": "daysInAWeek",
+          "required": true
         }
       ]
     },
@@ -129,7 +139,8 @@
               "type": "select",
               "question": "On a scale of 1-5, how difficult do you feel it is to learn new cards with this note type? (1 = extremely easy, 5 = extremely difficult)",
               "value": 0,
-              "items": "oneToFiveScale"
+              "items": "oneToFiveScale",
+              "required": true
             },
             {
               "key": "difficultyToRememberLearnedCards",
@@ -137,7 +148,8 @@
               "type": "select",
               "question": "On a scale of 1-5, how difficult do you feel it is to remember learned cards with this note type (cards you have reviewed at least once)? (1 = extremely easy, 5 = extremely difficult)",
               "value": 0,
-              "items": "oneToFiveScale"
+              "items": "oneToFiveScale",
+              "required": true
             },
             {
               "key": "howEnjoyableIsReviewing",
@@ -145,7 +157,8 @@
               "type": "select",
               "question": "On a scale of 1-5, how enjoyable do you feel it is to review cards with this note type? (1 = horrible to review, 5 = extremely enjoyable to review)",
               "value": 0,
-              "items": "oneToFiveScale"
+              "items": "oneToFiveScale",
+              "required": true
             },
             {
               "key": "cardLeadsToUnderstandingInImmersion",
@@ -153,7 +166,8 @@
               "type": "select",
               "question": "On a scale of 1-5, how well do you feel cards with this note type lead to improved understanding in immersion? (1 = I almost never notice/understand words I learned with this note type in my immersion, 5 = I very frequently notice/understand words I learned with this note type in my immersion)",
               "value": 0,
-              "items": "oneToFiveScale"
+              "items": "oneToFiveScale",
+              "required": true
             }
           ]
         },
@@ -167,7 +181,8 @@
               "type": "select",
               "question": "On a scale of 1-5, how difficult do you feel it is to learn new cards with this note type? (1 = extremely easy, 5 = extremely difficult)",
               "value": 0,
-              "items": "oneToFiveScale"
+              "items": "oneToFiveScale",
+              "required": true
             },
             {
               "key": "difficultyToRememberLearnedCards",
@@ -175,7 +190,8 @@
               "type": "select",
               "question": "On a scale of 1-5, how difficult do you feel it is to remember learned cards with this note type (cards you have reviewed at least once)? (1 = extremely easy, 5 = extremely difficult)",
               "value": 0,
-              "items": "oneToFiveScale"
+              "items": "oneToFiveScale",
+              "required": true
             },
             {
               "key": "howEnjoyableIsReviewing",
@@ -183,7 +199,8 @@
               "type": "select",
               "question": "On a scale of 1-5, how enjoyable do you feel it is to review cards with this note type? (1 = horrible to review, 5 = extremely enjoyable to review)",
               "value": 0,
-              "items": "oneToFiveScale"
+              "items": "oneToFiveScale",
+              "required": true
             },
             {
               "key": "cardLeadsToUnderstandingInImmersion",
@@ -191,7 +208,8 @@
               "type": "select",
               "question": "On a scale of 1-5, how well do you feel cards with this note type lead to improved understanding in immersion? (1 = I almost never notice/understand words I learned with this note type in my immersion, 5 = I very frequently notice/understand words I learned with this note type in my immersion)",
               "value": 0,
-              "items": "oneToFiveScale"
+              "items": "oneToFiveScale",
+              "required": true
             }
           ]
         }
@@ -203,7 +221,8 @@
           "type": "select",
           "question": "Which of the card types do you prefer to review in Anki?",
           "items": ["Card Type 1", "Card Type 2"],
-          "value": ""
+          "value": "",
+          "required": true
         }
       ]
     }
