@@ -1,15 +1,15 @@
-const webpack = require("webpack");
-const path = require("path");
-const VueLoaderPlugin = require("vue-loader/lib/plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const FriendlyErrorsPlugin = require("friendly-errors-webpack-plugin");
-const VuetifyLoaderPlugin = require("vuetify-loader/lib/plugin");
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const webpack = require('webpack');
+const path = require('path');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
+const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 function ifUtil(NODE_ENV) {
   return (dev_value, prod_value) => {
-    if (NODE_ENV == "development") {
+    if (NODE_ENV == 'development') {
       return dev_value;
     } else {
       return prod_value;
@@ -30,20 +30,20 @@ const plugins = [
     // Do not allow removal of current webpack assets
     protectWebpackAssets: false
   }),
+  new webpack.EnvironmentPlugin(['NODE_ENV', 'DEBUG']),
+  new VueLoaderPlugin(),
   new VuetifyLoaderPlugin(),
   new webpack.HotModuleReplacementPlugin(),
-  new VueLoaderPlugin(),
-  new webpack.EnvironmentPlugin(["NODE_ENV", "DEBUG"]),
   new FriendlyErrorsPlugin(),
   new HtmlWebpackPlugin({
-    template: "src/index.html",
-    filename: "index.html",
+    template: 'src/index.html',
+    filename: 'index.html',
     hash: true
   })
 ];
 
 if (process.env.BUNDLE_ANALYZER) {
-  const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+  const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
     .BundleAnalyzerPlugin;
 
   plugins.push(
@@ -66,8 +66,9 @@ if (process.env.BUNDLE_ANALYZER) {
 
 const devServer = {
   historyApiFallback: true,
-  contentBase: path.join(__dirname, "dist"),
-  open: "chrome",
+  // contentBase: path.join(__dirname, 'dist'),
+  open: 'chrome',
+  writeToDisk: true,
   stats: {
     hash: false,
     version: false,
@@ -95,12 +96,12 @@ const devServer = {
 const optimization = {
   minimize: ifDevElseProd(false, true),
   namedModules: ifDevElseProd(true, false),
-  runtimeChunk: "single",
+  runtimeChunk: 'single',
   noEmitOnErrors: true,
   splitChunks: {
     hidePathInfo: true,
-    chunks: "all",
-    automaticNameDelimiter: "-",
+    chunks: 'all',
+    automaticNameDelimiter: '-',
     maxAsyncRequests: 5,
     maxInitialRequests: 3
   },
@@ -131,63 +132,66 @@ const optimization = {
 };
 
 module.exports = {
-  mode: ifDevElseProd("development", "production"),
-  target: "web",
-  devtool: "cheap-module-eval-source-map",
+  mode: ifDevElseProd('development', 'production'),
+  target: 'web',
+  devtool: 'cheap-module-eval-source-map',
   devServer: devServer,
   entry: {
-    main: "./src/main.js"
+    main: './src/main.js'
   },
   resolve: {
-    extensions: [".js", ".vue"],
+    extensions: ['.js', '.vue'],
     alias: {
-      vue$: "vue/dist/vue.runtime.js",
-      "@": path.resolve(__dirname, "./src")
+      vue$: 'vue/dist/vue.runtime.js',
+      '@': path.resolve(__dirname, './src')
     }
   },
   module: {
     rules: [
       {
         test: /\.vue$/,
-        loader: "vue-loader"
+        loader: 'vue-loader'
       },
       {
         test: /\.js$/,
-        include: path.resolve(__dirname, "src"),
+        include: path.resolve(__dirname, 'src'),
         use: {
-          loader: "babel-loader"
+          loader: 'babel-loader'
         }
       },
       {
         test: /\.(css)$/,
-        use: ["vue-style-loader", "css-loader"]
+        use: ['vue-style-loader', 'css-loader']
       },
       {
         test: /\.s(c|a)ss$/,
         use: [
-          "vue-style-loader",
-          "css-loader",
+          'vue-style-loader',
+          'css-loader',
           {
-            loader: "sass-loader",
+            loader: 'sass-loader',
             options: {
-              implementation: require("sass")
+              implementation: require('sass')
             }
           }
         ]
       },
       {
-        test: /\.(jpe?g|png|gif|ico|svg|woff|woff2|eot|ttf|otf)$/i,
-        loaders: ["file-loader?name=[name].[ext]"]
+        test: /\.(jpe?g|png|gif|ico|svg|woff|woff2|eot|ttf|otf)$/,
+        loader: 'file-loader',
+        options: {
+          name: '[name].[ext]'
+        }
       }
     ]
   },
   plugins: plugins,
   output: {
-    path: path.resolve(__dirname, "./dist"),
+    path: path.resolve(__dirname, './dist'),
     pathinfo: false,
-    filename: "[name].bundle.js",
-    chunkFilename: "chunks/[chunkhash].chunk.js",
-    publicPath: "/"
+    filename: '[name].bundle.js',
+    chunkFilename: 'chunks/[chunkhash].chunk.js',
+    publicPath: '/'
   },
   optimization: ifDevElseProd({}, optimization)
 };

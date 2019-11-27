@@ -27,13 +27,13 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 
-import { formMixin } from "@/mixins/formMixin.js";
-const BaseForm = () => import("@/components/BaseForm.vue"); // recursive calls for subsections
-import BaseTextField from "@/components/BaseTextField.vue";
-import BaseSelect from "@/components/BaseSelect.vue";
-import BaseRadioButtons from "@/components/BaseRadioButtons.vue";
+import { formMixin } from '@/mixins/formMixin.js';
+const BaseForm = () => import('@/components/BaseForm.vue'); // recursive calls for subsections
+import BaseTextField from '@/components/BaseTextField.vue';
+import BaseSelect from '@/components/BaseSelect.vue';
+import BaseRadioButtons from '@/components/BaseRadioButtons.vue';
 
 export default {
   mixins: [formMixin],
@@ -64,24 +64,24 @@ export default {
         minChar: val => v =>
           (v && v.length >= val) || `Must be greater than ${val} characters`,
         email: val => {
-          if (val == "true") {
-            return v => /.+@.+\..+/.test(v) || "E-mail must be valid";
+          if (val == 'true') {
+            return v => /.+@.+\..+/.test(v) || 'E-mail must be valid';
           } else {
             return true;
           }
         },
         numberOnly: val => {
-          if (val == "true") {
+          if (val == 'true') {
             return v =>
-              /^[0-9]*$/.test(v) || "Must enter numbers only (no letters)";
+              /^[0-9]*$/.test(v) || 'Must enter numbers only (no letters)';
           } else {
             return true;
           }
         },
         textOnly: val => {
-          if (val == "true") {
+          if (val == 'true') {
             return v =>
-              /^[a-zA-Z ]*$/.test(v) || "Must enter text only (no numbers)";
+              /^[a-zA-Z ]*$/.test(v) || 'Must enter text only (no numbers)';
           } else {
             return true;
           }
@@ -90,30 +90,25 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getNumberOfSections"])
+    ...mapGetters(['getNumberOfSections'])
   },
   methods: {
     updateQuestion(question, newValue) {
       this.$store.commit({
-        type: "updateQuestionValue",
+        type: 'updateQuestionValue',
         question: question,
         newValue: newValue
       });
     },
     getItems(questionItems) {
-      if (typeof questionItems == "string") {
+      if (typeof questionItems == 'string') {
         let items = this.items[questionItems];
         if (items === undefined) {
           return [];
         } else {
           return items;
         }
-      }
-      // else if (Array.isArray(questionItems) && typeof questionItems[0] == "object") {
-      //   // if surveyData provides an array of objects e.x [{key: "foo", value: "bar"}], "bar" = option label, foo = the value sent to the server
-      //  return questionItems
-      // }
-      else if (typeof questionItems == "object") {
+      } else if (typeof questionItems == 'object') {
         // if surveyData provides their own Array of items
         return questionItems;
       } else {

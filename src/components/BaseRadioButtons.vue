@@ -11,8 +11,8 @@
     <v-radio
       v-for="item in items"
       :key="item.key || item"
-      :label="item.value || item"
-      :value="item.key || item"
+      :label="item.key || item"
+      :value="item.value || item"
     />
   </v-radio-group>
 </template>
@@ -47,7 +47,7 @@ export default {
   },
   data() {
     return {
-      inputValue: ""
+      inputValue: ''
     };
   }
 };

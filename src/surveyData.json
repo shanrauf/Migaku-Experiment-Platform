@@ -26,14 +26,24 @@
           "required": true
         },
         {
+          "key": "age",
+          "label": "Age",
+          "type": "select",
+          "rules": "maxChar=100&minChar=1",
+          "question": "How old are you?",
+          "value": "",
+          "items": "percentages",
+          "required": true
+        },
+        {
           "key": "completedRRTK",
           "label": "Recognition RTK",
           "type": "radio",
           "question": "Have you completed RRTK (Recognition RTK, previously known as Lazy Kanji)?",
           "note": "We forgot to ask this question in the initial survey",
           "items": [
-            { "key": "yes", "value": "yes" },
-            { "key": "no", "value": "No" }
+            { "key": "Yes", "value": "yes" },
+            { "key": "No", "value": "no" }
           ],
           "value": "",
           "required": true
