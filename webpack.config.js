@@ -66,9 +66,8 @@ if (process.env.BUNDLE_ANALYZER) {
 
 const devServer = {
   historyApiFallback: true,
-  // contentBase: path.join(__dirname, 'dist'),
+  contentBase: path.join(__dirname, 'dist'),
   open: 'chrome',
-  writeToDisk: true,
   stats: {
     hash: false,
     version: false,
@@ -178,10 +177,7 @@ module.exports = {
       },
       {
         test: /\.(jpe?g|png|gif|ico|svg|woff|woff2|eot|ttf|otf)$/,
-        loader: 'file-loader',
-        options: {
-          name: '[name].[ext]'
-        }
+        loaders: ['file-loader?name=[name].[ext]']
       }
     ]
   },
