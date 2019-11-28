@@ -6,27 +6,6 @@ export function camelCase(str) {
     .replace(/\s+/g, '');
 }
 
-export function formatDateOld(dateObject) {
-  let monthNames = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-  ];
-  let day = dateObject.getDate();
-  let monthIndex = dateObject.getMonth();
-  let year = dateObject.getFullYear();
-  return day + ' ' + monthNames[monthIndex] + ' ' + year;
-}
-
 export function dateToISO(dateObject) {
   return dateObject.toISOString().slice(0, 10);
 }
@@ -41,6 +20,20 @@ export function formatDate(dateObject, options = {}, language = 'en-US') {
   // }
   // let language = "en-US" || "hi-IN" || "ja-JP"
   return dateObject.toLocaleDateString(language, options);
+}
+
+export function dateToTimeUntil(dateObject) {
+  let oneDay = 8.64e7;
+  let oneMonth = 2.678e9;
+
+  let now = Date.now();
+  let millisecondsLeft = dateObject.getTime() - now;
+
+  if (millisecondsLeft > oneMonth) {
+    return Math.floor(millisecondsLeft / oneMonth) + ' months left';
+  } else if (millisecondsLeft > oneDay) {
+    return Math.floor(millisecondsLeft / oneDay) + ' days left';
+  }
 }
 
 export function truncate(value, limit = 150) {

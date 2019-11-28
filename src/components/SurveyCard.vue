@@ -1,0 +1,44 @@
+<template>
+  <v-card raised>
+    <v-card-title>{{title}}</v-card-title>
+    <v-card-subtitle>{{dateToTimeUntil(new Date(endDate))}}</v-card-subtitle>
+    <v-card-text>{{description}}</v-card-text>
+    <v-card-actions>
+      <v-btn :to="`${id}`" append>Sign up</v-btn>
+    </v-card-actions>
+  </v-card>
+</template>
+
+<script>
+import { dateToTimeUntil } from "@/utils/index.js";
+export default {
+  props: {
+    id: {
+      type: String,
+      required: true
+    },
+    title: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String,
+      required: true
+    },
+    startDate: {
+      type: Number,
+      required: true
+    },
+    endDate: {
+      type: Number,
+      required: true
+    }
+  },
+  methods: {
+    dateToTimeUntil
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+</style>

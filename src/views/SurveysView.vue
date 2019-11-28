@@ -2,24 +2,37 @@
   <v-container>
     <v-row>
       <v-col v-for="survey in surveys" :key="survey.id">
-        <h1>{{survey.title}}</h1>
+        <SurveyCard v-bind="survey" />
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import SurveyCard from "@/components/SurveyCard.vue";
+
 export default {
+  components: {
+    SurveyCard
+  },
   data() {
     return {
       surveys: [
         {
-          id: "fdsaf34g",
-          title: "Example Survey 1"
+          id: "sa54df154sa4dffpsdf",
+          title: "MIA Mid-Experiment Survey Week 1",
+          description:
+            "This is the first weekly survey to gauge your progress during the experiment.",
+          startDate: 1575849600000,
+          endDate: 1576108800000
         },
         {
-          id: "y56hfdhh",
-          title: "Random Survey 2"
+          id: "h9g45wj54gi90jhi9ds",
+          title: "Testing Anki Retention At Different Learning Steps",
+          description:
+            "This is the second weekly survey to gauge your progress during the experiment.",
+          startDate: Date.now(),
+          endDate: Date.now() + 2.68e9
         }
       ]
     };

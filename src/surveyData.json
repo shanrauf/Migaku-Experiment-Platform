@@ -1,6 +1,9 @@
 {
+  "id": "983wuf4noiahf78sh4",
   "title": "MIA Mid-Experiment Survey #1",
   "description": "This is the first weekly survey to gauge your progress during the experiment.",
+  "startDate": 1575849600000,
+  "endDate": 1576108800000,
   "sections": [
     {
       "id": 1,
