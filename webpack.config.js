@@ -38,7 +38,11 @@ const plugins = [
   new HtmlWebpackPlugin({
     template: 'src/index.html',
     filename: 'index.html',
-    hash: true
+    minify: {
+      collapseWhitespace: true
+    },
+    hash: true,
+    inject: true
   })
 ];
 
@@ -68,6 +72,7 @@ const devServer = {
   historyApiFallback: true,
   contentBase: path.join(__dirname, 'dist'),
   open: 'chrome',
+  compress: ifDevElseProd(false, true), // gzip
   stats: {
     hash: false,
     version: false,
@@ -93,8 +98,8 @@ const devServer = {
 };
 
 const optimization = {
-  minimize: ifDevElseProd(false, true),
-  namedModules: ifDevElseProd(true, false),
+  minimize: true,
+  namedModules: false,
   runtimeChunk: 'single',
   noEmitOnErrors: true,
   splitChunks: {
@@ -152,10 +157,10 @@ module.exports = {
         loader: 'vue-loader'
       },
       {
-        test: /\.js$/,
+        test: /\.m?js$/,
         include: path.resolve(__dirname, 'src'),
         use: {
-          loader: 'babel-loader'
+          loader: 'babel-loader?cacheDirectory'
         }
       },
       {
@@ -170,14 +175,23 @@ module.exports = {
           {
             loader: 'sass-loader',
             options: {
-              implementation: require('sass')
+              implementation: require('sass'),
+              sassOptions: {
+                fiber: require('fibers')
+              }
             }
           }
         ]
       },
       {
-        test: /\.(jpe?g|png|gif|ico|svg|woff|woff2|eot|ttf|otf)$/,
-        loaders: ['file-loader?name=[name].[ext]']
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        use: [
+          'file-loader?name=[name].[ext]&outputPath=images/&publicPath=images/'
+        ]
+      },
+      {
+        test: /\.(ico|eot|ttf|woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
+        use: 'file-loader?name=[name].[ext]&outputPath=fonts/&publicPath=fonts/'
       }
     ]
   },
