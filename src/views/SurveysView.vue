@@ -1,6 +1,9 @@
 <template>
   <v-container>
     <v-row>
+      <v-col>
+        <BaseCreateNewCard />
+      </v-col>
       <v-col v-for="survey in surveys" :key="survey.id">
         <SurveyCard v-bind="survey" />
       </v-col>
@@ -10,10 +13,12 @@
 
 <script>
 import SurveyCard from "@/components/SurveyCard.vue";
+import BaseCreateNewCard from "@/components/BaseCreateNewCard.vue";
 
 export default {
   components: {
-    SurveyCard
+    SurveyCard,
+    BaseCreateNewCard
   },
   data() {
     return {

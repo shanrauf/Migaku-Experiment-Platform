@@ -1,5 +1,8 @@
 <template>
   <v-row>
+    <v-col>
+      <BaseCreateNewCard />
+    </v-col>
     <v-col v-for="experiment in experiments" :key="experiment.id">
       <ExperimentCard v-bind="experiment" />
     </v-col>
@@ -8,10 +11,11 @@
 
 <script>
 import ExperimentCard from "@/components/ExperimentCard.vue";
-
+import BaseCreateNewCard from "@/components/BaseCreateNewCard.vue";
 export default {
   components: {
-    ExperimentCard
+    ExperimentCard,
+    BaseCreateNewCard
   },
   data() {
     return {
