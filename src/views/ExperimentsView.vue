@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col>
-      <BaseCreateNewCard to="experiments/create" />
+      <BaseCreateNewCard v-once to="experiments/create" />
     </v-col>
     <v-col v-for="experiment in experiments" :key="experiment.id">
       <ExperimentCard v-bind="experiment" />
