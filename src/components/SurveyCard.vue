@@ -4,7 +4,7 @@
     <v-card-subtitle>{{dateToTimeUntil(new Date(endDate))}}</v-card-subtitle>
     <v-card-text>{{description}}</v-card-text>
     <v-card-actions>
-      <v-btn :to="`${id}`" append>Sign up</v-btn>
+      <v-btn :to="`${id}`" append>Complete Survey</v-btn>
     </v-card-actions>
   </v-card>
 </template>

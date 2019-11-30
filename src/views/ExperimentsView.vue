@@ -1,11 +1,9 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col v-for="experiment in experiments" :key="experiment.id">
-        <ExperimentCard v-bind="experiment" />
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-row>
+    <v-col v-for="experiment in experiments" :key="experiment.id">
+      <ExperimentCard v-bind="experiment" />
+    </v-col>
+  </v-row>
 </template>
 
 <script>
