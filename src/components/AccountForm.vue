@@ -3,7 +3,7 @@
     <div class="form-container sign-up-container">
       <form>
         <h1>Create Account</h1>
-        <v-btn class="google-button" rounded color="#df4930">
+        <v-btn class="google-BaseButton" rounded color="#df4930">
           <v-icon color="white" left>$vuetify.icons.google</v-icon>
           <b class="white-text">Login with Google</b>
         </v-btn>
@@ -13,13 +13,13 @@
         <input type="text" placeholder="Name" />
         <input type="email" placeholder="Email" />
         <input type="password" placeholder="Password" />
-        <button>Sign Up</button>
+        <BaseButton rounded>Sign Up</BaseButton>
       </form>
     </div>
     <div class="form-container sign-in-container">
       <form>
         <h1>Sign in</h1>
-        <v-btn class="google-button" rounded color="#df4930">
+        <v-btn class="google-BaseButton" rounded color="#df4930">
           <v-icon color="white" left>$vuetify.icons.google</v-icon>
           <b class="white-text">Login with Google</b>
         </v-btn>
@@ -29,7 +29,7 @@
         <input type="email" placeholder="Email" />
         <input type="password" placeholder="Password" />
         <a href="#">Forgot your password?</a>
-        <button>Sign In</button>
+        <BaseButton rounded>Sign In</BaseButton>
       </form>
     </div>
     <div class="overlay-container">
@@ -37,12 +37,22 @@
         <div class="overlay-panel overlay-left">
           <h1>Welcome Back!</h1>
           <p>Login to access MIA experiments</p>
-          <button class="ghost" @click="containerClass['right-panel-active'] = false">Sign In</button>
+          <BaseButton
+            rounded
+            class="ghost"
+            @click="containerClass['right-panel-active'] = false"
+            >Sign In</BaseButton
+          >
         </div>
         <div class="overlay-panel overlay-right">
           <h1>Welcome!</h1>
           <p>Sign up to begin participating in MIA experiments</p>
-          <button class="ghost" @click="containerClass['right-panel-active'] = true">Sign Up</button>
+          <BaseButton
+            rounded
+            class="ghost"
+            @click="containerClass['right-panel-active'] = true"
+            >Sign Up</BaseButton
+          >
         </div>
       </div>
     </div>
@@ -55,7 +65,7 @@ export default {
     return {
       containerClass: {
         container: true,
-        "right-panel-active": false
+        'right-panel-active': false
       }
     };
   }
@@ -90,28 +100,7 @@ a {
   margin: 15px 0;
 }
 
-button {
-  border-radius: 20px;
-  border: 1px solid #204f70;
-  background-color: #204f70;
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: bold;
-  padding: 12px 45px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  transition: transform 80ms ease-in;
-}
-
-button:active {
-  transform: scale(0.95);
-}
-
-button:focus {
-  outline: none;
-}
-
-button.ghost {
+.ghost {
   background-color: transparent;
   border-color: #ffffff;
 }
@@ -258,7 +247,7 @@ input {
   transform: translateX(20%);
 }
 
-.google-button {
+.google-BaseButton {
   margin: 0 auto;
   display: block;
 }
