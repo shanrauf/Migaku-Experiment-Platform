@@ -157,7 +157,7 @@ module.exports = {
         loader: 'vue-loader'
       },
       {
-        test: /\.m?js$/,
+        test: /\.js$/,
         include: path.resolve(__dirname, 'src'),
         use: {
           loader: 'babel-loader?cacheDirectory'
@@ -185,13 +185,11 @@ module.exports = {
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
-        use: [
-          'file-loader?name=[name].[ext]&outputPath=images/&publicPath=images/'
-        ]
+        use: ['file-loader?name=[name].[ext]']
       },
       {
         test: /\.(ico|eot|ttf|woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-        use: 'file-loader?name=[name].[ext]&outputPath=fonts/&publicPath=fonts/'
+        use: 'file-loader?name=[name].[ext]'
       }
     ]
   },
