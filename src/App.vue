@@ -21,6 +21,11 @@ export default {
   components: {
     BaseFooter,
     TopNavigation
+  },
+  watch: {
+    $route(to, from) {
+      document.title = to.meta.title || "MIA Experiments";
+    }
   }
 };
 </script>
