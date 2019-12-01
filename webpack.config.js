@@ -6,6 +6,7 @@ const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 function ifUtil(NODE_ENV) {
   return (dev_value, prod_value) => {
@@ -35,6 +36,12 @@ const plugins = [
   new VuetifyLoaderPlugin(),
   new webpack.HotModuleReplacementPlugin(),
   new FriendlyErrorsPlugin(),
+  new CopyPlugin(
+    [{ from: 'src/assets/images/favicon.ico', to: 'assets/images' }],
+    {
+      copyUnmodified: true
+    }
+  ),
   new HtmlWebpackPlugin({
     template: 'src/index.html',
     filename: 'index.html',

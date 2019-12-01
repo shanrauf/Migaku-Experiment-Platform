@@ -1,7 +1,7 @@
 <template>
   <div class="survey-container">
-    <SideNavigation :sections="getSurveySectionTitles" />
-    <FormBuilder :surveyData="getSurveyData" />
+    <SideNavigation :sections="getCurrentSurveySectionTitles" />
+    <FormBuilder :currentSurvey="getCurrentSurvey" />
   </div>
 </template>
 
@@ -15,10 +15,10 @@ export default {
     SideNavigation
   },
   created() {
-    this.$store.dispatch("createSurveyData");
+    this.$store.dispatch("createCurrentSurvey", this.$route.params.survey);
   },
   computed: {
-    ...mapGetters(["getSurveyData", "getSurveySectionTitles"])
+    ...mapGetters(["getCurrentSurvey", "getCurrentSurveySectionTitles"])
   }
 };
 </script>

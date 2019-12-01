@@ -3,7 +3,7 @@
     <div class="form-container sign-up-container">
       <form>
         <h1>Create Account</h1>
-        <v-btn class="google-BaseButton" rounded color="#df4930">
+        <v-btn class="google-button" rounded color="#df4930">
           <v-icon color="white" left>$vuetify.icons.google</v-icon>
           <b class="white-text">Login with Google</b>
         </v-btn>
@@ -19,7 +19,7 @@
     <div class="form-container sign-in-container">
       <form>
         <h1>Sign in</h1>
-        <v-btn class="google-BaseButton" rounded color="#df4930">
+        <v-btn class="google-button" rounded color="#df4930">
           <v-icon color="white" left>$vuetify.icons.google</v-icon>
           <b class="white-text">Login with Google</b>
         </v-btn>
@@ -247,7 +247,7 @@ input {
   transform: translateX(20%);
 }
 
-.google-BaseButton {
+.google-button {
   margin: 0 auto;
   display: block;
 }

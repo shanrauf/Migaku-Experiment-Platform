@@ -13,29 +13,29 @@
 </template>
 
 <script>
-import TopNavigation from '@/components/TopNavigation.vue';
-import BaseFooter from '@/components/BaseFooter.vue';
+import TopNavigation from "@/components/TopNavigation.vue";
+import BaseFooter from "@/components/BaseFooter.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     BaseFooter,
     TopNavigation
   },
   watch: {
     $route(to, from) {
-      document.title = to.meta.title || 'MIA Experiments';
+      document.title = to.meta.title || "MIA Experiments";
     }
   }
 };
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Roboto&display=swap");
 
 #vuetify {
   font-size: 100%;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #f2f3f4;

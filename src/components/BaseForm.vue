@@ -1,25 +1,21 @@
 <template>
   <v-form class="form" lazy-validation>
-    <h1 style="margin: 20px 20px 5px 0">{{ section.title }}</h1>
-    <p style="margin: 0 20px 20px 0">{{ section.description }}</p>
-    <div v-for="question in section.questions" :key="question.key">
+    <h1 style="margin: 20px 20px 5px 0">{{ title }}</h1>
+    <p style="margin: 0 20px 20px 0">{{ description }}</p>
+    <div v-for="question in questions" :key="question.key">
       <h3>{{ question.question }}</h3>
       <component
         :is="typeToComponent(question.type)"
-        :initialValue="question.value"
+        :value="question.value"
         :label="question.label"
         :items="getItems(question.items)"
         :rules="getRules(question.rules)"
         @update="(...args) => updateQuestion(question, ...args)"
+        :disabled="$route.fullPath.split('/').slice(-1).pop() == 'view'"
       />
     </div>
-    <v-row v-if="section.subsections">
-      <v-col v-for="subsection in section.subsections" :key="subsection.name">
-        <BaseForm :section="subsection" />
-      </v-col>
-    </v-row>
 
-    <div v-if="section.id == getNumberOfSections">
+    <div v-if="id == getNumberOfSections">
       <v-btn style="margin: 10px">Back</v-btn>
       <v-btn style="margin: 10px" color="primary">Submit</v-btn>
     </div>
@@ -30,21 +26,29 @@
 import { mapGetters } from "vuex";
 
 import { formMixin } from "@/mixins/formMixin.js";
-const BaseForm = () => import("@/components/BaseForm.vue"); // recursive calls for subsections
 import components from "@/components/form";
 
 export default {
   mixins: [formMixin],
   props: {
-    section: {
-      type: Object,
-      required: true
+    id: {
+      type: String | Number,
+      required: false
+    },
+    title: {
+      type: String,
+      required: false
+    },
+    description: {
+      type: String,
+      required: false
+    },
+    questions: {
+      type: Array,
+      required: false
     }
   },
-  components: {
-    ...components,
-    BaseForm
-  },
+  components,
   data() {
     return {
       items: {
@@ -56,9 +60,9 @@ export default {
       },
       ruleGenerators: {
         maxChar: val => v =>
-          (v && v.length <= val) || `Must be less than ${val} characters`,
+          v.length <= val || `Must be less than ${val} characters`,
         minChar: val => v =>
-          (v && v.length >= val) || `Must be greater than ${val} characters`,
+          v.length >= val || `Must be greater than ${val} characters`,
         email: val => {
           if (val == "true") {
             return v => /.+@.+\..+/.test(v) || "E-mail must be valid";
@@ -105,7 +109,7 @@ export default {
           return items;
         }
       } else if (typeof questionItems == "object") {
-        // if surveyData provides their own Array of items
+        // if currentSurvey provides their own Array of items
         return questionItems;
       } else {
         return [];

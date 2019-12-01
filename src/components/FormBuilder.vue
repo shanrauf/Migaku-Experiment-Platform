@@ -2,15 +2,15 @@
   <div>
     <BaseCard
       :id="camelCase(section.title)"
-      v-for="section in surveyData.sections"
+      v-for="section in currentSurvey.sections"
       :key="section.id"
     >
       <div v-if="section.id == 1">
-        <h1 style="text-align: center">{{surveyData.title}}</h1>
-        <p style="text-align: center">{{surveyData.description}}</p>
+        <h1 style="text-align: center">{{ currentSurvey.title }}</h1>
+        <p style="text-align: center">{{ currentSurvey.description }}</p>
       </div>
       <SectionBanner :sectionId="section.id" :numberOfSections="getNumberOfSections" />
-      <BaseForm :section="section" />
+      <BaseForm v-bind="section" />
     </BaseCard>
   </div>
 </template>
@@ -20,10 +20,11 @@ import { mapGetters } from "vuex";
 import BaseForm from "@/components/BaseForm.vue";
 import BaseCard from "@/components/BaseCard.vue";
 import SectionBanner from "@/components/SectionBanner.vue";
+import { camelCase } from "@/utils/index.js";
 
 export default {
   props: {
-    surveyData: {
+    currentSurvey: {
       type: Object,
       required: true
     }
@@ -37,13 +38,7 @@ export default {
     ...mapGetters(["getNumberOfSections"])
   },
   methods: {
-    camelCase(str) {
-      return str
-        .replace(/(?:^\w|[A-Z]|\b\w)/g, function(word, index) {
-          return index == 0 ? word.toLowerCase() : word.toUpperCase();
-        })
-        .replace(/\s+/g, "");
-    }
+    camelCase
   }
 };
 </script>

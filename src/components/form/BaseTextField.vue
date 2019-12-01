@@ -3,7 +3,7 @@
     v-model="inputValue"
     :rules="rules"
     :placeholder="placeholder"
-    :value="initialValue"
+    :value="value"
     :label="label"
     :required="required"
     @input="$emit('update', inputValue)"
@@ -17,7 +17,7 @@ export default {
       type: String,
       required: false
     },
-    initialValue: {
+    value: {
       type: String | Number,
       required: true
     },

@@ -2,6 +2,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
+import store from '@/store';
+
 const HomeView = () => import('@/views/HomeView.vue');
 const ExperimentsView = () => import('@/views/ExperimentsView.vue');
 const ExperimentView = () => import('@/views/ExperimentView.vue');
@@ -135,5 +137,19 @@ const routes = [
 ];
 
 const router = new VueRouter({ mode: 'history', routes: routes });
+
+router.beforeEach((to, _, next) => {
+  if (to.matched.some(record => record.meta.requiresAdmin)) {
+    if (!store.user.isAdmin) {
+      router.push('/');
+    }
+  } else if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!store.user) {
+      router.push('/');
+    }
+  } else {
+    next();
+  }
+});
 
 export default router;

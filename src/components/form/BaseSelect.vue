@@ -5,7 +5,7 @@
     hide-selected
     :items="items"
     :placeholder="placeholder"
-    :value="initialValue"
+    :value="value"
     :rules="rules"
     :label="label || 'Select one:'"
     @input="$emit('update', inputValue)"
@@ -19,7 +19,7 @@ export default {
       type: String,
       required: false
     },
-    initialValue: {
+    value: {
       type: String | Number,
       required: true
     },

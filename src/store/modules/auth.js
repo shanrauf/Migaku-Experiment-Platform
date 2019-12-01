@@ -11,8 +11,11 @@ const getters = {};
 const actions = {
   async login({ commit }) {
     commit({
-      type: "setUser",
-      user: {}
+      type: 'setUser',
+      user: {
+        email: 'asdf@gmail.com',
+        isAdmin: true
+      }
     });
   }
 };
