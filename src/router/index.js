@@ -66,6 +66,16 @@ const routes = [
         component: ExperimentDashboard
       },
       {
+        path: 'edit',
+        meta: {
+          name: 'editExperiment',
+          title: 'Edit MIA Experiment',
+          requiresAuth: true,
+          requiresAdmin: false
+        },
+        component: ExperimentDashboard
+      },
+      {
         path: 'participants',
         meta: {
           name: 'participants',
@@ -79,18 +89,9 @@ const routes = [
         path: 'surveys',
         meta: {
           name: 'surveys',
-          title: 'MIA Experiment Dashboard',
+          title: 'MIA Experiment Surveys',
           requiresAuth: true,
           requiresAdmin: false
-        },
-        component: SurveysView
-      },
-      {
-        path: 'surveys/create',
-        meta: {
-          name: 'dashboard',
-          title: 'MIA Experiment Dashboard',
-          requiresAdmin: true
         },
         component: SurveysView
       },
@@ -98,7 +99,7 @@ const routes = [
         path: 'surveys/:survey',
         meta: {
           name: 'dashboard',
-          title: 'MIA Experiment Dashboard',
+          title: 'MIA Experiment Survey',
           requiresAuth: true,
           requiresAdmin: false
         },
@@ -126,7 +127,7 @@ const routes = [
         path: 'surveys/:survey/view',
         meta: {
           name: 'dashboard',
-          title: 'MIA Experiment Dashboard',
+          title: 'View MIA Experiment Survey',
           requiresAdmin: true
         },
         component: SurveyView

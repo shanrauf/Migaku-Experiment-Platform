@@ -33,6 +33,7 @@ export default {
   },
   mounted() {
     // dispatch store action stating I need data on experiment w id that's in url
+    // if admin, add UI/options to edit/delete experiment and what not
   },
   data() {
     return {
