@@ -1,17 +1,17 @@
 <template>
   <div class="survey-container">
-    <SideNavigation :sections="getCurrentSurveySectionTitles" />
-    <FormBuilder :currentSurvey="getCurrentSurvey" />
+    <SideNavigation v-if="getCurrentSurveySectionTitles" :sections="getCurrentSurveySectionTitles" />
+    <SurveyBuilder :currentSurvey="getCurrentSurvey" :viewMode="surveyViewMode" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import SideNavigation from "@/components/SideNavigation.vue";
-import FormBuilder from "@/components/FormBuilder.vue";
+import SurveyBuilder from "@/components/SurveyBuilder.vue";
 export default {
   components: {
-    FormBuilder,
+    SurveyBuilder,
     SideNavigation
   },
   created() {
@@ -27,7 +27,10 @@ export default {
     this.$store.dispatch("createCurrentSurvey", this.$route.params.survey);
   },
   computed: {
-    ...mapGetters(["getCurrentSurvey", "getCurrentSurveySectionTitles"])
+    ...mapGetters(["getCurrentSurvey", "getCurrentSurveySectionTitles"]),
+    surveyViewMode() {
+      return this.$route.fullPath.split("/").pop();
+    }
   }
 };
 </script>
@@ -35,7 +38,7 @@ export default {
 <style lang="scss" scoped>
 .survey-container {
   margin: auto;
-  margin-top: -64px;
+  margin-top: -125px;
   width: 750px;
 }
 </style>

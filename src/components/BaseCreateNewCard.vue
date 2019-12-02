@@ -1,10 +1,5 @@
 <template>
-  <v-card
-    :to="to"
-    class="mx-auto card-container"
-    style="text-align: center; height: 300px;"
-    raised
-  >
+  <v-card v-bind="$attrs" :to="to" class="mx-auto card-container" style="text-align: center" raised>
     <div class="create-new-container">
       <v-icon color="black" x-large>$vuetify.icons.add</v-icon>
       <h1>Create New</h1>

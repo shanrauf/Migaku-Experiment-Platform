@@ -1,4 +1,4 @@
-const surveyData = require('@/surveyData.json');
+const surveyData = require("@/surveyData.json");
 // import router from '@/router';
 
 const state = () => {
@@ -20,21 +20,21 @@ const actions = {
   async createSurveys({ commit }) {
     // await api call.then()
     commit({
-      type: 'setSurveys',
+      type: "setSurveys",
       surveys: [
         {
-          id: 'sa54df154sa4dffpsdf',
-          title: 'MIA Mid-Experiment Survey Week 1',
+          id: "sa54df154sa4dffpsdf",
+          title: "MIA Mid-Experiment Survey Week 1",
           description:
-            'This is the first weekly survey to gauge your progress during the experiment.',
+            "This is the first weekly survey to gauge your progress during the experiment.",
           startDate: 1575849600000,
           endDate: 1576108800000
         },
         {
-          id: 'h9g45wj54gi90jhi9ds',
-          title: 'Testing Anki Retention At Different Learning Steps',
+          id: "h9g45wj54gi90jhi9ds",
+          title: "Testing Anki Retention At Different Learning Steps",
           description:
-            'This is the second weekly survey to gauge your progress during the experiment.',
+            "This is the second weekly survey to gauge your progress during the experiment.",
           startDate: Date.now(),
           endDate: Date.now() + 2.68e9
         }
@@ -44,7 +44,7 @@ const actions = {
   async createCurrentSurvey({ commit }, surveyId) {
     console.log(surveyId);
     commit({
-      type: 'setCurrentSurvey',
+      type: "setCurrentSurvey",
       currentSurvey: surveyData
     });
   }
@@ -59,7 +59,16 @@ const mutations = {
   },
   updateQuestionValue(_, payload) {
     // don't need state param since question is a reference to that value in state
-    payload.question.value = payload.newValue;
+    payload.question[payload.attributeToUpdate] = payload.newValue;
+  },
+  setCurrentSurveyTitle(state, newTitle) {
+    state.currentSurvey.title = newTitle;
+  },
+  setCurrentSurveyDescription(state, newDescription) {
+    state.currentSurvey.description = newDescription;
+  },
+  updateCurrentSurveyMetadata(_, payload) {
+    payload.section[payload.attributeToUpdate] = payload.newVal;
   }
 };
 

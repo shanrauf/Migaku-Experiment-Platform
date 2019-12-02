@@ -1,56 +1,79 @@
 <template>
   <v-form class="form" lazy-validation>
-    <h1 style="margin: 20px 20px 5px 0">{{ title }}</h1>
-    <p style="margin: 0 20px 20px 0">{{ description }}</p>
-    <div v-for="question in questions" :key="question.key">
-      <h3>{{ question.question }}</h3>
-      <component
-        :is="typeToComponent(question.type)"
-        :value="question.value"
-        :label="question.label"
-        :items="getItems(question.items)"
-        :rules="getRules(question.rules)"
-        @update="(...args) => updateQuestion(question, ...args)"
-        :disabled="$route.fullPath.split('/').slice(-1).pop() == 'view'"
-      />
+    <h1
+      style="margin: 20px 20px 5px 0"
+      :contenteditable="editable"
+      @blur="updateCurrentSurveyMetadata($event, 'title')"
+    >{{ section.title }}</h1>
+    <p
+      style="margin: 0 20px 20px 0"
+      :contenteditable="editable"
+      @blur="updateCurrentSurveyMetadata($event, 'description')"
+    >{{ section.description }}</p>
+    <component
+      v-for="question in section.questions"
+      :key="question.key"
+      :is="typeToComponent(question.type)"
+      :value="question.value"
+      :label="question.label"
+      :placeholder="question.placeholder"
+      :rules="getRules(question.rules)"
+      :items="getItems(question.items)"
+      @update="(...args) => updateQuestionValue(question, ...args)"
+    />
+    <div v-if="section.id == getNumberOfSections">
+      <v-btn style="margin: 10px" @click="confirmOverlay = true">Back</v-btn>
+      <v-btn style="margin: 10px" color="primary" @click="submitSurvey">Submit</v-btn>
     </div>
 
-    <div v-if="id == getNumberOfSections">
-      <v-btn style="margin: 10px">Back</v-btn>
-      <v-btn style="margin: 10px" color="primary">Submit</v-btn>
-    </div>
+    <v-overlay :value="editOverlay">
+      <EditInputForm />
+    </v-overlay>
+
+    <v-overlay :value="confirmOverlay">
+      <v-card class="mx-auto" style="padding: 20px;">
+        <h2 style="text-align: center;">Are you sure?</h2>
+        <v-card-subtitle>Your progress will be erased...</v-card-subtitle>
+        <div style="display: flex; justify-content: space-between;">
+          <v-btn @click="$router.push({name: 'surveys'})">Yes</v-btn>
+          <v-btn @click="confirmOverlay = false">No</v-btn>
+        </div>
+      </v-card>
+    </v-overlay>
   </v-form>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-
 import { formMixin } from "@/mixins/formMixin.js";
 import components from "@/components/form";
+import BaseCreateNewCard from "@/components/BaseCreateNewCard.vue";
 
 export default {
   mixins: [formMixin],
   props: {
-    id: {
-      type: String | Number,
-      required: false
+    section: {
+      type: Object,
+      required: true
     },
-    title: {
-      type: String,
-      required: false
+    disabled: {
+      type: Boolean,
+      required: true
     },
-    description: {
-      type: String,
-      required: false
-    },
-    questions: {
-      type: Array,
-      required: false
+    editable: {
+      type: Boolean,
+      required: true
     }
   },
-  components,
+  components: {
+    ...components,
+    BaseCreateNewCard
+  },
   data() {
     return {
+      formInputs: [],
+      editOverlay: false,
+      confirmOverlay: false,
       items: {
         hoursInADay: [...Array(25).keys()],
         hoursInAWeek: [...Array(169).keys()],
@@ -93,11 +116,25 @@ export default {
     ...mapGetters(["getNumberOfSections"])
   },
   methods: {
-    updateQuestion(question, newValue) {
+    submitSurvey() {
+      this.confirmOverlay = false;
+      console.log("Submitted");
+      this.$router.push({ name: "surveys" });
+    },
+    updateQuestionValue(question, newValue) {
       this.$store.commit({
         type: "updateQuestionValue",
-        question: question,
-        newValue: newValue
+        question,
+        attributeToUpdate: "value",
+        newValue
+      });
+    },
+    updateCurrentSurveyMetadata(newVal, surveyAttributeToUpdate) {
+      this.$store.commit({
+        type: "updateCurrentSurveyMetadata",
+        section: this.section,
+        attributeToUpdate: surveyAttributeToUpdate,
+        newVal: newVal.target.innerText
       });
     },
     getItems(questionItems) {

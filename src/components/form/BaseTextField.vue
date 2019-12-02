@@ -1,17 +1,14 @@
 <template>
-  <v-text-field
-    v-model="inputValue"
-    :rules="rules"
-    :placeholder="placeholder"
-    :value="value"
-    :label="label"
-    :required="required"
-    @input="$emit('update', inputValue)"
-  ></v-text-field>
+  <!-- <div style="width: 200px;"> can apply this when want UI controls for fields -->
+    <v-text-field
+    v-bind="$attrs"
+    :label="label || 'Select one:'"
+    @input="onInput($event)" />
 </template>
 
 <script>
 export default {
+  inheritAttrs: false,
   props: {
     label: {
       type: String,
@@ -34,10 +31,10 @@ export default {
       required: false
     }
   },
-  data() {
-    return {
-      inputValue: ""
-    };
+  methods: {
+    onInput(newVal) {
+      this.$emit("update", newVal)
+    }
   }
 };
 </script>

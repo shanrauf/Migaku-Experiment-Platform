@@ -1,4 +1,5 @@
 <template>
+<!-- <div style="width: 200px;"> -->
   <v-select
     v-model="inputValue"
     menu-props="menuProps"
@@ -9,7 +10,7 @@
     :rules="rules"
     :label="label || 'Select one:'"
     @input="$emit('update', inputValue)"
-  ></v-select>
+  />
 </template>
 
 <script>
