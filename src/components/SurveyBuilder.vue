@@ -3,9 +3,9 @@
     <BaseCard
       :id="camelCase(section.title)"
       v-for="section in currentSurvey.sections"
-      :key="section.id"
+      :key="section.sectionId"
     >
-      <div v-if="section.id == 1">
+      <div v-if="section.sectionId == 1">
         <h1
           style="text-align: center"
           @blur="setTitle"
@@ -17,7 +17,7 @@
           :contenteditable="contentEditable"
         >{{ currentSurvey.description }}</p>
       </div>
-      <SectionBanner :sectionId="section.id" :numberOfSections="getNumberOfSections" />
+      <SectionBanner :sectionId="section.sectionId" :numberOfSections="getNumberOfSections" />
       <BaseSurvey :section="section" :editable="contentEditable" :disabled="viewMode == 'view'" />
     </BaseCard>
   </div>

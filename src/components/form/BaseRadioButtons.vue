@@ -15,7 +15,7 @@
     >
       <v-radio
         v-for="item in items"
-        :key="item.key || item"
+        :key="item.id || item"
         :label="item.key || item"
         :value="item.value || item"
       />

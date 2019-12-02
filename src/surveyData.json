@@ -6,12 +6,12 @@
   "endDate": 1576108800000,
   "sections": [
     {
-      "id": 1,
+      "sectionId": 1,
       "title": "Basic Information",
       "description": "This section is simply for us to identify who is filling out the survey.",
       "questions": [
         {
-          "key": "name",
+          "id": "name",
           "label": "Name",
           "type": "text",
           "rules": "maxChar=100&minChar=1",
@@ -20,7 +20,7 @@
           "required": true
         },
         {
-          "key": "email",
+          "id": "email",
           "label": "Email",
           "type": "text",
           "rules": "maxChar=100&minChar=1&email=true",
@@ -29,7 +29,7 @@
           "required": true
         },
         {
-          "key": "age",
+          "id": "age",
           "label": "Age",
           "type": "select",
           "rules": "maxChar=100&minChar=1",
@@ -39,7 +39,7 @@
           "required": true
         },
         {
-          "key": "completedRRTK",
+          "id": "completedRRTK",
           "label": "Recognition RTK",
           "type": "radio",
           "question": "Have you completed RRTK (Recognition RTK, previously known as Lazy Kanji)?",
@@ -52,7 +52,7 @@
           "required": true
         },
         {
-          "key": "completedPRTK",
+          "id": "completedPRTK",
           "label": "Production RTK",
           "type": "radio",
           "question": "Have you completed PRTK (Production RTK, previously known as Traditional RTK)?",
@@ -65,7 +65,7 @@
           "required": true
         },
         {
-          "key": "otherKanjiStudies",
+          "id": "otherKanjiStudies",
           "label": "Kanji Studies Outside of RTK",
           "type": "text",
           "rules": "maxChar=500&minChar=1",
@@ -75,7 +75,7 @@
           "required": false
         },
         {
-          "key": "preferredCardType",
+          "id": "preferredCardType",
           "label": "Preferred Card Type",
           "type": "select",
           "question": "Which of the card types do you prefer to review in Anki?",
@@ -86,12 +86,12 @@
       ]
     },
     {
-      "id": 2,
+      "sectionId": 2,
       "title": "Immersion Stats",
       "description": "This section will help us understand how you study Japanese. Don't feel bad if your answer to any of these questions is zero XD",
       "questions": [
         {
-          "key": "avgActiveListening",
+          "id": "avgActiveListening",
           "label": "Average Hours of Active Listening",
           "type": "select",
           "question": "How many hours of active listening did you do this week?",
@@ -100,7 +100,7 @@
           "required": true
         },
         {
-          "key": "avgPassiveListening",
+          "id": "avgPassiveListening",
           "label": "Average Hours of Passive Listening",
           "type": "select",
           "question": "How many hours of passive listening did you do this week?",
@@ -109,7 +109,7 @@
           "required": true
         },
         {
-          "key": "avgReading",
+          "id": "avgReading",
           "label": "Average Hours of Reading",
           "type": "select",
           "question": "How many hours of reading did you do this week?",
@@ -118,7 +118,7 @@
           "required": true
         },
         {
-          "key": "activeListeningWithSubtitles",
+          "id": "activeListeningWithSubtitles",
           "label": "Percentage of Active Listening with subtitles",
           "type": "select",
           "question": "What percentage of your active listening happened with subtitles (including the time spent mining sentences from subtitles)?",
@@ -127,7 +127,7 @@
           "required": true
         },
         {
-          "key": "daysOfActiveImmersionMissed",
+          "id": "daysOfActiveImmersionMissed",
           "label": "Days of Active Immersion Missed",
           "type": "select",
           "question": "How many days of active immersion did you miss this week? (NOTE: If you immersed a bit less than your average immersion time, you can still count that as a day of immersion.)",
@@ -136,7 +136,7 @@
           "required": true
         },
         {
-          "key": "daysOfReadingMissed",
+          "id": "daysOfReadingMissed",
           "label": "Days of Reading Missed",
           "type": "select",
           "question": "How many days of reading did you miss this week?",
@@ -147,13 +147,13 @@
       ]
     },
     {
-      "id": 3,
+      "sectionId": 3,
       "title": "Audio Card Type",
       "description": "This section is for us to understand your feelings about the card types we are testing.",
       "image": "",
       "questions": [
         {
-          "key": "difficultyToLearnNewCards",
+          "id": "difficultyToLearnNewCards",
           "label": "Difficulty to Learn New Cards",
           "type": "select",
           "question": "On a scale of 1-5, how difficult do you feel it is to learn new cards with this note type? (1 = extremely easy, 5 = extremely difficult)",
@@ -162,7 +162,7 @@
           "required": true
         },
         {
-          "key": "difficultyToRememberLearnedCards",
+          "id": "difficultyToRememberLearnedCards",
           "label": "Difficulty to Remember Learned Cards",
           "type": "select",
           "question": "On a scale of 1-5, how difficult do you feel it is to remember learned cards with this note type (cards you have reviewed at least once)? (1 = extremely easy, 5 = extremely difficult)",
@@ -171,7 +171,7 @@
           "required": true
         },
         {
-          "key": "howEnjoyableIsReviewing",
+          "id": "howEnjoyableIsReviewing",
           "label": "How Enjoyable is Reviewing",
           "type": "select",
           "question": "On a scale of 1-5, how enjoyable do you feel it is to review cards with this note type? (1 = horrible to review, 5 = extremely enjoyable to review)",
@@ -180,7 +180,7 @@
           "required": true
         },
         {
-          "key": "cardLeadsToUnderstandingInImmersion",
+          "id": "cardLeadsToUnderstandingInImmersion",
           "label": "Card Leads to Understanding In Immersion",
           "type": "select",
           "question": "On a scale of 1-5, how well do you feel cards with this note type lead to improved understanding in immersion? (1 = I almost never notice/understand words I learned with this note type in my immersion, 5 = I very frequently notice/understand words I learned with this note type in my immersion)",
@@ -191,13 +191,13 @@
       ]
     },
     {
-      "id": 4,
+      "sectionId": 4,
       "description": "This section is for us to understand your feelings about the card types we are testing.",
       "title": "Sentence Card Type",
       "image": "",
       "questions": [
         {
-          "key": "difficultyToLearnNewCards",
+          "id": "difficultyToLearnNewCards",
           "label": "Difficulty to Learn New Cards",
           "type": "select",
           "question": "On a scale of 1-5, how difficult do you feel it is to learn new cards with this note type? (1 = extremely easy, 5 = extremely difficult)",
@@ -206,7 +206,7 @@
           "required": true
         },
         {
-          "key": "difficultyToRememberLearnedCards",
+          "id": "difficultyToRememberLearnedCards",
           "label": "Difficulty to Remember Learned Cards",
           "type": "select",
           "question": "On a scale of 1-5, how difficult do you feel it is to remember learned cards with this note type (cards you have reviewed at least once)? (1 = extremely easy, 5 = extremely difficult)",
@@ -215,7 +215,7 @@
           "required": true
         },
         {
-          "key": "howEnjoyableIsReviewing",
+          "id": "howEnjoyableIsReviewing",
           "label": "How Enjoyable is Reviewing",
           "type": "select",
           "question": "On a scale of 1-5, how enjoyable do you feel it is to review cards with this note type? (1 = horrible to review, 5 = extremely enjoyable to review)",
@@ -224,7 +224,7 @@
           "required": true
         },
         {
-          "key": "cardLeadsToUnderstandingInImmersion",
+          "id": "cardLeadsToUnderstandingInImmersion",
           "label": "Card Leads to Understanding In Immersion",
           "type": "select",
           "question": "On a scale of 1-5, how well do you feel cards with this note type lead to improved understanding in immersion? (1 = I almost never notice/understand words I learned with this note type in my immersion, 5 = I very frequently notice/understand words I learned with this note type in my immersion)",

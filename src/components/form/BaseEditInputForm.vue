@@ -37,7 +37,7 @@ import BaseSelect from "@/components/form/BaseSelect.vue";
 import BaseRadioButtons from "@/components/form/BaseRadioButtons.vue";
 import BaseTextField from "@/components/form/BaseTextField.vue";
 
-// ;lable vs id in db,; how to see same labels/values across surveys/exps
+// by "keys" I prob meant id of the question
 
 export default {
   name: "editInputForm",

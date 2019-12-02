@@ -23,7 +23,7 @@
       :editable="editable"
       @edit="updateEditOverlay"
     />
-    <div v-if="section.id == getNumberOfSections">
+    <div v-if="section.sectionId == getNumberOfSections">
       <v-btn style="margin: 10px" @click="confirmOverlay = true">Back</v-btn>
       <v-btn style="margin: 10px" color="primary" @click="submitSurvey">Submit</v-btn>
     </div>
