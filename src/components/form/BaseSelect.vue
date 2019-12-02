@@ -1,28 +1,40 @@
 <template>
-<!-- <div style="width: 200px;"> -->
-  <v-select
-    v-model="inputValue"
-    menu-props="menuProps"
-    hide-selected
-    :items="items"
-    :placeholder="placeholder"
-    :value="value"
-    :rules="rules"
-    :label="label || 'Select one:'"
-    @input="$emit('update', inputValue)"
-  />
+  <!-- <div style="width: 200px;"> -->
+  <v-input
+    :messages="[`${note}`]"
+    :append-icon="icon && '$vuetify.icons.edit'"
+    @click:append="$emit('edit', true)"
+  >
+    <v-select
+      v-model="inputValue"
+      menu-props="menuProps"
+      hide-selected
+      :items="items"
+      :placeholder="placeholder"
+      :value="value"
+      :rules="rules"
+      :label="label || 'Select one:'"
+      @input="$emit('update', inputValue)"
+    />
+  </v-input>
 </template>
 
 <script>
 export default {
+  name: "BaseSelect",
   props: {
     label: {
       type: String,
       required: false
     },
+    note: {
+      type: String,
+      required: false,
+      default: ""
+    },
     value: {
       type: String | Number,
-      required: true
+      required: false
     },
     placeholder: {
       type: String | Number,
@@ -34,6 +46,10 @@ export default {
     },
     rules: {
       type: Array,
+      required: false
+    },
+    editable: {
+      type: Boolean,
       required: false
     }
   },
@@ -47,6 +63,15 @@ export default {
       },
       inputValue: ""
     };
+  },
+  computed: {
+    icon() {
+      if (!this.editable) {
+        return undefined;
+      } else {
+        return true;
+      }
+    }
   }
 };
 </script>

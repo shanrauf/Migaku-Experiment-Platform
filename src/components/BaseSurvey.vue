@@ -20,6 +20,8 @@
       :rules="getRules(question.rules)"
       :items="getItems(question.items)"
       @update="(...args) => updateQuestionValue(question, ...args)"
+      :editable="editable"
+      @edit="updateEditOverlay"
     />
     <div v-if="section.id == getNumberOfSections">
       <v-btn style="margin: 10px" @click="confirmOverlay = true">Back</v-btn>
@@ -27,7 +29,7 @@
     </div>
 
     <v-overlay :value="editOverlay">
-      <EditInputForm />
+      <BaseEditInputForm @edit="updateEditOverlay" />
     </v-overlay>
 
     <v-overlay :value="confirmOverlay">
@@ -46,10 +48,13 @@
 <script>
 import { mapGetters } from "vuex";
 import { formMixin } from "@/mixins/formMixin.js";
-import components from "@/components/form";
+import BaseSelect from "@/components/form/BaseSelect.vue";
+import BaseRadioButtons from "@/components/form/BaseRadioButtons.vue";
+import BaseTextField from "@/components/form/BaseTextField.vue";
 import BaseCreateNewCard from "@/components/BaseCreateNewCard.vue";
-
+import BaseEditInputForm from "@/components/form/BaseEditInputForm.vue";
 export default {
+  name: "BaseSurvey",
   mixins: [formMixin],
   props: {
     section: {
@@ -66,8 +71,11 @@ export default {
     }
   },
   components: {
-    ...components,
-    BaseCreateNewCard
+    BaseSelect,
+    BaseRadioButtons,
+    BaseTextField,
+    BaseCreateNewCard,
+    BaseEditInputForm
   },
   data() {
     return {
@@ -128,6 +136,9 @@ export default {
         attributeToUpdate: "value",
         newValue
       });
+    },
+    updateEditOverlay(val) {
+      this.editOverlay = val;
     },
     updateCurrentSurveyMetadata(newVal, surveyAttributeToUpdate) {
       this.$store.commit({
