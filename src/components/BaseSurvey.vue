@@ -87,6 +87,7 @@ export default {
         hoursInAWeek: [...Array(169).keys()],
         oneToFiveScale: [...Array(6).keys()].splice(1), // splice selects all but "0"
         daysInAWeek: [...Array(8).keys()],
+        oneToTenScale: [...Array(11).keys()].splice(1),
         percentages: [...Array(101).keys()]
       },
       ruleGenerators: {
