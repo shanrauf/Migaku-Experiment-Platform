@@ -1,0 +1,51 @@
+{
+  "name": "mia-experiment-server",
+  "version": "1.0.0",
+  "description": "MIA Experiment Server",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "nodemon",
+    "inspect": "nodemon --inspect src/app.js",
+    "test": "jest",
+    "lint": "npm run lint:js ",
+    "lint:eslint": "eslint --ignore-path .gitignore --ext .ts",
+    "lint:js": "npm run lint:eslint src/",
+    "lint:fix": "npm run lint:js -- --fix"
+  },
+  "author": "Santiago Quinteros",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "dotenv": "^5.0.1",
+    "errorhandler": "^1.5.0",
+    "event-dispatch": "^0.4.1",
+    "eventemitter3": "^3.1.0",
+    "express": "^4.16.2",
+    "express-basic-auth": "^1.2.0",
+    "express-jwt": "^5.3.1",
+    "jsonwebtoken": "^8.2.0",
+    "lodash": "^4.17.13",
+    "method-override": "^3.0.0",
+    "moment": "^2.23.0",
+    "moment-timezone": "^0.5.23",
+    "morgan": "^1.9.1",
+    "mysql2": "^2.0.1",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.4",
+    "@babel/node": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.2.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "jest": "^24.1.0",
+    "nodemon": "^2.0.1",
+    "prettier": "^1.17.0"
+  },
+  "bugs": {
+    "url": "https://github.com/mass-immersion-approach"
+  },
+  "homepage": "https://github.com/mass-immersion-approach"
+}

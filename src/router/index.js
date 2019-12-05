@@ -150,18 +150,21 @@ const routes = [
 
 const router = new VueRouter({ mode: "history", routes: routes });
 
-// router.beforeEach((to, _, next) => {
-//   if (to.matched.some(record => record.meta.requiresAdmin)) {
-//     if (!store.user.isAdmin) {
-//       router.push('/');
-//     }
-//   } else if (to.matched.some(record => record.meta.requiresAuth)) {
-//     if (!store.user) {
-//       router.push('/');
-//     }
-//   } else {
-//     next();
-//   }
-// });
+router.beforeEach((to, _, next) => {
+  let requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  let requiresAdmin = to.matched.some(record => record.meta.requiresAdmin);
+
+  if (requiresAdmin) {
+    if (!store.user.isAdmin) {
+      router.push("/");
+    }
+  } else if (requiresAuth) {
+    if (!store.user) {
+      router.push("/");
+    }
+  } else {
+    next();
+  }
+});
 
 export default router;

@@ -84,11 +84,18 @@
           "required": true
         },
         {
-        	"id": "difficultyOfDailySentenceMining",
-        	"label": "Difficulty of Daily Sentence Mining",
-        	"type": "select",
-        	"question": "On a scale of 1-5, how difficult do you find it to meet the daily quota of Anki cards for the experiment?",
-        	"items": "oneToFiveScale",
+          "id": "difficultyOfDailySentenceMining",
+          "label": "Difficulty of Daily Sentence Mining",
+          "type": "select",
+          "question": "On a scale of 1-5, how difficult do you find it to meet the daily quota of Anki cards for the experiment?",
+          "items": "oneToFiveScale"
+        },
+        {
+          "id": "commentsAboutExperiment",
+          "label": "Comments About Experiment",
+          "type": "text",
+          "question": "Do you have any comments about the experiment so far? (e.x things you found interesting, surprising; insights you've had, etc)",
+          "required": false
         }
       ]
     },
