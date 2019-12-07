@@ -1,22 +1,22 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import cors from 'cors';
-import routes from '../api';
-import config from '../config';
+// import express from 'express';
+import bodyParser from "body-parser";
+import cors from "cors";
+import routes from "../api";
+import config from "../config";
 export default ({ app }) => {
   /**
    * Health Check endpoints
    */
-  app.get('/status', (req, res) => {
+  app.get("/status", (req, res) => {
     res.status(200).end();
   });
-  app.head('/status', (req, res) => {
+  app.head("/status", (req, res) => {
     res.status(200).end();
   });
 
   // Useful if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
   // It shows the real origin IP in the heroku or Cloudwatch logs
-  app.enable('trust proxy');
+  app.enable("trust proxy");
 
   // The magic package that prevents frontend developers going nuts
   // Alternate description:
@@ -26,7 +26,7 @@ export default ({ app }) => {
   // Some sauce that always add since 2014
   // "Lets you use HTTP verbs such as PUT or DELETE in places where the client doesn't support it."
   // Maybe not needed anymore ?
-  app.use(require('method-override')());
+  app.use(require("method-override")());
 
   // Middleware that transforms the raw string of req.body into json
   app.use(bodyParser.json());
@@ -35,8 +35,8 @@ export default ({ app }) => {
 
   /// catch 404 and forward to error handler
   app.use((req, res, next) => {
-    const err = new Error('Not Found');
-    err['status'] = 404;
+    const err = new Error("Not Found");
+    err["status"] = 404;
     next(err);
   });
 
@@ -45,7 +45,7 @@ export default ({ app }) => {
     /**
      * Handle 401 thrown by express-jwt library
      */
-    if (err.name === 'UnauthorizedError') {
+    if (err.name === "UnauthorizedError") {
       return res
         .status(err.status)
         .send({ message: err.message })
@@ -57,8 +57,8 @@ export default ({ app }) => {
     res.status(err.status || 500);
     res.json({
       errors: {
-        message: err.message,
-      },
+        message: err.message
+      }
     });
   });
 };

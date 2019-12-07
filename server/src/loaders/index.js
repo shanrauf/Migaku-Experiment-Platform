@@ -1,10 +1,15 @@
 import expressLoader from "./express";
-import mongooseLoader from "./mongoose";
+import mysqlLoader from "./mysql";
 
 export default async ({ expressApp }) => {
-  const mongoConnection = await mongooseLoader();
+  const sqlConnection = await mysqlLoader();
+  sqlConnection.sequelize
+    .sync()
+    .then(() =>
+      console.log("Synced models with db (Use migrations instead b4 prod")
+    );
 
-  console.info("✌️ Dependency Injector loaded");
+  console.info("✌️ MySQL loaded");
 
   await expressLoader({ app: expressApp });
   console.info("✌️ Express loaded");
