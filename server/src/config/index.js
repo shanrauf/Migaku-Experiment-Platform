@@ -13,13 +13,39 @@ if (!envFound) {
 export default {
   port: parseInt(process.env.PORT, 10),
   sequelize: {
-    host: process.env.DATABASE_URL,
-    dialect: "mysql",
-    pool: {
-      max: 5,
-      min: 0,
-      acquire: 30000,
-      idle: 10000
+    options: {
+      host: process.env.DATABASE_URL,
+      dialect: "mysql",
+      pool: {
+        max: 5,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
+      }
+    },
+    development: {
+      username: "root",
+      password: process.env.ROOT_PASS,
+      database: "mia_experiment",
+      host: "127.0.0.1",
+      dialect: "mysql",
+      operatorsAliases: false
+    },
+    test: {
+      username: "root",
+      password: null,
+      database: "database_test",
+      host: "127.0.0.1",
+      dialect: "mysql",
+      operatorsAliases: false
+    },
+    production: {
+      username: "root",
+      password: null,
+      database: "database_production",
+      host: "127.0.0.1",
+      dialect: "mysql",
+      operatorsAliases: false
     }
   },
   jwtSecret: process.env.JWT_SECRET,

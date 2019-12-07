@@ -1,18 +1,20 @@
 const Sequelize = require("sequelize");
 import models from "../models";
 import config from "../config";
+import sequelizeConfig from "../config/sequelize.js";
 
 export default async () => {
   const sequelize = new Sequelize(
-    "mia_experiment",
-    "root",
+    sequelizeConfig[process.env.NODE_ENV].database,
+    sequelizeConfig[process.env.NODE_ENV].username,
     process.env.ROOT_PASS,
-    config.sequelize
+    config.sequelize.options
   );
 
   const db = {
     ...models(sequelize, Sequelize),
-    sequelize
+    sequelize,
+    Sequelize
   };
 
   db.sequelize

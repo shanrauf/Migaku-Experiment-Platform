@@ -6,13 +6,15 @@
   "scripts": {
     "start": "nodemon",
     "inspect": "nodemon --inspect src/app.js",
+    "migrate": "npx sequelize-cli db:migrate",
+    "seed": "npx sequelize-cli db:seed:all",
     "test": "jest",
     "lint": "npm run lint:js ",
     "lint:eslint": "eslint --ignore-path .gitignore --ext .ts",
     "lint:js": "npm run lint:eslint src/",
     "lint:fix": "npm run lint:js -- --fix"
   },
-  "author": "Santiago Quinteros",
+  "author": "Shan Rauf",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -38,6 +40,7 @@
     "@babel/core": "^7.7.4",
     "@babel/node": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
+    "babel-register": "^6.26.0",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.2.0",
     "eslint-plugin-prettier": "^3.0.1",

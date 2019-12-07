@@ -1,13 +1,9 @@
 import expressLoader from "./express";
-import mysqlLoader from "./mysql";
+import sequelizeLoader from "./sequelize";
 
 export default async ({ expressApp }) => {
-  const sqlConnection = await mysqlLoader();
-  sqlConnection.sequelize
-    .sync()
-    .then(() =>
-      console.log("Synced models with db (Use migrations instead b4 prod")
-    );
+  // const sqlConnection = await sequelizeLoader();
+  await sequelizeLoader();
 
   console.info("✌️ MySQL loaded");
 

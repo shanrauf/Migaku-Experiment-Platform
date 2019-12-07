@@ -14,5 +14,3 @@ dist/
 src/surveyData.json
 node_modules/
 package-lock.json
-
-data_dump/
