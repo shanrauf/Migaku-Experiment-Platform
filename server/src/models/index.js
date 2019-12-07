@@ -1,8 +1,8 @@
-import { User } from "./user.js";
+import { Participant } from "./participant.js";
 
 const models = (sequelize, Sequelize) => {
   let models = {
-    User: User.init(sequelize, Sequelize)
+    Participant: Participant.init(sequelize, Sequelize)
   };
 
   // Run `.associate` if it exists,

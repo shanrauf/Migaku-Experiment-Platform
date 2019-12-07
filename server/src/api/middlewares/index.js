@@ -1,7 +1,7 @@
-import attachCurrentUser from './attachCurrentUser';
-import isAuth from './isAuth';
+import continueIfNotAuthenticated from "./continueIfNotAuthenticated";
+import ensureAuthenticated from "./ensureAuthenticated";
 
 export default {
-  attachCurrentUser,
-  isAuth,
+  continueIfNotAuthenticated,
+  ensureAuthenticated
 };

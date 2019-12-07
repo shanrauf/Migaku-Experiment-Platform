@@ -1,5 +1,6 @@
 import { Router } from "express";
-import middlewares from "../middlewares";
+// import middlewares from "../middlewares";
+import passport from "passport";
 const route = Router();
 
 export default app => {
@@ -7,10 +8,16 @@ export default app => {
 
   route.get(
     "/me",
-    middlewares.isAuth,
-    middlewares.attachCurrentUser,
+    passport.authenticate("jwt", { session: false }),
+    // middlewares.attachCurrentUser,
     (req, res) => {
-      return res.json({ user: req.currentUser }).status(200);
+      return res.json({ user: req.user }).status(200);
     }
   );
+
+  route.get("/surveyStatus", (req, res) => {
+    const { email } = req;
+    // check if completed survey
+    return res.json({ email }).status(200);
+  });
 };
