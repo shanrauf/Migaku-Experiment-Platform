@@ -15,7 +15,7 @@ export class SurveyQuestion extends Model {
         note: { type: STRING },
         question: { type: STRING }
       },
-      { modelName: "surveyQuestion", tableName: "surveyQuestions", sequelize }
+      { modelName: "surveyQuestion", tableName: "surveyQuestion", sequelize }
     );
   }
 }

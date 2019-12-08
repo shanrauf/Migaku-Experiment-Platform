@@ -17,7 +17,7 @@ export class DataAnswer extends Model {
         answerText: { type: DataTypes.TEXT },
         answerJSON: { type: DataTypes.JSON }
       },
-      { modelName: "dataAnswer", tableName: "dataAnswers", sequelize }
+      { modelName: "dataAnswer", tableName: "dataAnswer", sequelize }
     );
   }
 }

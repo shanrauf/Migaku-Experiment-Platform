@@ -12,7 +12,7 @@ export class Experiment extends Model {
         endDate: { type: DATE },
         visibility: { type: STRING }
       },
-      { modelName: "experiment", tableName: "experiments", sequelize }
+      { modelName: "experiment", tableName: "experiment", sequelize }
     );
   }
 }

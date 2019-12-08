@@ -15,7 +15,7 @@ export class DataQuestion extends Model {
         note: { type: STRING },
         question: { type: STRING }
       },
-      { modelName: "dataQuestion", tableName: "dataQuestions", sequelize }
+      { modelName: "dataQuestion", tableName: "dataQuestion", sequelize }
     );
   }
 }

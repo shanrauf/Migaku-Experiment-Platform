@@ -16,7 +16,7 @@ export class SurveyAnswer extends Model {
         answerVarchar: { type: DataTypes.STRING },
         answerText: { type: DataTypes.TEXT }
       },
-      { modelName: "surveyAnswer", tableName: "surveyAnswers", sequelize }
+      { modelName: "surveyAnswer", tableName: "surveyAnswer", sequelize }
     );
   }
 }

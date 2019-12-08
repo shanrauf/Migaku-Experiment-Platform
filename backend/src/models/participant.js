@@ -12,7 +12,15 @@ export class Participant extends Model {
         age: { type: SMALLINT },
         sex: { type: STRING }
       },
-      { modelName: "participant", tableName: "participants", sequelize }
+      { modelName: "participant", tableName: "participant", sequelize }
     );
+  }
+  associate(models) {
+    this.belongsToMany(models.Experiment, {
+      through: "ExperimentParticipants",
+      as: "asdf",
+      foreignKey: "participantId",
+      otherKey: "experimentId"
+    });
   }
 }
