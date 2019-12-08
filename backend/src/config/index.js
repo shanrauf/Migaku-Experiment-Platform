@@ -9,9 +9,9 @@ if (!envFound) {
 
   throw new Error("⚠️  Couldn't find .env file  ⚠️");
 }
-
 export default {
-  port: parseInt(process.env.PORT, 10),
+  // port: parseInt(process.env.PORT, 10),
+  port: 3000,
   sequelize: {
     options: {
       host: process.env.DATABASE_URL,

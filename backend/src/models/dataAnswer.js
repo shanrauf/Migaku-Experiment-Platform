@@ -1,6 +1,6 @@
-const Sequelize = require("sequelize");
+import { Model } from "sequelize";
 
-export class SurveyAnswer extends Sequelize.Model {
+export class DataAnswer extends Model {
   static init(sequelize, DataTypes) {
     return super.init(
       {
@@ -13,10 +13,11 @@ export class SurveyAnswer extends Sequelize.Model {
         answerInt: { type: DataTypes.INTEGER },
         answerFloat: { type: DataTypes.FLOAT },
         answerBoolean: { type: DataTypes.BOOLEAN },
-        answerVarchar: { type: DataTypes.VARCHAR },
-        answerText: { type: DataTypes.TEXT }
+        answerVarchar: { type: DataTypes.STRING },
+        answerText: { type: DataTypes.TEXT },
+        answerJSON: { type: DataTypes.JSON }
       },
-      { modelName: "surveyAnswer", sequelize }
+      { modelName: "dataAnswer", tableName: "dataAnswers", sequelize }
     );
   }
 }

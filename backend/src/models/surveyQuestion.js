@@ -1,6 +1,6 @@
-const Sequelize = require("sequelize");
+import { Model } from "sequelize";
 
-export class DataQuestion extends Sequelize.Model {
+export class SurveyQuestion extends Model {
   static init(sequelize, DataTypes) {
     const { JSON, DATE, STRING } = DataTypes;
     return super.init(
@@ -15,7 +15,7 @@ export class DataQuestion extends Sequelize.Model {
         note: { type: STRING },
         question: { type: STRING }
       },
-      { modelName: "dataQuestion", sequelize }
+      { modelName: "surveyQuestion", tableName: "surveyQuestions", sequelize }
     );
   }
 }

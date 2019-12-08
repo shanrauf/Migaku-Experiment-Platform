@@ -14,7 +14,7 @@ export class Survey extends Sequelize.Model {
         sectionOrder: { type: JSON },
         visibility: { type: STRING }
       },
-      { modelName: "survey", sequelize }
+      { modelName: "survey", tableName: "surveys", sequelize }
     );
   }
 }
