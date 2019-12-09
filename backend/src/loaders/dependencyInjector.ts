@@ -1,7 +1,7 @@
 import { Container } from "typedi";
 import LoggerInstance from "./logger";
 
-export default ({ models }: { models: object[] }) => {
+export default ({ models }) => {
   try {
     Object.entries(models).forEach(model => {
       Container.set(model[0], model[1]);

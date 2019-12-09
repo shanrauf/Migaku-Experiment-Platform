@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
 import config from "../config";
-import { Participant } from "../models/participant.js";
+import { Participant } from "../models/participant";
 export default class AuthService {
   constructor() {}
 

@@ -1,16 +1,16 @@
 import { Request, Response, Router } from "express";
 // import middlewares from "../middlewares";
 import passport from "passport";
-const route = Router();
+const route = Router({ mergeParams: true });
 
 export default app => {
-  app.use("/experiments", route);
+  app.use("/experiments/:experimentId/surveys", route);
 
   route.get(
     "/",
     // middlewares.attachCurrentUser,
     (req: Request, res: Response) => {
-      return res.json({ status: "experiment listings" }).status(200);
+      return res.json({ status: "survey listings" }).status(200);
     }
   );
 
@@ -19,15 +19,15 @@ export default app => {
     // middlewares.attachCurrentUser,
     (req: Request, res: Response) => {
       console.log(req.body);
-      return res.json({ status: "experiment received" }).status(201);
+      return res.json({ status: "survey received" }).status(201);
     }
   );
 
   route.get(
-    "/:experimentId",
+    "/:surveyId",
     // middlewares.attachCurrentUser,
     (req: Request, res: Response) => {
-      return res.json({ status: "experiment info" }).status(200);
+      return res.json({ status: "survey info" }).status(200);
     }
   );
 };
