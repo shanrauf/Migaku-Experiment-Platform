@@ -1,10 +1,24 @@
-import { Table, Column, Model, HasMany } from "sequelize-typescript";
-
+import {
+  Table,
+  Column,
+  Model,
+  BelongsTo,
+  ForeignKey,
+  HasMany
+} from "sequelize-typescript";
+import { Experiment } from "./experiment";
 @Table
 export class Survey extends Model<Survey> {
+  @BelongsTo(() => Experiment)
+  team: Experiment;
+
+  // @HasMany(() => ) I feel like surveys have many questions...
+  // asdf: asdf[];
+
   @Column
   surveyId: string;
 
+  @ForeignKey(() => Experiment)
   @Column
   experimentId: string;
 

@@ -10,11 +10,11 @@ import { ExperimentParticipant } from "./experimentParticipant";
 
 @Table
 export class Participant extends Model<Participant> {
-  // @BelongsToMany(
-  //   () => Experiment,
-  //   () => ExperimentParticipant
-  // )
-  // experiments: Experiment[];
+  @BelongsToMany(
+    () => Experiment,
+    () => ExperimentParticipant
+  )
+  experiments: Experiment[];
 
   @Column
   participantId: string;

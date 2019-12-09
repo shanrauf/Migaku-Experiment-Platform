@@ -6,6 +6,9 @@ export class QuestionSection extends Model<QuestionSection> {
   sectionId: string;
 
   @Column
+  surveyId: string;
+
+  @Column
   title: string;
 
   @Column

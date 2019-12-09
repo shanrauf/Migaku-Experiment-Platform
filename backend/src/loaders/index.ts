@@ -5,9 +5,13 @@ import dependencyInjectorLoader from "./dependencyInjector";
 import { modelsObject } from "../models";
 
 export default async ({ expressApp }) => {
-  // const sqlConnection = await sequelizeLoader();
-  await sequelizeLoader();
-
+  const sqlConnection = await sequelizeLoader();
+  // await sequelizeLoader();
+  // sqlConnection.sync({ force: true }).then(() => {
+  //   console.log("Forced");
+  //   let user = new modelsObject["Participant"]();
+  //   console.log(user);
+  // });
   Logger.info("✌️ DB loaded and connected!");
 
   await dependencyInjectorLoader({

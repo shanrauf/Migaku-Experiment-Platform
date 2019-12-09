@@ -1,7 +1,27 @@
-import { Table, Column, Model, HasMany } from "sequelize-typescript";
-
+import {
+  Table,
+  Column,
+  Model,
+  HasOne,
+  ForeignKey,
+  HasMany
+} from "sequelize-typescript";
+import { SurveyAnswer } from "./surveyAnswer";
+import { QuestionSection } from "./questionSection";
+import { Experiment } from "./experiment";
+import { Survey } from "./survey";
 @Table
 export class SurveyQuestion extends Model<SurveyQuestion> {
+  @HasMany(() => Experiment)
+  experiments: Experiment[];
+
+  @HasMany(() => Survey)
+  surveys: Survey[];
+
+  @HasOne(() => SurveyAnswer)
+  surveyAnswer: SurveyAnswer;
+
+  @ForeignKey(() => QuestionSection)
   @Column
   sectionId: string;
 

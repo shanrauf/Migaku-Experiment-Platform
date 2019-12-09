@@ -4,7 +4,7 @@ module.exports = {
   up: (queryInterface, _) => {
     // not using second parameter of Sequelize
     return queryInterface.bulkInsert(
-      "Users",
+      "Participants",
       [
         {
           userId: 123456789,
@@ -20,6 +20,6 @@ module.exports = {
   },
 
   down: (queryInterface, _) => {
-    return queryInterface.bulkDelete("Users", null, {});
+    return queryInterface.bulkDelete("Participants", null, {});
   }
 };
