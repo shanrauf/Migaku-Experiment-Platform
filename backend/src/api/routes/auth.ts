@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Request, Response, Router } from "express";
 import AuthService from "../../services/auth";
 import middlewares from "../middlewares";
 import passport from "passport";
@@ -13,7 +13,7 @@ export default app => {
   route.post(
     "/signup",
     middlewares.continueIfNotAuthenticated,
-    async (req, res, next) => {
+    async (req: Request, res: Response, next) => {
       console.log("Calling Sign-Up endpoint with body: %o", req.body);
       try {
         const authServiceInstance = new AuthService();
@@ -39,7 +39,7 @@ export default app => {
   route.post(
     "/signin",
     middlewares.continueIfNotAuthenticated,
-    async (req, res, next) => {
+    async (req: Request, res: Response, next) => {
       // console.log("Calling Sign-In endpoint with body: %o", req.body);
       // try {
       //   const authServiceInstance = new AuthService();
@@ -89,7 +89,7 @@ export default app => {
   route.post(
     "/logout",
     passport.authenticate("jwt", { session: false }),
-    (req, res, next) => {
+    (req: Request, res: Response, next) => {
       console.log("Debug: Calling Sign-Out endpoint with body: %o", req.body);
       try {
         return res.status(200).end();

@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Request, Response, Router } from "express";
 // import middlewares from "../middlewares";
 import passport from "passport";
 const route = Router();
@@ -10,12 +10,12 @@ export default app => {
     "/me",
     passport.authenticate("jwt", { session: false }),
     // middlewares.attachCurrentUser,
-    (req, res) => {
+    (req: Request, res: Response) => {
       return res.json({ user: req.user }).status(200);
     }
   );
 
-  route.get("/surveyStatus", (req, res) => {
+  route.get("/surveyStatus", (req: Request, res: Response) => {
     const email = req.query.email;
     console.log(email);
     // check if completed survey or already synced anki data
@@ -28,11 +28,21 @@ export default app => {
       return res.json({ status: 1, data: latestSurveyCutoff }).status(200);
     } else if (email == surveyNotCompleted) {
       let surveyLink = "https://patreon.com/massimmersionapproach";
-      return res.json({ status: 2, surveyLink });
+      return res.json({ status: 2, data: surveyLink });
     } else if (email == alreadySynced) {
       return res.json({ status: 3 }).status(200);
     } else {
-      return res.json({ status: 4 }).status(401);
+      // email doesn't exist
+      return res.json({ status: 0 }).status(404);
     }
+  });
+
+  route.post("/survey", (req: Request, res: Response) => {
+    console.log("Incoming POST request:");
+    console.log(req.header("Content-Type"));
+    console.log(req.body);
+    // console.log(req.data);
+
+    return res.json({ status: 1 }).status(200);
   });
 };
