@@ -8,6 +8,9 @@ import { DataQuestion } from "./dataQuestion";
 import { DataAnswer } from "./dataAnswer";
 import { Cards } from "./cards";
 import { QuestionSection } from "./questionSection";
+import { ExperimentDataQuestion } from "./experimentDataQuestion";
+import { SurveyQuestionSurvey } from "./surveyQuestionSurvey";
+import { SurveyDataQuestion } from "./surveyDataQuestion";
 
 import { ModelCtor } from "sequelize-typescript";
 

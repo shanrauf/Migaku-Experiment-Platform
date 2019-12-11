@@ -11,6 +11,9 @@ export class DataAnswer extends Model<DataAnswer> {
   // @BelongsTo(() => DataQuestion)
   // dataQuestion: DataQuestion;
 
+  @Column({ primaryKey: true })
+  dataAnswerId: string;
+
   @Column
   userId: string;
 

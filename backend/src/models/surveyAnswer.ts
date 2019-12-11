@@ -14,6 +14,9 @@ export class SurveyAnswer extends Model<SurveyAnswer> {
   // @BelongsTo(() => SurveyQuestion)
   // surveyQuestion: SurveyQuestion;
 
+  @Column({ primaryKey: true })
+  surveyAnswerId: string;
+
   @Column
   userId: string;
 

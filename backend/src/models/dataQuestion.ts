@@ -5,6 +5,9 @@ export class DataQuestion extends Model<DataQuestion> {
   // @HasOne(() => DataAnswer)
   // dataAnswer: DataAnswer;
 
+  @Column({ primaryKey: true })
+  dataQuestionId: string;
+
   @Column
   sectionId: string;
 

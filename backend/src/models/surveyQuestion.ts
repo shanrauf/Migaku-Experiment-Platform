@@ -29,12 +29,12 @@ export class SurveyQuestion extends Model<SurveyQuestion> {
   // @HasOne(() => QuestionSection)
   // questionSection: QuestionSection;
 
+  @Column({ primaryKey: true })
+  surveyQuestionId: string;
+
   // @ForeignKey(() => QuestionSection)
   @Column
   sectionId: string;
-
-  @Column
-  surveyQuestionId: string;
 
   @Column
   questionType: string;
