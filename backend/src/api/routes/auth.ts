@@ -18,17 +18,17 @@ export default app => {
       try {
         const authServiceInstance = new AuthService();
         let { email, password, name, discordUsername, age, sex } = req.body;
-        const { user, token } = await authServiceInstance.SignUp(
-          email,
-          password,
-          name,
-          discordUsername,
-          age,
-          sex
-        );
-        res.cookie("jwt", token, { httpOnly: true, secure: true });
+        // const { user, token } = await authServiceInstance.SignUp(
+        //   email,
+        //   password,
+        //   name,
+        //   discordUsername,
+        //   age,
+        //   sex
+        // );
+        // res.cookie("jwt", token, { httpOnly: true, secure: true });
         // res.cookie('jwt', jwt, { httpOnly: true, secure: true });
-        return res.status(201).json({ user });
+        return res.status(201).json({ status: "signed up" });
       } catch (e) {
         console.error("🔥 error: %o", e);
         return next(e);
@@ -67,18 +67,18 @@ export default app => {
         };
 
         /** assigns payload to req.user */
-        req.login(payload, { session: false }, error => {
-          if (error) {
-            res.status(400).send({ error });
-          }
+        // req.login(payload, { session: false }, error => {
+        //   if (error) {
+        //     res.status(400).send({ error });
+        //   }
 
-          /** generate a signed json web token and return it in the response */
-          const token = jwt.sign(JSON.stringify(payload), config.jwtSecret);
+        //   /** generate a signed json web token and return it in the response */
+        //   const token = jwt.sign(JSON.stringify(payload), config.jwtSecret);
 
-          /** assign our jwt to the cookie */
-          res.cookie("jwt", token, { httpOnly: true, secure: true });
-          res.status(200).send({ user });
-        });
+        //   /** assign our jwt to the cookie */
+        //   res.cookie("jwt", token, { httpOnly: true, secure: true });
+        //   res.status(200).send({ user });
+        // });
       });
     }
   );

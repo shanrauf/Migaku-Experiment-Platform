@@ -8,8 +8,8 @@ import {
 import { DataQuestion } from "./dataQuestion";
 @Table
 export class DataAnswer extends Model<DataAnswer> {
-  @BelongsTo(() => DataQuestion)
-  dataQuestion: DataQuestion;
+  // @BelongsTo(() => DataQuestion)
+  // dataQuestion: DataQuestion;
 
   @Column
   userId: string;

@@ -1,6 +1,6 @@
 import { DataType, Table, Column, Model, HasMany } from "sequelize-typescript";
 
-@Table
+@Table // add DefineOptions for tableName/modelName cuz will minify code
 export class Cards extends Model<Cards> {
   @Column
   userId: string;

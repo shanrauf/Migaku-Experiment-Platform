@@ -14,7 +14,7 @@ export default async ({ expressApp }) => {
   // });
   Logger.info("✌️ DB loaded and connected!");
 
-  await dependencyInjectorLoader({
+  dependencyInjectorLoader({
     models: modelsObject
   });
   Logger.info("✌️ Dependency Injector loaded");

@@ -10,16 +10,16 @@ import { ExperimentParticipant } from "./experimentParticipant";
 import { Survey } from "./survey";
 @Table
 export class Experiment extends Model<Experiment> {
-  @BelongsToMany(
-    () => Participant,
-    () => ExperimentParticipant
-  )
-  participants: Participant[];
+  // @BelongsToMany(
+  //   () => Participant,
+  //   () => ExperimentParticipant
+  // )
+  // participants: Participant[];
 
-  @HasMany(() => Survey)
-  surveys: Survey[];
+  // @HasMany(() => Survey)
+  // surveys: Survey[];
 
-  @Column
+  @Column({ primaryKey: true })
   experimentId: string;
 
   @Column

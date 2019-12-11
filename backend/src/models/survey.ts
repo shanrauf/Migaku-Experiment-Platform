@@ -9,16 +9,16 @@ import {
 import { Experiment } from "./experiment";
 @Table
 export class Survey extends Model<Survey> {
-  @BelongsTo(() => Experiment)
-  team: Experiment;
+  // @BelongsTo(() => Experiment)
+  // team: Experiment;
 
   // @HasMany(() => ) I feel like surveys have many questions...
   // asdf: asdf[];
 
-  @Column
+  @Column({ primaryKey: true })
   surveyId: string;
 
-  @ForeignKey(() => Experiment)
+  // @ForeignKey(() => Experiment)
   @Column
   experimentId: string;
 

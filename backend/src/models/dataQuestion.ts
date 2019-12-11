@@ -2,8 +2,8 @@ import { Table, Column, Model, HasOne } from "sequelize-typescript";
 import { DataAnswer } from "./dataAnswer";
 @Table
 export class DataQuestion extends Model<DataQuestion> {
-  @HasOne(() => DataAnswer)
-  dataAnswer: DataAnswer;
+  // @HasOne(() => DataAnswer)
+  // dataAnswer: DataAnswer;
 
   @Column
   sectionId: string;
