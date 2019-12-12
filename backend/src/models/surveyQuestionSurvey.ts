@@ -1,10 +1,4 @@
-import {
-  ForeignKey,
-  Table,
-  Column,
-  Model,
-  HasMany
-} from "sequelize-typescript";
+import { ForeignKey, Table, Column, Model } from "sequelize-typescript";
 import { Survey } from "./survey";
 import { SurveyQuestion } from "./surveyQuestion";
 @Table

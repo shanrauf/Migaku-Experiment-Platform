@@ -13,4 +13,7 @@ export class ExperimentParticipant extends Model<ExperimentParticipant> {
 
   @Column
   registerDate: Date;
+
+  @Column
+  dropoutDate: Date; // can be null
 }

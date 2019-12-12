@@ -3,8 +3,7 @@ import {
   Table,
   Column,
   Model,
-  BelongsTo,
-  ForeignKey
+  BelongsTo
 } from "sequelize-typescript";
 import { DataQuestion } from "./dataQuestion";
 @Table
@@ -15,20 +14,24 @@ export class DataAnswer extends Model<DataAnswer> {
   @Column({ primaryKey: true })
   dataAnswerId: string;
 
+  // foreign key
   @Column
   dataQuestionId: string;
 
+  // foreign key
   @Column
-  userId: string;
+  participantId: string;
 
+  // foreign key
   @Column
   experimentId: string;
 
+  // foreign key
   @Column
   surveyId: string;
 
   @Column(DataType.SMALLINT)
-  answerSmallint: number;
+  answerSmallInt: number;
 
   @Column
   answerInt: number;

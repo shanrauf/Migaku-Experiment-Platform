@@ -6,29 +6,13 @@ import {
   BelongsToMany
 } from "sequelize-typescript";
 import { DataAnswer } from "./dataAnswer";
-import { Experiment } from "./experiment";
-import { ExperimentDataQuestion } from "./experimentDataQuestion";
 @Table
 export class DataQuestion extends Model<DataQuestion> {
-  @BelongsToMany(
-    () => Experiment,
-    () => ExperimentDataQuestion,
-    "dataQuestionId",
-    "experimentId"
-  )
-  experiments: Experiment[];
-
   @HasOne(() => DataAnswer, "dataQuestionId")
   dataAnswer: DataAnswer;
 
   @Column({ primaryKey: true })
   dataQuestionId: string;
-
-  @Column
-  questionType: string;
-
-  @Column
-  answerType: string;
 
   @Column
   label: string;
@@ -37,13 +21,10 @@ export class DataQuestion extends Model<DataQuestion> {
   rules: string;
 
   @Column
-  items: string;
+  questionType: string;
 
   @Column
-  required: Boolean;
-
-  @Column
-  note: string;
+  answerType: string;
 
   @Column
   question: string;

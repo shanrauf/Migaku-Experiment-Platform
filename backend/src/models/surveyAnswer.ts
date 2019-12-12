@@ -1,19 +1,6 @@
-import {
-  DataType,
-  Table,
-  Column,
-  Model,
-  BelongsTo,
-  ForeignKey
-} from "sequelize-typescript";
-import { SurveyQuestion } from "./surveyQuestion";
-import { Experiment } from "./experiment";
-import { Survey } from "./survey";
+import { DataType, Table, Column, Model } from "sequelize-typescript";
 @Table
 export class SurveyAnswer extends Model<SurveyAnswer> {
-  // @BelongsTo(() => SurveyQuestion)
-  // surveyQuestion: SurveyQuestion;
-
   @Column({ primaryKey: true })
   surveyAnswerId: string;
 
@@ -29,11 +16,12 @@ export class SurveyAnswer extends Model<SurveyAnswer> {
   @Column
   surveyId: string;
 
+  // @ForeignKey(() => Participant)
   @Column
   participantId: string;
 
   @Column(DataType.SMALLINT)
-  answerSmallint: number;
+  answerSmallInt: number;
 
   @Column
   answerInt: number;
@@ -49,4 +37,7 @@ export class SurveyAnswer extends Model<SurveyAnswer> {
 
   @Column(DataType.TEXT)
   answerText: string;
+
+  @Column(DataType.JSON)
+  answerJSON: string;
 }

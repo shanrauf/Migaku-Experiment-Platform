@@ -12,16 +12,8 @@ import { SurveySection } from "./surveySection";
 
 // intermediary tables
 import { ExperimentParticipant } from "./experimentParticipant";
-import { ExperimentDataQuestion } from "./experimentDataQuestion";
-import { SurveyQuestionSurvey } from "./surveyQuestionSurvey";
-import { SurveyDataQuestion } from "./surveyDataQuestion";
-import { ExperimentSurveyQuestion } from "./experimentSurveyQuestion";
 
-const intermediaryTables = [
-  ExperimentParticipant,
-  ExperimentSurveyQuestion,
-  ExperimentDataQuestion
-];
+const intermediaryTables = [ExperimentParticipant];
 
 export const modelsArray: ModelCtor[] = [
   Participant,
