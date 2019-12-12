@@ -8,20 +8,19 @@ import {
 } from "../decorators/eventDispatcher";
 import config from "../config";
 import { Container, Service, Inject } from "typedi";
-
+import { PassportStatic } from "passport";
+import winston from "winston";
 @Service()
 export default class AuthService {
   constructor(
     @Inject("Participant") private Participant: Models.Participant,
-    @Inject("logger") private logger,
+    @Inject("passport") private passport: PassportStatic,
+    @Inject("logger") private logger: winston.Logger,
     @EventDispatcher() private eventDispatcher: EventDispatcherInterface
-  ) {
-    // this.Participant.b;
-    // const person = new Participant()
-  }
+  ) {}
 
-  async SignUp(email, password, name, discordUsername, age, sex) {
-    // instead of many params, could pass object using typescript interface as the object u want (DTO)
+  async SignUp(IUserInputDTO: IUserInputDTO) {
+    const { email, password, name } = IUserInputDTO;
     let errors = [];
 
     if (!name || !email || !password) {
@@ -35,22 +34,22 @@ export default class AuthService {
     if (errors.length > 0) {
       console.log("Validation error");
     }
-    Participant.findOne({ where: { email: email } }).then(participant => {
+    this.Participant.findOne({ where: { email: email } }).then(participant => {
       if (participant) {
         errors.push({ msg: "Email already exists" });
         console.log("Error");
       } else {
         bcrypt.genSalt(10, (err, salt) => {
           if (err) throw err;
-          bcrypt.hash(newParticipant.password, salt, (err, hash) => {
+          bcrypt.hash(password, salt, (err, hash) => {
             if (err) throw err;
-            let newParticipant = Participant.build({
+            let newParticipant = this.Participant.build({
               email,
               password: hash,
               name,
-              discordUsername,
-              age,
-              sex
+              discordUsername: null,
+              age: null,
+              sex: null
             });
             newParticipant
               .save()
@@ -67,14 +66,14 @@ export default class AuthService {
   }
 
   async SignIn(email, password) {
-    const userRecord = await this.userModel.findOne({ email });
-    if (!userRecord) {
+    const participantRecord = await this.Participant.findOne();
+    if (!participantRecord) {
       throw new Error("User not registered");
     }
-    const validPassword = await argon2.verify(userRecord.password, password);
+    const validPassword = await jwt.verify(participantRecord, password); // (participantRecord.password, password)
     if (validPassword) {
-      const token = this.generateToken(userRecord);
-      const user = userRecord.toObject();
+      const token = this.generateToken(participantRecord);
+      const user = participantRecord; // .toObject()
       return { user, token };
     } else {
       throw new Error("Invalid Password");

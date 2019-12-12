@@ -1,5 +1,5 @@
 import { Sequelize } from "sequelize-typescript";
-import { modelsArray } from "../models";
+import models from "../models";
 import sequelizeConfig from "../config/sequelize";
 
 export default async () => {
@@ -19,7 +19,7 @@ export default async () => {
     }
   );
 
-  sequelize.addModels([...modelsArray]);
+  sequelize.addModels([...models]);
 
   sequelize
     .authenticate()

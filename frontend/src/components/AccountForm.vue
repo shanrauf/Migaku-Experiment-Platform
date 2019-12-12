@@ -13,6 +13,9 @@
         <input v-model="name" type="text" placeholder="Name" />
         <input v-model="email" type="email" placeholder="Email" />
         <input v-model="password" type="password" placeholder="Password" />
+        <input v-model="age" type="text" placeholder="Age" />
+        <input v-model="sex" type="text" placeholder="Sex" />
+
         <BaseButton rounded>Sign Up</BaseButton>
       </form>
     </div>
@@ -64,6 +67,8 @@ export default {
       name: "",
       email: "",
       password: "",
+      age: "",
+      sex: "",
       containerClass: {
         container: true,
         "right-panel-active": false
