@@ -3,12 +3,17 @@ import {
   Model,
   BelongsToMany,
   Column,
-  DataType
+  DataType,
+  AllowNull,
+  HasMany,
+  Unique
 } from "sequelize-typescript";
 import { Experiment } from "./experiment";
 import { ExperimentParticipant } from "./experimentParticipant";
+import { CardCollection } from "./cardCollection";
+import { QuestionResponse } from "./questionResponse";
 
-@Table
+@Table({ modelName: "Participant", tableName: "participants" })
 export class Participant extends Model<Participant> {
   @BelongsToMany(
     () => Experiment,
@@ -18,9 +23,16 @@ export class Participant extends Model<Participant> {
   )
   experiments: Experiment[];
 
+  @HasMany(() => QuestionResponse, "participantId")
+  questionResponses: QuestionResponse[];
+
+  @HasMany(() => CardCollection, "participantId")
+  cardCollections: CardCollection[];
+
   @Column({ type: DataType.STRING(255), primaryKey: true })
   participantId: string;
 
+  @Unique
   @Column(DataType.STRING(100))
   email: string;
 
@@ -30,6 +42,7 @@ export class Participant extends Model<Participant> {
   @Column(DataType.STRING(100))
   name: string;
 
+  @AllowNull(true)
   @Column(DataType.STRING(100))
   discordUsername: string;
 

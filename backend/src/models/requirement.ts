@@ -3,12 +3,14 @@ import {
   Column,
   Model,
   BelongsToMany,
-  DataType
+  DataType,
+  AllowNull,
+  Unique
 } from "sequelize-typescript";
 import { Experiment } from "./experiment";
 import { ExperimentRequirement } from "./experimentRequirement";
 
-@Table
+@Table({ modelName: "Requirement", tableName: "requirements" })
 export class Requirement extends Model<Requirement> {
   @BelongsToMany(
     () => Experiment,
@@ -21,12 +23,14 @@ export class Requirement extends Model<Requirement> {
   @Column({ type: DataType.STRING(255), primaryKey: true })
   requirementId: string;
 
+  @Unique
   @Column(DataType.STRING(100))
   key: string;
 
   @Column(DataType.STRING(50))
   dataType: string;
 
+  @AllowNull(true)
   @Column(DataType.STRING(1000))
   image: string; // URL, can be null
 }

@@ -3,11 +3,15 @@ import {
   Table,
   Column,
   Model,
-  DataType
+  DataType,
+  AllowNull
 } from "sequelize-typescript";
 import { Experiment } from "./experiment";
 import { Participant } from "./participant";
-@Table
+@Table({
+  modelName: "ExperimentParticipant",
+  tableName: "experimentparticipants"
+})
 export class ExperimentParticipant extends Model<ExperimentParticipant> {
   @ForeignKey(() => Experiment)
   @Column(DataType.STRING(255))
@@ -20,6 +24,7 @@ export class ExperimentParticipant extends Model<ExperimentParticipant> {
   @Column
   registerDate: Date;
 
+  @AllowNull(true)
   @Column
   dropoutDate: Date; // can be null
 }

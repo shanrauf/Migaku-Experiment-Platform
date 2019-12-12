@@ -4,12 +4,14 @@ import {
   Model,
   DataType,
   BelongsToMany,
-  HasMany
+  HasMany,
+  AllowNull,
+  Unique
 } from "sequelize-typescript";
 import { Survey } from "./survey";
 import { SurveyQuestion } from "./surveyQuestion";
 import { QuestionResponse } from "./questionResponse";
-@Table
+@Table({ modelName: "Question", tableName: "questions" })
 export class Question extends Model<Question> {
   @BelongsToMany(
     () => Survey,
@@ -25,6 +27,7 @@ export class Question extends Model<Question> {
   @Column({ type: DataType.STRING(255), primaryKey: true })
   questionId: string;
 
+  @Unique
   @Column(DataType.STRING(100))
   key: string;
 
@@ -34,18 +37,22 @@ export class Question extends Model<Question> {
   @Column(DataType.STRING(50))
   dataType: string;
 
+  @AllowNull(true)
   @Column(DataType.STRING(100))
   label: string;
 
+  @AllowNull(true)
   @Column(DataType.STRING(500))
   rules: string;
 
+  @AllowNull(true)
   @Column(DataType.STRING(500))
   items: string;
 
   @Column
   required: Boolean;
 
+  @AllowNull(true)
   @Column(DataType.STRING(1000))
   note: string;
 

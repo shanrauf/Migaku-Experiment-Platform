@@ -4,14 +4,17 @@ import {
   Model,
   DataType,
   BelongsToMany,
-  HasMany
+  HasMany,
+  AllowNull
 } from "sequelize-typescript";
 import { Experiment } from "./experiment";
 import { ExperimentSurvey } from "./experimentSurvey";
 import { Question } from "./question";
 import { SurveyQuestion } from "./surveyQuestion";
 import { CardCollection } from "./cardCollection";
-@Table
+import { QuestionResponse } from "./questionResponse";
+import { SurveySection } from "./surveySection";
+@Table({ modelName: "Survey", tableName: "surveys" })
 export class Survey extends Model<Survey> {
   @BelongsToMany(
     () => Experiment,
@@ -29,6 +32,12 @@ export class Survey extends Model<Survey> {
   )
   questions: Question[];
 
+  @HasMany(() => SurveySection, "surveyId")
+  surveySections: SurveySection[];
+
+  @HasMany(() => QuestionResponse, "surveyId")
+  questionResponses: QuestionResponse[];
+
   @HasMany(() => CardCollection, "surveyId")
   cardCollections: CardCollection[];
 
@@ -38,6 +47,7 @@ export class Survey extends Model<Survey> {
   @Column(DataType.STRING(255))
   title: string;
 
+  @AllowNull(true)
   @Column(DataType.STRING(1500))
   description: string;
 }

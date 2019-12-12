@@ -3,11 +3,12 @@ import {
   Table,
   Column,
   Model,
-  DataType
+  DataType,
+  AllowNull
 } from "sequelize-typescript";
 import { Experiment } from "./experiment";
 import { Survey } from "./survey";
-@Table
+@Table({ modelName: "ExperimentSurvey", tableName: "experimentsurveys" })
 export class ExperimentSurvey extends Model<ExperimentSurvey> {
   @ForeignKey(() => Experiment)
   @Column(DataType.STRING(255))
@@ -20,6 +21,7 @@ export class ExperimentSurvey extends Model<ExperimentSurvey> {
   @Column
   startDate: Date;
 
+  @AllowNull(true)
   @Column
   endDate: Date; // can be null too represent TBH or indefinite
 

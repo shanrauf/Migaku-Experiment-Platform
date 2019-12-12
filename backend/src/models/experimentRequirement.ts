@@ -3,11 +3,15 @@ import {
   Table,
   Column,
   Model,
-  DataType
+  DataType,
+  AllowNull
 } from "sequelize-typescript";
 import { Experiment } from "./experiment";
 import { Requirement } from "./requirement";
-@Table
+@Table({
+  modelName: "ExperimentRequirement",
+  tableName: "experimentrequirements"
+})
 export class ExperimentRequirement extends Model<ExperimentRequirement> {
   @ForeignKey(() => Experiment)
   @Column(DataType.STRING(255))
@@ -20,6 +24,7 @@ export class ExperimentRequirement extends Model<ExperimentRequirement> {
   @Column(DataType.STRING(255))
   title: string;
 
+  @AllowNull(true)
   @Column(DataType.STRING(1500))
   description: string;
 

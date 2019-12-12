@@ -3,27 +3,38 @@ import {
   Table,
   Column,
   Model,
-  BelongsTo
+  BelongsTo,
+  ForeignKey,
+  AutoIncrement
 } from "sequelize-typescript";
 import { Survey } from "./survey";
+import { Experiment } from "./experiment";
+import { Participant } from "./participant";
 
-@Table
+@Table({ modelName: "CardCollection", tableName: "cardcollections" })
 export class CardCollection extends Model<CardCollection> {
+  @BelongsTo(() => Experiment, "experimentId")
+  experiment: Experiment;
+
   @BelongsTo(() => Survey, "surveyId")
   survey: Survey;
 
-  @Column(DataType.STRING(255))
-  cardCollectionId: string;
+  @BelongsTo(() => Participant, "participantId")
+  participant: Participant;
 
-  // foreign key
+  @AutoIncrement
+  @Column({ type: DataType.INTEGER.UNSIGNED, primaryKey: true })
+  id: number;
+
+  @ForeignKey(() => Experiment)
   @Column(DataType.STRING(255))
   experimentId: string;
 
-  // foreign key
+  @ForeignKey(() => Survey)
   @Column(DataType.STRING(255))
   surveyId: string;
 
-  // foreign key
+  @ForeignKey(() => Participant)
   @Column(DataType.STRING(255))
   participantId: string;
 
