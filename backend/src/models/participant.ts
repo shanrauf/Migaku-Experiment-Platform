@@ -18,24 +18,24 @@ export class Participant extends Model<Participant> {
   )
   experiments: Experiment[];
 
-  @Column({ primaryKey: true })
+  @Column({ type: DataType.STRING(255), primaryKey: true })
   participantId: string;
 
-  @Column
+  @Column(DataType.STRING(100))
   email: string;
 
-  @Column
+  @Column(DataType.STRING(60))
   password: string;
 
-  @Column
+  @Column(DataType.STRING(100))
   name: string;
 
-  @Column
+  @Column(DataType.STRING(100))
   discordUsername: string;
 
-  @Column(DataType.SMALLINT)
+  @Column(DataType.TINYINT)
   age: number;
 
-  @Column
+  @Column(DataType.STRING(20))
   sex: string;
 }

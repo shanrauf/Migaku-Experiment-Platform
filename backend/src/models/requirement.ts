@@ -1,4 +1,10 @@
-import { Table, Column, Model, BelongsToMany } from "sequelize-typescript";
+import {
+  Table,
+  Column,
+  Model,
+  BelongsToMany,
+  DataType
+} from "sequelize-typescript";
 import { Experiment } from "./experiment";
 import { ExperimentRequirement } from "./experimentRequirement";
 
@@ -12,15 +18,15 @@ export class Requirement extends Model<Requirement> {
   )
   experiments: Experiment[];
 
-  @Column({ primaryKey: true })
+  @Column({ type: DataType.STRING(255), primaryKey: true })
   requirementId: string;
 
-  @Column
+  @Column(DataType.STRING(100))
   key: string;
 
-  @Column
+  @Column(DataType.STRING(50))
   dataType: string;
 
-  @Column
+  @Column(DataType.STRING(1000))
   image: string; // URL, can be null
 }

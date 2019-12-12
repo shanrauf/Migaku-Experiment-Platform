@@ -3,19 +3,19 @@ import { DataType } from "sequelize-typescript";
 
 @Table
 export class SurveySection extends Model<SurveySection> {
-  @Column({ primaryKey: true })
+  @Column({ type: DataType.STRING(255), primaryKey: true })
   sectionId: string;
 
   // foreign key
-  @Column
+  @Column(DataType.STRING(255))
   surveyId: string;
 
-  @Column(DataType.SMALLINT)
-  order: number;
+  @Column(DataType.TINYINT)
+  sectionOrder: number;
 
-  @Column
+  @Column(DataType.STRING(255))
   title: string;
 
-  @Column
+  @Column(DataType.STRING(1500))
   description: string;
 }

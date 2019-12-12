@@ -1,29 +1,29 @@
 import { DataType, Table, Column, Model } from "sequelize-typescript";
 @Table
 export class QuestionResponse extends Model<QuestionResponse> {
-  @Column({ primaryKey: true })
+  @Column({ type: DataType.STRING(255), primaryKey: true })
   responseId: string;
 
   // @ForeignKey(() => Question)
-  @Column
+  @Column(DataType.STRING(255))
   questionId: string;
 
   // @ForeignKey(() => Experiment)
-  @Column
+  @Column(DataType.STRING(255))
   experimentId: string;
 
   // @ForeignKey(() => Survey)
-  @Column
+  @Column(DataType.STRING(255))
   surveyId: string;
 
   // @ForeignKey(() => Participant)
-  @Column
+  @Column(DataType.STRING(255))
   participantId: string;
 
   @Column(DataType.SMALLINT)
   answerSmallInt: number;
 
-  @Column
+  @Column(DataType.INTEGER)
   answerInt: number;
 
   @Column(DataType.FLOAT)
@@ -32,7 +32,7 @@ export class QuestionResponse extends Model<QuestionResponse> {
   @Column
   answerBoolean: Boolean;
 
-  @Column(DataType.TEXT) // change?
+  @Column(DataType.STRING(255))
   answerVarchar: string;
 
   @Column(DataType.TEXT)

@@ -1,22 +1,28 @@
-import { ForeignKey, Table, Column, Model } from "sequelize-typescript";
+import {
+  ForeignKey,
+  Table,
+  Column,
+  Model,
+  DataType
+} from "sequelize-typescript";
 import { Experiment } from "./experiment";
 import { Requirement } from "./requirement";
 @Table
 export class ExperimentRequirement extends Model<ExperimentRequirement> {
   @ForeignKey(() => Experiment)
-  @Column
+  @Column(DataType.STRING(255))
   experimentId: string;
 
   @ForeignKey(() => Requirement)
-  @Column
+  @Column(DataType.STRING(255))
   requirementId: string;
 
-  @Column
+  @Column(DataType.STRING(255))
   title: string;
 
-  @Column
+  @Column(DataType.STRING(1500))
   description: string;
 
-  @Column
-  value: string; // can be null, converted bsaed on requirement dataType
+  @Column(DataType.STRING(255))
+  value: string; // can be null, converted based on requirement dataType
 }

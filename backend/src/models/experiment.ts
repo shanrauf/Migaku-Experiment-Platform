@@ -1,4 +1,10 @@
-import { Table, Model, BelongsToMany, Column } from "sequelize-typescript";
+import {
+  Table,
+  Model,
+  BelongsToMany,
+  Column,
+  DataType
+} from "sequelize-typescript";
 import { Participant } from "./participant";
 import { ExperimentParticipant } from "./experimentParticipant";
 import { Requirement } from "./requirement";
@@ -21,13 +27,13 @@ export class Experiment extends Model<Experiment> {
   )
   requirements: Requirement[];
 
-  @Column({ primaryKey: true })
+  @Column({ type: DataType.STRING(255), primaryKey: true })
   experimentId: string;
 
-  @Column
+  @Column(DataType.STRING(255))
   title: string;
 
-  @Column
+  @Column(DataType.STRING(1500))
   description: string;
 
   @Column
@@ -36,6 +42,6 @@ export class Experiment extends Model<Experiment> {
   @Column
   endDate: Date;
 
-  @Column
+  @Column(DataType.STRING(25))
   visibility: string;
 }

@@ -1,33 +1,33 @@
-import { Table, Column, Model } from "sequelize-typescript";
+import { Table, Column, Model, DataType } from "sequelize-typescript";
 @Table
 export class Question extends Model<Question> {
-  @Column({ primaryKey: true })
+  @Column({ type: DataType.STRING(255), primaryKey: true })
   questionId: string;
 
-  @Column
+  @Column(DataType.STRING(100))
   key: string;
 
-  @Column
+  @Column(DataType.STRING(50))
   questionType: string;
 
-  @Column
-  answerType: string;
+  @Column(DataType.STRING(50))
+  dataType: string;
 
-  @Column
+  @Column(DataType.STRING(100))
   label: string;
 
-  @Column
+  @Column(DataType.STRING(500))
   rules: string;
 
-  @Column
+  @Column(DataType.STRING(500))
   items: string;
 
   @Column
   required: Boolean;
 
-  @Column
+  @Column(DataType.STRING(1000))
   note: string;
 
-  @Column
+  @Column(DataType.STRING(255))
   question: string;
 }

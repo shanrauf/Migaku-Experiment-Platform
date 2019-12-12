@@ -5,15 +5,18 @@ import {
   Model,
   DataType
 } from "sequelize-typescript";
-import { Survey } from "./survey";
+import { SurveySection } from "./surveySection";
 import { Question } from "./question";
 @Table
-export class SurveyQuestion extends Model<SurveyQuestion> {
-  @ForeignKey(() => Survey)
+export class SurveySectionQuestion extends Model<SurveySectionQuestion> {
+  @ForeignKey(() => SurveySection)
   @Column(DataType.STRING(255))
-  surveyId: string;
+  sectionId: string;
 
   @ForeignKey(() => Question)
   @Column(DataType.STRING(255))
   questionId: string;
+
+  @Column(DataType.TINYINT)
+  questionOrder: number;
 }

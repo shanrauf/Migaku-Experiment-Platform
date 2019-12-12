@@ -1,14 +1,20 @@
-import { ForeignKey, Table, Column, Model } from "sequelize-typescript";
+import {
+  ForeignKey,
+  Table,
+  Column,
+  Model,
+  DataType
+} from "sequelize-typescript";
 import { Experiment } from "./experiment";
 import { Survey } from "./survey";
 @Table
 export class ExperimentSurvey extends Model<ExperimentSurvey> {
   @ForeignKey(() => Experiment)
-  @Column
+  @Column(DataType.STRING(255))
   experimentId: string;
 
   @ForeignKey(() => Survey)
-  @Column
+  @Column(DataType.STRING(255))
   surveyId: string;
 
   @Column
@@ -17,9 +23,9 @@ export class ExperimentSurvey extends Model<ExperimentSurvey> {
   @Column
   endDate: Date; // can be null too represent TBH or indefinite
 
-  @Column
-  surveyCategoory: string;
+  @Column(DataType.STRING(100))
+  surveyCategory: string;
 
-  @Column
+  @Column(DataType.STRING(25))
   visibility: string;
 }
