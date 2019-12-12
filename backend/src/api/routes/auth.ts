@@ -5,6 +5,7 @@ import passport from "passport";
 import jwt from "jsonwebtoken";
 
 import config from "../../config";
+import Container from "typedi";
 const route = Router();
 
 export default app => {
@@ -16,7 +17,7 @@ export default app => {
     async (req: Request, res: Response, next) => {
       console.log("Calling Sign-Up endpoint with body: %o", req.body);
       try {
-        const authServiceInstance = new AuthService();
+        const authServiceInstance = Container.get(AuthService);
         let { email, password, name, discordUsername, age, sex } = req.body;
         // const { user, token } = await authServiceInstance.SignUp(
         //   email,

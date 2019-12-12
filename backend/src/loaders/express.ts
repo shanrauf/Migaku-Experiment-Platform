@@ -1,9 +1,10 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
+import { errors } from "celebrate";
 import routes from "../api";
 import config from "../config";
-export default ({ app }: { app: express.Application }) => {
+export default async ({ app }: { app: express.Application }) => {
   /**
    * Health Check endpoints
    */
@@ -38,6 +39,7 @@ export default ({ app }: { app: express.Application }) => {
 
   // Load API routes
   app.use(config.api.prefix, routes());
+  app.use(errors());
 
   /// catch 404 and forward to error handler
   app.use((req, res, next) => {

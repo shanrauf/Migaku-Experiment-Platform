@@ -8,14 +8,17 @@ import {
   AllowNull
 } from "sequelize-typescript";
 import { Experiment } from "./experiment";
-import { ExperimentSurvey } from "./experimentSurvey";
+import { ExperimentSurvey } from "./intermediary/experimentSurvey";
 import { Question } from "./question";
-import { SurveyQuestion } from "./surveyQuestion";
+import { SurveyQuestion } from "./intermediary/surveyQuestion";
 import { CardCollection } from "./cardCollection";
 import { QuestionResponse } from "./questionResponse";
 import { SurveySection } from "./surveySection";
 @Table({ modelName: "Survey", tableName: "surveys" })
 export class Survey extends Model<Survey> {
+  toString() {
+    return "Survey";
+  }
   @BelongsToMany(
     () => Experiment,
     () => ExperimentSurvey,

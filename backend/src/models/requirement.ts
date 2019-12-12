@@ -8,10 +8,13 @@ import {
   Unique
 } from "sequelize-typescript";
 import { Experiment } from "./experiment";
-import { ExperimentRequirement } from "./experimentRequirement";
+import { ExperimentRequirement } from "./intermediary/experimentRequirement";
 
 @Table({ modelName: "Requirement", tableName: "requirements" })
 export class Requirement extends Model<Requirement> {
+  toString() {
+    return "Requirement";
+  }
   @BelongsToMany(
     () => Experiment,
     () => ExperimentRequirement,

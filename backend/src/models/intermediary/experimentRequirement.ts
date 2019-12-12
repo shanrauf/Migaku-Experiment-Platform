@@ -6,13 +6,16 @@ import {
   DataType,
   AllowNull
 } from "sequelize-typescript";
-import { Experiment } from "./experiment";
-import { Requirement } from "./requirement";
+import { Experiment } from "../experiment";
+import { Requirement } from "../requirement";
 @Table({
   modelName: "ExperimentRequirement",
   tableName: "experimentrequirements"
 })
 export class ExperimentRequirement extends Model<ExperimentRequirement> {
+  toString() {
+    return "ExperimentRequirement";
+  }
   @ForeignKey(() => Experiment)
   @Column(DataType.STRING(255))
   experimentId: string;

@@ -8,15 +8,18 @@ import {
   HasMany
 } from "sequelize-typescript";
 import { Participant } from "./participant";
-import { ExperimentParticipant } from "./experimentParticipant";
+import { ExperimentParticipant } from "./intermediary/experimentParticipant";
 import { Requirement } from "./requirement";
-import { ExperimentRequirement } from "./experimentRequirement";
+import { ExperimentRequirement } from "./intermediary/experimentRequirement";
 import { Survey } from "./survey";
-import { ExperimentSurvey } from "./experimentSurvey";
+import { ExperimentSurvey } from "./intermediary/experimentSurvey";
 import { CardCollection } from "./cardCollection";
 import { QuestionResponse } from "./questionResponse";
 @Table({ modelName: "Experiment", tableName: "experiments" })
 export class Experiment extends Model<Experiment> {
+  toString() {
+    return "Experiment";
+  }
   @BelongsToMany(
     () => Participant,
     () => ExperimentParticipant,

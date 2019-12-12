@@ -9,10 +9,13 @@ import {
   Unique
 } from "sequelize-typescript";
 import { Survey } from "./survey";
-import { SurveyQuestion } from "./surveyQuestion";
+import { SurveyQuestion } from "./intermediary/surveyQuestion";
 import { QuestionResponse } from "./questionResponse";
 @Table({ modelName: "Question", tableName: "questions" })
 export class Question extends Model<Question> {
+  toString() {
+    return "Question";
+  }
   @BelongsToMany(
     () => Survey,
     () => SurveyQuestion,

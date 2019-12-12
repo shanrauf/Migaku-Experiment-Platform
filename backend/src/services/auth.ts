@@ -1,10 +1,24 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
+import { IUser, IUserInputDTO } from "../interfaces/IUser";
+import {
+  EventDispatcher,
+  EventDispatcherInterface
+} from "../decorators/eventDispatcher";
 import config from "../config";
-import { Participant } from "../models/participant";
+import { Container, Service, Inject } from "typedi";
+
+@Service()
 export default class AuthService {
-  constructor() {}
+  constructor(
+    @Inject("Participant") private Participant: Models.Participant,
+    @Inject("logger") private logger,
+    @EventDispatcher() private eventDispatcher: EventDispatcherInterface
+  ) {
+    // this.Participant.b;
+    // const person = new Participant()
+  }
 
   async SignUp(email, password, name, discordUsername, age, sex) {
     // instead of many params, could pass object using typescript interface as the object u want (DTO)
@@ -18,47 +32,30 @@ export default class AuthService {
       errors.push({ msg: "Password must be at least 6 characters" });
     }
 
-    // if (errors.length > 0) {
-    //   res.render('register', {
-    //     errors,
-    //     name,
-    //     email,
-    //     password,
-    //     password2
-    //   });
-    // }
+    if (errors.length > 0) {
+      console.log("Validation error");
+    }
     Participant.findOne({ where: { email: email } }).then(participant => {
       if (participant) {
         errors.push({ msg: "Email already exists" });
         console.log("Error");
-        // res.render('register', {
-        //   errors,
-        //   name,
-        //   email,
-        //   password,
-        //   password2
-        // });
       } else {
-        let newParticipant = Participant.build({
-          email,
-          password,
-          name,
-          discordUsername,
-          age,
-          sex
-        });
         bcrypt.genSalt(10, (err, salt) => {
+          if (err) throw err;
           bcrypt.hash(newParticipant.password, salt, (err, hash) => {
             if (err) throw err;
-            newParticipant.password = hash;
+            let newParticipant = Participant.build({
+              email,
+              password: hash,
+              name,
+              discordUsername,
+              age,
+              sex
+            });
             newParticipant
               .save()
               .then(participant => {
-                // req.flash(
-                //   'success_msg',
-                //   'You are now registered and can log in'
-                // );
-                // res.redirect('/users/login');
+                // return json of participant info and token?
                 let token = this.generateToken(participant);
                 return { participant, token };
               })

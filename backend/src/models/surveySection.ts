@@ -10,6 +10,9 @@ import { Survey } from "./survey";
 
 @Table({ modelName: "SurveySection", tableName: "surveysections" })
 export class SurveySection extends Model<SurveySection> {
+  toString() {
+    return "SurveySection";
+  }
   @Column({ type: DataType.STRING(255), primaryKey: true })
   sectionId: string;
 

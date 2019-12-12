@@ -5,13 +5,16 @@ import {
   Model,
   DataType
 } from "sequelize-typescript";
-import { SurveySection } from "./surveySection";
-import { Question } from "./question";
+import { SurveySection } from "../surveySection";
+import { Question } from "../question";
 @Table({
   modelName: "SurveySectionQuestion",
   tableName: "surveysectionquestions"
 })
 export class SurveySectionQuestion extends Model<SurveySectionQuestion> {
+  toString() {
+    return "SurveySectionQuestion";
+  }
   @ForeignKey(() => SurveySection)
   @Column(DataType.STRING(255))
   sectionId: string;
