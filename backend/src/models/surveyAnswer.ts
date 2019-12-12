@@ -17,8 +17,9 @@ export class SurveyAnswer extends Model<SurveyAnswer> {
   @Column({ primaryKey: true })
   surveyAnswerId: string;
 
+  // @ForeignKey(() => SurveyQuestion)
   @Column
-  userId: string;
+  surveyQuestionId: string;
 
   // @ForeignKey(() => Experiment)
   @Column
@@ -28,9 +29,8 @@ export class SurveyAnswer extends Model<SurveyAnswer> {
   @Column
   surveyId: string;
 
-  // @ForeignKey(() => SurveyQuestion)
   @Column
-  surveyQuestionId: string;
+  participantId: string;
 
   @Column(DataType.SMALLINT)
   answerSmallint: number;

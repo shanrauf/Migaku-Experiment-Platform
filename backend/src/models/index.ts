@@ -1,30 +1,39 @@
+import { ModelCtor } from "sequelize-typescript";
+
 import { Participant } from "./participant";
 import { Experiment } from "./experiment";
-import { ExperimentParticipant } from "./experimentParticipant";
 import { Survey } from "./survey";
 import { SurveyAnswer } from "./surveyAnswer";
 import { SurveyQuestion } from "./surveyQuestion";
 import { DataQuestion } from "./dataQuestion";
 import { DataAnswer } from "./dataAnswer";
-import { Cards } from "./cards";
-import { QuestionSection } from "./questionSection";
+import { CardCollection } from "./cardCollection";
+import { SurveySection } from "./surveySection";
+
+// intermediary tables
+import { ExperimentParticipant } from "./experimentParticipant";
 import { ExperimentDataQuestion } from "./experimentDataQuestion";
 import { SurveyQuestionSurvey } from "./surveyQuestionSurvey";
 import { SurveyDataQuestion } from "./surveyDataQuestion";
+import { ExperimentSurveyQuestion } from "./experimentSurveyQuestion";
 
-import { ModelCtor } from "sequelize-typescript";
+const intermediaryTables = [
+  ExperimentParticipant,
+  ExperimentSurveyQuestion,
+  ExperimentDataQuestion
+];
 
 export const modelsArray: ModelCtor[] = [
   Participant,
   Experiment,
-  // ExperimentParticipant,
   Survey,
   SurveyAnswer,
-  QuestionSection,
+  SurveySection,
   SurveyQuestion,
   DataQuestion,
   DataAnswer,
-  Cards
+  CardCollection,
+  ...intermediaryTables
 ];
 
 export const modelsObject = {
@@ -32,8 +41,10 @@ export const modelsObject = {
   Experiment,
   Survey,
   SurveyAnswer,
+  SurveySection,
   SurveyQuestion,
   DataQuestion,
   DataAnswer,
-  Cards
+  CardCollection,
+  ...intermediaryTables
 };

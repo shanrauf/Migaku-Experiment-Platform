@@ -1,13 +1,7 @@
-import {
-  ForeignKey,
-  Table,
-  Column,
-  Model,
-  HasMany
-} from "sequelize-typescript";
+import { ForeignKey, Table, Column, Model } from "sequelize-typescript";
 import { Experiment } from "./experiment";
 import { DataQuestion } from "./dataQuestion";
-@Table
+@Table // All data questions used in an experiment
 export class ExperimentDataQuestion extends Model<ExperimentDataQuestion> {
   @ForeignKey(() => Experiment)
   @Column

@@ -1,9 +1,11 @@
 import { DataType, Table, Column, Model, HasMany } from "sequelize-typescript";
 
-@Table // add DefineOptions for tableName/modelName cuz will minify code
-export class Cards extends Model<Cards> {
+@Table
+export class CardCollection extends Model<CardCollection> {
+  // id primary key autoincrement
+
   @Column
-  userId: string;
+  dataQuestionId: string;
 
   @Column
   experimentId: string;
@@ -12,7 +14,7 @@ export class Cards extends Model<Cards> {
   surveyId: string;
 
   @Column
-  dataQuestionId: string;
+  participantId: string;
 
   @Column(DataType.JSON)
   cards: string;

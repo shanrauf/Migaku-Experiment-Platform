@@ -3,16 +3,20 @@ import {
   Table,
   Column,
   Model,
-  BelongsTo
+  BelongsTo,
+  ForeignKey
 } from "sequelize-typescript";
 import { DataQuestion } from "./dataQuestion";
 @Table
 export class DataAnswer extends Model<DataAnswer> {
-  // @BelongsTo(() => DataQuestion)
-  // dataQuestion: DataQuestion;
+  @BelongsTo(() => DataQuestion, "dataQuestionId")
+  dataQuestion: DataQuestion;
 
   @Column({ primaryKey: true })
   dataAnswerId: string;
+
+  @Column
+  dataQuestionId: string;
 
   @Column
   userId: string;
@@ -22,9 +26,6 @@ export class DataAnswer extends Model<DataAnswer> {
 
   @Column
   surveyId: string;
-
-  @Column
-  questionId: string;
 
   @Column(DataType.SMALLINT)
   answerSmallint: number;

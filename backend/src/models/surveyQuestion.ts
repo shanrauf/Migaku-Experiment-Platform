@@ -7,18 +7,17 @@ import {
   HasMany,
   BelongsToMany
 } from "sequelize-typescript";
-import { SurveyAnswer } from "./surveyAnswer";
-import { QuestionSection } from "./questionSection";
 import { Experiment } from "./experiment";
-import { Survey } from "./survey";
-import { ExperimentParticipant } from "./experimentParticipant";
+import { ExperimentSurveyQuestion } from "./experimentSurveyQuestion";
 @Table
 export class SurveyQuestion extends Model<SurveyQuestion> {
-  // @BelongsToMany(
-  //   () => Experiment,
-  //   () => ExperimentParticipant
-  // )
-  // experiments: Experiment[];
+  @BelongsToMany(
+    () => Experiment,
+    () => ExperimentSurveyQuestion,
+    "surveyQuestionId",
+    "experimentId"
+  )
+  experiments: Experiment[];
 
   // @BelongsToMany(() => Survey, () => SurveyQuestionSurvey)
   // surveys: Survey[];
@@ -26,13 +25,13 @@ export class SurveyQuestion extends Model<SurveyQuestion> {
   // @HasOne(() => SurveyAnswer)
   // surveyAnswer: SurveyAnswer;
 
-  // @HasOne(() => QuestionSection)
-  // questionSection: QuestionSection;
+  // @HasOne(() => SurveySection)
+  // surveySection: SurveySection;
 
   @Column({ primaryKey: true })
   surveyQuestionId: string;
 
-  // @ForeignKey(() => QuestionSection)
+  // @ForeignKey(() => SurveySection)
   @Column
   sectionId: string;
 

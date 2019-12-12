@@ -1,7 +1,7 @@
-import { Table, Column, Model, HasMany } from "sequelize-typescript";
+import { Table, Column, Model } from "sequelize-typescript";
 
 @Table
-export class QuestionSection extends Model<QuestionSection> {
+export class SurveySection extends Model<SurveySection> {
   @Column({ primaryKey: true })
   sectionId: string;
 

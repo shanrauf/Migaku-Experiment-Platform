@@ -7,13 +7,16 @@ import {
   HasMany
 } from "sequelize-typescript";
 import { Experiment } from "./experiment";
+import { SurveyQuestion } from "./surveyQuestion";
 @Table
 export class Survey extends Model<Survey> {
-  // @BelongsTo(() => Experiment)
-  // team: Experiment;
-
-  // @HasMany(() => ) I feel like surveys have many questions...
-  // asdf: asdf[];
+  // @BelongsToMany(
+  //   () => SurveyQuestion,
+  //   () => SurveySurveyQuestion,
+  //   "experimentId",
+  //   "participantId"
+  // )
+  // surveyQuestions: SurveyQuestion[];
 
   @Column({ primaryKey: true })
   surveyId: string;
