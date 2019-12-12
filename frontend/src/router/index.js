@@ -155,16 +155,15 @@ router.beforeEach((to, _, next) => {
   let requiresAdmin = to.matched.some(record => record.meta.requiresAdmin);
 
   if (requiresAdmin) {
-    if (!store.user.isAdmin) {
+    if (!store.state.auth.user.isAdmin) {
       router.push("/");
     }
   } else if (requiresAuth) {
-    if (!store.user) {
+    if (!store.state.auth.user) {
       router.push("/");
     }
-  } else {
-    next();
   }
+  next();
 });
 
 export default router;

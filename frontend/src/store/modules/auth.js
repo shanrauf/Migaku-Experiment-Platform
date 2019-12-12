@@ -2,7 +2,8 @@
 
 const state = () => {
   return {
-    user: {}
+    // user: {}
+    user: "filler to pass router guards"
   };
 };
 
@@ -11,9 +12,9 @@ const getters = {};
 const actions = {
   async login({ commit }) {
     commit({
-      type: 'setUser',
+      type: "setUser",
       user: {
-        email: 'asdf@gmail.com',
+        email: "asdf@gmail.com",
         isAdmin: true
       }
     });
