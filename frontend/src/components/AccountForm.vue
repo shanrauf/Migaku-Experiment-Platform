@@ -10,9 +10,9 @@
         <div class="or-seperator">
           <i>or</i>
         </div>
-        <input type="text" placeholder="Name" />
-        <input type="email" placeholder="Email" />
-        <input type="password" placeholder="Password" />
+        <input v-model="name" type="text" placeholder="Name" />
+        <input v-model="email" type="email" placeholder="Email" />
+        <input v-model="password" type="password" placeholder="Password" />
         <BaseButton rounded>Sign Up</BaseButton>
       </form>
     </div>
@@ -26,10 +26,10 @@
         <div class="or-seperator">
           <i>or</i>
         </div>
-        <input type="email" placeholder="Email" />
-        <input type="password" placeholder="Password" />
+        <input v-model="email" type="email" placeholder="Email" />
+        <input v-model="password" type="password" placeholder="Password" />
         <a href="#">Forgot your password?</a>
-        <BaseButton rounded>Sign In</BaseButton>
+        <BaseButton rounded @click="onSignIn">Sign In</BaseButton>
       </form>
     </div>
     <div class="overlay-container">
@@ -41,8 +41,7 @@
             rounded
             class="ghost"
             @click="containerClass['right-panel-active'] = false"
-            >Sign In</BaseButton
-          >
+          >Sign In</BaseButton>
         </div>
         <div class="overlay-panel overlay-right">
           <h1>Welcome!</h1>
@@ -51,8 +50,7 @@
             rounded
             class="ghost"
             @click="containerClass['right-panel-active'] = true"
-            >Sign Up</BaseButton
-          >
+          >Sign Up</BaseButton>
         </div>
       </div>
     </div>
@@ -63,11 +61,29 @@
 export default {
   data() {
     return {
+      name: "",
+      email: "",
+      password: "",
       containerClass: {
         container: true,
-        'right-panel-active': false
+        "right-panel-active": false
       }
     };
+  },
+  methods: {
+    onSignIn() {
+      this.$store.dispatch({
+        type: "signIn",
+        email: this.email,
+        password: this.password
+      });
+      this.$notify({
+        group: "global",
+        type: "success",
+        duration: "2000",
+        title: "Successfully signed in!"
+      });
+    }
   }
 };
 </script>

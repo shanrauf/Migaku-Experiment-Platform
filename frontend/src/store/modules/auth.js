@@ -10,12 +10,25 @@ const state = () => {
 const getters = {};
 
 const actions = {
-  async login({ commit }) {
+  async signup({ commit }) {
+    // axios post to create account, then login and set user and jwt token and stuff
     commit({
       type: "setUser",
       user: {
         email: "asdf@gmail.com",
         isAdmin: true
+      }
+    });
+  },
+  async signIn({ commit }, payload) {
+    // axios post to login, then set user and jwt token and stuff
+    const { email, password } = payload;
+    commit({
+      type: "setUser",
+      user: {
+        email,
+        password,
+        isAdmin: false // dangerouos?
       }
     });
   }

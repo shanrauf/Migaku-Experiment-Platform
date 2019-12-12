@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <v-app id="vuetify">
+      <BaseNotification />
       <v-content>
         <TopNavigation />
         <transition name="fade" mode="out-in">
