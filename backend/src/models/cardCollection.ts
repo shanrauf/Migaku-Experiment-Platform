@@ -4,9 +4,6 @@ import { DataType, Table, Column, Model } from "sequelize-typescript";
 export class CardCollection extends Model<CardCollection> {
   // id primary key autoincrement, perhaps add explicitly even though sequelize auto-adds
 
-  @Column
-  dataQuestionId: string;
-
   // foreign key
   @Column
   experimentId: string;

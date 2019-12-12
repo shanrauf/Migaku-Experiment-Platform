@@ -1,29 +1,30 @@
 import { ModelCtor } from "sequelize-typescript";
 
+// TODO: Write script to auto import all of these instead of manually doing it
 import { Participant } from "./participant";
 import { Experiment } from "./experiment";
+import { Requirement } from "./requirement";
 import { Survey } from "./survey";
-import { SurveyAnswer } from "./surveyAnswer";
-import { SurveyQuestion } from "./surveyQuestion";
-import { DataQuestion } from "./dataQuestion";
-import { DataAnswer } from "./dataAnswer";
+import { QuestionResponse } from "./questionResponse";
+import { Question } from "./question";
 import { CardCollection } from "./cardCollection";
 import { SurveySection } from "./surveySection";
 
 // intermediary tables
+// TODO: Move all to a folder with index.js and only impor that array
 import { ExperimentParticipant } from "./experimentParticipant";
+import { ExperimentRequirement } from "./experimentRequirement";
 
-const intermediaryTables = [ExperimentParticipant];
+const intermediaryTables = [ExperimentParticipant, ExperimentRequirement];
 
 export const modelsArray: ModelCtor[] = [
   Participant,
   Experiment,
+  Requirement,
   Survey,
-  SurveyAnswer,
+  QuestionResponse,
   SurveySection,
-  SurveyQuestion,
-  DataQuestion,
-  DataAnswer,
+  Question,
   CardCollection,
   ...intermediaryTables
 ];
@@ -32,11 +33,9 @@ export const modelsObject = {
   Participant,
   Experiment,
   Survey,
-  SurveyAnswer,
+  QuestionResponse,
   SurveySection,
-  SurveyQuestion,
-  DataQuestion,
-  DataAnswer,
+  Question,
   CardCollection,
   ...intermediaryTables
 };

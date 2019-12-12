@@ -1,30 +1,13 @@
-import { Table, Column, Model } from "sequelize-typescript";
+import { ForeignKey, Table, Column, Model } from "sequelize-typescript";
+import { Survey } from "./survey";
+import { Question } from "./question";
 @Table
 export class SurveyQuestion extends Model<SurveyQuestion> {
-  @Column({ primaryKey: true })
-  surveyQuestionId: string;
-
+  @ForeignKey(() => Survey)
   @Column
-  questionType: string;
+  surveyId: string;
 
+  @ForeignKey(() => Question)
   @Column
-  answerType: string;
-
-  @Column
-  label: string;
-
-  @Column
-  rules: string;
-
-  @Column
-  items: string;
-
-  @Column
-  required: Boolean;
-
-  @Column
-  note: string;
-
-  @Column
-  question: string;
+  questionId: string;
 }

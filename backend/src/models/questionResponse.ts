@@ -1,12 +1,12 @@
 import { DataType, Table, Column, Model } from "sequelize-typescript";
 @Table
-export class SurveyAnswer extends Model<SurveyAnswer> {
+export class QuestionResponse extends Model<QuestionResponse> {
   @Column({ primaryKey: true })
-  surveyAnswerId: string;
+  responseId: string;
 
-  // @ForeignKey(() => SurveyQuestion)
+  // @ForeignKey(() => Question)
   @Column
-  surveyQuestionId: string;
+  questionId: string;
 
   // @ForeignKey(() => Experiment)
   @Column
