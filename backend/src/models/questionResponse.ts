@@ -1,6 +1,16 @@
-import { DataType, Table, Column, Model } from "sequelize-typescript";
+import {
+  DataType,
+  Table,
+  Column,
+  Model,
+  BelongsTo
+} from "sequelize-typescript";
+import { Question } from "./question";
 @Table
 export class QuestionResponse extends Model<QuestionResponse> {
+  @BelongsTo(() => Question, "responseId")
+  question: Question;
+
   @Column({ type: DataType.STRING(255), primaryKey: true })
   responseId: string;
 

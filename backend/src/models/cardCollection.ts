@@ -1,8 +1,19 @@
-import { DataType, Table, Column, Model } from "sequelize-typescript";
+import {
+  DataType,
+  Table,
+  Column,
+  Model,
+  BelongsTo
+} from "sequelize-typescript";
+import { Survey } from "./survey";
 
 @Table
 export class CardCollection extends Model<CardCollection> {
-  // id primary key autoincrement, perhaps add explicitly even though sequelize auto-adds
+  @BelongsTo(() => Survey, "surveyId")
+  survey: Survey;
+
+  @Column(DataType.STRING(255))
+  cardCollectionId: string;
 
   // foreign key
   @Column(DataType.STRING(255))

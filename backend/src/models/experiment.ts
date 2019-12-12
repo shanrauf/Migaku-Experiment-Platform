@@ -9,6 +9,8 @@ import { Participant } from "./participant";
 import { ExperimentParticipant } from "./experimentParticipant";
 import { Requirement } from "./requirement";
 import { ExperimentRequirement } from "./experimentRequirement";
+import { Survey } from "./survey";
+import { ExperimentSurvey } from "./experimentSurvey";
 @Table
 export class Experiment extends Model<Experiment> {
   @BelongsToMany(
@@ -18,6 +20,14 @@ export class Experiment extends Model<Experiment> {
     "participantId"
   )
   participants: Participant[];
+
+  @BelongsToMany(
+    () => Survey,
+    () => ExperimentSurvey,
+    "experimentId",
+    "surveyId"
+  )
+  surveys: Survey[];
 
   @BelongsToMany(
     () => Requirement,

@@ -11,11 +11,20 @@ import { CardCollection } from "./cardCollection";
 import { SurveySection } from "./surveySection";
 
 // intermediary tables
-// TODO: Move all to a folder with index.js and only impor that array
+// TODO: Move all to a folder with index.js and only import that array
 import { ExperimentParticipant } from "./experimentParticipant";
 import { ExperimentRequirement } from "./experimentRequirement";
+import { ExperimentSurvey } from "./experimentSurvey";
+import { SurveyQuestion } from "./surveyQuestion";
+import { SurveySectionQuestion } from "./surveySectionQuestion";
 
-const intermediaryTables = [ExperimentParticipant, ExperimentRequirement];
+const intermediaryTables = [
+  ExperimentParticipant,
+  ExperimentSurvey,
+  ExperimentRequirement,
+  SurveyQuestion,
+  SurveySectionQuestion
+];
 
 export const modelsArray: ModelCtor[] = [
   Participant,
@@ -32,6 +41,7 @@ export const modelsArray: ModelCtor[] = [
 export const modelsObject = {
   Participant,
   Experiment,
+  Requirement,
   Survey,
   QuestionResponse,
   SurveySection,
