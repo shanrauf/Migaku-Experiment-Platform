@@ -44,29 +44,23 @@
           },
           {
             "questionId": "completedRRTK",
-            "label": "Recognition RTK",
+            "label": "Completed Recognition RTK",
             "questionType": "radio",
             "dataType": "boolean",
             "question": "Have you completed RRTK (Recognition RTK, previously known as Lazy Kanji)?",
             "note": "We forgot to ask this question in the initial survey",
-            "items": [
-              { "key": "Yes", "value": true },
-              { "key": "No", "value": false }
-            ],
+            "items": "trueFalse",
             "value": "",
             "required": true
           },
           {
             "questionId": "completedPRTK",
-            "label": "Production RTK",
+            "label": "Completed Production RTK",
             "questionType": "radio",
             "dataType": "boolean",
             "question": "Have you completed PRTK (Production RTK, previously known as Traditional RTK)?",
             "note": "We forgot to ask this question in the initial survey",
-            "items": [
-              { "key": "yes", "value": true },
-              { "key": "no", "value": false }
-            ],
+            "items": "trueFalse",
             "value": "",
             "required": true
           },

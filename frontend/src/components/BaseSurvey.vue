@@ -8,18 +8,21 @@
       style="margin: 0 20px 20px 0"
       @blur="updateCurrentSurveyMetadata($event, 'description')"
     >{{ section.description }}</p>
-    <component
-      v-for="question in section.questions"
-      :key="question.key"
-      :is="typeToComponent(question.type)"
-      :value="question.value"
-      :label="question.label"
-      :placeholder="question.placeholder"
-      :rules="getRules(question.rules)"
-      :items="getItems(question.items)"
-      @update="(...args) => updateQuestionValue(question, ...args)"
-      @edit="updateEditOverlay"
-    />
+    <div v-for="question in section.questions" :key="question.key">
+      <h4>{{question.question}}</h4>
+      <span v-if="question.note">(Note: {{question.note}})</span>
+      <component
+        :is="typeToComponent(question.questionType)"
+        :value="question.value"
+        :label="question.label"
+        :placeholder="question.placeholder"
+        :rules="getRules(question.rules)"
+        :items="getItems(question.items)"
+        @update="(...args) => updateQuestionValue(question, ...args)"
+        @edit="updateEditOverlay"
+      />
+    </div>
+
     <div v-if="section.sectionId == getNumberOfSections">
       <v-btn style="margin: 10px" @click="confirmOverlay = true">Back</v-btn>
       <v-btn style="margin: 10px" color="primary" @click="submitSurvey">Submit</v-btn>
@@ -78,7 +81,8 @@ export default {
         daysInAWeek: [...Array(8).keys()],
         oneToTenScale: [...Array(11).keys()].splice(1),
         percentages: [...Array(101).keys()],
-        zeroToOneHundred: [...Array(101).keys()]
+        zeroToOneHundred: [...Array(101).keys()],
+        trueFalse: [true, false]
       },
       ruleGenerators: {
         maxChar: val => v =>
