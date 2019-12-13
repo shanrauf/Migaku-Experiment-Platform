@@ -8,7 +8,6 @@ module.exports = {
         {
           experimentId: "abc123",
           surveyId: "testSurvey",
-          description: "Example survey description 1",
           startDate: new Date(),
           endDate: new Date(Date.now() + 8.64e7 * 14),
           surveyCategory: "regular",
@@ -19,7 +18,6 @@ module.exports = {
         {
           experimentId: "123abc",
           surveyId: "testSurvey",
-          description: "Example survey description 12345",
           startDate: new Date(),
           endDate: null,
           surveyCategory: "regular",

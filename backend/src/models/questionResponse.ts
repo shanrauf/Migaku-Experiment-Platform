@@ -16,13 +16,13 @@ export class QuestionResponse extends Model<QuestionResponse> {
   @BelongsTo(() => Experiment, "experimentId")
   experiment: Experiment;
 
-  @BelongsTo(() => Survey, "experimentId")
+  @BelongsTo(() => Survey, "surveyId")
   survey: Survey;
 
-  @BelongsTo(() => Participant, "experimentId")
+  @BelongsTo(() => Participant, "participantId")
   participant: Participant;
 
-  @BelongsTo(() => Question, "responseId")
+  @BelongsTo(() => Question, "questionId")
   question: Question;
 
   @Column({ type: DataType.STRING(255), primaryKey: true })
