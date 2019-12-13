@@ -18,7 +18,7 @@ export class SurveySection extends Model<SurveySection> {
   surveyId: string;
 
   @Column(DataType.TINYINT)
-  sectionOrder: number;
+  sectionNumber: number;
 
   @Column(DataType.STRING(255))
   title: string;

@@ -13,6 +13,8 @@ declare global {
     export type Experiment = ModelCtor<Model>;
     export type ExperimentSurvey = ModelCtor<Model>;
     export type Survey = ModelCtor<Model>;
+    export type Question = ModelCtor<Model>;
+    export type QuestionResponse = ModelCtor<Model>;
     export type GenericModel = ModelCtor<Model>;
   }
 }

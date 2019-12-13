@@ -10,7 +10,6 @@ export default app => {
     "/me",
     passport.authenticate("jwt", { session: false }),
     middlewares.ensureAuthenticated,
-    // middlewares.attachCurrentUser,
     (req: Request, res: Response) => {
       return res.json({ status: "me" }).status(200);
 
