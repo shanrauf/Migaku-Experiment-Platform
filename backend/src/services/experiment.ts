@@ -49,4 +49,19 @@ export default class ExperimentService {
     }
     return { experiment: experimentRecord };
   }
+  public async CreateExperiment(experimentObj: {
+    experimentId: string;
+    title: string;
+    description: string;
+    startDate: string;
+    endDate: string | null;
+    visibility: string;
+  }): Promise<{ experiment: Model | null }> {
+    this.logger.silly(`Creating experiment ${experimentObj.experimentId}`);
+    const experimentRecord = await this.Experiment.create(experimentObj);
+    if (!experimentRecord) {
+      return { experiment: null };
+    }
+    return { experiment: experimentRecord };
+  }
 }

@@ -23,7 +23,6 @@
 export default {
   methods: {
     notificationType(type) {
-      console.log(type);
       switch (type) {
         case "success":
           return "message--green";

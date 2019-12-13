@@ -55,10 +55,6 @@ export default {
     items: {
       type: Array,
       required: true
-    },
-    editable: {
-      type: Boolean,
-      required: false
     }
   },
   data() {

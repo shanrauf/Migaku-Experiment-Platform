@@ -61,7 +61,7 @@ export class QuestionResponse extends Model<QuestionResponse> {
   answerBoolean: Boolean;
 
   @AllowNull(true)
-  @Column(DataType.STRING(255))
+  @Column(DataType.STRING(500))
   answerVarchar: string;
 
   @AllowNull(true)

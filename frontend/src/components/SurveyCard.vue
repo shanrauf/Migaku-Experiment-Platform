@@ -4,7 +4,7 @@
     <v-card-subtitle>{{dateToTimeUntil(new Date(endDate))}}</v-card-subtitle>
     <v-card-text>{{description}}</v-card-text>
     <v-card-actions>
-      <v-btn :to="`${id}`" append>Complete Survey</v-btn>
+      <v-btn :to="`${surveyId}`" append>Complete Survey</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -13,7 +13,7 @@
 import { dateToTimeUntil } from "@/utils/index.js";
 export default {
   props: {
-    id: {
+    surveyId: {
       type: String,
       required: true
     },

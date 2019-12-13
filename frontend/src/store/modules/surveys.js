@@ -23,7 +23,7 @@ const actions = {
       type: "setSurveys",
       surveys: [
         {
-          id: "sa54df154sa4dffpsdf",
+          surveyId: "sa54df154sa4dffpsdf",
           title: "MIA Mid-Experiment Survey Week 1",
           description:
             "This is the first weekly survey to gauge your progress during the experiment.",
@@ -31,7 +31,7 @@ const actions = {
           endDate: 1576108800000
         },
         {
-          id: "h9g45wj54gi90jhi9ds",
+          surveyId: "h9g45wj54gi90jhi9ds",
           title: "Testing Anki Retention At Different Learning Steps",
           description:
             "This is the second weekly survey to gauge your progress during the experiment.",
@@ -42,10 +42,9 @@ const actions = {
     });
   },
   async createCurrentSurvey({ commit }, surveyId) {
-    console.log(surveyId);
     commit({
       type: "setCurrentSurvey",
-      currentSurvey: surveyData
+      currentSurvey: surveyData.survey
     });
   },
   async submitSurvey({ commit }, payload) {

@@ -17,17 +17,28 @@ export default app => {
     return res.json(payload).status(200);
   });
 
-  route.post("/", (req: Request, res: Response) => {
-    return res.status(403);
-
-    // console.log(req.body);
-    // return res.json({ status: "survey received" }).status(201);
+  route.post("/", async (req: Request, res: Response) => {
+    const surveyService = Container.get(SurveyService);
+    console.log(req.body.survey);
+    const payload = await surveyService.CreateSurvey(req.body.survey);
+    if (!payload) {
+      return res.send(401);
+    }
+    return res
+      .json({ survey: payload.survey, status: "Survey updated" })
+      .status(200);
   });
 
-  route.put("/", (req: Request, res: Response) => {
-    return res.status(403);
-    // console.log("same as /create but with custom surveyId; ");
-    // return res.json({ status: "survey received" }).status(201);
+  route.put("/", async (req: Request, res: Response) => {
+    const { survey } = req.body;
+    const surveyService = Container.get(SurveyService);
+    const payload = await surveyService.UpdateSurvey(survey);
+    if (!payload) {
+      return res.send(401);
+    }
+    return res
+      .json({ survey: payload.survey, status: "Survey updated" })
+      .status(200);
   });
 
   route.get("/latest", async (req: Request, res: Response) => {

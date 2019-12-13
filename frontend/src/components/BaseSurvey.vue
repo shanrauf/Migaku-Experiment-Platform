@@ -2,12 +2,10 @@
   <v-form class="form" lazy-validation>
     <h1
       style="margin: 20px 20px 5px 0"
-      :contenteditable="editable"
       @blur="updateCurrentSurveyMetadata($event, 'title')"
     >{{ section.title }}</h1>
     <p
       style="margin: 0 20px 20px 0"
-      :contenteditable="editable"
       @blur="updateCurrentSurveyMetadata($event, 'description')"
     >{{ section.description }}</p>
     <component
@@ -20,7 +18,6 @@
       :rules="getRules(question.rules)"
       :items="getItems(question.items)"
       @update="(...args) => updateQuestionValue(question, ...args)"
-      :editable="editable"
       @edit="updateEditOverlay"
     />
     <div v-if="section.sectionId == getNumberOfSections">
@@ -60,14 +57,6 @@ export default {
     section: {
       type: Object,
       required: true
-    },
-    disabled: {
-      type: Boolean,
-      required: true
-    },
-    editable: {
-      type: Boolean,
-      required: true
     }
   },
   components: {
@@ -88,7 +77,8 @@ export default {
         oneToFiveScale: [...Array(6).keys()].splice(1), // splice selects all but "0"
         daysInAWeek: [...Array(8).keys()],
         oneToTenScale: [...Array(11).keys()].splice(1),
-        percentages: [...Array(101).keys()]
+        percentages: [...Array(101).keys()],
+        zeroToOneHundred: [...Array(101).keys()]
       },
       ruleGenerators: {
         maxChar: val => v =>

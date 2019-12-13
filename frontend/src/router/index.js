@@ -106,7 +106,7 @@ const routes = [
         meta: {
           name: "currentSurvey",
           title: "MIA Experiment Survey",
-          requiresAuth: true,
+          requiresAuth: false, // change later...
           requiresAdmin: false
         },
         component: SurveyView

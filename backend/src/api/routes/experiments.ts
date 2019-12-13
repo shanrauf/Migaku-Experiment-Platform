@@ -17,9 +17,15 @@ export default app => {
     return res.json(payload).status(200);
   });
 
-  route.post("/", (req: Request, res: Response) => {
-    console.log(req.body);
-    return res.json({ status: "experiment received" }).status(201);
+  route.post("/", async (req: Request, res: Response) => {
+    const experimentService = Container.get(ExperimentService);
+    const payload = await experimentService.CreateExperiment(
+      req.body.experiment
+    );
+    if (!payload.experiment) {
+      return res.status(404);
+    }
+    return res.json({ experiment: payload.experiment }).status(201);
   });
 
   route.get("/:experimentId", async (req: Request, res: Response) => {

@@ -6,19 +6,11 @@
       :key="section.sectionId"
     >
       <div v-if="section.sectionId == 1">
-        <h1
-          style="text-align: center"
-          @blur="setTitle"
-          :contenteditable="contentEditable"
-        >{{ currentSurvey.title }}</h1>
-        <p
-          style="text-align: center"
-          @blur="setDescription"
-          :contenteditable="contentEditable"
-        >{{ currentSurvey.description }}</p>
+        <h1 style="text-align: center" @blur="setTitle">{{ currentSurvey.title }}</h1>
+        <p style="text-align: center" @blur="setDescription">{{ currentSurvey.description }}</p>
       </div>
-      <SectionBanner :sectionId="section.sectionId" :numberOfSections="getNumberOfSections" />
-      <BaseSurvey :section="section" :editable="contentEditable" :disabled="viewMode == 'view'" />
+      <SectionBanner :sectionId="section.sectionNumber" :numberOfSections="getNumberOfSections" />
+      <BaseSurvey :section="section" />
     </BaseCard>
   </div>
 </template>
@@ -35,10 +27,6 @@ export default {
     currentSurvey: {
       type: Object,
       required: true
-    },
-    viewMode: {
-      type: String,
-      required: true
     }
   },
   components: {
@@ -47,10 +35,7 @@ export default {
     SectionBanner
   },
   computed: {
-    ...mapGetters(["getNumberOfSections"]),
-    contentEditable() {
-      return this.viewMode == "edit" || this.viewMode == "create";
-    }
+    ...mapGetters(["getNumberOfSections"])
   },
   methods: {
     camelCase,

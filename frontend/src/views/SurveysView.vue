@@ -4,7 +4,7 @@
       <v-col>
         <BaseCreateNewCard v-once />
       </v-col>
-      <v-col v-for="survey in getSurveys" :key="survey.id">
+      <v-col v-for="survey in getSurveys" :key="survey.surveyId">
         <SurveyCard v-bind="survey" />
       </v-col>
     </v-row>

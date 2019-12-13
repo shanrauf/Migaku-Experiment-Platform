@@ -1,7 +1,7 @@
 <template>
   <div class="survey-container">
     <SideNavigation v-if="getCurrentSurveySectionTitles" :sections="getCurrentSurveySectionTitles" />
-    <SurveyBuilder :currentSurvey="getCurrentSurvey" :viewMode="surveyViewMode" />
+    <SurveyBuilder :currentSurvey="getCurrentSurvey" />
   </div>
 </template>
 
@@ -27,10 +27,7 @@ export default {
     this.$store.dispatch("createCurrentSurvey", this.$route.params.survey);
   },
   computed: {
-    ...mapGetters(["getCurrentSurvey", "getCurrentSurveySectionTitles"]),
-    surveyViewMode() {
-      return this.$route.fullPath.split("/").pop();
-    }
+    ...mapGetters(["getCurrentSurvey", "getCurrentSurveySectionTitles"])
   }
 };
 </script>
