@@ -16,6 +16,7 @@ module.exports = {
           discordUsername: "testing1234",
           age: 19,
           sex: "female",
+          lastLogin: new Date(),
           createdAt: new Date(),
           updatedAt: new Date()
         },
@@ -27,6 +28,7 @@ module.exports = {
           discordUsername: "shanrauf",
           age: 18,
           sex: "male",
+          lastLogin: new Date(),
           createdAt: new Date(),
           updatedAt: new Date()
         }

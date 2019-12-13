@@ -51,4 +51,7 @@ export class Participant extends Model<Participant> {
 
   @Column(DataType.STRING(20))
   sex: string;
+
+  @Column
+  lastLogin: Date;
 }

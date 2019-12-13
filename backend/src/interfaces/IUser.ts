@@ -6,6 +6,7 @@ export interface IUser {
   password: string;
   age: number;
   sex: string;
+  lastLogin: Date;
 }
 
 export interface IUserInputDTO {

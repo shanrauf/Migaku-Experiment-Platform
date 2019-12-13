@@ -7,10 +7,12 @@ import {
   EventDispatcherInterface
 } from "../decorators/eventDispatcher";
 import config from "../config";
-import { Container, Service, Inject } from "typedi";
+import { Service, Inject } from "typedi";
 import { PassportStatic } from "passport";
 import winston from "winston";
 import { randomIdGenerator } from "../utils";
+import events from "../subscribers/events";
+
 @Service()
 export default class AuthService {
   constructor(
@@ -39,9 +41,13 @@ export default class AuthService {
       name,
       discordUsername: null,
       age,
-      sex
+      sex,
+      lastLogin: new Date()
     })
       .then(participantRecord => {
+        this.eventDispatcher.dispatch(events.participant.signUp, {
+          participant: participantRecord
+        });
         /**
          * @TODO This is a bad way to delete fields...
          * There should exist a 'Mapper' layer

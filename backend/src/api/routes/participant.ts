@@ -4,7 +4,15 @@ import passport from "passport";
 const route = Router();
 
 export default app => {
-  app.use("/users", route);
+  app.use("/participants", route);
+
+  route.post("/", (req: Request, res: Response) => {
+    return res.status(201);
+  });
+
+  route.delete("/", (req: Request, res: Response) => {
+    return res.status(200);
+  });
 
   route.get(
     "/me",

@@ -74,7 +74,7 @@ export default app => {
     // return res.json(payload).status(200);
   });
 
-  route.post("/latest", (req: Request, res: Response) => {
+  route.post("/latest", async (req: Request, res: Response) => {
     const surveyId = req.params.surveyId;
     const surveyService = Container.get(SurveyService);
     const payload = await surveyService.GetSurvey(surveyId);
@@ -85,7 +85,7 @@ export default app => {
     return res.json(payload).status(200);
   });
 
-  route.get("/:surveyId/status", (req: Request, res: Response) => {
+  route.get("/:surveyId/status", async (req: Request, res: Response) => {
     const email = req.query.email;
     const surveyId = req.params.surveyId;
     const surveyService = Container.get(SurveyService);
@@ -109,7 +109,7 @@ export default app => {
     // }
   });
 
-  route.get("/latest/status", (req: Request, res: Response) => {
+  route.get("/latest/status", async (req: Request, res: Response) => {
     const email = req.query.email;
     const surveyId = req.params.surveyId;
     const surveyService = Container.get(SurveyService);

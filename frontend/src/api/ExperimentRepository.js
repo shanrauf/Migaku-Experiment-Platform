@@ -5,18 +5,16 @@ export default {
   get() {
     return AxiosClient.get(`${resource}`);
   },
-  getExperiment(id) {
-    return AxiosClient.get(`${resource}/${id}`);
+  getExperiment(experimentId) {
+    return AxiosClient.get(`${resource}/${experimentId}`);
   },
   create(payload) {
     return AxiosClient.post(`${resource}`, payload);
   },
-  update(payload, id) {
-    return AxiosClient.put(`${resource}/${id}`, payload);
+  update(payload, experimentId) {
+    return AxiosClient.put(`${resource}/${experimentId}`, payload);
   },
-  delete(id) {
-    return AxiosClient.delete(`${resource}/${id}`);
+  delete(experimentId) {
+    return AxiosClient.delete(`${resource}/${experimentId}`);
   }
-
-  // MANY OTHER ENDPOINT RELATED STUFFS
 };

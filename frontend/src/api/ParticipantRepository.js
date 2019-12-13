@@ -5,16 +5,16 @@ export default {
   get() {
     return AxiosClient.get(`${resource}`);
   },
-  getUser(id) {
-    return AxiosClient.get(`${resource}/${id}`);
+  getUser(participantId) {
+    return AxiosClient.get(`${resource}/${participantId}`);
   },
   create(payload) {
     return AxiosClient.post(`${resource}`, payload);
   },
-  update(payload, id) {
-    return AxiosClient.put(`${resource}/${id}`, payload);
+  update(payload, participantId) {
+    return AxiosClient.put(`${resource}/${participantId}`, payload);
   },
-  delete(id) {
-    return AxiosClient.delete(`${resource}/${id}`);
+  delete(participantId) {
+    return AxiosClient.delete(`${resource}/${participantId}`);
   }
 };

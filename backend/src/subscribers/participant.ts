@@ -2,10 +2,11 @@ import { Container } from "typedi";
 import { EventSubscriber, On } from "event-dispatch";
 import events from "./events";
 import { IUser } from "../interfaces/IUser";
-import mongoose from "mongoose";
+import { ModelCtor } from "sequelize/types";
+import { Model } from "sequelize-typescript";
 
 @EventSubscriber()
-export default class UserSubscriber {
+export default class ParticipantSubscriber {
   /**
    * A great example of an event that you want to handle
    * save the last time a user signin, your boss will be pleased.
@@ -16,16 +17,17 @@ export default class UserSubscriber {
    * Use another approach like emit events to a queue (rabbitmq/aws sqs),
    * then save the latest in Redis/Memcache or something similar
    */
-  @On(events.user.signIn)
+  @On(events.participant.signIn)
   public onUserSignIn({ participantId }: Partial<IUser>) {
     const Logger = Container.get("logger");
 
     try {
-      const UserModel = Container.get("UserModel") as mongoose.Model<
-        IUser & mongoose.Document
-      >;
+      const Participant = Container.get("Participant") as ModelCtor<Model>;
 
-      UserModel.update({ participantId }, { $set: { lastLogin: new Date() } });
+      Participant.update(
+        { lastLogin: new Date() },
+        { where: { participantId } }
+      );
     } catch (e) {
       // Logger.error(`🔥 Error on event ${events.user.signIn}: %o`, e);
 
@@ -33,7 +35,7 @@ export default class UserSubscriber {
       throw e;
     }
   }
-  @On(events.user.signUp)
+  @On(events.participant.signUp)
   public onUserSignUp({ name, email, participantId }: Partial<IUser>) {
     const Logger = Container.get("logger");
 

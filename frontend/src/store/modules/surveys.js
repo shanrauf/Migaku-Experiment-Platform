@@ -47,6 +47,9 @@ const actions = {
       type: "setCurrentSurvey",
       currentSurvey: surveyData
     });
+  },
+  async submitSurvey({ commit }, payload) {
+    // SurveyRepository.post
   }
 };
 

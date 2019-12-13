@@ -31,4 +31,13 @@ export default app => {
     }
     return res.json(payload).status(200);
   });
+
+  route.put("/:experimentId", async (req: Request, res: Response) => {
+    // custom experimentId
+    return res.status(403);
+  });
+
+  route.delete("/:experimentId", async (req: Request, res: Response) => {
+    return res.status(403);
+  });
 };
