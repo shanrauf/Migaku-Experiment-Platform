@@ -1,17 +1,10 @@
-import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
-
-import { IUser, IUserInputDTO } from "../interfaces/IUser";
 import {
   EventDispatcher,
   EventDispatcherInterface
 } from "../decorators/eventDispatcher";
-import config from "../config";
-import { Container, Service, Inject } from "typedi";
-import { PassportStatic } from "passport";
+import { Service, Inject } from "typedi";
 import winston from "winston";
 import { randomIdGenerator } from "../utils";
-import { Experiment } from "../models/experiment";
 import { Model } from "sequelize-typescript";
 @Service()
 export default class ExperimentService {
@@ -50,13 +43,17 @@ export default class ExperimentService {
     return { experiment: experimentRecord };
   }
   public async CreateExperiment(experimentObj: {
-    experimentId: string;
+    experimentId?: string;
     title: string;
     description: string;
     startDate: string;
     endDate: string | null;
     visibility: string;
   }): Promise<{ experiment: Model | null }> {
+    if !("experimentId" in experimentObj) {
+      this.logger.silly("Generating random ID");
+      experimentObj["experimentId"] = randomIdGenerator();
+    }
     this.logger.silly(`Creating experiment ${experimentObj.experimentId}`);
     const experimentRecord = await this.Experiment.create(experimentObj);
     if (!experimentRecord) {

@@ -1,14 +1,8 @@
-import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
-
-import { IUser, IUserInputDTO } from "../interfaces/IUser";
 import {
   EventDispatcher,
   EventDispatcherInterface
 } from "../decorators/eventDispatcher";
-import config from "../config";
-import { Container, Service, Inject } from "typedi";
-import { PassportStatic } from "passport";
+import { Service, Inject } from "typedi";
 import winston from "winston";
 import { randomIdGenerator } from "../utils";
 import { Model, DataType } from "sequelize-typescript";
