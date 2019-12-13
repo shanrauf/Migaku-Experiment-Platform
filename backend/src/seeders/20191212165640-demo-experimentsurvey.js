@@ -24,6 +24,26 @@ module.exports = {
           visibility: "private",
           createdAt: new Date(),
           updatedAt: new Date()
+        },
+        {
+          experimentId: "abc123",
+          surveyId: "testSurveyTwo",
+          startDate: new Date(),
+          endDate: new Date(Date.now() + 8.64e7 * 14),
+          surveyCategory: "regular",
+          visibility: "public",
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          experimentId: "123abc",
+          surveyId: "testSurveyTwo",
+          startDate: new Date(),
+          endDate: null,
+          surveyCategory: "regular",
+          visibility: "public",
+          createdAt: new Date(),
+          updatedAt: new Date()
         }
       ],
       {}

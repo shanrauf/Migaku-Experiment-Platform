@@ -2,9 +2,6 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    if (process.env.NODE_ENV !== "development") {
-      throw new Error("You aren't in development mode...");
-    }
     return queryInterface.bulkInsert(
       "Participants",
       [

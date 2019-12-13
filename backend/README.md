@@ -3,9 +3,8 @@
 Setup Instructions:
 
 1. `npm install`
-2. `npm run force-sync-dev # This creates the tables on your local SQL server`
-3. 'npm run seed # This will create dummy entries in the table to test the API with'
-4. 'npm start'
+2. `npm run setup-dev # This creates the tables and test data on your local SQL server to test the API`
+3. 'npm start'
 
 # NPM Commands to Write:
 

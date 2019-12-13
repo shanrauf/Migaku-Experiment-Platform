@@ -45,20 +45,22 @@ export default class SurveyService {
         surveys: surveyRecords.rows,
         totalCount: surveyRecords.count
       };
+    } else {
+      const surveyRecords = await this.Survey.findAndCountAll({
+        // offset: 10, implement pagination with this later
+        limit: 10
+      });
+      return {
+        surveys: surveyRecords.rows,
+        totalCount: surveyRecords.count
+      };
     }
-    const surveyRecords = await this.Survey.findAndCountAll({
-      // offset: 10, implement pagination with this later
-      limit: 10
-    });
-    return {
-      surveys: surveyRecords.rows,
-      totalCount: surveyRecords.count
-    };
   }
 
   public async GetSurvey(surveyId: string): Promise<{ survey: Model | null }> {
     this.logger.silly(`Fetching survey ${surveyId}`);
     const surveyRecord = await this.Survey.findByPk(surveyId);
+    console.log(surveyRecord);
     if (!surveyRecord) {
       return { survey: null };
     }
@@ -120,7 +122,6 @@ export default class SurveyService {
       };
       let dataType = this.GetQuestionDataType(i[0]);
       questionResponse[dataType] = i[1];
-      console.log(questionResponse);
       questionResponses.push(questionResponse);
     }
     const questionResponseRecords = await this.QuestionResponse.bulkCreate(

@@ -12,7 +12,7 @@ export default app => {
     const surveyService = Container.get(SurveyService);
     const payload = await surveyService.GetSurveys(req.params.experimentId);
     if (!payload.surveys) {
-      return res.status(404);
+      return res.status(404).send("Not found");
     }
     return res.json(payload).status(200);
   });
@@ -46,7 +46,7 @@ export default app => {
     const surveyService = Container.get(SurveyService);
     const payload = await surveyService.GetLatestSurvey(experimentId);
     if (!payload.survey) {
-      return res.status(404);
+      return res.json(payload).status(404);
     }
     return res.json(payload).status(200);
   });
@@ -69,8 +69,8 @@ export default app => {
       surveyId,
       req.body
     );
-    if (!payload.survey) {
-      return res.status(404);
+    if (!payload.questionResponses) {
+      return res.json(payload).status(200);
     }
     return res.json(payload).status(200);
   });
@@ -86,14 +86,14 @@ export default app => {
   });
 
   route.post("/latest", async (req: Request, res: Response) => {
-    const surveyId = req.params.surveyId;
-    const surveyService = Container.get(SurveyService);
-    const payload = await surveyService.GetSurvey(surveyId);
-    if (!payload.survey) {
-      return res.status(404);
-    }
-    // now post all teh answers into questionResponses
-    return res.json(payload).status(200);
+    // const surveyId = req.params.surveyId;
+    // const surveyService = Container.get(SurveyService);
+    // const payload = await surveyService.GetSurvey(surveyId);
+    // if (!payload.survey) {
+    //   return res.status(404).send("Not found");
+    // }
+    // // now post all teh answers into questionResponses
+    // return res.json(payload).status(200);
   });
 
   route.get("/:surveyId/status", async (req: Request, res: Response) => {
@@ -102,7 +102,7 @@ export default app => {
     const surveyService = Container.get(SurveyService);
     const payload = await surveyService.GetSurvey(surveyId);
     if (!payload.survey) {
-      return res.status(404);
+      return res.json(payload).status(404);
     }
     // check if email
     // if (email == readyToSyncAnkiData) {
