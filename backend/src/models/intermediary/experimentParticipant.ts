@@ -13,9 +13,6 @@ import { Participant } from "../participant";
   tableName: "experimentparticipants"
 })
 export class ExperimentParticipant extends Model<ExperimentParticipant> {
-  toString() {
-    return "ExperimentParticipant";
-  }
   @ForeignKey(() => Experiment)
   @Column(DataType.STRING(255))
   experimentId: string;

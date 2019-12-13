@@ -17,9 +17,6 @@ import { CardCollection } from "./cardCollection";
 import { QuestionResponse } from "./questionResponse";
 @Table({ modelName: "Experiment", tableName: "experiments" })
 export class Experiment extends Model<Experiment> {
-  toString() {
-    return "Experiment";
-  }
   @BelongsToMany(
     () => Participant,
     () => ExperimentParticipant,

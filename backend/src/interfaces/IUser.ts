@@ -9,8 +9,9 @@ export interface IUser {
 }
 
 export interface IUserInputDTO {
-  // this makes sense cuz it's the "user" b4 registering
   name: string;
   email: string;
   password: string;
+  age: number;
+  sex: string;
 }

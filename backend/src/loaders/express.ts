@@ -4,6 +4,7 @@ import cors from "cors";
 import { errors } from "celebrate";
 import routes from "../api";
 import config from "../config";
+import cookieParser from "cookie-parser";
 export default async ({ app }: { app: express.Application }) => {
   /**
    * Health Check endpoints
@@ -36,6 +37,7 @@ export default async ({ app }: { app: express.Application }) => {
     })
   );
   app.use(express.json());
+  app.use(cookieParser());
 
   // Load API routes
   app.use(config.api.prefix, routes());

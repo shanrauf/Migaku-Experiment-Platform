@@ -12,9 +12,6 @@ import { Question } from "../question";
   tableName: "surveysectionquestions"
 })
 export class SurveySectionQuestion extends Model<SurveySectionQuestion> {
-  toString() {
-    return "SurveySectionQuestion";
-  }
   @ForeignKey(() => SurveySection)
   @Column(DataType.STRING(255))
   sectionId: string;

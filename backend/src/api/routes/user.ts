@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 import middlewares from "../middlewares";
-// import passport from "passport";
+import passport from "passport";
 const route = Router();
 
 export default app => {
@@ -8,8 +8,8 @@ export default app => {
 
   route.get(
     "/me",
-    // passport.authenticate("jwt", { session: false }),
-    // middlewares.ensureAuthenticated,
+    passport.authenticate("jwt", { session: false }),
+    middlewares.ensureAuthenticated,
     // middlewares.attachCurrentUser,
     (req: Request, res: Response) => {
       return res.json({ status: "me" }).status(200);

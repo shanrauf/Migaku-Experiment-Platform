@@ -10,7 +10,7 @@ module.exports = {
           experimentId: "123abc",
           participantId: "abcd1234",
           surveyId: "testSurvey1",
-          cards: ["asdf"],
+          cards: JSON.stringify(["asdf"]),
           createdAt: new Date(),
           updatedAt: new Date()
         }

@@ -13,9 +13,6 @@ import { Survey } from "./survey";
 import { Participant } from "./participant";
 @Table({ modelName: "QuestionResponse", tableName: "questionresponses" })
 export class QuestionResponse extends Model<QuestionResponse> {
-  toString() {
-    return "QuestionResponse";
-  }
   @BelongsTo(() => Experiment, "experimentId")
   experiment: Experiment;
 

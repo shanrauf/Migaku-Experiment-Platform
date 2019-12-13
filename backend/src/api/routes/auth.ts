@@ -1,11 +1,13 @@
 import { Request, Response, Router } from "express";
 import AuthService from "../../services/auth";
 import middlewares from "../middlewares";
-import passport from "passport";
+import passport, { PassportStatic } from "passport";
 import jwt from "jsonwebtoken";
 
 import config from "../../config";
 import Container from "typedi";
+import { IUserInputDTO, IUser } from "../../interfaces/IUser";
+import { Participant } from "../../models/participant";
 const route = Router();
 
 export default app => {
@@ -18,18 +20,19 @@ export default app => {
       console.log("Calling Sign-Up endpoint with body: %o", req.body);
       try {
         const authServiceInstance = Container.get(AuthService);
-        let { email, password, name, discordUsername, age, sex } = req.body;
-        // const { user, token } = await authServiceInstance.SignUp(
-        //   email,
-        //   password,
-        //   name,
-        //   discordUsername,
-        //   age,
-        //   sex
-        // );
-        // res.cookie("jwt", token, { httpOnly: true, secure: true });
-        // res.cookie('jwt', jwt, { httpOnly: true, secure: true });
-        return res.status(201).json({ status: "signed up" });
+        const {
+          participant,
+          token
+        }: {
+          participant: object;
+          token: string;
+        } = await authServiceInstance.SignUp(req.body as IUserInputDTO);
+        if (!participant) {
+          return res.status(403).json({ participant, token });
+        }
+        res.cookie("jwt", token, { httpOnly: true, secure: true });
+        res.cookie("jwt", jwt, { httpOnly: true, secure: true });
+        return res.status(201).json({ participant, token });
       } catch (e) {
         console.error("🔥 error: %o", e);
         return next(e);
@@ -40,47 +43,31 @@ export default app => {
   route.post(
     "/signin",
     middlewares.continueIfNotAuthenticated,
-    async (req: Request, res: Response, next) => {
-      // console.log("Calling Sign-In endpoint with body: %o", req.body);
-      // try {
-      //   const authServiceInstance = new AuthService();
-      //   const { email, password } = req.body;
-      //   const { user, token } = await authServiceInstance.SignIn(
-      //     email,
-      //     password
-      //   );
-      //   return res.json({ user, token }).status(200);
-      // } catch (e) {
-      //   console.error("🔥 error: %o", e);
-      //   return next(e);
-      // }
-
-      passport.authenticate("local", { session: false }, (error, user) => {
-        if (error || !user) {
-          res.status(400).json({ error });
-        }
-
-        /** This is what ends up in our JWT */
-        const payload = {
-          name: user.name,
-          discordUsername: user.discordUsername,
-          expires: Date.now() + parseInt(process.env.JWT_EXPIRATION_MS)
-        };
-
-        /** assigns payload to req.user */
-        // req.login(payload, { session: false }, error => {
-        //   if (error) {
-        //     res.status(400).send({ error });
-        //   }
-
-        //   /** generate a signed json web token and return it in the response */
-        //   const token = jwt.sign(JSON.stringify(payload), config.jwtSecret);
-
-        //   /** assign our jwt to the cookie */
-        //   res.cookie("jwt", token, { httpOnly: true, secure: true });
-        //   res.status(200).send({ user });
-        // });
-      });
+    (req: Request, res: Response, next) => {
+      console.log("Calling Sign-In endpoint");
+      try {
+        const passport: PassportStatic = Container.get("passport");
+        passport.authenticate(
+          "local",
+          { session: false },
+          async (err, participantRecord: Participant) => {
+            if (err || !participantRecord) {
+              return res.status(401).send({ participant: {}, token: "" });
+            }
+            const authServiceInstance = Container.get(AuthService);
+            const { participant, token } = await authServiceInstance.SignIn(
+              participantRecord.toJSON() as IUser
+            );
+            /** assign our jwt to the cookie */
+            // res.cookie("jwt", token, { httpOnly: true, secure: true });
+            res.cookie("jwt", token, { httpOnly: true });
+            return res.status(200).send({ participant, token });
+          }
+        )(req, res);
+      } catch (e) {
+        console.error("🔥 error: %o", e);
+        return next(e);
+      }
     }
   );
 

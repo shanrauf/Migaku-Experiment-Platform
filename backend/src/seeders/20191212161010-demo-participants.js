@@ -15,18 +15,18 @@ module.exports = {
           sex: "female",
           createdAt: new Date(),
           updatedAt: new Date()
+        },
+        {
+          participantId: "1234abcd",
+          email: "test2@test.com",
+          password: "test321",
+          name: "Shan Rauf",
+          discordUsername: "shanrauf",
+          age: 18,
+          sex: "male",
+          createdAt: new Date(),
+          updatedAt: new Date()
         }
-        // {
-        //   participantId: "1234abcd",
-        //   email: "test2@test.com",
-        //   password: "test321",
-        //   name: "Shan Rauf",
-        //   discordUsername: "shanrauf",
-        //   age: 18,
-        //   sex: "male",
-        //   createdAt: new Date(),
-        //   updatedAt: new Date()
-        // }
       ],
       {}
     );

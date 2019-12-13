@@ -10,6 +10,7 @@ import config from "../config";
 import { Container, Service, Inject } from "typedi";
 import { PassportStatic } from "passport";
 import winston from "winston";
+import { randomIdGenerator } from "../utils";
 @Service()
 export default class AuthService {
   constructor(
@@ -19,72 +20,65 @@ export default class AuthService {
     @EventDispatcher() private eventDispatcher: EventDispatcherInterface
   ) {}
 
-  async SignUp(IUserInputDTO: IUserInputDTO) {
-    const { email, password, name } = IUserInputDTO;
-    let errors = [];
-
-    if (!name || !email || !password) {
-      errors.push({ msg: "Please enter all fields" });
-    }
-
-    if (password.length < 6) {
-      errors.push({ msg: "Password must be at least 6 characters" });
-    }
-
-    if (errors.length > 0) {
-      console.log("Validation error");
-    }
-    this.Participant.findOne({ where: { email: email } }).then(participant => {
-      if (participant) {
-        errors.push({ msg: "Email already exists" });
-        console.log("Error");
-      } else {
-        bcrypt.genSalt(10, (err, salt) => {
-          if (err) throw err;
-          bcrypt.hash(password, salt, (err, hash) => {
-            if (err) throw err;
-            let newParticipant = this.Participant.build({
-              email,
-              password: hash,
-              name,
-              discordUsername: null,
-              age: null,
-              sex: null
-            });
-            newParticipant
-              .save()
-              .then(participant => {
-                // return json of participant info and token?
-                let token = this.generateToken(participant);
-                return { participant, token };
-              })
-              .catch(err => console.log(err));
-          });
-        });
+  public async SignUp(
+    userInputDTO: IUserInputDTO
+  ): Promise<{ participant: any; token: string }> {
+    const { email, password, name, age, sex } = userInputDTO;
+    this.Participant.findOne({ where: { email } }).then(existingParticipant => {
+      if (existingParticipant) {
+        // return error that the email already exists
+        console.error("Already existss");
       }
     });
+    this.logger.silly("Hashing password");
+    const hashedPassword = await bcrypt.hash(password, 10);
+    let newParticipant = this.Participant.create({
+      participantId: randomIdGenerator(),
+      email,
+      password: hashedPassword,
+      name,
+      discordUsername: null,
+      age,
+      sex
+    })
+      .then(participantRecord => {
+        /**
+         * @TODO This is a bad way to delete fields...
+         * There should exist a 'Mapper' layer
+         * that transforms data from layer to layer
+         * but that's too over-engineering for now
+         */
+        const participant: any = participantRecord.toJSON();
+        Reflect.deleteProperty(participant, "password");
+        Reflect.deleteProperty(participant, "participantId");
+        this.logger.silly("Generating JWT");
+        const token = this.generateToken(participant.email);
+        return { participant, token };
+      })
+      .catch(err => {
+        console.log(err);
+        return { participant: {}, token: "" };
+      });
+    return newParticipant;
   }
 
-  async SignIn(email, password) {
-    const participantRecord = await this.Participant.findOne();
-    if (!participantRecord) {
-      throw new Error("User not registered");
-    }
-    const validPassword = await jwt.verify(participantRecord, password); // (participantRecord.password, password)
-    if (validPassword) {
-      const token = this.generateToken(participantRecord);
-      const user = participantRecord; // .toObject()
-      return { user, token };
-    } else {
-      throw new Error("Invalid Password");
-    }
+  async SignIn(participant): Promise<{ participant: any; token: string }> {
+    Reflect.deleteProperty(participant, "password");
+    Reflect.deleteProperty(participant, "participantId");
+
+    const token = this.generateToken(participant);
+    return { participant, token };
   }
 
-  generateToken(participant) {
+  generateToken(email: any) {
     const today = new Date();
     const exp = new Date(today);
-    exp.setDate(today.getDate() + 60);
-    let jwtToken = jwt.sign(JSON.stringify(participant), config.jwtSecret);
+    const expires = exp.setDate(today.getDate() + 30);
+    const payload = {
+      email,
+      expires
+    };
+    let jwtToken = jwt.sign(JSON.stringify(payload), config.jwtSecret);
     return jwtToken;
   }
 }

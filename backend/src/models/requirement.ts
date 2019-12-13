@@ -12,9 +12,6 @@ import { ExperimentRequirement } from "./intermediary/experimentRequirement";
 
 @Table({ modelName: "Requirement", tableName: "requirements" })
 export class Requirement extends Model<Requirement> {
-  toString() {
-    return "Requirement";
-  }
   @BelongsToMany(
     () => Experiment,
     () => ExperimentRequirement,

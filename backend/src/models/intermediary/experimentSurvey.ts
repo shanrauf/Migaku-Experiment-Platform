@@ -10,9 +10,6 @@ import { Experiment } from "../experiment";
 import { Survey } from "../survey";
 @Table({ modelName: "ExperimentSurvey", tableName: "experimentsurveys" })
 export class ExperimentSurvey extends Model<ExperimentSurvey> {
-  toString() {
-    return "ExperimentSurvey";
-  }
   @ForeignKey(() => Experiment)
   @Column(DataType.STRING(255))
   experimentId: string;

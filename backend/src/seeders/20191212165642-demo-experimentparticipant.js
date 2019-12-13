@@ -15,7 +15,7 @@ module.exports = {
         },
         {
           experimentId: "abc123",
-          participantId: "abcd1234",
+          participantId: "1234abcd",
           registerDate: new Date(Date.now() - 8.64e7 * 14),
           dropoutDate: null,
           createdAt: new Date(),
@@ -23,7 +23,7 @@ module.exports = {
         },
         {
           experimentId: "123abc",
-          participantId: "1234abcd",
+          participantId: "abcd1234",
           registerDate: new Date(Date.now() - 8.64e7 * 7),
           dropoutDate: new Date(),
           createdAt: new Date(),
