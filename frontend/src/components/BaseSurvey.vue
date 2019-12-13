@@ -82,7 +82,8 @@ export default {
         oneToTenScale: [...Array(11).keys()].splice(1),
         percentages: [...Array(101).keys()],
         zeroToOneHundred: [...Array(101).keys()],
-        trueFalse: [true, false]
+        trueFalse: [true, false],
+        audioOrSentenceCard: ["Audio Card", "Sentence Card"]
       },
       ruleGenerators: {
         maxChar: val => v =>

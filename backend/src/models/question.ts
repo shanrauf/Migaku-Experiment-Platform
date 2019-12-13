@@ -56,6 +56,6 @@ export class Question extends Model<Question> {
   @Column(DataType.STRING(1000))
   note: string;
 
-  @Column(DataType.STRING(255))
+  @Column(DataType.STRING(500))
   question: string;
 }

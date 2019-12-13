@@ -19,8 +19,10 @@ export default app => {
 
   route.post("/", async (req: Request, res: Response) => {
     const surveyService = Container.get(SurveyService);
-    console.log(req.body.survey);
-    const payload = await surveyService.CreateSurvey(req.body.survey);
+    const payload = await surveyService.CreateSurvey(
+      req.params.experimentId,
+      req.body.survey
+    );
     if (!payload) {
       return res.send(401);
     }

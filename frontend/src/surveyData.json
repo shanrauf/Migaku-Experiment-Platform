@@ -5,6 +5,8 @@
     "description": "This is the first weekly survey to gauge your progress during the experiment.",
     "startDate": "2019-12-13 00:00:00",
     "endDate": "2019-12-18 00:00:00",
+    "surveyCategory": "regular",
+    "visibility": "public",
     "sections": [
       {
         "sectionId": "48amhgnusrnata3aqumhjr",
@@ -81,7 +83,7 @@
             "questionType": "select",
             "dataType": "varchar",
             "question": "Which of the card types do you prefer to review in Anki?",
-            "items": ["Audio Card", "Sentence Card"],
+            "items": "audioOrSentenceCard",
             "value": "",
             "required": true
           },
@@ -182,8 +184,8 @@
         "image": "",
         "questions": [
           {
-            "questionId": "difficultyToLearnNewCards",
-            "label": "Difficulty to Learn New Cards",
+            "questionId": "difficultyToLearnNewAudioCards",
+            "label": "Difficulty to Learn New Audio Cards",
             "questionType": "select",
             "dataType": "tinyint",
             "question": "On a scale of 1-5, how difficult do you feel it is to learn new cards with this note type? (1 = extremely easy, 5 = extremely difficult)",
@@ -192,8 +194,8 @@
             "required": true
           },
           {
-            "questionId": "difficultyToRememberLearnedCards",
-            "label": "Difficulty to Remember Learned Cards",
+            "questionId": "difficultyToRememberLearnedAudioCards",
+            "label": "Difficulty to Remember Learned Audio Cards",
             "questionType": "select",
             "dataType": "tinyint",
             "question": "On a scale of 1-5, how difficult do you feel it is to remember learned cards with this note type (cards you have reviewed at least once)? (1 = extremely easy, 5 = extremely difficult)",
@@ -202,8 +204,8 @@
             "required": true
           },
           {
-            "questionId": "howEnjoyableIsReviewing",
-            "label": "How Enjoyable is Reviewing",
+            "questionId": "howEnjoyableIsReviewingAudioCards",
+            "label": "How Enjoyable is Reviewing Audio Cards",
             "questionType": "select",
             "dataType": "tinyint",
             "question": "On a scale of 1-5, how enjoyable do you feel it is to review cards with this note type? (1 = horrible to review, 5 = extremely enjoyable to review)",
@@ -212,8 +214,8 @@
             "required": true
           },
           {
-            "questionId": "cardLeadsToUnderstandingInImmersion",
-            "label": "Card Leads to Understanding In Immersion",
+            "questionId": "audioCardLeadsToUnderstandingInImmersion",
+            "label": "Audio Cards Lead to Understanding In Immersion",
             "questionType": "select",
             "dataType": "tinyint",
             "question": "On a scale of 1-5, how well do you feel cards with this note type lead to improved understanding in immersion? (1 = I almost never notice/understand words I learned with this note type in my immersion, 5 = I very frequently notice/understand words I learned with this note type in my immersion)",
@@ -231,8 +233,8 @@
         "image": "",
         "questions": [
           {
-            "questionId": "difficultyToLearnNewCards",
-            "label": "Difficulty to Learn New Cards",
+            "questionId": "difficultyToLearnNewSentenceCards",
+            "label": "Difficulty to Learn New Sentence Cards",
             "questionType": "select",
             "dataType": "tinyint",
             "question": "On a scale of 1-5, how difficult do you feel it is to learn new cards with this note type? (1 = extremely easy, 5 = extremely difficult)",
@@ -241,8 +243,8 @@
             "required": true
           },
           {
-            "questionId": "difficultyToRememberLearnedCards",
-            "label": "Difficulty to Remember Learned Cards",
+            "questionId": "difficultyToRememberLearnedSentenceCards",
+            "label": "Difficulty to Remember Learned Sentence Cards",
             "questionType": "select",
             "dataType": "tinyint",
             "question": "On a scale of 1-5, how difficult do you feel it is to remember learned cards with this note type (cards you have reviewed at least once)? (1 = extremely easy, 5 = extremely difficult)",
@@ -251,8 +253,8 @@
             "required": true
           },
           {
-            "questionId": "howEnjoyableIsReviewing",
-            "label": "How Enjoyable is Reviewing",
+            "questionId": "howEnjoyableIsReviewingSentenceCards",
+            "label": "How Enjoyable is Reviewing Sentence Cards",
             "questionType": "select",
             "dataType": "tinyint",
             "question": "On a scale of 1-5, how enjoyable do you feel it is to review cards with this note type? (1 = horrible to review, 5 = extremely enjoyable to review)",
@@ -261,8 +263,8 @@
             "required": true
           },
           {
-            "questionId": "cardLeadsToUnderstandingInImmersion",
-            "label": "Card Leads to Understanding In Immersion",
+            "questionId": "sentenceCardsLeadsToUnderstandingInImmersion",
+            "label": "Sentence Cards Lead to Understanding In Immersion",
             "questionType": "select",
             "dataType": "tinyint",
             "question": "On a scale of 1-5, how well do you feel cards with this note type lead to improved understanding in immersion? (1 = I almost never notice/understand words I learned with this note type in my immersion, 5 = I very frequently notice/understand words I learned with this note type in my immersion)",

@@ -50,7 +50,7 @@ export default class ExperimentService {
     endDate: string | null;
     visibility: string;
   }): Promise<{ experiment: Model | null }> {
-    if !("experimentId" in experimentObj) {
+    if (!experimentObj.hasOwnProperty("experimentId")) {
       this.logger.silly("Generating random ID");
       experimentObj["experimentId"] = randomIdGenerator();
     }
