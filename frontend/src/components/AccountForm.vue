@@ -3,13 +3,13 @@
     <div class="form-container sign-up-container">
       <form>
         <h1>Create Account</h1>
-        <v-btn class="google-button" rounded color="#df4930">
+        <!-- <v-btn class="google-button" rounded color="#df4930">
           <v-icon color="white" left>$vuetify.icons.google</v-icon>
           <b class="white-text">Login with Google</b>
         </v-btn>
         <div class="or-seperator">
           <i>or</i>
-        </div>
+        </div> -->
         <input v-model="name" type="text" placeholder="Name" />
         <input v-model="email" type="email" placeholder="Email" />
         <input v-model="password" type="password" placeholder="Password" />
@@ -22,13 +22,13 @@
     <div class="form-container sign-in-container">
       <form>
         <h1>Sign in</h1>
-        <v-btn class="google-button" rounded color="#df4930">
+        <!-- <v-btn class="google-button" rounded color="#df4930">
           <v-icon color="white" left>$vuetify.icons.google</v-icon>
           <b class="white-text">Login with Google</b>
         </v-btn>
         <div class="or-seperator">
           <i>or</i>
-        </div>
+        </div> -->
         <input v-model="email" type="email" placeholder="Email" />
         <input v-model="password" type="password" placeholder="Password" />
         <a href="#">Forgot your password?</a>
@@ -44,7 +44,8 @@
             rounded
             class="ghost"
             @click="containerClass['right-panel-active'] = false"
-          >Sign In</BaseButton>
+            >Sign In</BaseButton
+          >
         </div>
         <div class="overlay-panel overlay-right">
           <h1>Welcome!</h1>
@@ -53,7 +54,8 @@
             rounded
             class="ghost"
             @click="containerClass['right-panel-active'] = true"
-          >Sign Up</BaseButton>
+            >Sign Up</BaseButton
+          >
         </div>
       </div>
     </div>

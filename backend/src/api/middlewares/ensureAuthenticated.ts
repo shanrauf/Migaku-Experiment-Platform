@@ -5,7 +5,7 @@
  * @param {*} next  Express next Function
  */
 const ensureAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
+  if (req.isAuthenticated() || "jwt" in req.cookies) {
     return next();
   }
   // req.flash('error_msg', 'Please log in to view that resource');

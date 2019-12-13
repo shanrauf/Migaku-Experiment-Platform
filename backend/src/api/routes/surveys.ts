@@ -1,18 +1,21 @@
 import { Request, Response, Router } from "express";
 // import middlewares from "../middlewares";
 import passport from "passport";
+import SurveyService from "../../services/survey";
+import Container from "typedi";
 const route = Router({ mergeParams: true });
 
 export default app => {
   app.use("/experiments/:experimentId/surveys", route);
 
-  route.get(
-    "/",
-    // middlewares.attachCurrentUser,
-    (req: Request, res: Response) => {
-      return res.json({ status: "survey listings" }).status(200);
+  route.get("/", async (req: Request, res: Response) => {
+    const surveyService = Container.get(SurveyService);
+    const payload = await surveyService.GetSurveys(req.params.experimentId);
+    if (!payload.surveys) {
+      return res.status(404);
     }
-  );
+    return res.json(payload).status(200);
+  });
 
   route.post(
     "/",
@@ -20,22 +23,6 @@ export default app => {
     (req: Request, res: Response) => {
       console.log(req.body);
       return res.json({ status: "survey received" }).status(201);
-    }
-  );
-
-  route.get(
-    "/:surveyId",
-    // middlewares.attachCurrentUser,
-    (req: Request, res: Response) => {
-      return res.json({ status: "survey info" }).status(200);
-    }
-  );
-
-  route.post(
-    "/:surveyId",
-    // middlewares.attachCurrentUser,
-    (req: Request, res: Response) => {
-      return res.json({ status: "survey info" }).status(200);
     }
   );
 
@@ -66,7 +53,25 @@ export default app => {
     // middlewares.attachCurrentUser,
     (req: Request, res: Response) => {
       // find latest survey id and redirect too :/surveyId
-      return res.json({ status: "survey info" }).status(200);
+      return res.json({ status: req.params.experimentId }).status(200);
+    }
+  );
+
+  route.get("/:surveyId", async (req: Request, res: Response) => {
+    const surveyId = req.params.surveyId;
+    const surveyService = Container.get(SurveyService);
+    const payload = await surveyService.GetSurvey(surveyId);
+    if (!payload.survey) {
+      return res.status(404);
+    }
+    return res.json(payload).status(200);
+  });
+
+  route.post(
+    "/:surveyId",
+    // middlewares.attachCurrentUser,
+    (req: Request, res: Response) => {
+      return res.json({ status: "survey fdsa" }).status(200);
     }
   );
 

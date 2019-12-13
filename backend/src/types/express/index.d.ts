@@ -10,6 +10,9 @@ declare global {
 
   namespace Models {
     export type Participant = ModelCtor<Model & IUser>;
+    export type Experiment = ModelCtor<Model>;
+    export type ExperimentSurvey = ModelCtor<Model>;
+    export type Survey = ModelCtor<Model>;
     export type GenericModel = ModelCtor<Model>;
   }
 }
