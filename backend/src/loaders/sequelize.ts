@@ -16,6 +16,9 @@ export default async () => {
         acquire: 30000,
         idle: 10000
       }
+      // dialectOptions: {
+      //   socketPath: "/var/run/mysqld/mysqld.sock"
+      // }
     }
   );
 

@@ -41,6 +41,7 @@ export default async ({ app }: { app: express.Application }) => {
 
   // Load API routes
   app.use(config.api.prefix, routes());
+
   app.use(errors());
 
   /// catch 404 and forward to error handler

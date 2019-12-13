@@ -17,7 +17,7 @@ export default app => {
     "/signup",
     middlewares.continueIfNotAuthenticated,
     async (req: Request, res: Response, next) => {
-      console.log("Calling Sign-Up endpoint with body: %o", req.body);
+      console.log("Calling Sign-Up endpoint");
       try {
         const authServiceInstance = Container.get(AuthService);
         const {
@@ -78,7 +78,7 @@ export default app => {
     "/logout",
     passport.authenticate("jwt", { session: false }),
     (req: Request, res: Response, next) => {
-      console.log("Debug: Calling Sign-Out endpoint with body: %o", req.body);
+      console.log("Calling Sign-Out endpoint");
       try {
         return res.status(200).end();
       } catch (e) {

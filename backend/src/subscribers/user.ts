@@ -17,7 +17,7 @@ export default class UserSubscriber {
    * then save the latest in Redis/Memcache or something similar
    */
   @On(events.user.signIn)
-  public onUserSignIn({ _id }: Partial<IUser>) {
+  public onUserSignIn({ participantId }: Partial<IUser>) {
     const Logger = Container.get("logger");
 
     try {
@@ -25,7 +25,7 @@ export default class UserSubscriber {
         IUser & mongoose.Document
       >;
 
-      UserModel.update({ _id }, { $set: { lastLogin: new Date() } });
+      UserModel.update({ participantId }, { $set: { lastLogin: new Date() } });
     } catch (e) {
       // Logger.error(`🔥 Error on event ${events.user.signIn}: %o`, e);
 
@@ -34,7 +34,7 @@ export default class UserSubscriber {
     }
   }
   @On(events.user.signUp)
-  public onUserSignUp({ name, email, _id }: Partial<IUser>) {
+  public onUserSignUp({ name, email, participantId }: Partial<IUser>) {
     const Logger = Container.get("logger");
 
     try {
@@ -43,7 +43,7 @@ export default class UserSubscriber {
        */
       // Call the tracker tool so your investor knows that there is a new signup
       // and leave you alone for another hour.
-      // TrackerService.track('user.signup', { email, _id })
+      // TrackerService.track('user.signup', { email, participantId })
       // Start your email sequence or whatever
       // MailService.startSequence('user.welcome', { email, name })
     } catch (e) {

@@ -55,4 +55,17 @@ export default class SurveyService {
     }
     return { survey: surveyRecord };
   }
+  public async GetLatestSurvey(
+    surveyId: string
+  ): Promise<{ survey: Model | null }> {
+    this.logger.silly("Fetching latest survey");
+    const surveyRecord = await this.ExperimentSurvey.findOne({
+      where: { visibility: "public" },
+      order: [["startDate", "DESC"]]
+    });
+    if (!surveyRecord) {
+      return { survey: null };
+    }
+    return { survey: surveyRecord };
+  }
 }

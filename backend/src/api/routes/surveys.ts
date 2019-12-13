@@ -51,9 +51,15 @@ export default app => {
   route.get(
     "/latest",
     // middlewares.attachCurrentUser,
-    (req: Request, res: Response) => {
-      // find latest survey id and redirect too :/surveyId
-      return res.json({ status: req.params.experimentId }).status(200);
+    async (req: Request, res: Response) => {
+      const surveyService = Container.get(SurveyService);
+      const payload = await surveyService.GetLatestSurvey(
+        req.params.experimentId
+      );
+      if (!payload.survey) {
+        return res.status(404);
+      }
+      return res.json(payload).status(200);
     }
   );
 
