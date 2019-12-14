@@ -41,8 +41,7 @@ export function capitalize(value: string) {
 
 export function inferDataTypeOf(value: any): { dataType: string; value: any } {
   if (typeof value === undefined) {
-    // idk what this is... but ignore it XD
-    return undefined;
+    return null;
   }
   if (typeof value == "string") {
     if (value.match(/^-{0,1}\d+$/)) {

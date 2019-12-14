@@ -24,6 +24,18 @@ module.exports = {
           visibility: "private",
           createdAt: new Date(),
           updatedAt: new Date()
+        },
+        {
+          // legit experiment...
+          experimentId: "audiovssentencecards",
+          title: "Audio Vs Sentence Cards",
+          description:
+            "Testing whether audio or sentence cards result in higher retention rates",
+          startDate: "2019-12-02 00:00:00",
+          endDate: null,
+          visibility: "public",
+          createdAt: new Date(),
+          updatedAt: new Date()
         }
       ],
       {}

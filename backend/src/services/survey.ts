@@ -4,10 +4,8 @@ import {
 } from "../decorators/eventDispatcher";
 import { Service, Inject } from "typedi";
 import winston from "winston";
-import { randomIdGenerator, answerAndRestNull, capitalize } from "../utils";
-import { Model, DataType, Sequelize } from "sequelize-typescript";
-import { Survey } from "../models/survey";
-import { ExperimentSurvey } from "../models/intermediary/experimentSurvey";
+import { randomIdGenerator, capitalize, inferDataTypeOf } from "../utils";
+import { Model, Sequelize } from "sequelize-typescript";
 
 @Service()
 export default class SurveyService {
@@ -19,7 +17,8 @@ export default class SurveyService {
     @Inject("Survey") private Survey: Models.SurveyModel,
     @Inject("SurveyQuestion")
     private SurveyQuestion: Models.SurveyQuestionModel,
-
+    @Inject("CardCollection")
+    private CardCollection: Models.CardCollectionModel,
     @Inject("Experiment") private Experiment: Models.ExperimentModel,
     @Inject("Question") private Question: Models.QuestionModel,
     @Inject("QuestionResponse")
@@ -74,7 +73,6 @@ export default class SurveyService {
           surveyId
         }
       });
-      console.log(surveyRecord);
       if (!surveyRecord) {
         return { survey: null };
       }
@@ -88,13 +86,11 @@ export default class SurveyService {
     experimentId: string
   ): Promise<{ survey: Model | null }> {
     try {
-      console.log("RUN");
       this.logger.silly("Fetching latest survey");
       const surveyRecord = await this.ExperimentSurvey.findOne({
         where: { visibility: "public", experimentId },
         order: [["startDate", "DESC"]]
       }).then(survey => {
-        console.log(survey);
         return survey;
       });
       if (!surveyRecord) {
@@ -111,7 +107,6 @@ export default class SurveyService {
     surveyId: string
   ): Promise<any> {
     try {
-      console.log(surveyId);
       this.logger.silly("Fetching survey status");
       const participantExists = await this.Participant.findOne({
         where: { participantId }
@@ -121,7 +116,7 @@ export default class SurveyService {
         })
         .catch(e => {
           this.logger.error(e);
-          throw e;
+          return 0;
         });
 
       if (!participantExists) {
@@ -138,7 +133,6 @@ export default class SurveyService {
           this.logger.error(e);
           throw e;
         });
-
       if (!responseRecordExists) {
         return 2; // user hasn't filled out survey
       }
@@ -147,7 +141,6 @@ export default class SurveyService {
       const audioTotalTime: any = await this.QuestionResponse.findOne({
         where: { questionId: "audioTotalTime", participantId }
       });
-      console.log(audioTotalTime);
 
       // check if the time submitted foro that attribute is before the date of the most recent survey
 
@@ -202,8 +195,23 @@ export default class SurveyService {
     surveyId: string,
     participantId: string,
     dataPayload: {}
-  ): Promise<{ questionResponses: Model[] | null }> {
+  ): Promise<{ questionResponses: Model[] | null | any[] }> {
     try {
+      // Checking if user has already submitted the survey
+      const responseRecordExists = await this.QuestionResponse.findOne({
+        where: { participantId, surveyId }
+      })
+        .then((responseRecord: any) => {
+          return !!responseRecord;
+        })
+        .catch(e => {
+          this.logger.error(e);
+          throw e;
+        });
+      if (responseRecordExists) {
+        return { questionResponses: [] }; // user hasn't filled out survey
+      }
+
       this.logger.silly("Posting survey responses");
       let questionResponses = [];
       let question: any;
@@ -222,7 +230,6 @@ export default class SurveyService {
           answerText: null,
           answerJSON: null
         };
-        console.log(question);
         let dataType = capitalize(question[1].dataType);
         questionResponse["answer" + dataType] = question[1].value;
         questionResponses.push(questionResponse);
@@ -230,12 +237,101 @@ export default class SurveyService {
       const questionResponseRecords = await this.QuestionResponse.bulkCreate(
         questionResponses
       );
-      console.log(questionResponses);
       return { questionResponses: questionResponseRecords };
     } catch (e) {
       this.logger.error(e);
       throw e;
     }
+  }
+  public async PostAnkiData(
+    // being hacky and dangerous; checking if question exists, and if doesn,t creating it b4 inserting a QuestionResponse
+    experimentId: string,
+    surveyId: string,
+    participantId: string,
+    dataPayload: {}
+  ): Promise<{ questionResponses: Model[] | null }> {
+    try {
+      this.logger.silly("Posting survey responses");
+      let questionResponses = [];
+      let question: [string, any];
+      for (question of Object.entries(dataPayload)) {
+        if (question[0] == "cards") {
+          this.PostAnkiCardCollection(
+            experimentId,
+            surveyId,
+            participantId,
+            JSON.parse(question[1])
+          );
+        } else {
+          // need to get dataType and questionId given question key after questioons created once
+
+          // only runs once then throws validation error...
+          const dataType = (await this.CreateQuestion(surveyId, question))
+            .dataType;
+
+          let questionResponse = {
+            responseId: randomIdGenerator(),
+            questionId: question[0],
+            experimentId,
+            surveyId,
+            participantId,
+            answerSmallInt: null,
+            answerInt: null,
+            answerFloat: null,
+            answerBoolean: null,
+            answerVarchar: null,
+            answerText: null,
+            answerJSON: null
+          };
+          questionResponse["answer" + dataType] = question[1].value;
+          questionResponses.push(questionResponse);
+        }
+      }
+      const questionResponseRecords = await this.QuestionResponse.bulkCreate(
+        questionResponses
+      );
+      return { questionResponses: questionResponseRecords };
+    } catch (e) {
+      this.logger.error(e);
+      throw e;
+    }
+  }
+  private async CreateQuestion(surveyId, question) {
+    let dataType = inferDataTypeOf(question[1]).dataType;
+    console.log(question);
+    await this.Question.create({
+      questionId: question[0],
+      key: question[0],
+      questionType: "text", // this is prob bad
+      dataType,
+      label: question[0], // bad
+      rules: null,
+      items: null,
+      required: true,
+      note: null,
+      question: question[0] // bad and repetitive XD
+    });
+    await this.SurveyQuestion.create({
+      questionId: question[0],
+      surveyId: surveyId
+    });
+    return { dataType };
+  }
+  public async PostAnkiCardCollection(
+    experimentId: string,
+    surveyId: string,
+    participantId: string,
+    cards: {}
+  ): Promise<{ cardCollection: any }> {
+    const cardCollection = await this.CardCollection.create({
+      experimentId,
+      surveyId,
+      participantId,
+      cards
+    }).then(cards => {
+      return { cards };
+    });
+    return { cardCollection };
   }
   public async CreateSurvey(
     experimentId,

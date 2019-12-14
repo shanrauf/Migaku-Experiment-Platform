@@ -5,7 +5,6 @@ const baseDomain =
     ? "http://localhost:3000"
     : process.env.SERVER_URL_PROD;
 const baseURL = `${baseDomain}/api`;
-console.log(baseURL);
 // ALL DEFUALT CONFIGURATION HERE
 
 export default axios.create({

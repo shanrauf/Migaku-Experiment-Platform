@@ -28,8 +28,8 @@ export default class AuthService {
     const { email, password, name, age, sex } = userInputDTO;
     this.Participant.findOne({ where: { email } }).then(existingParticipant => {
       if (existingParticipant) {
-        // return error that the email already exists
-        console.error("Already existss");
+        // #TODO: return error that the email already exists
+        console.error("Already exists");
       }
     });
     this.logger.silly("Hashing password");
@@ -62,7 +62,7 @@ export default class AuthService {
         return { participant, token };
       })
       .catch(err => {
-        console.log(err);
+        this.logger.error(err);
         return { participant: {}, token: "" };
       });
     return newParticipant;

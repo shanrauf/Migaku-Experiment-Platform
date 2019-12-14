@@ -29,7 +29,11 @@ export default {
     // shud be same API call for ju, and locally u can have a v-if answers exist
     // Note: / and /view are the same component, only /view disables the inputs (whether answersExist or not)
     // /edit will require its own UI on top of the survey UI to build surveys (same for experiments)
-    this.$store.dispatch("createCurrentSurvey", this.$route.params.survey);
+    this.$store.dispatch({
+      type: "createCurrentSurvey",
+      // email: this.user.email, can only add when implemented auth, which idc about rn
+      surveyId: this.$route.params.survey
+    });
   },
   computed: {
     ...mapGetters(["getCurrentSurvey", "getCurrentSurveySectionTitles"])

@@ -8,6 +8,7 @@ import { Question } from "../../models/question";
 import { SurveyQuestion } from "../../models/intermediary/surveyQuestion";
 import { QuestionResponse } from "../../models/questionResponse";
 import { SurveySection } from "../../models/surveySection";
+import { CardCollection } from "../../models/cardCollection";
 declare global {
   namespace Express {
     export interface Request {
@@ -19,6 +20,7 @@ declare global {
     export type ParticipantModel = ModelCtor<Participant & IUser>;
     export type ExperimentModel = ModelCtor<Experiment>;
     export type ExperimentSurveyModel = ModelCtor<ExperimentSurvey>;
+    export type CardCollectionModel = ModelCtor<CardCollection>;
     export type SurveyModel = ModelCtor<Survey>;
     export type QuestionModel = ModelCtor<Question>;
     export type SurveySectionModel = ModelCtor<SurveySection>;

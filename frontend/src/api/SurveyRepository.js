@@ -8,6 +8,10 @@ export default {
   getSurvey(surveyId) {
     return AxiosClient.get(`${resource}/${surveyId}`);
   },
+  getStatus(surveyId) {
+    // can be an actual surveyId, or can be "latest"
+    return AxiosClient.get(`${resource}/${surveyId}/status`);
+  },
   post(surveyId, payload) {
     return AxiosClient.post(`${resource}/${surveyId}`, payload);
   },

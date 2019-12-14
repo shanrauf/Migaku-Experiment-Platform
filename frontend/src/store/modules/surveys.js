@@ -36,8 +36,12 @@ const actions = {
       surveys: surveys
     });
   },
-  async createCurrentSurvey({ state, commit }, surveyId) {
-    console.log(surveyData.survey);
+  async createCurrentSurvey({ state, commit }, payload) {
+    // if already submitted, then just redirect back and notify already submitted...
+    // const SurveyRepository = RepositoryFactory.get("surveys");
+    // const surveyStatus = await SurveyRepository.getStatus(
+    //   `latest?email=${payload.email}`
+    // );
     commit({
       type: "setCurrentSurvey",
       currentSurvey: surveyData.survey
@@ -49,7 +53,6 @@ const actions = {
       for (let question of section.questions) {
         if (question.value == "" && canSubmit) {
           // doesn't allow for questioons where u allow leaving blank
-          console.log(question);
           canSubmit = false;
           Vue.notify({
             title: "You haven't filled out every question yet..",
@@ -67,11 +70,8 @@ const actions = {
       state.currentSurvey.sections.forEach(section => {
         section.questions.forEach(question => {
           // add to payload
-          console.log(question.questionId);
-          console.log(question);
 
           if (question.questionId == "email") {
-            console.log("EMAIL!");
             data["email"] = question.value;
           }
           payload[question.questionId] = {
@@ -81,7 +81,6 @@ const actions = {
         });
       });
       data["data"] = payload;
-      console.log(data);
       const SurveyRepository = RepositoryFactory.get("surveys");
 
       SurveyRepository.post(state.currentSurvey.surveyId, data).then(() => {

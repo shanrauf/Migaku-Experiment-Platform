@@ -129,11 +129,9 @@ export default {
   methods: {
     submitSurvey() {
       this.confirmOverlay = false;
-      console.log("Submitted");
       this.$router.push({ name: "surveys" });
     },
     updateQuestionValue(question, newValue) {
-      console.log(newValue);
       this.$store.commit({
         type: "updateQuestionValue",
         question,
