@@ -12,5 +12,6 @@ export default axios.create({
   baseURL,
   headers: {
     // "Authorization": "Bearer xxxxx"
+    "Access-Control-Allow-Origin": "*"
   }
 });
