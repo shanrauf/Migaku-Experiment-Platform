@@ -23,7 +23,15 @@ export default async ({ app }: { app: express.Application }) => {
   // The magic package that prevents frontend developers going nuts
   // Alternate description:
   // Enable Cross Origin Resource Sharing to all origins by default
-  app.use(cors());
+  // app.use(cors());
+  app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    next();
+  });
 
   // Some sauce that always add since 2014
   // "Lets you use HTTP verbs such as PUT or DELETE in places where the client doesn't support it."
