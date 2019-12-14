@@ -1,4 +1,4 @@
-import AxiosClient from "./AxiosClient";
+import AxiosClient from "./axiosClient";
 const resource = "/experiments";
 
 export default {

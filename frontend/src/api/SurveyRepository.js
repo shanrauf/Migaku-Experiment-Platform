@@ -1,4 +1,4 @@
-import AxiosClient from "./AxiosClient";
+import AxiosClient from "./axiosClient";
 const resource = "experiments/audiovssentencecards/surveys"; // change later when change survey endpoiont to just /surveys w ?experimentId stuff...
 
 export default {

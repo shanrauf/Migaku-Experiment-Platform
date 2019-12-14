@@ -65,7 +65,6 @@ export default app => {
   });
 
   route.get("/latest/status", async (req: Request, res: Response) => {
-    console.log("Check");
     const { experimentId } = req.params;
     const surveyService = Container.get(SurveyService);
     const payload: any = await surveyService.GetLatestSurvey(experimentId);
