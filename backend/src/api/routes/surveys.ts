@@ -70,7 +70,6 @@ export default app => {
     const participantId = await participantService.GetParticipantIdByEmail(
       req.body.email
     );
-    console.log(participantId);
 
     const payload = await surveyService.PostSurveyResponses(
       experimentId,
@@ -105,52 +104,62 @@ export default app => {
     // return res.json(payload).status(200);
   });
 
-  route.get("/:surveyId/status", async (req: Request, res: Response) => {
-    const email = req.query.email;
-    const surveyId = req.params.surveyId;
+  // route.get("/:surveyId/status", async (req: Request, res: Response) => {
+  //   const email = req.query.email;
+  //   const surveyId = req.params.surveyId;
+  //   const surveyService = Container.get(SurveyService);
+  //   const surveyStatus = await surveyService.GetSurveyStatus(email, surveyId); // change to participantId later
+
+  //   // respond based on surveyStatus
+  //   if (surveyStatus == 2) {
+  //     let surveyLink = "https://patreon.com/massimmersionapproach";
+  //     return res.json({ status: 2, data: surveyLink });
+  //   } else if (surveyStatus == 3) {
+  //     return res.json({ status: 3 }).status(404);
+  //   } else if (surveyStatus == 0) {
+  //     // email doesn't exist
+  //     return res.json({ status: 0 }).status(404);
+  //   } else {
+  //     return res.json({ status: 1, data: surveyStatus });
+  //   }
+  // });
+
+  route.get("/latest/status", async (req: Request, res: Response) => {
+    const { experimentId } = req.params;
     const surveyService = Container.get(SurveyService);
-    const payload = await surveyService.GetSurvey(surveyId);
+    const payload: any = await surveyService.GetLatestSurvey(experimentId);
     if (!payload.survey) {
       return res.json(payload).status(404);
     }
-    // check if email
-    // if (email == readyToSyncAnkiData) {
-    //   // get survey cutoff
-    //   let latestSurveyCutoff = "2019,12,07";
-    //   return res.json({ status: 1, data: latestSurveyCutoff }).status(200);
-    // } else if (email == surveyNotCompleted) {
-    //   let surveyLink = "https://patreon.com/massimmersionapproach";
-    //   return res.json({ status: 2, data: surveyLink });
-    // } else if (email == alreadySynced) {
-    //   return res.json({ status: 3 }).status(200);
-    // } else {
-    //   // email doesn't exist
-    //   return res.json({ status: 0 }).status(404);
-    // }
-  });
 
-  route.get("/latest/status", async (req: Request, res: Response) => {
+    console.log(payload.survey);
+    const surveyId = payload.survey.surveyId;
     const email = req.query.email;
-    const surveyId = req.params.surveyId;
-    const surveyService = Container.get(SurveyService);
-    const payload = await surveyService.GetSurvey(surveyId);
-    if (!payload.survey) {
-      return res.status(404);
+    console.log(email);
+    // convert to partcipantId
+    const participantService = Container.get(ParticipantService);
+    const participantId = await participantService.GetParticipantIdByEmail(
+      email
+    );
+
+    const surveyStatus = await surveyService.GetSurveyStatus(
+      participantId,
+      surveyId
+    );
+
+    console.log(surveyStatus);
+    // respond based on surveyStatus
+    if (surveyStatus == 2) {
+      let surveyLink = "https://patreon.com/massimmersionapproach";
+      return res.json({ status: 2, data: surveyLink }).status(401);
+    } else if (surveyStatus == 3) {
+      return res.json({ status: 3 }).status(404);
+    } else if (surveyStatus == 0) {
+      // email doesn't exist
+      return res.json({ status: 0 }).status(404);
+    } else {
+      return res.json({ status: 1, data: surveyStatus }).status(200);
     }
-    // check if email
-    // if (email == readyToSyncAnkiData) {
-    //   // get survey cutoff
-    //   let latestSurveyCutoff = "2019,12,07";
-    //   return res.json({ status: 1, data: latestSurveyCutoff }).status(200);
-    // } else if (email == surveyNotCompleted) {
-    //   let surveyLink = "https://patreon.com/massimmersionapproach";
-    //   return res.json({ status: 2, data: surveyLink });
-    // } else if (email == alreadySynced) {
-    //   return res.json({ status: 3 }).status(200);
-    // } else {
-    //   // email doesn't exist
-    //   return res.json({ status: 0 }).status(404);
-    // }
   });
   route.get(
     "/:surveyId/:sectionNumber",

@@ -12,6 +12,8 @@ import { ExperimentSurvey } from "../models/intermediary/experimentSurvey";
 @Service()
 export default class SurveyService {
   constructor(
+    @Inject("Participant")
+    private Participant: Models.ParticipantModel,
     @Inject("ExperimentSurvey")
     private ExperimentSurvey: Models.ExperimentSurveyModel,
     @Inject("Survey") private Survey: Models.SurveyModel,
@@ -86,15 +88,92 @@ export default class SurveyService {
     experimentId: string
   ): Promise<{ survey: Model | null }> {
     try {
+      console.log("RUN");
       this.logger.silly("Fetching latest survey");
       const surveyRecord = await this.ExperimentSurvey.findOne({
         where: { visibility: "public", experimentId },
         order: [["startDate", "DESC"]]
+      }).then(survey => {
+        console.log(survey);
+        return survey;
       });
       if (!surveyRecord) {
         return { survey: null };
       }
       return { survey: surveyRecord };
+    } catch (e) {
+      this.logger.error(e);
+      throw e;
+    }
+  }
+  public async GetSurveyStatus(
+    participantId: string,
+    surveyId: string
+  ): Promise<any> {
+    try {
+      console.log(surveyId);
+      this.logger.silly("Fetching survey status");
+      const participantExists = await this.Participant.findOne({
+        where: { participantId }
+      })
+        .then((participantRecord: any) => {
+          return !!participantRecord;
+        })
+        .catch(e => {
+          this.logger.error(e);
+          throw e;
+        });
+
+      if (!participantExists) {
+        return 0; // user doesnt exist
+      }
+
+      const responseRecordExists = await this.QuestionResponse.findOne({
+        where: { participantId, surveyId }
+      })
+        .then((responseRecord: any) => {
+          return !!responseRecord;
+        })
+        .catch(e => {
+          this.logger.error(e);
+          throw e;
+        });
+
+      if (!responseRecordExists) {
+        return 2; // user hasn't filled out survey
+      }
+
+      // check if user submitted an attribute that lucas will submit recently; e.x audioTotalTime
+      const audioTotalTime: any = await this.QuestionResponse.findOne({
+        where: { questionId: "audioTotalTime", participantId }
+      });
+      console.log(audioTotalTime);
+
+      // check if the time submitted foro that attribute is before the date of the most recent survey
+
+      const mostRecentSurveyCreatedAt = await this.Survey.findOne({
+        where: { surveyId },
+        order: [["createdAt", "DESC"]]
+      }).then(survey => {
+        return survey.createdAt;
+      });
+
+      let mostRecentAnkiSync = +new Date(audioTotalTime).getTime();
+
+      let surveyCreatedAt = new Date(mostRecentSurveyCreatedAt);
+      let surveyCreatedAtTimestamp = surveyCreatedAt.getTime();
+
+      if (audioTotalTime && mostRecentAnkiSync < surveyCreatedAtTimestamp) {
+        return 3; // allready synced
+      } else {
+        // get most recent survey created at timestamp intoo format Lucas wants: "2019,12,07"
+        let d = surveyCreatedAt; // make it easier to read
+        let surveyCutoff = `${d.getFullYear()},${(
+          "0" +
+          (d.getMonth() + 1)
+        ).slice(-2)},${d.getDate()}`;
+        return surveyCutoff; // ready to sync data
+      }
     } catch (e) {
       this.logger.error(e);
       throw e;
