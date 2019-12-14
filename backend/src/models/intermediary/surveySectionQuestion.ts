@@ -9,7 +9,7 @@ import { SurveySection } from "../surveySection";
 import { Question } from "../question";
 @Table({
   modelName: "SurveySectionQuestion",
-  tableName: "surveysectionquestions"
+  tableName: "SurveySectionQuestions"
 })
 export class SurveySectionQuestion extends Model<SurveySectionQuestion> {
   @ForeignKey(() => SurveySection)

@@ -3,26 +3,53 @@ import models from "../models";
 import sequelizeConfig from "../config/sequelize";
 
 export default async () => {
+  const sequelizeOptions: any = {
+    host: sequelizeConfig[process.env.NODE_ENV].host,
+    dialect: "mysql",
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000
+    },
+    retry: {
+      match: [
+        /ETIMEDOUT/,
+        /EHOSTUNREACH/,
+        /ECONNRESET/,
+        /ECONNREFUSED/,
+        /ETIMEDOUT/,
+        /ESOCKETTIMEDOUT/,
+        /EHOSTUNREACH/,
+        /EPIPE/,
+        /EAI_AGAIN/,
+        /SequelizeConnectionError/,
+        /SequelizeConnectionRefusedError/,
+        /SequelizeHostNotFoundError/,
+        /SequelizeHostNotReachableError/,
+        /SequelizeInvalidConnectionError/,
+        /SequelizeConnectionTimedOutError/
+      ],
+      max: 5
+    }
+  };
+  if (process.env.NODE_ENV == "production") {
+    sequelizeOptions["port"] = sequelizeConfig[process.env.NODE_ENV].port; // crashes on dev...
+  }
   const sequelize = new Sequelize(
     sequelizeConfig[process.env.NODE_ENV].database,
     sequelizeConfig[process.env.NODE_ENV].username,
-    process.env.ROOT_PASS,
-    {
-      host: process.env.DATABASE_URL,
-      dialect: "mysql",
-      pool: {
-        max: 5,
-        min: 0,
-        acquire: 30000,
-        idle: 10000
-      }
-      // dialectOptions: {
-      //   socketPath: "/var/run/mysqld/mysqld.sock"
-      // }
-    }
+    sequelizeConfig[process.env.NODE_ENV].password,
+    sequelizeOptions
   );
 
   sequelize.addModels([...models]);
+
+  if (process.env.FORCE_SYNC) {
+    await sequelize.sync({
+      force: true
+    });
+  }
 
   sequelize
     .authenticate()

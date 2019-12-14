@@ -6,7 +6,6 @@ const baseDomain =
     : process.env.SERVER_URL_PROD;
 const baseURL = `${baseDomain}/api`;
 // ALL DEFUALT CONFIGURATION HERE
-
 export default axios.create({
   baseURL,
   headers: {

@@ -10,7 +10,7 @@ import { Experiment } from "../experiment";
 import { Requirement } from "../requirement";
 @Table({
   modelName: "ExperimentRequirement",
-  tableName: "experimentrequirements"
+  tableName: "ExperimentRequirements"
 })
 export class ExperimentRequirement extends Model<ExperimentRequirement> {
   @ForeignKey(() => Experiment)

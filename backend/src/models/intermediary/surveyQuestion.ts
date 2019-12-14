@@ -7,7 +7,7 @@ import {
 } from "sequelize-typescript";
 import { Survey } from "../survey";
 import { Question } from "../question";
-@Table({ modelName: "SurveyQuestion", tableName: "surveyquestions" })
+@Table({ modelName: "SurveyQuestion", tableName: "SurveyQuestions" })
 export class SurveyQuestion extends Model<SurveyQuestion> {
   @ForeignKey(() => Survey)
   @Column(DataType.STRING(255))

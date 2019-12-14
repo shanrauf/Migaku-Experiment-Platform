@@ -15,7 +15,7 @@ import { Survey } from "./survey";
 import { ExperimentSurvey } from "./intermediary/experimentSurvey";
 import { CardCollection } from "./cardCollection";
 import { QuestionResponse } from "./questionResponse";
-@Table({ modelName: "Experiment", tableName: "experiments" })
+@Table({ modelName: "Experiment", tableName: "Experiments" })
 export class Experiment extends Model<Experiment> {
   @BelongsToMany(
     () => Participant,

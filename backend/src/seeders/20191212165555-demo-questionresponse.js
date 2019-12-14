@@ -3,7 +3,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert(
-      "QuestionResponses",
+      "questionResponses",
       [
         {
           responseId: "testQuestionOneResponse",
@@ -43,6 +43,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete("QuestionResponses", null, {});
+    return queryInterface.bulkDelete("questionResponses", null, {});
   }
 };

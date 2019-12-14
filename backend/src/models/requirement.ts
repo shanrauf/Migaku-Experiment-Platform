@@ -10,7 +10,7 @@ import {
 import { Experiment } from "./experiment";
 import { ExperimentRequirement } from "./intermediary/experimentRequirement";
 
-@Table({ modelName: "Requirement", tableName: "requirements" })
+@Table({ modelName: "Requirement", tableName: "Requirements" })
 export class Requirement extends Model<Requirement> {
   @BelongsToMany(
     () => Experiment,

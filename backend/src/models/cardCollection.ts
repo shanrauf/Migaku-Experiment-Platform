@@ -11,7 +11,7 @@ import { Survey } from "./survey";
 import { Experiment } from "./experiment";
 import { Participant } from "./participant";
 
-@Table({ modelName: "CardCollection", tableName: "cardcollections" })
+@Table({ modelName: "CardCollection", tableName: "CardCollections" })
 export class CardCollection extends Model<CardCollection> {
   @BelongsTo(() => Experiment, "experimentId")
   experiment: Experiment;
