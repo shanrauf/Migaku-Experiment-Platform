@@ -1,7 +1,6 @@
 <template>
   <v-radio-group
     v-model="inputValue"
-    row
     :rules="rules"
     :placeholder="placeholder"
     :value="value"
@@ -9,7 +8,12 @@
     :mandatory="required"
     @change="$emit('update', inputValue)"
   >
-    <v-radio v-for="item in items" :key="item" :label="item.toString()" :value="item.value" />
+    <v-radio
+      v-for="item in items"
+      :key="item"
+      :label="item.toString()"
+      :value="item.value"
+    />
   </v-radio-group>
 </template>
 

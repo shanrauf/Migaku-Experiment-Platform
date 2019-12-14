@@ -16,7 +16,7 @@
         <input v-model="age" type="text" placeholder="Age" />
         <input v-model="sex" type="text" placeholder="Sex" />
 
-        <BaseButton rounded>Sign Up</BaseButton>
+        <BaseButton rounded @click="onSignup">Sign Up</BaseButton>
       </form>
     </div>
     <div class="form-container sign-in-container">
@@ -79,16 +79,32 @@ export default {
   },
   methods: {
     onSignIn() {
-      this.$store.dispatch({
-        type: "signIn",
-        email: this.email,
-        password: this.password
-      });
+      // this.$store.dispatch({
+      //   type: "signIn",
+      //   email: this.email,
+      //   password: this.password
+      // });
+      // this.$notify({
+      //   group: "global",
+      //   type: "success",
+      //   duration: "2000",
+      //   title: "Successfully signed in!"
+      // });
       this.$notify({
         group: "global",
-        type: "success",
+        type: "info",
         duration: "2000",
-        title: "Successfully signed in!"
+        text:
+          "We haven't implemented authentication yet, we'll telll you in the server when to create an account!"
+      });
+    },
+    onSignup() {
+      this.$notify({
+        group: "global",
+        type: "info",
+        duration: "2000",
+        text:
+          "We haven't implemented authentication yet, we'll telll you in the server when to create an account!"
       });
     }
   }

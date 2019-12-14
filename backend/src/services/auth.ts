@@ -16,7 +16,7 @@ import events from "../subscribers/events";
 @Service()
 export default class AuthService {
   constructor(
-    @Inject("Participant") private Participant: Models.Participant,
+    @Inject("Participant") private Participant: Models.ParticipantModel,
     @Inject("passport") private passport: PassportStatic,
     @Inject("logger") private logger: winston.Logger,
     @EventDispatcher() private eventDispatcher: EventDispatcherInterface

@@ -4,19 +4,26 @@ import {
 } from "../decorators/eventDispatcher";
 import { Service, Inject } from "typedi";
 import winston from "winston";
-import { randomIdGenerator } from "../utils";
-import { Model, DataType } from "sequelize-typescript";
+import { randomIdGenerator, answerAndRestNull, capitalize } from "../utils";
+import { Model, DataType, Sequelize } from "sequelize-typescript";
+import { Survey } from "../models/survey";
+import { ExperimentSurvey } from "../models/intermediary/experimentSurvey";
 
 @Service()
 export default class SurveyService {
   constructor(
     @Inject("ExperimentSurvey")
-    private ExperimentSurvey: Models.ExperimentSurvey,
-    @Inject("Survey") private Survey: Models.Survey,
-    @Inject("Question") private Question: Models.Question,
+    private ExperimentSurvey: Models.ExperimentSurveyModel,
+    @Inject("Survey") private Survey: Models.SurveyModel,
+    @Inject("SurveyQuestion")
+    private SurveyQuestion: Models.SurveyQuestionModel,
+
+    @Inject("Experiment") private Experiment: Models.ExperimentModel,
+    @Inject("Question") private Question: Models.QuestionModel,
     @Inject("QuestionResponse")
-    private QuestionResponse: Models.QuestionResponse,
-    @Inject("SurveySection") private SurveySection: Models.SurveySection,
+    private QuestionResponse: Models.QuestionResponseModel,
+    @Inject("sequelize") private sequelize: Sequelize,
+    @Inject("SurveySection") private SurveySection: Models.SurveySectionModel,
     @Inject("logger") private logger: winston.Logger,
     @EventDispatcher() private eventDispatcher: EventDispatcherInterface
   ) {}
@@ -24,42 +31,47 @@ export default class SurveyService {
   public async GetSurveys(
     experimentId?: string
   ): Promise<{
-    surveys: Model[];
+    surveys: any[];
     totalCount: number;
   }> {
     try {
-      let where = {};
       this.logger.silly("Fetching surveys");
-      if (experimentId) {
-        const surveyRecords = await this.ExperimentSurvey.findAndCountAll({
-          where: { experimentId, visibility: "public" },
-          // offset: 10, implement pagination with this later
-          limit: 10
-        });
-        return {
-          surveys: surveyRecords.rows,
-          totalCount: surveyRecords.count
-        };
-      } else {
-        const surveyRecords = await this.Survey.findAndCountAll({
-          // offset: 10, implement pagination with this later
-          limit: 10
-        });
-        return {
-          surveys: surveyRecords.rows,
-          totalCount: surveyRecords.count
-        };
-      }
+      const surveyRecords = await this.Survey.findAndCountAll({
+        include: [
+          {
+            model: this.Experiment,
+            attributes: ["experimentId"],
+            where: { experimentId, visibility: "public" }
+          }
+        ],
+        limit: 10
+      });
+      return {
+        surveys: surveyRecords.rows,
+        totalCount: surveyRecords.count
+      };
     } catch (e) {
       this.logger.error(e);
       throw e;
     }
   }
 
-  public async GetSurvey(surveyId: string): Promise<{ survey: Model | null }> {
+  public async GetSurvey(surveyId: string): Promise<{ survey: any }> {
     try {
       this.logger.silly(`Fetching survey ${surveyId}`);
-      const surveyRecord = await this.Survey.findByPk(surveyId);
+      const surveyRecord = await this.Survey.findAndCountAll({
+        include: [
+          {
+            model: this.SurveySection
+          },
+          {
+            model: this.Question
+          }
+        ],
+        where: {
+          surveyId
+        }
+      });
       console.log(surveyRecord);
       if (!surveyRecord) {
         return { survey: null };
@@ -106,29 +118,20 @@ export default class SurveyService {
       throw e;
     }
   }
-  private GetQuestionDataType(questionId: string): any {
-    try {
-      this.logger.silly("Fetching survey section");
-      const question: any = this.Question.findByPk(questionId);
-      return question.dataType;
-    } catch (e) {
-      this.logger.error(e);
-      throw e;
-    }
-  }
   public async PostSurveyResponses(
     experimentId: string,
     surveyId: string,
+    participantId: string,
     dataPayload: {}
   ): Promise<{ questionResponses: Model[] | null }> {
     try {
-      let participantId = ""; // grab from auth jwt token later i guess
       this.logger.silly("Posting survey responses");
       let questionResponses = [];
-      for (let i of Object.entries(dataPayload)) {
+      let question: any;
+      for (question of Object.entries(dataPayload)) {
         let questionResponse = {
           responseId: randomIdGenerator(),
-          questionId: i[0],
+          questionId: question[0],
           experimentId,
           surveyId,
           participantId,
@@ -140,13 +143,15 @@ export default class SurveyService {
           answerText: null,
           answerJSON: null
         };
-        let dataType = this.GetQuestionDataType(i[0]);
-        questionResponse[dataType] = i[1];
+        console.log(question);
+        let dataType = capitalize(question[1].dataType);
+        questionResponse["answer" + dataType] = question[1].value;
         questionResponses.push(questionResponse);
       }
       const questionResponseRecords = await this.QuestionResponse.bulkCreate(
         questionResponses
       );
+      console.log(questionResponses);
       return { questionResponses: questionResponseRecords };
     } catch (e) {
       this.logger.error(e);
@@ -211,6 +216,10 @@ export default class SurveyService {
         });
         for (let question of section.questions) {
           await this.Question.create(question);
+          await this.SurveyQuestion.create({
+            questionId: question.questionId,
+            surveyId: surveyObj.surveyId
+          });
         }
       }
       return { survey: surveyRecord };

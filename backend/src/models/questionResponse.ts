@@ -39,7 +39,7 @@ export class QuestionResponse extends Model<QuestionResponse> {
   @ForeignKey(() => Survey)
   @Column(DataType.STRING(255))
   surveyId: string;
-
+  // @Unique
   @ForeignKey(() => Participant)
   @Column(DataType.STRING(255))
   participantId: string;

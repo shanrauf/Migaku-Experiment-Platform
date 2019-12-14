@@ -6,10 +6,17 @@
       :key="section.sectionId"
     >
       <div v-if="section.sectionId == 1">
-        <h1 style="text-align: center" @blur="setTitle">{{ currentSurvey.title }}</h1>
-        <p style="text-align: center" @blur="setDescription">{{ currentSurvey.description }}</p>
+        <h1 style="text-align: center" @blur="setTitle">
+          {{ currentSurvey.title }}
+        </h1>
+        <p style="text-align: center" @blur="setDescription">
+          {{ currentSurvey.description }}
+        </p>
       </div>
-      <SectionBanner :sectionId="section.sectionNumber" :numberOfSections="getNumberOfSections" />
+      <SectionBanner
+        :sectionId="section.sectionNumber"
+        :numberOfSections="getNumberOfSections"
+      />
       <BaseSurvey :section="section" />
     </BaseCard>
   </div>

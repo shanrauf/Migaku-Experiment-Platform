@@ -9,7 +9,7 @@ import { Model } from "sequelize-typescript";
 @Service()
 export default class ExperimentService {
   constructor(
-    @Inject("Experiment") private Experiment: Models.Experiment,
+    @Inject("Experiment") private Experiment: Models.ExperimentModel,
     @Inject("logger") private logger: winston.Logger,
     @EventDispatcher() private eventDispatcher: EventDispatcherInterface
   ) {}

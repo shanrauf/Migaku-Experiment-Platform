@@ -19,6 +19,26 @@ function IsJsonString(str: string): boolean {
   return true;
 }
 
+export function answerAndRestNull(value, dataType) {
+  let allDataTypes = {
+    answerSmallInt: null,
+    answerInt: null,
+    answerFloat: null,
+    answerBoolean: null,
+    answerVarchar: null,
+    answerText: null,
+    answerJSON: null
+  };
+
+  allDataTypes["answer" + capitalize(dataType)] = value;
+
+  return allDataTypes;
+}
+
+export function capitalize(value: string) {
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
 export function inferDataTypeOf(value: any): { dataType: string; value: any } {
   if (typeof value === undefined) {
     // idk what this is... but ignore it XD

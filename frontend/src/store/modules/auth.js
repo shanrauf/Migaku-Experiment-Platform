@@ -2,8 +2,8 @@
 
 const state = () => {
   return {
-    // user: {}
-    user: "filler to pass router guards"
+    user: {}
+    // user: "filler to pass router guards"
   };
 };
 

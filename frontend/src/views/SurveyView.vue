@@ -1,7 +1,12 @@
 <template>
   <div class="survey-container">
-    <SideNavigation v-if="getCurrentSurveySectionTitles" :sections="getCurrentSurveySectionTitles" />
+    <SideNavigation
+      v-if="getCurrentSurvey.sections"
+      :sections="getCurrentSurveySectionTitles"
+    />
     <SurveyBuilder :currentSurvey="getCurrentSurvey" />
+
+    <v-btn color="primary" @click="onSubmit">Submit</v-btn>
   </div>
 </template>
 
@@ -28,6 +33,14 @@ export default {
   },
   computed: {
     ...mapGetters(["getCurrentSurvey", "getCurrentSurveySectionTitles"])
+  },
+  methods: {
+    onSubmit() {
+      let result = this.$store.dispatch("submitSurvey");
+      if (!result) {
+        this.$notify("Failed");
+      }
+    }
   }
 };
 </script>

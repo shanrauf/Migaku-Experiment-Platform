@@ -1,0 +1,13 @@
+{
+  "data": {
+    "name": {
+      "value": "Shan",
+      "dataType": "varchar"
+    },
+    "age": {
+      "value": 15,
+      "dataType": "smallInt"
+    }
+  },
+  "email": "test@test.com"
+}

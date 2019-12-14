@@ -94,7 +94,7 @@ const routes = [
         meta: {
           name: "surveys",
           title: "MIA Experiment Surveys",
-          requiresAuth: true,
+          requiresAuth: false,
           requiresAdmin: false
         },
         component: SurveysView
@@ -150,20 +150,21 @@ const routes = [
 
 const router = new VueRouter({ mode: "history", routes: routes });
 
-router.beforeEach((to, _, next) => {
-  let requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-  let requiresAdmin = to.matched.some(record => record.meta.requiresAdmin);
+// router.beforeEach((to, _, next) => {
+//   let requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+//   let requiresAdmin = to.matched.some(record => record.meta.requiresAdmin);
 
-  if (requiresAdmin) {
-    if (!store.state.auth.user.isAdmin) {
-      router.push("/");
-    }
-  } else if (requiresAuth) {
-    if (!store.state.auth.user) {
-      router.push("/");
-    }
-  }
-  next();
-});
+//   if (requiresAdmin) {
+//     // if (!store.state.auth.user.isAdmin) {
+//     router.push("/");
+//     // }
+//   } else if (requiresAuth) {
+//     console.log(requiresAuth);
+//     // if (!store.state.auth.user) {
+//     router.push("/");
+//     // }
+//   }
+//   next();
+// });
 
 export default router;

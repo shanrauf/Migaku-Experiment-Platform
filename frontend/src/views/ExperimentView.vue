@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn to="/experiments">Back</v-btn>
+    <!-- <v-btn to="/experiments">Back</v-btn> -->
     <transition name="fade" mode="out-in">
       <router-view />
     </transition>
@@ -11,5 +11,4 @@
 export default {};
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

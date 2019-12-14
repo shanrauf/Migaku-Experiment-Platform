@@ -1,7 +1,6 @@
 import { Request, Response, Router } from "express";
-// import middlewares from "../middlewares";
-import passport from "passport";
 import SurveyService from "../../services/survey";
+import ParticipantService from "../../services/participant";
 import Container from "typedi";
 const route = Router({ mergeParams: true });
 
@@ -66,10 +65,17 @@ export default app => {
   route.post("/:surveyId", async (req: Request, res: Response) => {
     const { experimentId, surveyId } = req.params;
     const surveyService = Container.get(SurveyService);
+
+    const participantService = Container.get(ParticipantService);
+    const participantId = await participantService.GetParticipantIdByEmail(
+      req.body.email
+    );
+
     const payload = await surveyService.PostSurveyResponses(
       experimentId,
       surveyId,
-      req.body
+      participantId,
+      req.body.data
     );
     if (!payload.questionResponses) {
       return res.json(payload).status(200);

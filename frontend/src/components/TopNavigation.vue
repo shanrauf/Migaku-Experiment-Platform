@@ -9,11 +9,11 @@
     </v-toolbar-title>
 
     <v-spacer />
-    <v-toolbar-items>
+    <!-- <v-toolbar-items>
       <v-list-item-avatar>
         <img src="@/assets/images/profile.png" alt="Profile Photo" />
       </v-list-item-avatar>
-    </v-toolbar-items>
+    </v-toolbar-items> -->
   </v-toolbar>
 </template>
 

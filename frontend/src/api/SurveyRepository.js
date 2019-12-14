@@ -1,12 +1,15 @@
 import AxiosClient from "./AxiosClient";
-const resource = "/surveys";
+const resource = "experiments/audiovssentencecards/surveys"; // change later when change survey endpoiont to just /surveys w ?experimentId stuff...
 
 export default {
   get() {
     return AxiosClient.get(`${resource}`);
   },
-  getExperiment(surveyId) {
+  getSurvey(surveyId) {
     return AxiosClient.get(`${resource}/${surveyId}`);
+  },
+  post(payload) {
+    return AxiosClient.post(`${resource}/${surveyId}`, payload);
   },
   create(payload) {
     return AxiosClient.post(`${resource}`, payload);

@@ -3,14 +3,18 @@
     <h1
       style="margin: 20px 20px 5px 0"
       @blur="updateCurrentSurveyMetadata($event, 'title')"
-    >{{ section.title }}</h1>
+    >
+      {{ section.title }}
+    </h1>
     <p
       style="margin: 0 20px 20px 0"
       @blur="updateCurrentSurveyMetadata($event, 'description')"
-    >{{ section.description }}</p>
+    >
+      {{ section.description }}
+    </p>
     <div v-for="question in section.questions" :key="question.key">
-      <h4>{{question.question}}</h4>
-      <span v-if="question.note">(Note: {{question.note}})</span>
+      <h4>{{ question.question }}</h4>
+      <span v-if="question.note">(Note: {{ question.note }})</span>
       <component
         :is="typeToComponent(question.questionType)"
         :value="question.value"
@@ -25,7 +29,9 @@
 
     <div v-if="section.sectionId == getNumberOfSections">
       <v-btn style="margin: 10px" @click="confirmOverlay = true">Back</v-btn>
-      <v-btn style="margin: 10px" color="primary" @click="submitSurvey">Submit</v-btn>
+      <v-btn style="margin: 10px" color="primary" @click="submitSurvey"
+        >Submit</v-btn
+      >
     </div>
 
     <v-overlay :value="editOverlay">
@@ -37,7 +43,7 @@
         <h2 style="text-align: center;">Are you sure?</h2>
         <v-card-subtitle>Your progress will be erased...</v-card-subtitle>
         <div style="display: flex; justify-content: space-between;">
-          <v-btn @click="$router.push({name: 'surveys'})">Yes</v-btn>
+          <v-btn @click="$router.push({ name: 'surveys' })">Yes</v-btn>
           <v-btn @click="confirmOverlay = false">No</v-btn>
         </div>
       </v-card>
@@ -87,9 +93,9 @@ export default {
       },
       ruleGenerators: {
         maxChar: val => v =>
-          v.length <= val || `Must be less than ${val} characters`,
+          (v && v.length <= val) || `Must be less than ${val} characters`,
         minChar: val => v =>
-          v.length >= val || `Must be greater than ${val} characters`,
+          (v && v.length >= val) || `Must be greater than ${val} characters`,
         email: val => {
           if (val == "true") {
             return v => /.+@.+\..+/.test(v) || "E-mail must be valid";
@@ -161,7 +167,7 @@ export default {
     },
     getRules(questionRulesParams) {
       // generate array of rule functions for form inputs
-      if (questionRulesParams === undefined) {
+      if (questionRulesParams === undefined || questionRulesParams === null) {
         return [];
       }
       let queryObject = this.parseQuery(questionRulesParams);
