@@ -77,7 +77,7 @@ if (process.env.BUNDLE_ANALYZER) {
 
 const devServer = {
   historyApiFallback: true,
-  contentBase: path.join(__dirname, "../backend/build/static"),
+  contentBase: path.join(__dirname, "build"),
   open: "chrome",
   compress: ifDevElseProd(false, true), // gzip
   stats: {
@@ -202,7 +202,7 @@ module.exports = {
   },
   plugins: plugins,
   output: {
-    path: path.join(__dirname, "../backend/build/static"),
+    path: path.join(__dirname, "build"),
     pathinfo: false,
     filename: "[name].bundle.js",
     chunkFilename: "chunks/[chunkhash].chunk.js",

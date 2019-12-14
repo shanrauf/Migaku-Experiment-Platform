@@ -12,7 +12,7 @@
       v-for="item in items"
       :key="item"
       :label="item.toString()"
-      :value="item.value"
+      :value="item"
     />
   </v-radio-group>
 </template>

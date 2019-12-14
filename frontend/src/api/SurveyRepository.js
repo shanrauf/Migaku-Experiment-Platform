@@ -8,7 +8,7 @@ export default {
   getSurvey(surveyId) {
     return AxiosClient.get(`${resource}/${surveyId}`);
   },
-  post(payload) {
+  post(surveyId, payload) {
     return AxiosClient.post(`${resource}/${surveyId}`, payload);
   },
   create(payload) {

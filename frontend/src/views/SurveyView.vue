@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import SideNavigation from "@/components/SideNavigation.vue";
 import SurveyBuilder from "@/components/SurveyBuilder.vue";
 export default {

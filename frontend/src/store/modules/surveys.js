@@ -1,8 +1,7 @@
 const surveyData = require("@/surveyData.json");
 import router from "@/router";
-import Vue from "vue";
 import RepositoryFactory from "@/api";
-
+import Vue from "vue";
 const state = () => {
   return {
     surveys: [],
@@ -27,82 +26,75 @@ const actions = {
 
     const { surveys } = response.data;
 
+    surveys.forEach(survey => {
+      survey["startDate"] = survey.surveys[0].ExperimentSurvey.startDate;
+      survey["endDate"] = survey.surveys[0].ExperimentSurvey.endDate;
+    });
+
     commit({
       type: "setSurveys",
       surveys: surveys
     });
   },
   async createCurrentSurvey({ state, commit }, surveyId) {
-    // const SurveyRepository = RepositoryFactory.get("surveys");
-
-    // let response = await SurveyRepository.getSurvey(surveyId);
-
-    // let survey = {
-    //   ...response.data.survey.rows[0],
-    //   sections: [
-    //     {
-    //       title: "Section 1",
-    //       sectionNumber: 1,
-    //       description: "This survey helps us gauge your progress so far",
-    //       questions: response.data.survey.rows[0].questions
-    //     }
-    //   ]
-    // };
-
-    // commit({
-    //   type: "setQuestions",
-    //   questions: response.data.survey.rows[0].questions
-    // });
-
-    // console.log(response.data.survey.rows[0].questions);
-
+    console.log(surveyData.survey);
     commit({
       type: "setCurrentSurvey",
       currentSurvey: surveyData.survey
     });
   },
   async submitSurvey({ commit, state }) {
-    console.log("Here");
+    let canSubmit = true;
     state.currentSurvey.sections.forEach(section => {
-      section.questions.forEach(question => {
-        if (!question.value) {
+      for (let question of section.questions) {
+        if (question.value == "" && canSubmit) {
+          // doesn't allow for questioons where u allow leaving blank
+          console.log(question);
+          canSubmit = false;
           Vue.notify({
             title: "You haven't filled out every question yet..",
             group: "global"
           });
-          throw BreakException;
+          return false;
         }
-      });
+      }
     });
 
     // formatting payload...
     let payload = {};
-    state.currentSurvey.sections.forEach(section => {
-      sectiion.questions.forEach(question => {
-        // add to payload
-        if (question.key == "email") {
-          data["email"] = question.value;
-        } else {
-          payload[question.key] = {
+    let data = {};
+    if (canSubmit) {
+      state.currentSurvey.sections.forEach(section => {
+        section.questions.forEach(question => {
+          // add to payload
+          console.log(question.questionId);
+          console.log(question);
+
+          if (question.questionId == "email") {
+            console.log("EMAIL!");
+            data["email"] = question.value;
+          }
+          payload[question.questionId] = {
             value: question.value,
-            dataType: question.dataType,
-            questionId: q.questionId
+            dataType: question.dataType
           };
-        }
+        });
       });
-    });
+      data["data"] = payload;
+      console.log(data);
+      const SurveyRepository = RepositoryFactory.get("surveys");
 
-    data["data"] = payload;
-
-    const SurveyRepository = RepositoryFactory.get("surveys");
-
-    SurveyRepository.post(data).then(() => {
-      Vue.notify({
-        title: "Successfully submitted survey!",
-        text: "Don't forget to come back next week to fill out the next one"
+      SurveyRepository.post(state.currentSurvey.surveyId, data).then(() => {
+        router.push("/");
+        Vue.notify({
+          group: "global",
+          title: "Successfully submitted survey!",
+          text: "Don't forget to come back next week to fill out the next one"
+        });
       });
-      router.push("/");
-    });
+    } else {
+      return false;
+    }
   }
 };
 

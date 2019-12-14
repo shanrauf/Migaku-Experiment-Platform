@@ -89,7 +89,8 @@ export default {
         percentages: [...Array(101).keys()],
         zeroToOneHundred: [...Array(101).keys()],
         trueFalse: [true, false],
-        audioOrSentenceCard: ["Audio Card", "Sentence Card"]
+        audioOrSentenceCard: ["Audio Card", "Sentence Card"],
+        yesNo: ["Yes", "No"]
       },
       ruleGenerators: {
         maxChar: val => v =>
@@ -132,6 +133,7 @@ export default {
       this.$router.push({ name: "surveys" });
     },
     updateQuestionValue(question, newValue) {
+      console.log(newValue);
       this.$store.commit({
         type: "updateQuestionValue",
         question,

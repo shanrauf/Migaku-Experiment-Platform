@@ -70,6 +70,7 @@ export default app => {
     const participantId = await participantService.GetParticipantIdByEmail(
       req.body.email
     );
+    console.log(participantId);
 
     const payload = await surveyService.PostSurveyResponses(
       experimentId,
