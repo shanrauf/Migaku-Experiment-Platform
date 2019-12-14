@@ -6,7 +6,8 @@
   "license": "ISC",
   "scripts": {
     "start": "cross-env NODE_ENV=development DEBUG=true webpack-dev-server --config webpack.config.js --progress",
-    "build": "cross-env NODE_ENV=production DEBUG=true webpack --config webpack.config.js && cp src/_redirects build/ && cp .env build/",
+    "staging": "cross-env NODE_ENV=production DEBUG=true webpack-dev-server --config webpack.config.js --progress",
+    "build": "cross-env NODE_ENV=production DEBUG=true webpack --config webpack.config.js && cp src/_redirects build/",
     "test": "echo 'create test script'",
     "analyze": "cross-env NODE_ENV=development DEBUG=true BUNDLE_ANALYZER=true webpack-dev-server --config webpack.config.js --progress",
     "deploy": "npm run prod && firebase deploy",

@@ -3,9 +3,11 @@ import axios from "axios";
 const baseDomain =
   process.env.NODE_ENV === "development"
     ? "http://localhost:3000"
-    : process.env.SERVER_URL_PROD;
+    : "http://54.197.11.54/backend"; // hard-coded for now since .env isn't in Github for Netlify to catch
 const baseURL = `${baseDomain}/api`;
-// ALL DEFUALT CONFIGURATION HERE
+
+console.log(baseURL);
+
 export default axios.create({
   baseURL,
   headers: {

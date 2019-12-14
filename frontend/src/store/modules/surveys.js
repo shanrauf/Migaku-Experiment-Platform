@@ -25,7 +25,8 @@ const actions = {
     let response = await SurveyRepository.get();
 
     const { surveys } = response.data;
-
+    console.log(surveys);
+    console.log(response);
     surveys.forEach(survey => {
       survey["startDate"] = survey.surveys[0].ExperimentSurvey.startDate;
       survey["endDate"] = survey.surveys[0].ExperimentSurvey.endDate;
