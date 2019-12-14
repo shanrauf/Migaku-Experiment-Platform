@@ -20,6 +20,10 @@ const getters = {
 
 const actions = {
   async createSurveys({ commit }) {
+    const r = await fetch(
+      "http://http://54.197.11.54/backend/api/experiments/audiovssentencecards/surveys"
+    );
+    console.log(r);
     const SurveyRepository = RepositoryFactory.get("surveys");
 
     let response = await SurveyRepository.get();
