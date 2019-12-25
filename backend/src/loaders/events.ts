@@ -1,2 +1,2 @@
-//Here we import all events
-import "../subscribers/participant";
+// Here we import all events
+import '../subscribers/participant';

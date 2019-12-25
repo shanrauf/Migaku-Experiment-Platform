@@ -3,11 +3,11 @@ import {
   Table,
   Column,
   Model,
-  DataType
-} from "sequelize-typescript";
-import { Survey } from "../survey";
-import { Question } from "../question";
-@Table({ modelName: "SurveyQuestion", tableName: "SurveyQuestions" })
+  DataType,
+} from 'sequelize-typescript';
+import { Survey } from '../survey';
+import { Question } from '../question';
+@Table({ modelName: 'SurveyQuestion', tableName: 'SurveyQuestions' })
 export class SurveyQuestion extends Model<SurveyQuestion> {
   @ForeignKey(() => Survey)
   @Column(DataType.STRING(255))

@@ -1,14 +1,15 @@
-import { Request, Response, Router } from "express";
+import { Request, Response, Router } from 'express';
 // import middlewares from "../middlewares";
-import passport from "passport";
-import { Container } from "typedi";
-import ExperimentService from "../../services/experiment";
+import passport from 'passport';
+import { Container } from 'typedi';
+import ExperimentService from '../../services/experiment';
+
 const route = Router();
 
-export default app => {
-  app.use("/experiments", route);
+export default (app) => {
+  app.use('/experiments', route);
 
-  route.get("/", async (req: Request, res: Response) => {
+  route.get('/', async (req: Request, res: Response) => {
     const experimentService = Container.get(ExperimentService);
     const payload = await experimentService.GetExperimentListings();
     if (!payload.experiments) {
@@ -17,10 +18,10 @@ export default app => {
     return res.json(payload).status(200);
   });
 
-  route.post("/", async (req: Request, res: Response) => {
+  route.post('/', async (req: Request, res: Response) => {
     const experimentService = Container.get(ExperimentService);
     const payload = await experimentService.CreateExperiment(
-      req.body.experiment
+      req.body.experiment,
     );
     if (!payload.experiment) {
       return res.status(404);
@@ -28,8 +29,8 @@ export default app => {
     return res.json({ experiment: payload.experiment }).status(201);
   });
 
-  route.get("/:experimentId", async (req: Request, res: Response) => {
-    const experimentId = req.params.experimentId;
+  route.get('/:experimentId', async (req: Request, res: Response) => {
+    const { experimentId } = req.params;
     const experimentService = Container.get(ExperimentService);
     const payload = await experimentService.GetExperiment(experimentId);
     if (!payload.experiment) {
@@ -38,12 +39,9 @@ export default app => {
     return res.json(payload).status(200);
   });
 
-  route.put("/:experimentId", async (req: Request, res: Response) => {
+  route.put('/:experimentId', async (req: Request, res: Response) =>
     // custom experimentId
-    return res.status(403);
-  });
+    res.status(403));
 
-  route.delete("/:experimentId", async (req: Request, res: Response) => {
-    return res.status(403);
-  });
+  route.delete('/:experimentId', async (req: Request, res: Response) => res.status(403));
 };

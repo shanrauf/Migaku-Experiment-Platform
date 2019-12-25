@@ -1,40 +1,42 @@
-import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
-import { IUser, IUserInputDTO } from "../interfaces/IUser";
+import { Service, Inject } from 'typedi';
+import { PassportStatic } from 'passport';
+import winston from 'winston';
+import { IUser, IUserInputDTO } from '../interfaces/IUser';
 import {
   EventDispatcher,
-  EventDispatcherInterface
-} from "../decorators/eventDispatcher";
-import config from "../config";
-import { Service, Inject } from "typedi";
-import { PassportStatic } from "passport";
-import winston from "winston";
-import { randomIdGenerator } from "../utils";
-import events from "../subscribers/events";
+  EventDispatcherInterface,
+} from '../decorators/eventDispatcher';
+import config from '../config';
+import { randomIdGenerator } from '../utils';
+import events from '../subscribers/events';
 
 @Service()
 export default class AuthService {
   constructor(
-    @Inject("Participant") private Participant: Models.ParticipantModel,
-    @Inject("passport") private passport: PassportStatic,
-    @Inject("logger") private logger: winston.Logger,
-    @EventDispatcher() private eventDispatcher: EventDispatcherInterface
+    @Inject('Participant') private Participant: Models.ParticipantModel,
+    @Inject('passport') private passport: PassportStatic,
+    @Inject('logger') private logger: winston.Logger,
+    @EventDispatcher() private eventDispatcher: EventDispatcherInterface,
   ) {}
 
   public async SignUp(
-    userInputDTO: IUserInputDTO
+    userInputDTO: IUserInputDTO,
   ): Promise<{ participant: any; token: string }> {
-    const { email, password, name, age, sex } = userInputDTO;
-    this.Participant.findOne({ where: { email } }).then(existingParticipant => {
+    const {
+      email, password, name, age, sex,
+    } = userInputDTO;
+    this.Participant.findOne({ where: { email } }).then((existingParticipant) => {
       if (existingParticipant) {
         // #TODO: return error that the email already exists
-        console.error("Already exists");
+        console.error('Already exists');
       }
     });
-    this.logger.silly("Hashing password");
+    this.logger.silly('Hashing password');
     const hashedPassword = await bcrypt.hash(password, 10);
-    let newParticipant = this.Participant.create({
+    const newParticipant = this.Participant.create({
       participantId: randomIdGenerator(),
       email,
       password: hashedPassword,
@@ -42,11 +44,11 @@ export default class AuthService {
       discordUsername: null,
       age,
       sex,
-      lastLogin: new Date()
+      lastLogin: new Date(),
     })
-      .then(participantRecord => {
+      .then((participantRecord) => {
         this.eventDispatcher.dispatch(events.participant.signUp, {
-          participant: participantRecord
+          participant: participantRecord,
         });
         /**
          * @TODO This is a bad way to delete fields...
@@ -55,22 +57,22 @@ export default class AuthService {
          * but that's too over-engineering for now
          */
         const participant: any = participantRecord.toJSON();
-        Reflect.deleteProperty(participant, "password");
-        Reflect.deleteProperty(participant, "participantId");
-        this.logger.silly("Generating JWT");
+        Reflect.deleteProperty(participant, 'password');
+        Reflect.deleteProperty(participant, 'participantId');
+        this.logger.silly('Generating JWT');
         const token = this.generateToken(participant.email);
         return { participant, token };
       })
-      .catch(err => {
+      .catch((err) => {
         this.logger.error(err);
-        return { participant: {}, token: "" };
+        return { participant: {}, token: '' };
       });
     return newParticipant;
   }
 
   async SignIn(participant): Promise<{ participant: any; token: string }> {
-    Reflect.deleteProperty(participant, "password");
-    Reflect.deleteProperty(participant, "participantId");
+    Reflect.deleteProperty(participant, 'password');
+    Reflect.deleteProperty(participant, 'participantId');
 
     const token = this.generateToken(participant);
     return { participant, token };
@@ -82,9 +84,9 @@ export default class AuthService {
     const expires = exp.setDate(today.getDate() + 30);
     const payload = {
       email,
-      expires
+      expires,
     };
-    let jwtToken = jwt.sign(JSON.stringify(payload), config.jwtSecret);
+    const jwtToken = jwt.sign(JSON.stringify(payload), config.jwtSecret);
     return jwtToken;
   }
 }

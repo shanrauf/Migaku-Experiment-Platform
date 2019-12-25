@@ -3,13 +3,13 @@ import {
   Table,
   Column,
   Model,
-  DataType
-} from "sequelize-typescript";
-import { SurveySection } from "../surveySection";
-import { Question } from "../question";
+  DataType,
+} from 'sequelize-typescript';
+import { SurveySection } from '../surveySection';
+import { Question } from '../question';
 @Table({
-  modelName: "SurveySectionQuestion",
-  tableName: "SurveySectionQuestions"
+  modelName: 'SurveySectionQuestion',
+  tableName: 'SurveySectionQuestions',
 })
 export class SurveySectionQuestion extends Model<SurveySectionQuestion> {
   @ForeignKey(() => SurveySection)

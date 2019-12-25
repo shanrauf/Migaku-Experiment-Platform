@@ -1,8 +1,9 @@
-import sequelizeLoader from "./loaders/sequelize";
+import sequelizeLoader from './loaders/sequelize';
+
 sequelizeLoader()
-  .then(sequelize => {
+  .then((sequelize) => {
     sequelize.sync({
-      force: true
+      force: true,
     });
   })
-  .catch(() => console.error("Failed"));
+  .catch(() => console.error('Failed'));

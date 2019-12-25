@@ -9,7 +9,9 @@ import { Container } from 'typedi';
 export function EventDispatcher() {
   return (object: any, propertyName: string, index?: number): void => {
     const eventDispatcher = new EventDispatcherClass();
-    Container.registerHandler({ object, propertyName, index, value: () => eventDispatcher });
+    Container.registerHandler({
+      object, propertyName, index, value: () => eventDispatcher,
+    });
   };
 }
 

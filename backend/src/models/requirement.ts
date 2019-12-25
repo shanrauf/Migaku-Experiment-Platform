@@ -5,18 +5,18 @@ import {
   BelongsToMany,
   DataType,
   AllowNull,
-  Unique
-} from "sequelize-typescript";
-import { Experiment } from "./experiment";
-import { ExperimentRequirement } from "./intermediary/experimentRequirement";
+  Unique,
+} from 'sequelize-typescript';
+import { Experiment } from './experiment';
+import { ExperimentRequirement } from './intermediary/experimentRequirement';
 
-@Table({ modelName: "Requirement", tableName: "Requirements" })
+@Table({ modelName: 'Requirement', tableName: 'Requirements' })
 export class Requirement extends Model<Requirement> {
   @BelongsToMany(
     () => Experiment,
     () => ExperimentRequirement,
-    "requirementId",
-    "experimentId"
+    'requirementId',
+    'experimentId',
   )
   experiments: Experiment[];
 

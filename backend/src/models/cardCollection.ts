@@ -5,21 +5,21 @@ import {
   Model,
   BelongsTo,
   ForeignKey,
-  AutoIncrement
-} from "sequelize-typescript";
-import { Survey } from "./survey";
-import { Experiment } from "./experiment";
-import { Participant } from "./participant";
+  AutoIncrement,
+} from 'sequelize-typescript';
+import { Survey } from './survey';
+import { Experiment } from './experiment';
+import { Participant } from './participant';
 
-@Table({ modelName: "CardCollection", tableName: "CardCollections" })
+@Table({ modelName: 'CardCollection', tableName: 'CardCollections' })
 export class CardCollection extends Model<CardCollection> {
-  @BelongsTo(() => Experiment, "experimentId")
+  @BelongsTo(() => Experiment, 'experimentId')
   experiment: Experiment;
 
-  @BelongsTo(() => Survey, "surveyId")
+  @BelongsTo(() => Survey, 'surveyId')
   survey: Survey;
 
-  @BelongsTo(() => Participant, "participantId")
+  @BelongsTo(() => Participant, 'participantId')
   participant: Participant;
 
   @AutoIncrement

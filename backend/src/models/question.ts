@@ -6,22 +6,22 @@ import {
   BelongsToMany,
   HasMany,
   AllowNull,
-  Unique
-} from "sequelize-typescript";
-import { Survey } from "./survey";
-import { SurveyQuestion } from "./intermediary/surveyQuestion";
-import { QuestionResponse } from "./questionResponse";
-@Table({ modelName: "Question", tableName: "Questions" })
+  Unique,
+} from 'sequelize-typescript';
+import { Survey } from './survey';
+import { SurveyQuestion } from './intermediary/surveyQuestion';
+import { QuestionResponse } from './questionResponse';
+@Table({ modelName: 'Question', tableName: 'Questions' })
 export class Question extends Model<Question> {
   @BelongsToMany(
     () => Survey,
     () => SurveyQuestion,
-    "questionId",
-    "surveyId"
+    'questionId',
+    'surveyId',
   )
   surveys: Survey[];
 
-  @HasMany(() => QuestionResponse, "questionId")
+  @HasMany(() => QuestionResponse, 'questionId')
   questionResponses: QuestionResponse[];
 
   @Column({ type: DataType.STRING(255), primaryKey: true })
@@ -50,7 +50,7 @@ export class Question extends Model<Question> {
   items: string;
 
   @Column
-  required: Boolean;
+  required: boolean;
 
   @AllowNull(true)
   @Column(DataType.STRING(1000))

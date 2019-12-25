@@ -5,24 +5,24 @@ import {
   Model,
   BelongsTo,
   AllowNull,
-  ForeignKey
-} from "sequelize-typescript";
-import { Question } from "./question";
-import { Experiment } from "./experiment";
-import { Survey } from "./survey";
-import { Participant } from "./participant";
-@Table({ modelName: "QuestionResponse", tableName: "QuestionResponses" })
+  ForeignKey,
+} from 'sequelize-typescript';
+import { Question } from './question';
+import { Experiment } from './experiment';
+import { Survey } from './survey';
+import { Participant } from './participant';
+@Table({ modelName: 'QuestionResponse', tableName: 'QuestionResponses' })
 export class QuestionResponse extends Model<QuestionResponse> {
-  @BelongsTo(() => Experiment, "experimentId")
+  @BelongsTo(() => Experiment, 'experimentId')
   experiment: Experiment;
 
-  @BelongsTo(() => Survey, "surveyId")
+  @BelongsTo(() => Survey, 'surveyId')
   survey: Survey;
 
-  @BelongsTo(() => Participant, "participantId")
+  @BelongsTo(() => Participant, 'participantId')
   participant: Participant;
 
-  @BelongsTo(() => Question, "questionId")
+  @BelongsTo(() => Question, 'questionId')
   question: Question;
 
   @Column({ type: DataType.STRING(255), primaryKey: true })
@@ -39,6 +39,7 @@ export class QuestionResponse extends Model<QuestionResponse> {
   @ForeignKey(() => Survey)
   @Column(DataType.STRING(255))
   surveyId: string;
+
   // @Unique
   @ForeignKey(() => Participant)
   @Column(DataType.STRING(255))
@@ -58,7 +59,7 @@ export class QuestionResponse extends Model<QuestionResponse> {
 
   @AllowNull(true)
   @Column
-  answerBoolean: Boolean;
+  answerBoolean: boolean;
 
   @AllowNull(true)
   @Column(DataType.STRING(500))

@@ -5,43 +5,43 @@ import {
   Column,
   DataType,
   AllowNull,
-  HasMany
-} from "sequelize-typescript";
-import { Participant } from "./participant";
-import { ExperimentParticipant } from "./intermediary/experimentParticipant";
-import { Requirement } from "./requirement";
-import { ExperimentRequirement } from "./intermediary/experimentRequirement";
-import { Survey } from "./survey";
-import { ExperimentSurvey } from "./intermediary/experimentSurvey";
-import { CardCollection } from "./cardCollection";
-import { QuestionResponse } from "./questionResponse";
-@Table({ modelName: "Experiment", tableName: "Experiments" })
+  HasMany,
+} from 'sequelize-typescript';
+import { Participant } from './participant';
+import { ExperimentParticipant } from './intermediary/experimentParticipant';
+import { Requirement } from './requirement';
+import { ExperimentRequirement } from './intermediary/experimentRequirement';
+import { Survey } from './survey';
+import { ExperimentSurvey } from './intermediary/experimentSurvey';
+import { CardCollection } from './cardCollection';
+import { QuestionResponse } from './questionResponse';
+@Table({ modelName: 'Experiment', tableName: 'Experiments' })
 export class Experiment extends Model<Experiment> {
   @BelongsToMany(
     () => Participant,
     () => ExperimentParticipant,
-    "experimentId",
-    "participantId"
+    'experimentId',
+    'participantId',
   )
   participants: Participant[];
 
   @BelongsToMany(
     () => Survey,
     () => ExperimentSurvey,
-    "experimentId",
-    "surveyId"
+    'experimentId',
+    'surveyId',
   )
   surveys: Survey[];
 
   @BelongsToMany(
     () => Requirement,
     () => ExperimentRequirement,
-    "experimentId",
-    "requirementId"
+    'experimentId',
+    'requirementId',
   )
   requirements: Requirement[];
 
-  @HasMany(() => QuestionResponse, "experimentId")
+  @HasMany(() => QuestionResponse, 'experimentId')
   questionResponses: QuestionResponse[];
 
   @HasMany(() => CardCollection)

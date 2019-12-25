@@ -1,14 +1,15 @@
-import { Participant } from "../../models/participant";
-import { IUser } from "../../interfaces/IUser";
-import { Model, ModelCtor } from "sequelize-typescript";
-import { Experiment } from "../../models/experiment";
-import { ExperimentSurvey } from "../../models/intermediary/experimentSurvey";
-import { Survey } from "../../models/survey";
-import { Question } from "../../models/question";
-import { SurveyQuestion } from "../../models/intermediary/surveyQuestion";
-import { QuestionResponse } from "../../models/questionResponse";
-import { SurveySection } from "../../models/surveySection";
-import { CardCollection } from "../../models/cardCollection";
+import { Model, ModelCtor } from 'sequelize-typescript';
+import { Participant } from '../../models/participant';
+import { IUser } from '../../interfaces/IUser';
+import { Experiment } from '../../models/experiment';
+import { ExperimentSurvey } from '../../models/intermediary/experimentSurvey';
+import { Survey } from '../../models/survey';
+import { Question } from '../../models/question';
+import { SurveyQuestion } from '../../models/intermediary/surveyQuestion';
+import { QuestionResponse } from '../../models/questionResponse';
+import { SurveySection } from '../../models/surveySection';
+import { CardCollection } from '../../models/cardCollection';
+
 declare global {
   namespace Express {
     export interface Request {

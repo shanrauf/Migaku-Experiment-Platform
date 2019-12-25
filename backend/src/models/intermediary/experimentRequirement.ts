@@ -4,13 +4,13 @@ import {
   Column,
   Model,
   DataType,
-  AllowNull
-} from "sequelize-typescript";
-import { Experiment } from "../experiment";
-import { Requirement } from "../requirement";
+  AllowNull,
+} from 'sequelize-typescript';
+import { Experiment } from '../experiment';
+import { Requirement } from '../requirement';
 @Table({
-  modelName: "ExperimentRequirement",
-  tableName: "ExperimentRequirements"
+  modelName: 'ExperimentRequirement',
+  tableName: 'ExperimentRequirements',
 })
 export class ExperimentRequirement extends Model<ExperimentRequirement> {
   @ForeignKey(() => Experiment)

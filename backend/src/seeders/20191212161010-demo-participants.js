@@ -1,30 +1,30 @@
-"use strict";
+'use strict';
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert(
-      "participants",
+      'participants',
       [
         {
-          participantId: "abcd1234",
-          email: "test@test.com",
-          password: "test123",
-          name: "Test This",
-          discordUsername: "testing1234",
+          participantId: 'abcd1234',
+          email: 'test@test.com',
+          password: 'test123',
+          name: 'Test This',
+          discordUsername: 'testing1234',
           age: 19,
-          sex: "female",
+          sex: 'female',
           lastLogin: new Date(),
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
-          participantId: "1234abcd",
-          email: "test2@test.com",
-          password: "test321",
-          name: "Shan Test",
-          discordUsername: "shanrauftest",
+          participantId: '1234abcd',
+          email: 'test2@test.com',
+          password: 'test321',
+          name: 'Shan Test',
+          discordUsername: 'shanrauftest',
           age: 19,
-          sex: "male",
+          sex: 'male',
           lastLogin: new Date(),
           createdAt: new Date(),
           updatedAt: new Date()
@@ -35,6 +35,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete("participants", null, {});
+    return queryInterface.bulkDelete('participants', null, {});
   }
 };

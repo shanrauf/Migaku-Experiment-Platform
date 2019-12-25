@@ -1,16 +1,16 @@
-import { Sequelize } from "sequelize-typescript";
-import models from "../models";
-import sequelizeConfig from "../config/sequelize";
+import { Sequelize } from 'sequelize-typescript';
+import models from '../models';
+import sequelizeConfig from '../config/sequelize';
 
 export default async () => {
   const sequelizeOptions: any = {
     host: sequelizeConfig[process.env.NODE_ENV].host,
-    dialect: "mysql",
+    dialect: 'mysql',
     pool: {
       max: 5,
       min: 0,
       acquire: 30000,
-      idle: 10000
+      idle: 10000,
     },
     retry: {
       match: [
@@ -28,36 +28,36 @@ export default async () => {
         /SequelizeHostNotFoundError/,
         /SequelizeHostNotReachableError/,
         /SequelizeInvalidConnectionError/,
-        /SequelizeConnectionTimedOutError/
+        /SequelizeConnectionTimedOutError/,
       ],
-      max: 5
-    }
+      max: 5,
+    },
   };
-  if (process.env.NODE_ENV == "production") {
-    sequelizeOptions["port"] = sequelizeConfig[process.env.NODE_ENV].port; // crashes on dev...
+  if (process.env.NODE_ENV == 'production') {
+    sequelizeOptions.port = sequelizeConfig[process.env.NODE_ENV].port; // crashes on dev...
   }
   const sequelize = new Sequelize(
     sequelizeConfig[process.env.NODE_ENV].database,
     sequelizeConfig[process.env.NODE_ENV].username,
     sequelizeConfig[process.env.NODE_ENV].password,
-    sequelizeOptions
+    sequelizeOptions,
   );
 
   sequelize.addModels([...models]);
 
   if (process.env.FORCE_SYNC) {
     await sequelize.sync({
-      force: true
+      force: true,
     });
   }
 
   sequelize
     .authenticate()
     .then(() => {
-      console.log("MySQL authenticated");
+      console.log('MySQL authenticated');
     })
-    .catch(err => {
-      console.error("Unable to connect to the database:", err);
+    .catch((err) => {
+      console.error('Unable to connect to the database:', err);
     });
   return sequelize;
 };

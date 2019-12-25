@@ -5,40 +5,40 @@ import {
   DataType,
   BelongsToMany,
   HasMany,
-  AllowNull
-} from "sequelize-typescript";
-import { Experiment } from "./experiment";
-import { ExperimentSurvey } from "./intermediary/experimentSurvey";
-import { Question } from "./question";
-import { SurveyQuestion } from "./intermediary/surveyQuestion";
-import { CardCollection } from "./cardCollection";
-import { QuestionResponse } from "./questionResponse";
-import { SurveySection } from "./surveySection";
-@Table({ modelName: "Survey", tableName: "Surveys" })
+  AllowNull,
+} from 'sequelize-typescript';
+import { Experiment } from './experiment';
+import { ExperimentSurvey } from './intermediary/experimentSurvey';
+import { Question } from './question';
+import { SurveyQuestion } from './intermediary/surveyQuestion';
+import { CardCollection } from './cardCollection';
+import { QuestionResponse } from './questionResponse';
+import { SurveySection } from './surveySection';
+@Table({ modelName: 'Survey', tableName: 'Surveys' })
 export class Survey extends Model<Survey> {
   @BelongsToMany(
     () => Experiment,
     () => ExperimentSurvey,
-    "surveyId",
-    "experimentId"
+    'surveyId',
+    'experimentId',
   )
   surveys: Survey[];
 
   @BelongsToMany(
     () => Question,
     () => SurveyQuestion,
-    "surveyId",
-    "questionId"
+    'surveyId',
+    'questionId',
   )
   questions: Question[];
 
-  @HasMany(() => SurveySection, "surveyId")
+  @HasMany(() => SurveySection, 'surveyId')
   surveySections: SurveySection[];
 
-  @HasMany(() => QuestionResponse, "surveyId")
+  @HasMany(() => QuestionResponse, 'surveyId')
   questionResponses: QuestionResponse[];
 
-  @HasMany(() => CardCollection, "surveyId")
+  @HasMany(() => CardCollection, 'surveyId')
   cardCollections: CardCollection[];
 
   @Column({ type: DataType.STRING(255), primaryKey: true })

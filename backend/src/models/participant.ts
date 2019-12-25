@@ -6,27 +6,27 @@ import {
   DataType,
   AllowNull,
   HasMany,
-  Unique
-} from "sequelize-typescript";
-import { Experiment } from "./experiment";
-import { ExperimentParticipant } from "./intermediary/experimentParticipant";
-import { CardCollection } from "./cardCollection";
-import { QuestionResponse } from "./questionResponse";
+  Unique,
+} from 'sequelize-typescript';
+import { Experiment } from './experiment';
+import { ExperimentParticipant } from './intermediary/experimentParticipant';
+import { CardCollection } from './cardCollection';
+import { QuestionResponse } from './questionResponse';
 
-@Table({ modelName: "Participant", tableName: "Participants" })
+@Table({ modelName: 'Participant', tableName: 'Participants' })
 export class Participant extends Model<Participant> {
   @BelongsToMany(
     () => Experiment,
     () => ExperimentParticipant,
-    "participantId",
-    "experimentId"
+    'participantId',
+    'experimentId',
   )
   experiments: Experiment[];
 
-  @HasMany(() => QuestionResponse, "participantId")
+  @HasMany(() => QuestionResponse, 'participantId')
   questionResponses: QuestionResponse[];
 
-  @HasMany(() => CardCollection, "participantId")
+  @HasMany(() => CardCollection, 'participantId')
   cardCollections: CardCollection[];
 
   @Column({ type: DataType.STRING(255), primaryKey: true })

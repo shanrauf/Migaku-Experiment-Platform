@@ -1,9 +1,9 @@
-import { Container } from "typedi";
-import { EventSubscriber, On } from "event-dispatch";
-import events from "./events";
-import { IUser } from "../interfaces/IUser";
-import { ModelCtor } from "sequelize/types";
-import { Model } from "sequelize-typescript";
+import { Container } from 'typedi';
+import { EventSubscriber, On } from 'event-dispatch';
+import { ModelCtor } from 'sequelize/types';
+import { Model } from 'sequelize-typescript';
+import events from './events';
+import { IUser } from '../interfaces/IUser';
 
 @EventSubscriber()
 export default class ParticipantSubscriber {
@@ -19,14 +19,14 @@ export default class ParticipantSubscriber {
    */
   @On(events.participant.signIn)
   public onUserSignIn({ participantId }: Partial<IUser>) {
-    const Logger = Container.get("logger");
+    const Logger = Container.get('logger');
 
     try {
-      const Participant = Container.get("Participant") as ModelCtor<Model>;
+      const Participant = Container.get('Participant') as ModelCtor<Model>;
 
       Participant.update(
         { lastLogin: new Date() },
-        { where: { participantId } }
+        { where: { participantId } },
       );
     } catch (e) {
       // Logger.error(`🔥 Error on event ${events.user.signIn}: %o`, e);
@@ -35,9 +35,10 @@ export default class ParticipantSubscriber {
       throw e;
     }
   }
+
   @On(events.participant.signUp)
   public onUserSignUp({ name, email, participantId }: Partial<IUser>) {
-    const Logger = Container.get("logger");
+    const Logger = Container.get('logger');
 
     try {
       /**

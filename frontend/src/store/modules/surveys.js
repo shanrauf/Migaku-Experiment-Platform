@@ -1,7 +1,7 @@
-const surveyData = require("@/surveyData.json");
-import router from "@/router";
-import RepositoryFactory from "@/api";
-import Vue from "vue";
+const surveyData = require('@/surveyData.json');
+import router from '@/router';
+import RepositoryFactory from '@/api';
+import Vue from 'vue';
 const state = () => {
   return {
     surveys: [],
@@ -20,24 +20,16 @@ const getters = {
 
 const actions = {
   async createSurveys({ commit }) {
-    const r = await fetch(
-      "http://http://54.197.11.54/backend/api/experiments/audiovssentencecards/surveys"
-    );
-    console.log(r);
-    const SurveyRepository = RepositoryFactory.get("surveys");
-
+    const SurveyRepository = RepositoryFactory.get('surveys');
     let response = await SurveyRepository.get();
-
     const { surveys } = response.data;
-    console.log(surveys);
-    console.log(response);
     surveys.forEach(survey => {
-      survey["startDate"] = survey.surveys[0].ExperimentSurvey.startDate;
-      survey["endDate"] = survey.surveys[0].ExperimentSurvey.endDate;
+      survey['startDate'] = survey.surveys[0].ExperimentSurvey.startDate;
+      survey['endDate'] = survey.surveys[0].ExperimentSurvey.endDate;
     });
 
     commit({
-      type: "setSurveys",
+      type: 'setSurveys',
       surveys: surveys
     });
   },
@@ -48,20 +40,20 @@ const actions = {
     //   `latest?email=${payload.email}`
     // );
     commit({
-      type: "setCurrentSurvey",
-      currentSurvey: surveyData.survey
+      type: 'setCurrentSurvey',
+      currentSurvey: surveyData.survey // doing manually for now
     });
   },
   async submitSurvey({ commit, state }) {
     let canSubmit = true;
     state.currentSurvey.sections.forEach(section => {
       for (let question of section.questions) {
-        if (question.value == "" && canSubmit) {
+        if (question.value == '' && canSubmit) {
           // doesn't allow for questioons where u allow leaving blank
           canSubmit = false;
           Vue.notify({
             title: "You haven't filled out every question yet..",
-            group: "global"
+            group: 'global'
           });
           return false;
         }
@@ -76,8 +68,8 @@ const actions = {
         section.questions.forEach(question => {
           // add to payload
 
-          if (question.questionId == "email") {
-            data["email"] = question.value;
+          if (question.questionId == 'email') {
+            data['email'] = question.value;
           }
           payload[question.questionId] = {
             value: question.value,
@@ -85,14 +77,14 @@ const actions = {
           };
         });
       });
-      data["data"] = payload;
-      const SurveyRepository = RepositoryFactory.get("surveys");
+      data['data'] = payload;
+      const SurveyRepository = RepositoryFactory.get('surveys');
 
       SurveyRepository.post(state.currentSurvey.surveyId, data).then(() => {
-        router.push("/");
+        router.push('/');
         Vue.notify({
-          group: "global",
-          title: "Successfully submitted survey!",
+          group: 'global',
+          title: 'Successfully submitted survey!',
           text: "Don't forget to come back next week to fill out the next one"
         });
       });

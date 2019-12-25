@@ -1,6 +1,6 @@
 export default {
   participant: {
-    signUp: "onParticipantSignUp",
-    signIn: "onParticipantSignIn"
-  }
+    signUp: 'onParticipantSignUp',
+    signIn: 'onParticipantSignIn',
+  },
 };

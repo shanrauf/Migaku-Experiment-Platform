@@ -3,12 +3,12 @@ import {
   Column,
   Model,
   AllowNull,
-  ForeignKey
-} from "sequelize-typescript";
-import { DataType } from "sequelize-typescript";
-import { Survey } from "./survey";
+  ForeignKey,
+, DataType } from "sequelize-typescript";
 
-@Table({ modelName: "SurveySection", tableName: "SurveySections" })
+import { Survey } from './survey';
+
+@Table({ modelName: 'SurveySection', tableName: 'SurveySections' })
 export class SurveySection extends Model<SurveySection> {
   @Column({ type: DataType.STRING(255), primaryKey: true })
   sectionId: string;
