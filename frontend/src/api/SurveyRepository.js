@@ -1,8 +1,9 @@
-import AxiosClient from "./axiosClient";
-const resource = "experiments/audiovssentencecards/surveys"; // change later when change survey endpoiont to just /surveys w ?experimentId stuff...
+import AxiosClient from './axiosClient';
+const resource = 'experiments/audiovssentencecards/surveys'; // change later when change survey endpoiont to just /surveys w ?experimentId stuff...
 
 export default {
   get() {
+    console.log(resource);
     return AxiosClient.get(`${resource}`);
   },
   getSurvey(surveyId) {

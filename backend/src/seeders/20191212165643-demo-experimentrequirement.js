@@ -1,25 +1,25 @@
-"use strict";
+'use strict';
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert(
-      "experimentrequirements",
+      'ExperimentRequirements',
       [
         {
-          experimentId: "abc123",
-          requirementId: "testRequirementOne",
-          title: "completedRRTK",
-          description: "Completed RRTK",
-          value: "true",
+          experimentId: 'abc123',
+          requirementId: 'testRequirementOne',
+          title: 'completedRRTK',
+          description: 'Completed RRTK',
+          value: 'true',
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
-          experimentId: "abc123",
-          requirementId: "testRequirementTwo",
-          title: "completedPRTK",
-          description: "Completed PRTK",
-          value: "true",
+          experimentId: 'abc123',
+          requirementId: 'testRequirementTwo',
+          title: 'completedPRTK',
+          description: 'Completed PRTK',
+          value: 'true',
           createdAt: new Date(),
           updatedAt: new Date()
         }
@@ -29,6 +29,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete("experimentrequirements", null, {});
+    return queryInterface.bulkDelete('experimentrequirements', null, {});
   }
 };

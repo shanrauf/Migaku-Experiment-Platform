@@ -1,10 +1,10 @@
 {
   "survey": {
-    "surveyId": "983wuf4noiahf78sh4",
-    "title": "MIA Mid-Experiment Survey #1",
-    "description": "This is the first weekly survey to gauge your progress during the experiment.",
-    "startDate": "2019-12-13 00:00:00",
-    "endDate": "2019-12-18 00:00:00",
+    "surveyId": "surveyThree",
+    "title": "MIA Mid-Experiment Survey #3",
+    "description": "This is the third weekly survey to gauge your progress during the experiment.",
+    "startDate": "2019-12-30 00:00:00",
+    "endDate": "2020-1-02 00:00:00",
     "surveyCategory": "regular",
     "visibility": "public",
     "sections": [
@@ -43,39 +43,6 @@
             "value": "",
             "items": "zeroToOneHundred",
             "required": true
-          },
-          {
-            "questionId": "completedRRTK",
-            "label": "Completed Recognition RTK",
-            "questionType": "radio",
-            "dataType": "varchar",
-            "question": "Have you completed RRTK (Recognition RTK, previously known as Lazy Kanji)?",
-            "note": "We forgot to ask this question in the initial survey",
-            "items": "yesNo",
-            "value": "",
-            "required": true
-          },
-          {
-            "questionId": "completedPRTK",
-            "label": "Completed Production RTK",
-            "questionType": "radio",
-            "dataType": "varchar",
-            "question": "Have you completed PRTK (Production RTK, previously known as Traditional RTK)?",
-            "note": "We forgot to ask this question in the initial survey",
-            "items": "yesNo",
-            "value": "",
-            "required": true
-          },
-          {
-            "questionId": "otherKanjiStudies",
-            "label": "Kanji Studies Outside of RTK",
-            "questionType": "text",
-            "dataType": "varchar",
-            "rules": "maxChar=500&minChar=1",
-            "question": "Please describe your Kanji studies outside of RTK (e.x WaniKani, KanjiDamage, Kanji From Zero, etc). You may leave this blank if this does not apply to you",
-            "note": "We forgot to ask this question in the initial survey",
-            "value": "",
-            "required": false
           },
           {
             "questionId": "preferredCardType",

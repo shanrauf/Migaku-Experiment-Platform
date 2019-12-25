@@ -1,20 +1,20 @@
-"use strict";
+'use strict';
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert(
-      "surveysectionquestions",
+      'SurveySectionQuestions',
       [
         {
-          sectionId: "testSectionOne",
-          questionId: "testQuestionOne",
+          sectionId: 'testSectionOne',
+          questionId: 'testQuestionOne',
           questionOrder: 1,
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
-          sectionId: "testSectionTwo",
-          questionId: "testQuestionTwo",
+          sectionId: 'testSectionTwo',
+          questionId: 'testQuestionTwo',
           questionOrder: 1,
           createdAt: new Date(),
           updatedAt: new Date()
@@ -25,6 +25,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete("surveysectionquestions", null, {});
+    return queryInterface.bulkDelete('surveysectionquestions', null, {});
   }
 };

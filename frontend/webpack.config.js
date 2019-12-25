@@ -204,7 +204,7 @@ module.exports = {
   },
   plugins: plugins,
   output: {
-    path: path.join(__dirname, '../backend/src/frontend'), // for backend to use
+    path: path.join(__dirname, '../backend/frontend'), // for backend to use
     pathinfo: false,
     filename: '[name].bundle.js',
     chunkFilename: 'chunks/[chunkhash].chunk.js',

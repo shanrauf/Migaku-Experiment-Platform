@@ -1,22 +1,22 @@
-"use strict";
+'use strict';
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert(
-      "requirements",
+      'Requirements',
       [
         {
-          requirementId: "testRequirementOne",
-          key: "completedRRTK",
-          dataType: "boolean",
-          image: "https://www.dropbox.com/s/fcxavuijy65hfem/profile.jpg?dl=1",
+          requirementId: 'testRequirementOne',
+          key: 'completedRRTK',
+          dataType: 'boolean',
+          image: 'https://www.dropbox.com/s/fcxavuijy65hfem/profile.jpg?dl=1',
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
-          requirementId: "testRequirementTwo",
-          key: "completedPRTK",
-          dataType: "boolean",
+          requirementId: 'testRequirementTwo',
+          key: 'completedPRTK',
+          dataType: 'boolean',
           image: null,
           createdAt: new Date(),
           updatedAt: new Date()
@@ -27,6 +27,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete("requirements", null, {});
+    return queryInterface.bulkDelete('requirements', null, {});
   }
 };

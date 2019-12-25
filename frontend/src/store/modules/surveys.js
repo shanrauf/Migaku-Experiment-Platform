@@ -22,6 +22,7 @@ const actions = {
   async createSurveys({ commit }) {
     const SurveyRepository = RepositoryFactory.get('surveys');
     let response = await SurveyRepository.get();
+    console.log(response);
     const { surveys } = response.data;
     surveys.forEach(survey => {
       survey['startDate'] = survey.surveys[0].ExperimentSurvey.startDate;

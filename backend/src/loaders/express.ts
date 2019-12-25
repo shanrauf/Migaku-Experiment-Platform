@@ -36,8 +36,8 @@ export default async ({ app }: { app: express.Application }) => {
   // Middleware that transforms the raw string of req.body into json
   app.use(
     bodyParser.urlencoded({
-      extended: true,
-    }),
+      extended: true
+    })
   );
   app.use(express.json());
   app.use(cookieParser());
@@ -45,21 +45,21 @@ export default async ({ app }: { app: express.Application }) => {
   // Load API routes
   app.use(config.api.prefix, routes());
 
-  app.use('/', express.static(path.join(__dirname, '../frontend')));
+  // app.use('/', express.static(path.join(__dirname, '../../frontend')));
 
   app.use(errors());
 
-  // trying to serve frontend
-  app.use((req, res, next) => {
-    res.sendFile(path.join(__dirname, '../frontend', 'index.html'));
-  });
+  // because of replacing below commented code w this, errors just send html...
+  // app.use((req, res, next) => {
+  //   res.sendFile(path.join(__dirname, '../../frontend', 'index.html'));
+  // });
 
   // / catch 404 and forward to error handler
-  // app.use((req, res, next) => {
-  //   const err = new Error('Not Found');
-  //   err['status'] = 404;
-  //   next(err);
-  // });
+  app.use((req, res, next) => {
+    const err = new Error('Not Found');
+    err['status'] = 404;
+    next(err);
+  });
 
   // / error handlers
   app.use((err, req, res, next) => {
@@ -78,8 +78,8 @@ export default async ({ app }: { app: express.Application }) => {
     res.status(err.status || 500);
     res.json({
       errors: {
-        message: err.message,
-      },
+        message: err.message
+      }
     });
   });
 };
