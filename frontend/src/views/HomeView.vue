@@ -6,9 +6,7 @@
       style="height: 80vh; text-align: center"
       class="landing-container"
     >
-      <h1 style="font-size: 60px">
-        Mass Immersion Approach Foreign Language Experiments
-      </h1>
+      <h1 style="font-size: 60px">Mass Immersion Approach Foreign Language Experiments</h1>
 
       <br />
 

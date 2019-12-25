@@ -11,5 +11,6 @@ yarn-debug.log*
 yarn-error.log*
 .env
 build
+frontend
 
 src/seeders/20191214024339-experiment-participants.js
