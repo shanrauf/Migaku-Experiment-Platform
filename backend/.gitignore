@@ -14,3 +14,4 @@ build
 frontend
 
 src/seeders/20191214024339-experiment-participants.js
+src/seeders/20191214024340-experiment-experimentParticipants.js

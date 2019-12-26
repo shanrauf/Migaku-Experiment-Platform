@@ -13,7 +13,7 @@
     "seed": "npx sequelize-cli db:seed:all",
     "seed-prod": "npx sequelize-cli db:seed:all --env production",
     "force-sync-dev": "cross-env NODE_ENV=development ts-node src/migrate.ts",
-    "force-sync-prod": "cross-env NODE_ENV=production ts-node src/migrate.ts --env production",
+    "force-sync-prod": "cross-env NODE_ENV=production node build/migrate.js --env production",
     "setup-dev": "npm run force-sync-dev && npm run seed",
     "test": "jest",
     "lint": "npm run lint:eslint ",

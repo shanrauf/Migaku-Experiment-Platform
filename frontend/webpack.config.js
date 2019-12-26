@@ -81,6 +81,9 @@ const devServer = {
   historyApiFallback: true,
   contentBase: path.join(__dirname, 'build'),
   open: 'chrome',
+  proxy: {
+    '/api': 'http://localhost:3000'
+  },
   compress: ifDevElseProd(false, true), // gzip
   stats: {
     hash: false,
