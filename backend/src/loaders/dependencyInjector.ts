@@ -6,14 +6,14 @@ import LoggerInstance from './logger';
 export default async ({
   sqlConnection,
   passport,
-  models,
+  models
 }: {
   sqlConnection: Sequelize;
   passport: PassportStatic;
   models: ModelCtor[];
 }) => {
   try {
-    models.forEach((Model) => {
+    models.forEach(Model => {
       Container.set(Model.options.name.singular, Model);
     });
 
