@@ -1,42 +1,44 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
-import { Service, Inject } from 'typedi';
+import Container, { Service, Inject } from 'typedi';
 import { PassportStatic } from 'passport';
 import winston from 'winston';
-import { IUser, IUserInputDTO } from '../interfaces/IUser';
+import { IUserInputDTO } from '../interfaces/IUser';
 import {
   EventDispatcher,
-  EventDispatcherInterface,
+  EventDispatcherInterface
 } from '../decorators/eventDispatcher';
 import config from '../config';
 import { randomIdGenerator } from '../utils';
 import events from '../subscribers/events';
+import { Participant } from '../models/participant';
+import LoggerInstance from '../loaders/logger';
 
 @Service()
 export default class AuthService {
   constructor(
-    @Inject('Participant') private Participant: Models.ParticipantModel,
     @Inject('passport') private passport: PassportStatic,
     @Inject('logger') private logger: winston.Logger,
-    @EventDispatcher() private eventDispatcher: EventDispatcherInterface,
+    @EventDispatcher() private eventDispatcher: EventDispatcherInterface
   ) {}
 
   public async SignUp(
-    userInputDTO: IUserInputDTO,
+    userInputDTO: IUserInputDTO
   ): Promise<{ participant: any; token: string }> {
+    const logger = Container.get(LoggerInstance);
     const {
-      email, password, name, age, sex,
+      email, password, name, age, sex
     } = userInputDTO;
-    this.Participant.findOne({ where: { email } }).then((existingParticipant) => {
+    Participant.findOne({ where: { email } }).then((existingParticipant) => {
       if (existingParticipant) {
         // #TODO: return error that the email already exists
-        console.error('Already exists');
+        logger.error('Already exists');
       }
     });
     this.logger.silly('Hashing password');
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newParticipant = this.Participant.create({
+    const newParticipant = Participant.create({
       participantId: randomIdGenerator(),
       email,
       password: hashedPassword,
@@ -44,11 +46,11 @@ export default class AuthService {
       discordUsername: null,
       age,
       sex,
-      lastLogin: new Date(),
+      lastLogin: new Date()
     })
       .then((participantRecord) => {
         this.eventDispatcher.dispatch(events.participant.signUp, {
-          participant: participantRecord,
+          participant: participantRecord
         });
         /**
          * @TODO This is a bad way to delete fields...
@@ -70,7 +72,9 @@ export default class AuthService {
     return newParticipant;
   }
 
-  async SignIn(participant): Promise<{ participant: any; token: string }> {
+  async SignIn(
+    participant: any
+  ): Promise<{ participant: Participant; token: string }> {
     Reflect.deleteProperty(participant, 'password');
     Reflect.deleteProperty(participant, 'participantId');
 
@@ -84,7 +88,7 @@ export default class AuthService {
     const expires = exp.setDate(today.getDate() + 30);
     const payload = {
       email,
-      expires,
+      expires
     };
     const jwtToken = jwt.sign(JSON.stringify(payload), config.jwtSecret);
     return jwtToken;

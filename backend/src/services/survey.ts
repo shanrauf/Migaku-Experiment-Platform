@@ -6,25 +6,19 @@ import {
   EventDispatcher,
   EventDispatcherInterface,
 } from '../decorators/eventDispatcher';
+import { Participant } from '../models/participant';
+import { ExperimentSurvey } from '../models/intermediary/experimentSurvey';
+import { QuestionResponse } from '../models/questionResponse';
+import { Survey } from '../models/survey';
+import { SurveySection } from '../models/surveySection';
+import { Question } from '../models/question';
+import { SurveyQuestion } from '../models/intermediary/surveyQuestion';
+import { Experiment } from '../models/experiment';
+import { CardCollection } from '../models/cardCollection';
 
 @Service()
 export default class SurveyService {
   constructor(
-    @Inject('Participant')
-    private Participant: Models.ParticipantModel,
-    @Inject('ExperimentSurvey')
-    private ExperimentSurvey: Models.ExperimentSurveyModel,
-    @Inject('Survey') private Survey: Models.SurveyModel,
-    @Inject('SurveyQuestion')
-    private SurveyQuestion: Models.SurveyQuestionModel,
-    @Inject('CardCollection')
-    private CardCollection: Models.CardCollectionModel,
-    @Inject('Experiment') private Experiment: Models.ExperimentModel,
-    @Inject('Question') private Question: Models.QuestionModel,
-    @Inject('QuestionResponse')
-    private QuestionResponse: Models.QuestionResponseModel,
-    @Inject('sequelize') private sequelize: Sequelize,
-    @Inject('SurveySection') private SurveySection: Models.SurveySectionModel,
     @Inject('logger') private logger: winston.Logger,
     @EventDispatcher() private eventDispatcher: EventDispatcherInterface,
   ) {}
@@ -39,10 +33,10 @@ export default class SurveyService {
     }> {
     try {
       this.logger.silly('Fetching surveys');
-      const surveyRecords = await this.Survey.findAndCountAll({
+      const surveyRecords = await Survey.findAndCountAll({
         include: [
           {
-            model: this.Experiment,
+            model: Experiment,
             attributes: ['experimentId'],
             where: { experimentId, visibility: 'public' },
           },
@@ -62,13 +56,13 @@ export default class SurveyService {
   public async GetSurvey(surveyId: string): Promise<{ survey: any }> {
     try {
       this.logger.silly(`Fetching survey ${surveyId}`);
-      const surveyRecord = await this.Survey.findAndCountAll({
+      const surveyRecord = await Survey.findAndCountAll({
         include: [
           {
-            model: this.SurveySection,
+            model: SurveySection,
           },
           {
-            model: this.Question,
+            model: Question,
           },
         ],
         where: {
@@ -90,7 +84,7 @@ export default class SurveyService {
   ): Promise<{ survey: Model | null }> {
     try {
       this.logger.silly('Fetching latest survey');
-      const surveyRecord = await this.ExperimentSurvey.findOne({
+      const surveyRecord = await ExperimentSurvey.findOne({
         where: { visibility: 'public', experimentId },
         order: [['startDate', 'DESC']],
       }).then((survey) => survey);
@@ -110,7 +104,7 @@ export default class SurveyService {
   ): Promise<any> {
     try {
       this.logger.silly('Fetching survey status');
-      const participantExists = await this.Participant.findOne({
+      const participantExists = await Participant.findOne({
         where: { participantId },
       })
         .then((participantRecord: any) => !!participantRecord)
@@ -123,7 +117,7 @@ export default class SurveyService {
         return 0; // user doesnt exist
       }
 
-      const responseRecordExists = await this.QuestionResponse.findOne({
+      const responseRecordExists = await QuestionResponse.findOne({
         where: { participantId, surveyId },
       })
         .then((responseRecord: any) => !!responseRecord)
@@ -136,13 +130,13 @@ export default class SurveyService {
       }
 
       // check if user submitted an attribute that lucas will submit recently; e.x audioTotalTime
-      const audioTotalTime: any = await this.QuestionResponse.findOne({
+      const audioTotalTime: any = await QuestionResponse.findOne({
         where: { questionId: 'audioTotalTime', participantId },
       });
 
       // check if the time submitted foro that attribute is before the date of the most recent survey
 
-      const mostRecentSurveyCreatedAt = await this.Survey.findOne({
+      const mostRecentSurveyCreatedAt = await Survey.findOne({
         where: { surveyId },
         order: [['createdAt', 'DESC']],
       }).then((survey) => survey.createdAt);
@@ -157,10 +151,9 @@ export default class SurveyService {
       }
       // get most recent survey created at timestamp intoo format Lucas wants: "2019,12,07"
       const d = surveyCreatedAt; // make it easier to read
-      const surveyCutoff = `${d.getFullYear()},${(
-        `0${
-          d.getMonth() + 1}`
-      ).slice(-2)},${d.getDate()}`;
+      const surveyCutoff = `${d.getFullYear()},${`0${d.getMonth() + 1}`.slice(
+        -2,
+      )},${d.getDate()}`;
       return surveyCutoff; // ready to sync data
     } catch (e) {
       this.logger.error(e);
@@ -174,7 +167,7 @@ export default class SurveyService {
   ): Promise<{ surveySection: Model | null }> {
     try {
       this.logger.silly('Fetching survey section');
-      const surveySectionRecord = await this.SurveySection.findOne({
+      const surveySectionRecord = await SurveySection.findOne({
         where: { sectionNumber },
       });
       if (!surveySectionRecord) {
@@ -195,7 +188,7 @@ export default class SurveyService {
   ): Promise<{ questionResponses: Model[] | null | any[] }> {
     try {
       // Checking if user has already submitted the survey
-      const responseRecordExists = await this.QuestionResponse.findOne({
+      const responseRecordExists = await QuestionResponse.findOne({
         where: { participantId, surveyId },
       })
         .then((responseRecord: any) => !!responseRecord)
@@ -229,7 +222,7 @@ export default class SurveyService {
         questionResponse[`answer${dataType}`] = question[1].value;
         questionResponses.push(questionResponse);
       }
-      const questionResponseRecords = await this.QuestionResponse.bulkCreate(
+      const questionResponseRecords = await QuestionResponse.bulkCreate(
         questionResponses,
       );
       return { questionResponses: questionResponseRecords };
@@ -251,7 +244,7 @@ export default class SurveyService {
       const questionResponses = [];
       let question: [string, any];
       for (question of Object.entries(dataPayload)) {
-        if (question[0] == 'cards') {
+        if (question[0] === 'cards') {
           this.PostAnkiCardCollection(
             experimentId,
             surveyId,
@@ -282,7 +275,7 @@ export default class SurveyService {
           questionResponses.push(questionResponse);
         }
       }
-      const questionResponseRecords = await this.QuestionResponse.bulkCreate(
+      const questionResponseRecords = await QuestionResponse.bulkCreate(
         questionResponses,
       );
       return { questionResponses: questionResponseRecords };
@@ -292,10 +285,9 @@ export default class SurveyService {
     }
   }
 
-  private async CreateQuestion(surveyId, question) {
+  private async CreateQuestion(surveyId: string, question: [string, any]) {
     const { dataType } = inferDataTypeOf(question[1]);
-    console.log(question);
-    await this.Question.create({
+    await Question.create({
       questionId: question[0],
       key: question[0],
       questionType: 'text', // this is prob bad
@@ -307,7 +299,7 @@ export default class SurveyService {
       note: null,
       question: question[0], // bad and repetitive XD
     });
-    await this.SurveyQuestion.create({
+    await SurveyQuestion.create({
       questionId: question[0],
       surveyId,
     });
@@ -320,17 +312,17 @@ export default class SurveyService {
     participantId: string,
     cards: {},
   ): Promise<{ cardCollection: any }> {
-    const cardCollection = await this.CardCollection.create({
+    const cardCollection = await CardCollection.create({
       experimentId,
       surveyId,
       participantId,
       cards,
-    }).then((cards) => ({ cards }));
+    }).then((c) => ({ cards: c }));
     return { cardCollection };
   }
 
   public async CreateSurvey(
-    experimentId,
+    experimentId: string,
     surveyObj: {
       surveyId: string;
       title: string;
@@ -339,27 +331,12 @@ export default class SurveyService {
       endDate?: string;
       surveyCategory?: string;
       visibility?: string;
-      sections?: {
-        sectionId: string;
-        sectionNumber: number;
-        title: string;
-        description: string | null;
-        questions: {
-          questionId: string;
-          key: string;
-          questionType: string;
-          dataType: string;
-          label: string;
-          rules: string;
-          items: string;
-          required: boolean;
-        }[];
-      }[];
+      sections?: Models.section[];
     },
   ): Promise<{ survey: Model | null }> {
     try {
       this.logger.silly('Creating survey');
-      const surveyRecord = await this.Survey.create({
+      const surveyRecord = await Survey.create({
         surveyId: surveyObj.surveyId,
         title: surveyObj.title,
         description: surveyObj.description,
@@ -372,7 +349,7 @@ export default class SurveyService {
         surveyCategory,
         visibility,
       } = surveyObj;
-      await this.ExperimentSurvey.create({
+      await ExperimentSurvey.create({
         startDate,
         endDate,
         experimentId,
@@ -382,12 +359,12 @@ export default class SurveyService {
       });
 
       for (const section of surveyObj.sections) {
-        await this.SurveySection.update(section, {
+        await SurveySection.update(section, {
           where: { sectionId: section.sectionId },
         });
         for (const question of section.questions) {
-          await this.Question.create(question);
-          await this.SurveyQuestion.create({
+          await Question.create(question);
+          await SurveyQuestion.create({
             questionId: question.questionId,
             surveyId: surveyObj.surveyId,
           });
@@ -406,26 +383,11 @@ export default class SurveyService {
     description?: string;
     startDate: string;
     endDate: string;
-    sections?: {
-      sectionId: string;
-      sectionNumber: number;
-      title: string;
-      description: string | null;
-      questions: {
-        questionId: string;
-        key: string;
-        questionType: string;
-        dataType: string;
-        label: string;
-        rules: string;
-        items: string | any[];
-        required: boolean;
-      }[];
-    }[];
-  }): Promise<{ survey: Model | null }> {
+    sections?: Models.section[];
+  }): Promise<{ survey: Survey | null }> {
     try {
       this.logger.silly('Updating survey');
-      const surveyRecord = await this.Survey.build({
+      const surveyRecord = await Survey.build({
         surveyId: surveyObj.surveyId,
         title: surveyObj.title,
         description: surveyObj.description,
@@ -433,11 +395,11 @@ export default class SurveyService {
       surveyRecord.save();
 
       for (const section of surveyObj.sections) {
-        await this.SurveySection.update(section, {
+        await SurveySection.update(section, {
           where: { sectionId: section.sectionId },
         });
         for (const question of section.questions) {
-          await this.Question.update(question, {
+          await Question.update(question, {
             where: { questionId: question.questionId },
           });
         }

@@ -12,7 +12,7 @@ if (!envFound) {
 
 export default {
   // port: parseInt(process.env.PORT, 10),
-  port: process.env.NODE_ENV == 'development' ? 3000 : 3306,
+  port: process.env.NODE_ENV === 'development' ? 3000 : 3306,
   jwtSecret: process.env.JWT_SECRET,
 
   /**

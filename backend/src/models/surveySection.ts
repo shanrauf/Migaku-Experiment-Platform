@@ -4,7 +4,7 @@ import {
   Model,
   AllowNull,
   ForeignKey,
-  DataType
+  DataType,
 } from 'sequelize-typescript';
 
 import { Survey } from './survey';

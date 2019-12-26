@@ -5,10 +5,10 @@
  * @param {*} next  Express next Function
  */
 const continueIfNotAuthenticated = (req, res, next) => {
-  if (!req.isAuthenticated() && !("jwt" in req.cookies)) {
+  if (!req.isAuthenticated() && !('jwt' in req.cookies)) {
     return next();
   }
-  res.redirect("/dashboard");
+  res.redirect('/dashboard');
 };
 
 export default continueIfNotAuthenticated;

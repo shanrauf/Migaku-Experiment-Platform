@@ -20,8 +20,8 @@ export default async ({ app }: { app: express.Application }) => {
   // Middleware that transforms the raw string of req.body into json
   app.use(
     bodyParser.urlencoded({
-      extended: true
-    })
+      extended: true,
+    }),
   );
   app.use(express.json());
   app.use(cookieParser());
@@ -34,7 +34,7 @@ export default async ({ app }: { app: express.Application }) => {
   // / catch 404 and forward to error handler
   app.use((req, res, next) => {
     const err = new Error('Not Found');
-    err['status'] = 404;
+    err.status = 404;
     next(err);
   });
 
@@ -55,8 +55,8 @@ export default async ({ app }: { app: express.Application }) => {
     res.status(err.status || 500);
     res.json({
       errors: {
-        message: err.message
-      }
+        message: err.message,
+      },
     });
   });
 };

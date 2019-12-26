@@ -1,15 +1,4 @@
-import { Model, ModelCtor } from 'sequelize-typescript';
-import { Participant } from '../../models/participant';
 import { IUser } from '../../interfaces/IUser';
-import { Experiment } from '../../models/experiment';
-import { ExperimentSurvey } from '../../models/intermediary/experimentSurvey';
-import { Survey } from '../../models/survey';
-import { Question } from '../../models/question';
-import { SurveyQuestion } from '../../models/intermediary/surveyQuestion';
-import { QuestionResponse } from '../../models/questionResponse';
-import { SurveySection } from '../../models/surveySection';
-import { CardCollection } from '../../models/cardCollection';
-import { ExperimentParticipant } from '../../models/intermediary/experimentParticipant';
 
 declare global {
   namespace Express {
@@ -19,16 +8,22 @@ declare global {
   }
 
   namespace Models {
-    export type ParticipantModel = ModelCtor<Participant & IUser>;
-    export type ExperimentModel = ModelCtor<Experiment>;
-    export type ExperimentParticipantModel = ModelCtor<ExperimentParticipant>;
-    export type ExperimentSurveyModel = ModelCtor<ExperimentSurvey>;
-    export type CardCollectionModel = ModelCtor<CardCollection>;
-    export type SurveyModel = ModelCtor<Survey>;
-    export type QuestionModel = ModelCtor<Question>;
-    export type SurveySectionModel = ModelCtor<SurveySection>;
-    export type SurveyQuestionModel = ModelCtor<SurveyQuestion>;
-    export type QuestionResponseModel = ModelCtor<QuestionResponse>;
-    export type GenericModel = ModelCtor<Model>;
+    export type section = {
+      sectionId: string;
+      sectionNumber: number;
+      title: string;
+      description: string | null;
+      questions: question[];
+    };
+    export type question = {
+      questionId: string;
+      key: string;
+      questionType: string;
+      dataType: string;
+      label: string;
+      rules: string;
+      items: string | any[];
+      required: boolean;
+    };
   }
 }

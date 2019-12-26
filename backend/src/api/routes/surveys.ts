@@ -87,12 +87,14 @@ export default (app) => {
     );
 
     // respond based on surveyStatus
-    if (surveyStatus == 2) {
+    if (surveyStatus === 2) {
       const surveyLink = 'https://patreon.com/massimmersionapproach';
       return res.json({ status: 2, data: surveyLink }).status(401);
-    } if (surveyStatus == 3) {
+    }
+    if (surveyStatus === 3) {
       return res.json({ status: 3 }).status(404);
-    } if (surveyStatus == 0) {
+    }
+    if (surveyStatus === 0) {
       // email doesn't exist
       return res.json({ status: 0 }).status(404);
     }
@@ -119,7 +121,7 @@ export default (app) => {
     const dataPayload = req.body;
     Reflect.deleteProperty(dataPayload, 'email');
 
-    return await surveyService
+    return surveyService
       .PostAnkiData(experimentId, surveyId, participantId, dataPayload)
       .then(() => res.json({ status: 1 }).status(200));
   });

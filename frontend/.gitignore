@@ -1,18 +1,13 @@
-<<<<<<< HEAD
 .vscode/
-
 node_modules/
-=======
 .vs/
 .vscode/
 .env/
->>>>>>> visualization/master
 
 # Webpack output folder
 dist/
 build/
 
-src/surveyData.json
 node_modules/
 package-lock.json
 

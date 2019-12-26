@@ -1,29 +1,30 @@
 import { Request, Response, Router } from 'express';
-import passport, { PassportStatic } from 'passport';
+import passport from 'passport';
 import jwt from 'jsonwebtoken';
 import Container from 'typedi';
 import AuthService from '../../services/auth';
 import middlewares from '../middlewares';
 
-import config from '../../config';
 import { IUserInputDTO, IUser } from '../../interfaces/IUser';
 import { Participant } from '../../models/participant';
+import LoggerInstance from '../../loaders/logger';
 
 const route = Router();
 
-export default (app) => {
+export default app => {
+  const logger: any = Container.get('logger');
   app.use('/auth', route);
 
   route.post(
     '/signup',
     middlewares.continueIfNotAuthenticated,
     async (req: Request, res: Response, next) => {
-      console.log('Calling Sign-Up endpoint');
+      logger.info('Calling Sign-Up endpoint');
       try {
         const authServiceInstance = Container.get(AuthService);
         const {
           participant,
-          token,
+          token
         }: {
           participant: object;
           token: string;
@@ -35,19 +36,18 @@ export default (app) => {
         res.cookie('jwt', jwt, { httpOnly: true, secure: true });
         return res.status(201).json({ participant, token });
       } catch (e) {
-        console.error('🔥 error: %o', e);
+        logger.error('🔥 error: %o', e);
         return next(e);
       }
-    },
+    }
   );
 
   route.post(
     '/signin',
     middlewares.continueIfNotAuthenticated,
     (req: Request, res: Response, next) => {
-      console.log('Calling Sign-In endpoint');
+      logger.info('Calling Sign-In endpoint');
       try {
-        const passport: PassportStatic = Container.get('passport');
         passport.authenticate(
           'local',
           { session: false },
@@ -57,19 +57,19 @@ export default (app) => {
             }
             const authServiceInstance = Container.get(AuthService);
             const { participant, token } = await authServiceInstance.SignIn(
-              participantRecord.toJSON() as IUser,
+              participantRecord.toJSON() as IUser
             );
             /** assign our jwt to the cookie */
             // res.cookie("jwt", token, { httpOnly: true, secure: true });
             res.cookie('jwt', token, { httpOnly: true });
             return res.status(200).send({ participant, token });
-          },
+          }
         )(req, res);
       } catch (e) {
-        console.error('🔥 error: %o', e);
+        logger.error('🔥 error: %o', e);
         return next(e);
       }
-    },
+    }
   );
 
   /**
@@ -79,13 +79,13 @@ export default (app) => {
     '/logout',
     passport.authenticate('jwt', { session: false }),
     (req: Request, res: Response, next) => {
-      console.log('Calling Sign-Out endpoint');
+      logger.info('Calling Sign-Out endpoint');
       try {
         return res.status(200).end();
       } catch (e) {
-        console.error('🔥 error %o', e);
+        logger.error('🔥 error %o', e);
         return next(e);
       }
-    },
+    }
   );
 };
