@@ -7,7 +7,6 @@ const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const Dotenv = require('dotenv-webpack');
 
 function ifUtil(NODE_ENV) {
   return (dev_value, prod_value) => {
@@ -32,7 +31,6 @@ const plugins = [
     // Do not allow removal of current webpack assets
     protectWebpackAssets: false
   }),
-  new Dotenv(),
   new webpack.EnvironmentPlugin(['NODE_ENV', 'DEBUG']),
   new VueLoaderPlugin(),
   new VuetifyLoaderPlugin(),

@@ -10,7 +10,17 @@ Features:
 
 # Deploy
 
-1. `npm run build in /frontend and /backend`
-2. Copy `/frontend` and `/backend` folders into `/home/ubuntu` (exclude node_modules, include .env files)
-3. `cp -i -r /home/ubuntu/backend /opt` && `cp -i -r /home/ubuntu/frontend /opt` # The reaosn for such a tedious process is because I don't have write access through FileZilla to just drag/drop... So I have to use cp when connnecting to the instance with ssh
-4. In /opt/backend: `sudo npm install --production` && `sudo pm2 start npm -- run start-prod`
+1. Create file called `setup` in instance root directory
+2. Write contents of `install_dependencies.sh` to it
+3. `sudo chmod +x setup` && sudo ./setup
+4. Apply this random PR https://github.com/aws/aws-codedeploy-agent/pull/201
+5. Deploy to master normally (AWS CodePipeline takes care of the rest)
+
+# Todo (in order of priority):
+
+- Complete API design and validation (using Joi)
+- Authentication (including frontend views based on user roles)
+- Continuous deployment pipeline (deploy on every commit/merge to master on Github by cloning the repo)
+- Comprehensive test suite
+- Admin dashboard (view status of site; ability to edit experiments/surveys/participants/etc)
+- Experiment data analytics/visualization

@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar extended extension-height="100" color="#204f70">
+  <v-toolbar extended extension-height="50" color="#204f70">
     <v-btn class="nav-icon" icon>
       <img class="logo" src="@/assets/images/mia.png" alt="MIA Logo" />
     </v-btn>
@@ -13,7 +13,7 @@
       <v-list-item-avatar>
         <img src="@/assets/images/profile.png" alt="Profile Photo" />
       </v-list-item-avatar>
-    </v-toolbar-items> -->
+    </v-toolbar-items>-->
   </v-toolbar>
 </template>
 
