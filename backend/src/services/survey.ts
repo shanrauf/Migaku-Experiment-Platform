@@ -1,10 +1,10 @@
 import { Service, Inject } from 'typedi';
 import winston from 'winston';
-import { Model, Sequelize } from 'sequelize-typescript';
+import { Model } from 'sequelize-typescript';
 import { randomIdGenerator, capitalize, inferDataTypeOf } from '../utils';
 import {
   EventDispatcher,
-  EventDispatcherInterface,
+  EventDispatcherInterface
 } from '../decorators/eventDispatcher';
 import { Participant } from '../models/participant';
 import { ExperimentSurvey } from '../models/intermediary/experimentSurvey';
@@ -15,22 +15,23 @@ import { Question } from '../models/question';
 import { SurveyQuestion } from '../models/intermediary/surveyQuestion';
 import { Experiment } from '../models/experiment';
 import { CardCollection } from '../models/cardCollection';
+import { ISurvey } from '../interfaces/ISurvey';
 
 @Service()
 export default class SurveyService {
   constructor(
     @Inject('logger') private logger: winston.Logger,
-    @EventDispatcher() private eventDispatcher: EventDispatcherInterface,
+    @EventDispatcher() private eventDispatcher: EventDispatcherInterface
   ) {}
 
   questionId;
 
   public async GetSurveys(
-    experimentId?: string,
+    experimentId?: string
   ): Promise<{
-      surveys: any[];
-      totalCount: number;
-    }> {
+    surveys: Survey[];
+    totalCount: number;
+  }> {
     try {
       this.logger.silly('Fetching surveys');
       const surveyRecords = await Survey.findAndCountAll({
@@ -38,14 +39,14 @@ export default class SurveyService {
           {
             model: Experiment,
             attributes: ['experimentId'],
-            where: { experimentId, visibility: 'public' },
-          },
+            where: { experimentId, visibility: 'public' }
+          }
         ],
-        limit: 10,
+        limit: 10
       });
       return {
         surveys: surveyRecords.rows,
-        totalCount: surveyRecords.count,
+        totalCount: surveyRecords.count
       };
     } catch (e) {
       this.logger.error(e);
@@ -53,21 +54,21 @@ export default class SurveyService {
     }
   }
 
-  public async GetSurvey(surveyId: string): Promise<{ survey: any }> {
+  public async GetSurvey(surveyId: string): Promise<{ survey: Survey }> {
     try {
       this.logger.silly(`Fetching survey ${surveyId}`);
-      const surveyRecord = await Survey.findAndCountAll({
+      const surveyRecord = await Survey.findOne({
         include: [
           {
-            model: SurveySection,
+            model: SurveySection
           },
           {
-            model: Question,
-          },
+            model: Question
+          }
         ],
         where: {
-          surveyId,
-        },
+          surveyId
+        }
       });
       if (!surveyRecord) {
         return { survey: null };
@@ -80,14 +81,14 @@ export default class SurveyService {
   }
 
   public async GetLatestSurvey(
-    experimentId: string,
-  ): Promise<{ survey: Model | null }> {
+    experimentId: string
+  ): Promise<{ survey: ExperimentSurvey | null }> {
     try {
       this.logger.silly('Fetching latest survey');
       const surveyRecord = await ExperimentSurvey.findOne({
         where: { visibility: 'public', experimentId },
-        order: [['startDate', 'DESC']],
-      }).then((survey) => survey);
+        order: [['startDate', 'DESC']]
+      }).then(survey => survey);
       if (!surveyRecord) {
         return { survey: null };
       }
@@ -99,16 +100,17 @@ export default class SurveyService {
   }
 
   public async GetSurveyStatus(
+    // this method is horrendously large
     participantId: string,
-    surveyId: string,
+    surveyId: string
   ): Promise<any> {
     try {
       this.logger.silly('Fetching survey status');
       const participantExists = await Participant.findOne({
-        where: { participantId },
+        where: { participantId }
       })
-        .then((participantRecord: any) => !!participantRecord)
-        .catch((e) => {
+        .then(participantRecord => !!participantRecord)
+        .catch(e => {
           this.logger.error(e);
           return 0;
         });
@@ -118,10 +120,10 @@ export default class SurveyService {
       }
 
       const responseRecordExists = await QuestionResponse.findOne({
-        where: { participantId, surveyId },
+        where: { participantId, surveyId }
       })
-        .then((responseRecord: any) => !!responseRecord)
-        .catch((e) => {
+        .then(responseRecord => !!responseRecord)
+        .catch(e => {
           this.logger.error(e);
           throw e;
         });
@@ -131,15 +133,15 @@ export default class SurveyService {
 
       // check if user submitted an attribute that lucas will submit recently; e.x audioTotalTime
       const audioTotalTime: any = await QuestionResponse.findOne({
-        where: { questionId: 'audioTotalTime', participantId },
+        where: { questionId: 'audioTotalTime', participantId }
       });
 
       // check if the time submitted foro that attribute is before the date of the most recent survey
 
       const mostRecentSurveyCreatedAt = await Survey.findOne({
         where: { surveyId },
-        order: [['createdAt', 'DESC']],
-      }).then((survey) => survey.createdAt);
+        order: [['createdAt', 'DESC']]
+      }).then(survey => survey.createdAt);
 
       const mostRecentAnkiSync = +new Date(audioTotalTime).getTime();
 
@@ -149,10 +151,10 @@ export default class SurveyService {
       if (audioTotalTime && mostRecentAnkiSync < surveyCreatedAtTimestamp) {
         return 3; // allready synced
       }
-      // get most recent survey created at timestamp intoo format Lucas wants: "2019,12,07"
+      // get most recent survey created at timestamp into format Lucas wants: "2019,12,07"
       const d = surveyCreatedAt; // make it easier to read
       const surveyCutoff = `${d.getFullYear()},${`0${d.getMonth() + 1}`.slice(
-        -2,
+        -2
       )},${d.getDate()}`;
       return surveyCutoff; // ready to sync data
     } catch (e) {
@@ -163,12 +165,12 @@ export default class SurveyService {
 
   public async GetSurveySection(
     // could redoo this to return a payload w prev and nextSectionId, which can then use to fetch questions
-    sectionNumber: number,
-  ): Promise<{ surveySection: Model | null }> {
+    sectionNumber: number
+  ): Promise<{ surveySection: SurveySection | null }> {
     try {
       this.logger.silly('Fetching survey section');
       const surveySectionRecord = await SurveySection.findOne({
-        where: { sectionNumber },
+        where: { sectionNumber }
       });
       if (!surveySectionRecord) {
         return { surveySection: null };
@@ -184,15 +186,15 @@ export default class SurveyService {
     experimentId: string,
     surveyId: string,
     participantId: string,
-    dataPayload: {},
-  ): Promise<{ questionResponses: Model[] | null | any[] }> {
+    dataPayload: {}
+  ): Promise<{ questionResponses: QuestionResponse[] | null | any[] }> {
     try {
       // Checking if user has already submitted the survey
       const responseRecordExists = await QuestionResponse.findOne({
-        where: { participantId, surveyId },
+        where: { participantId, surveyId }
       })
-        .then((responseRecord: any) => !!responseRecord)
-        .catch((e) => {
+        .then(responseRecord => !!responseRecord)
+        .catch(e => {
           this.logger.error(e);
           throw e;
         });
@@ -216,14 +218,14 @@ export default class SurveyService {
           answerBoolean: null,
           answerVarchar: null,
           answerText: null,
-          answerJSON: null,
+          answerJSON: null
         };
         const dataType = capitalize(question[1].dataType);
         questionResponse[`answer${dataType}`] = question[1].value;
         questionResponses.push(questionResponse);
       }
       const questionResponseRecords = await QuestionResponse.bulkCreate(
-        questionResponses,
+        questionResponses
       );
       return { questionResponses: questionResponseRecords };
     } catch (e) {
@@ -237,8 +239,8 @@ export default class SurveyService {
     experimentId: string,
     surveyId: string,
     participantId: string,
-    dataPayload: {},
-  ): Promise<{ questionResponses: Model[] | null }> {
+    dataPayload: {}
+  ): Promise<{ questionResponses: QuestionResponse[] | null }> {
     try {
       this.logger.silly('Posting survey responses');
       const questionResponses = [];
@@ -249,7 +251,7 @@ export default class SurveyService {
             experimentId,
             surveyId,
             participantId,
-            JSON.parse(question[1]),
+            JSON.parse(question[1])
           );
         } else {
           // need to get dataType and questionId given question key after questioons created once
@@ -269,14 +271,14 @@ export default class SurveyService {
             answerBoolean: null,
             answerVarchar: null,
             answerText: null,
-            answerJSON: null,
+            answerJSON: null
           };
           questionResponse[`answer${dataType}`] = question[1].value;
           questionResponses.push(questionResponse);
         }
       }
       const questionResponseRecords = await QuestionResponse.bulkCreate(
-        questionResponses,
+        questionResponses
       );
       return { questionResponses: questionResponseRecords };
     } catch (e) {
@@ -297,11 +299,11 @@ export default class SurveyService {
       items: null,
       required: true,
       note: null,
-      question: question[0], // bad and repetitive XD
+      question: question[0] // bad and repetitive XD
     });
     await SurveyQuestion.create({
       questionId: question[0],
-      surveyId,
+      surveyId
     });
     return { dataType };
   }
@@ -310,36 +312,28 @@ export default class SurveyService {
     experimentId: string,
     surveyId: string,
     participantId: string,
-    cards: {},
+    cards: {}
   ): Promise<{ cardCollection: any }> {
+    // this method seems overly complicated, but I don't have a test suite yet to change it
     const cardCollection = await CardCollection.create({
       experimentId,
       surveyId,
       participantId,
-      cards,
-    }).then((c) => ({ cards: c }));
+      cards
+    }).then(c => ({ cards: c }));
     return { cardCollection };
   }
 
   public async CreateSurvey(
     experimentId: string,
-    surveyObj: {
-      surveyId: string;
-      title: string;
-      description?: string;
-      startDate?: string;
-      endDate?: string;
-      surveyCategory?: string;
-      visibility?: string;
-      sections?: Models.section[];
-    },
-  ): Promise<{ survey: Model | null }> {
+    surveyObj: ISurvey
+  ): Promise<{ survey: Survey | null }> {
     try {
       this.logger.silly('Creating survey');
       const surveyRecord = await Survey.create({
         surveyId: surveyObj.surveyId,
         title: surveyObj.title,
-        description: surveyObj.description,
+        description: surveyObj.description
       });
 
       const {
@@ -347,7 +341,7 @@ export default class SurveyService {
         startDate,
         endDate,
         surveyCategory,
-        visibility,
+        visibility
       } = surveyObj;
       await ExperimentSurvey.create({
         startDate,
@@ -355,18 +349,18 @@ export default class SurveyService {
         experimentId,
         surveyId,
         surveyCategory,
-        visibility,
+        visibility
       });
 
       for (const section of surveyObj.sections) {
         await SurveySection.update(section, {
-          where: { sectionId: section.sectionId },
+          where: { sectionId: section.sectionId }
         });
         for (const question of section.questions) {
           await Question.create(question);
           await SurveyQuestion.create({
             questionId: question.questionId,
-            surveyId: surveyObj.surveyId,
+            surveyId: surveyObj.surveyId
           });
         }
       }
@@ -377,30 +371,25 @@ export default class SurveyService {
     }
   }
 
-  public async UpdateSurvey(surveyObj: {
-    surveyId: string;
-    title: string;
-    description?: string;
-    startDate: string;
-    endDate: string;
-    sections?: Models.section[];
-  }): Promise<{ survey: Survey | null }> {
+  public async UpdateSurvey(
+    surveyObj: ISurvey
+  ): Promise<{ survey: Survey | null }> {
     try {
       this.logger.silly('Updating survey');
       const surveyRecord = await Survey.build({
         surveyId: surveyObj.surveyId,
         title: surveyObj.title,
-        description: surveyObj.description,
+        description: surveyObj.description
       });
       surveyRecord.save();
 
       for (const section of surveyObj.sections) {
         await SurveySection.update(section, {
-          where: { sectionId: section.sectionId },
+          where: { sectionId: section.sectionId }
         });
         for (const question of section.questions) {
           await Question.update(question, {
-            where: { questionId: question.questionId },
+            where: { questionId: question.questionId }
           });
         }
       }

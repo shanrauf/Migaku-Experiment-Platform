@@ -1,12 +1,10 @@
-import { Request, Response, Router } from 'express';
+import { Request, Response, Router, NextFunction } from 'express';
 import Container from 'typedi';
 import SurveyService from '../../services/survey';
 import ParticipantService from '../../services/participant';
-import { SurveySectionQuestion } from '../../models/intermediary/surveySectionQuestion';
-
 const route = Router({ mergeParams: true });
 
-export default (app) => {
+export default app => {
   app.use('/experiments/:experimentId/surveys', route);
 
   route.get('/', async (req: Request, res: Response) => {
@@ -18,19 +16,23 @@ export default (app) => {
     return res.json(payload).status(200);
   });
 
-  route.post('/', async (req: Request, res: Response) => {
-    // posting an actual survey
-    const surveyService = Container.get(SurveyService);
-    const payload = await surveyService.CreateSurvey(
-      req.params.experimentId,
-      req.body.survey,
-    );
-    if (!payload) {
-      return res.send(401);
+  route.post('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      // posting an actual survey
+      const surveyService = Container.get(SurveyService);
+      const payload = await surveyService.CreateSurvey(
+        req.params.experimentId,
+        req.body.survey
+      );
+      if (!payload) {
+        return res.send(401);
+      }
+      return res
+        .json({ survey: payload.survey, status: 'Survey updated' })
+        .status(200);
+    } catch (err) {
+      next(err); // handles the error, but reveals exactly wht the error was...
     }
-    return res
-      .json({ survey: payload.survey, status: 'Survey updated' })
-      .status(200);
   });
 
   route.put('/', async (req: Request, res: Response) => {
@@ -78,12 +80,12 @@ export default (app) => {
     // convert to partcipantId
     const participantService = Container.get(ParticipantService);
     const participantId = await participantService.GetParticipantIdByEmail(
-      email,
+      email
     );
 
     const surveyStatus = await surveyService.GetSurveyStatus(
       participantId,
-      surveyId,
+      surveyId
     );
 
     // respond based on surveyStatus
@@ -115,7 +117,7 @@ export default (app) => {
     // get participantId from email
     const participantService = Container.get(ParticipantService);
     const participantId = await participantService.GetParticipantIdByEmail(
-      email,
+      email
     );
 
     const dataPayload = req.body;
@@ -132,14 +134,14 @@ export default (app) => {
 
     const participantService = Container.get(ParticipantService);
     const participantId = await participantService.GetParticipantIdByEmail(
-      req.body.email,
+      req.body.email
     );
 
     const payload = await surveyService.PostSurveyResponses(
       experimentId,
       surveyId,
       participantId,
-      req.body.data,
+      req.body.data
     );
     if (!payload.questionResponses) {
       return res.json(payload).status(200);
@@ -167,6 +169,6 @@ export default (app) => {
         return res.status(404);
       }
       return res.json(payload).status(200);
-    },
+    }
   );
 };

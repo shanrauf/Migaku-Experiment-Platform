@@ -6,7 +6,7 @@ import ExperimentService from '../../services/experiment';
 
 const route = Router();
 
-export default (app) => {
+export default app => {
   app.use('/experiments', route);
 
   route.get('/', async (req: Request, res: Response) => {
@@ -21,7 +21,7 @@ export default (app) => {
   route.post('/', async (req: Request, res: Response) => {
     const experimentService = Container.get(ExperimentService);
     const payload = await experimentService.CreateExperiment(
-      req.body.experiment,
+      req.body.experiment
     );
     if (!payload.experiment) {
       return res.status(404);
@@ -41,7 +41,10 @@ export default (app) => {
 
   route.put('/:experimentId', async (req: Request, res: Response) =>
     // custom experimentId
-    res.status(403));
+    res.status(403)
+  );
 
-  route.delete('/:experimentId', async (req: Request, res: Response) => res.status(403));
+  route.delete('/:experimentId', async (req: Request, res: Response) =>
+    res.status(403)
+  );
 };

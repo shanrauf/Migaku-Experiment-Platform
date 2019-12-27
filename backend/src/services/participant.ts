@@ -19,9 +19,9 @@ export default class ParticipantService {
   public async GetParticipants(
     experimentId?: string
   ): Promise<{
-      participants: Model[] | null;
-      totalCount: number;
-    }> {
+    participants: ExperimentParticipant[] | Participant[] | null;
+    totalCount: number;
+  }> {
     this.logger.silly('Fetching participants');
     if (experimentId) {
       const participantRecords = await ExperimentParticipant.findAndCountAll({
@@ -50,14 +50,14 @@ export default class ParticipantService {
     };
   }
 
-  public async GetParticipantIdByEmail(email: string) {
+  public async GetParticipantIdByEmail(email: string): Promise<string> {
     try {
       this.logger.silly('Fetching surveys');
       const participantId = await Participant.findOne({
         where: { email }
       })
         .then((participant: any) => participant.participantId)
-        .catch((e) => {
+        .catch(e => {
           this.logger.error(e);
           throw e;
         });
