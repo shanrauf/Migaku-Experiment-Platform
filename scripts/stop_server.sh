@@ -5,4 +5,4 @@ echo "
   Stopping server
 ----------------------
 "
-cd ../../../../../../backend && sudo pm2 kill
+cd /opt/backend && sudo pm2 kill

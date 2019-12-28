@@ -13,8 +13,9 @@ Features:
 1. Create file called `setup` in instance root directory
 2. Write contents of `install_dependencies.sh` to it
 3. `sudo chmod +x setup` && sudo ./setup
-4. Apply this random PR https://github.com/aws/aws-codedeploy-agent/pull/201
-5. Deploy to master normally (AWS CodePipeline takes care of the rest)
+4. Configure NGINX for frontend and /api proxy
+5. Apply this random PR https://github.com/aws/aws-codedeploy-agent/pull/201
+6. Deploy to master normally (AWS CodePipeline takes care of the rest)
 
 # Todo (in order of priority):
 

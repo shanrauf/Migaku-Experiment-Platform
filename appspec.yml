@@ -4,6 +4,10 @@ files:
   - source: /
     destination: /opt
 hooks:
+  BeforeInstall:
+    - location: scripts/clear_directory.sh
+      timeout: 300
+      runas: root
   AfterInstall:
     - location: scripts/build_project.sh
       timeout: 300

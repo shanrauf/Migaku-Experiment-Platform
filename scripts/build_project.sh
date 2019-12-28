@@ -1,22 +1,12 @@
-#!/usr/bin/env bash
-
-echo "
-----------------------
-  Fetching project
-----------------------
-"
-
-sudo git clone https://github.com/shanrauf/mia-experiment /opt
+#!/bin/bash
 
 echo "
 ----------------------
   Building backend
 ----------------------
 "
-# seems like we start in /opt/codedeploy-agent
-
-sudo cp ../.env ../backend
-cd ../backend && sudo npm install --production
+sudo cp /opt/.env /opt/backend # need to add this to EC2 instance manually
+cd /opt/backend && sudo npm install --production
 sudo npm run build
 
 echo "
@@ -24,5 +14,5 @@ echo "
   Building frontend
 ----------------------
 "
-cd ../frontend && sudo npm install
+cd /opt/frontend && sudo npm install
 sudo npm run build

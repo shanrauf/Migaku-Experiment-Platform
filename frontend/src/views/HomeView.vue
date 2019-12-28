@@ -1,6 +1,6 @@
 <template>
   <div class="landing-container">
-    <h1 style="font-size: 60px">Mass Immersion Approach Foreign Language Experiments</h1>
+    <h1 style="font-size: 60px">MIA Foreign Language Experiments</h1>
 
     <AccountForm />
   </div>
