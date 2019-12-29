@@ -5,7 +5,7 @@ import {
   Model,
   BelongsTo,
   AllowNull,
-  ForeignKey,
+  ForeignKey
 } from 'sequelize-typescript';
 import { Question } from './question';
 import { Experiment } from './experiment';
@@ -40,7 +40,6 @@ export class QuestionResponse extends Model<QuestionResponse> {
   @Column(DataType.STRING(255))
   surveyId: string;
 
-  // @Unique
   @ForeignKey(() => Participant)
   @Column(DataType.STRING(255))
   participantId: string;
