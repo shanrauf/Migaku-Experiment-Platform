@@ -1,5 +1,7 @@
 #!/bin/bash
 # Note: You jut run this once to setup an EC2 instance environment
+# If you had a CD setup where every deploy created fresh/new instances automatically,
+# then you would want to have the CD pipeline run this script for you (since you can't do it manually)
 echo "
 ----------------------
   Installing dependencies
