@@ -4,7 +4,7 @@ import {
   Column,
   Model,
   DataType,
-  AllowNull,
+  AllowNull
 } from 'sequelize-typescript';
 import { Experiment } from '../experiment';
 import { Survey } from '../survey';
@@ -23,7 +23,7 @@ export class ExperimentSurvey extends Model<ExperimentSurvey> {
 
   @AllowNull(true)
   @Column
-  endDate: Date; // can be null too represent TBH or indefinite
+  endDate: Date; // can be null to represent TBD or indefinite
 
   @Column(DataType.STRING(100))
   surveyCategory: string;

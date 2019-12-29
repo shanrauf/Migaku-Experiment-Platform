@@ -18,7 +18,7 @@ export default app => {
 
   route.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // posting an actual survey
+      // Creates a survey
       const surveyService = Container.get(SurveyService);
       const payload = await surveyService.CreateSurvey(
         req.params.experimentId,

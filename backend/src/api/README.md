@@ -15,9 +15,17 @@ Parameters:
 }
 ```
 
+Response:
+
+```
+{
+    experiments: Experiment[]
+}
+```
+
 ### `/experiments` POST (201)
 
-(or `/experiments/:experimentId`) # note validate both experimentId values equal
+(shorthand for `/experiments/:experimentId` POST) # validate url and body experimentId values equal  
 Creates an experiment
 
 Body:
@@ -70,37 +78,26 @@ Body:
 
 ```
 {
-    Experiment?: (any attribute)
-}
-```
-
-### `/experiments/:experimentId/participants` GET (200)
-
-Gets participants registered for experiment
-
-Ressponse:
-
-```
-{
-    Participant[]
+    ...Experiment?: (any attribute)
 }
 ```
 
 ### `/experiments/:experimentId/participants` POST (201)
 
+(or `/experiments/:experimentId:/participants/:participantId`)
 Registers participant for experiment
 
 Response:
 
 ```
 {
-    Participant
+    ...Participant
 }
 ```
 
 ### `/experiments/:experimentId/participants` DELETE (204)
 
-(or `/experiments/:experimentId/participants/:participantId`)
+(or `/experiments/:experimentId/participants/:participantId`)  
 Unregisters participant for experiment
 
 Parameters:
@@ -131,13 +128,14 @@ Response:
 
 ```
 {
-    Survey[]
+    surveys: Survey[]
 }
 ```
 
 ### `/experiments/:experimentId/surveys` POST (201)
 
-Schedules survey to be administered in the experiment (on frontend, if user selects existing surveyId, post here; otherwise, post to /surveys and then here)
+Schedules survey to be administered in the experiment (on frontend, if user selects existing surveyId, post here; otherwise, post to /surveys and then here)  
+(Note I feel like this isn't an ideal route, but it'll do for now)
 
 Body:
 
@@ -155,7 +153,7 @@ Response:
 
 ```
 {
-    Survey[]
+    surveys: Survey[]
 }
 ```
 
@@ -165,12 +163,22 @@ Response:
 
 Gets all participants
 
+Parameters:
+
+```
+{
+    experimentId?: returns participants registered for this experiment
+    surveyId?: returns participants who completed this survey
+    requirements?: comma-delimited string (e.x "completedPRTK=false,knownWordCount=559")
+}
+```
+
 Response:
 
 ```
 
 {
-Participant[]
+    participants: Participant[]
 }
 
 ```
@@ -185,12 +193,12 @@ Body:
 ```
 
 {
-experimentId?: string # Gets all participants who signed up for this experiment
-surveyId?: string # Get all participants who filled out this survey
-description?: string
-startDate?: string (ISO string: "2019-12-14T13:19:44.000Z")
-endDate?: string (ISO string: "2019-12-14T13:19:44.000Z")
-visibility?: string ("public" | "private")
+    experimentId?: string # Gets all participants who signed up for this experiment
+    surveyId?: string # Get all participants who filled out this survey
+    description?: string
+    startDate?: string (ISO string: "2019-12-14T13:19:44.000Z")
+    endDate?: string (ISO string: "2019-12-14T13:19:44.000Z")
+    visibility?: string ("public" | "private")
 }
 
 ```
@@ -200,21 +208,21 @@ Response:
 ```
 
 {
-Participant
+    ...Participant
 }
 
 ```
 
 ### `/participants/:participantId` GET (200)
 
-Gets all participants
+Gets a participant
 
 Response:
 
 ```
 
 {
-Participant[]
+    ...Participant
 }
 
 ```
@@ -227,7 +235,7 @@ Parameters:
 
 ```
 {
-    Participant? (any attribute)
+    ...Participant? (any attribute)
 }
 ```
 
@@ -235,51 +243,7 @@ Response:
 
 ```
 {
-Participant
-}
-
-```
-
-### `/participants/:participantId/experiments` GET (200)
-
-Get experiments that participant is registered for
-
-Parameters:
-
-```
-{}
-```
-
-Response:
-
-```
-{
-Experiment[]
-}
-
-```
-
-### `/participants/:participantId/surveys` GET (200)
-
-Get surveyIds and completion counts of surveys that that participant has filled out before
-
-Response (object[]):
-
-```
-{
-    [{
-        surveyId: string
-        numOfTimesCompleted: int (for individual #, count surveys that hve a questionResponse from participant; maybe globally store # of completions too cuz why not)
-    }
-    ]
-}
-```
-
-Response:
-
-```
-{
-Participant
+    ...Participant
 }
 
 ```
@@ -294,7 +258,9 @@ Parameters:
 
 ```
 {
-    experimentId?: string
+    experimentId?: string # returns surveys that the experiment has administered
+    participantId?: string # returns surveys that the participant has completed
+    surveyId?: string # Returns metadata of just this survey
 }
 ```
 
@@ -302,13 +268,13 @@ Response:
 
 ```
 {
-Survey[]
+    surveys: Survey[] # (metadata e.x title/description/requirements) (if surveyId parameter, this array length is just 1)
 }
 ```
 
 ### `/surveys` POST (200)
 
-Create a survey
+Creates a survey
 
 Body:
 
@@ -317,6 +283,7 @@ Body:
     surveyId?: string # If empty, a random id is generated
     title: string
     description?: string
+    questions: Question[] # must have a sectionId and questionOrder
 }
 ```
 
@@ -324,20 +291,41 @@ Response:
 
 ```
 {
-Survey[]
+    surveys: Survey[]
 }
 ```
 
-## `surveys/:surveyId` (201) POST
+## `/surveys/:surveyId` (200) GET
 
-(Note: This is normally equivalent to /surveys POST, buuut for now it's not...)
-Submits the survey response of a participant # NOTE maybe the better idea is to do /surveys/:surveyId/responses (create a responses "resource"; would make sense for analysis platform too, cuz we query responses);
+Gets the metadata and questions/sections of survey
+
+Parameters:
+
+```
+{
+    sections: sectionId[] // only return these sections/questions (good for pagination for example)
+}
+```
+
+Response:
+
+```
+{
+    ...Survey (questions/sections, metadata, etc)
+}
+```
+
+## `/surveys/:surveyId` (201) POST
+
+(or `/surveys/latest` POST which is self-explanatory)
+Submits the survey response of a participant
 
 Body:
 
 ```
 {
-    participantId: string
-    Question[] # probably just key-value pairs, maybe value type (string, int) as well...
+    participantId: string;
+    experimentId: string
+    questions: Question[] # array of objects with key, value, type (string, int)
 }
 ```
