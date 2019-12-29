@@ -5,7 +5,6 @@ echo "
   Setting up folder directory
 ----------------------
 "
-yum -y update
 
 export app_root=/opt/mia-experiment
 if [ -d "$app_root" ];then
