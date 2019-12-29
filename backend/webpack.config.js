@@ -57,7 +57,7 @@ if (process.env.BUNDLE_ANALYZER) {
 const optimization = {
   minimize: true,
   namedModules: true,
-  runtimeChunk: 'single',
+  // runtimeChunk: 'single',
   noEmitOnErrors: false,
   splitChunks: {
     hidePathInfo: true,

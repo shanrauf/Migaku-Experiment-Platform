@@ -9,6 +9,7 @@
     "start-prod": "cross-env NODE_ENV=production node build/app.js",
     "test": "jest --forceExit",
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
+    "build-tsc": "tsc",
     "force-sync-then-start-prod": "cross-env NODE_ENV=production FORCE_SYNC=true node build/app.js",
     "inspect": "nodemon --inspect src/app.ts",
     "migrate": "npx sequelize-cli db:migrate",
