@@ -100,7 +100,7 @@ export default app => {
       // email doesn't exist
       return res.json({ status: 0 }).status(404);
     }
-    return res.json({ status: 1, data: surveyStatus }).status(200);
+    return res.json({ status: 1, data: surveyStatus }).status(200); // surveyStatus = surveyCuttof here
   });
 
   route.post('/latest', async (req: Request, res: Response) => {

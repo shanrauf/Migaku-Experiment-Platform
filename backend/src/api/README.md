@@ -116,21 +116,15 @@ Response:
 
 ### `/experiments/:experimentId/surveys` GET (200)
 
-Gets surveys administered by experiment
+Redirect to /surveys/:surveyId?experimentId=experimentId
 
-Parameters:
+### `/experiments/:experimentId/surveys/latest` GET (200)
 
-```
-{}
-```
+Redirect to /surveys/latest?experimentId=experimentId
 
-Response:
+### `/experiments/:experimentId/surveys/latest/status?email=email` GET (200)
 
-```
-{
-    surveys: Survey[]
-}
-```
+Returns 0 if email doesn't exist, 1 if readyToSync, 2 if surveyIncomplete, 3 if alreadySubmittedAnkiData (this is a legacy route for Anki implementation)
 
 ### `/experiments/:experimentId/surveys` POST (201)
 
@@ -156,6 +150,10 @@ Response:
     surveys: Survey[]
 }
 ```
+
+## `/experiments/:experimentId/surveys/:surveyId` (POST)
+
+Redirects to `/surveys:surveyId` with experimentId in body (legacy route to support Anki addon implementation)
 
 ## Participants
 
@@ -318,14 +316,17 @@ Response:
 ## `/surveys/:surveyId` (201) POST
 
 (or `/surveys/latest` POST which is self-explanatory)
+(Note this route can be posted to many times with new question key/value pairs; we submit survey here, then submit anki data here)
 Submits the survey response of a participant
 
 Body:
 
 ```
 {
-    participantId: string;
+    <!-- participantId: string; -->
+    email: string (temporary due to Anki addon implementation)
     experimentId: string
-    questions: Question[] # array of objects with key, value, type (string, int)
+    ...questionKeyValuePairs
+    <!-- questions: Question[] # array of objects with key, value, type (string, int) -->
 }
 ```
