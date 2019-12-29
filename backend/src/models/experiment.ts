@@ -6,6 +6,7 @@ import {
   DataType,
   AllowNull,
   HasMany,
+  Default
 } from 'sequelize-typescript';
 import { Participant } from './participant';
 import { ExperimentParticipant } from './intermediary/experimentParticipant';
@@ -21,7 +22,7 @@ export class Experiment extends Model<Experiment> {
     () => Participant,
     () => ExperimentParticipant,
     'experimentId',
-    'participantId',
+    'participantId'
   )
   participants: Participant[];
 
@@ -29,7 +30,7 @@ export class Experiment extends Model<Experiment> {
     () => Survey,
     () => ExperimentSurvey,
     'experimentId',
-    'surveyId',
+    'surveyId'
   )
   surveys: Survey[];
 
@@ -37,7 +38,7 @@ export class Experiment extends Model<Experiment> {
     () => Requirement,
     () => ExperimentRequirement,
     'experimentId',
-    'requirementId',
+    'requirementId'
   )
   requirements: Requirement[];
 
