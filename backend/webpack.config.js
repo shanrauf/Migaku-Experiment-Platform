@@ -100,11 +100,7 @@ module.exports = {
     main: './src/app.ts'
   },
   resolve: {
-    extensions: ['.js', '.ts'],
-    alias: {
-      vue$: 'vue/dist/vue.runtime.js',
-      '@': path.resolve(__dirname, './src')
-    }
+    extensions: ['.js', '.ts']
   },
   module: {
     rules: [
