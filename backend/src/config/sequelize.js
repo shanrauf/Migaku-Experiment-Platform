@@ -10,12 +10,21 @@ module.exports = {
     port: 3306
   },
   test: {
+    // create a script to create the db this config will eventually use
     username: 'root',
     password: null,
-    database: 'database_test',
-    host: '127.0.0.1',
+    database: process.env.DATABASE_NAME,
+    host: 'localhost',
     dialect: 'mysql',
-    port: 3306
+    port: 3306,
+    pool: {
+      max: 5,
+      min: 0,
+      idle: 10000
+    },
+    dialectOptions: {
+      socketPath: '/var/run/mysqld/mysqld.sock'
+    }
   },
   production: {
     username: process.env.ROOT_USER_PROD,

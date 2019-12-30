@@ -11,16 +11,17 @@ async function startServer() {
     res.header('Access-Control-Allow-Origin', '*');
     res.header(
       'Access-Control-Allow-Headers',
-      'Origin, X-Requested-With, Content-Type, Accept',
+      'Origin, X-Requested-With, Content-Type, Accept'
     );
     next();
   });
   await require('./loaders').default({ expressApp: app });
 
-  const port = process.env.NODE_ENV === 'production'
-    ? parseInt(process.env.PORT, 10) || 80
-    : 3000;
-  app.listen(port, (err) => {
+  const port =
+    process.env.NODE_ENV === 'production'
+      ? parseInt(process.env.PORT, 10) || 80
+      : 3000;
+  app.listen(port, err => {
     if (err) {
       Logger.error(err);
       process.exit(1);

@@ -1,7 +1,6 @@
 import express from 'express';
 
-import expressLoader from '../../src/loaders/express';
-
-export const initExpress = () => {
-  return expressLoader({ app: express() });
-};
+import loaders from '../../src/loaders';
+let app = express();
+loaders({ expressApp: app }); // loads "test" sequelize config which is unfinished
+export default app;

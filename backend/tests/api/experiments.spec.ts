@@ -1,7 +1,8 @@
 const moxios = require('moxios');
 const request = require('supertest');
+const axios = require('axios');
 
-import { initExpress } from './index';
+// import app from './index';
 
 // const mockRequest = (params, body) => ({
 //   params,
@@ -14,7 +15,6 @@ import { initExpress } from './index';
 //   res.json = jest.fn().mockReturnValue(res);
 //   return res;
 // };
-
 describe('experiments', () => {
   beforeEach(() => {
     moxios.install();
@@ -22,20 +22,19 @@ describe('experiments', () => {
   afterEach(() => {
     moxios.uninstall();
   });
-  test('/ GET should fetch all MIA experiments', async () => {
-    // moxios.stubRequest(/experiments/, {
-    //   status: 200,
-    //   response: {
-    //     experiments: []
-    //   }
-    // });
-    // const app = initExpress();
-    // await request(app).get('/experiments');
-    // expect(moxios.requests.mostRecent().url).toBe(
-    //   'https://api.github.com/users/HugoDF'
-    // );
-    expect(2).toBe(2);
-  });
+  // test('/ GET should fetch all MIA experiments', async () => {
+  //   moxios.stubRequest('localhost:3000/api/experiments', {
+  //     status: 200,
+  //     response: {
+  //       experiments: []
+  //     }
+  //   });
+  //   await request(app).get('/api/experiments');
+  //   console.log(moxios.requests.mostRecent().url);
+  //   expect(moxios.requests.mostRecent().url).toBe(
+  //     'http://localhost:3000/api/experiments'
+  //   );
+  // });
   test('It should 200 and return experiments that the participant is registered for', async () => {
     // moxios.stubRequest(/experiments/, {
     //   status: 200,
@@ -51,6 +50,5 @@ describe('experiments', () => {
     //   }
     // ]);
     expect(2).toBe(2);
-    test('/ GET', async () => {});
   });
 });
