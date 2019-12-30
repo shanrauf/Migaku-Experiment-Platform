@@ -17,6 +17,7 @@ import { SurveyQuestion } from './intermediary/surveyQuestion';
 import { CardCollection } from './cardCollection';
 import { QuestionResponse } from './questionResponse';
 import { SurveySection } from './surveySection';
+import { SurveyResponse } from './surveyResponse';
 @Table({ modelName: 'Survey', tableName: 'Surveys' })
 export class Survey extends Model<Survey> {
   @BelongsTo(() => Experiment, 'experimentId')
@@ -32,6 +33,9 @@ export class Survey extends Model<Survey> {
 
   @HasMany(() => SurveySection, 'surveyId')
   surveySections: SurveySection[];
+
+  @HasMany(() => SurveyResponse, 'surveyId')
+  surveyResponses: SurveySection[];
 
   @HasMany(() => QuestionResponse, 'surveyId')
   questionResponses: QuestionResponse[];

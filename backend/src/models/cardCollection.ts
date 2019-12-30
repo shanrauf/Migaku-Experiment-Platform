@@ -12,6 +12,7 @@ import {
 import { Survey } from './survey';
 import { Experiment } from './experiment';
 import { Participant } from './participant';
+import { SurveyResponse } from './surveyResponse';
 
 @Table({ modelName: 'CardCollection', tableName: 'CardCollections' })
 export class CardCollection extends Model<CardCollection> {
@@ -23,6 +24,9 @@ export class CardCollection extends Model<CardCollection> {
 
   @BelongsTo(() => Participant, 'participantId')
   participant: Participant;
+
+  @BelongsTo(() => SurveyResponse, 'responseId')
+  surveyResponse: SurveyResponse;
 
   @AutoIncrement
   @Column({ type: DataType.INTEGER.UNSIGNED, primaryKey: true })
@@ -39,6 +43,10 @@ export class CardCollection extends Model<CardCollection> {
   @ForeignKey(() => Participant)
   @Column(DataType.STRING(255))
   participantId: string;
+
+  @ForeignKey(() => SurveyResponse)
+  @Column(DataType.STRING(255))
+  responseId: string;
 
   @Column(DataType.JSON)
   cards: string;
