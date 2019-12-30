@@ -43,9 +43,10 @@ Body:
 
 ### `/experiments` DELETE (204)
 
+(shorthand for `/experiments/:experimentId`)
 Deletes an experiment
 
-Parameters:
+Body:
 
 ```
 {
@@ -82,10 +83,22 @@ Body:
 }
 ```
 
+### `/experiments/:experimentId/participants` GET (200)
+
+Redirects to `/participants?experimentId=experimentId`
+
 ### `/experiments/:experimentId/participants` POST (201)
 
-(or `/experiments/:experimentId:/participants/:participantId`)
+(shorthand for `/experiments/:experimentId:/participants/:participantId`)
 Registers participant for experiment
+
+Body:
+
+```
+{
+    participantId: string;
+}
+```
 
 Response:
 
@@ -97,10 +110,10 @@ Response:
 
 ### `/experiments/:experimentId/participants` DELETE (204)
 
-(or `/experiments/:experimentId/participants/:participantId`)  
+(shorthand for `/experiments/:experimentId/participants/:participantId`)  
 Unregisters participant for experiment
 
-Parameters:
+Body:
 
 ```
 {
@@ -114,32 +127,43 @@ Response:
 {}
 ```
 
-### `/experiments/:experimentId/surveys` GET (200)
+#### `/experiments/:experimentId/surveys` GET (200)
 
-Redirect to /surveys/:surveyId?experimentId=experimentId
+Get all surveys
 
-### `/experiments/:experimentId/surveys/latest` GET (200)
+Parameters:
 
-Redirect to /surveys/latest?experimentId=experimentId
+```
+{
+    participantId?: string # returns surveys that the participant has completed
+    surveyId?: string # Returns metadata of specific survey
+}
+```
 
-### `/experiments/:experimentId/surveys/latest/status?email=email` GET (200)
+Response:
 
-Returns 0 if email doesn't exist, 1 if readyToSync, 2 if surveyIncomplete, 3 if alreadySubmittedAnkiData (this is a legacy route for Anki implementation)
+```
+{
+    surveys: Survey[] # (metadata e.x title/description/requirements) (if surveyId parameter, this array length is just 1)
+}
+```
 
-### `/experiments/:experimentId/surveys` POST (201)
+### `/experiments/:experimentId/surveys` POST (200)
 
-Schedules survey to be administered in the experiment (on frontend, if user selects existing surveyId, post here; otherwise, post to /surveys and then here)  
-(Note I feel like this isn't an ideal route, but it'll do for now)
+Creates a survey
 
 Body:
 
 ```
 {
-    surveyId: string
+    surveyId?: string # If empty, a random id is generated
+    title: string
+    description?: string
     startDate: string (ISO string)
     endDate?: string (ISO string)
-    surveyCategory: string (any string of your choice)
+    surveyCategory: string (any string of your choice; e.x "regular", "initial", "mid-experiment")
     visibility: string ("public" | "private")
+    sections: SurveySection[] # contains Question[]
 }
 ```
 
@@ -150,6 +174,60 @@ Response:
     surveys: Survey[]
 }
 ```
+
+### `/experiments/:experimentId/surveys/latest` GET (200)
+
+Finds latest survey, then redirects to /experiments/:experimentId/surveys/:surveyId (GET)
+
+## `/experiments/:experimentId/surveys/:surveyId` (200) GET
+
+Gets the metadata and questions/sections of survey
+
+Parameters:
+
+```
+{
+    sections?: sectionId[] // only return these sections/questions (good for pagination for example)
+}
+```
+
+Response:
+
+```
+{
+    ...Survey (questions/sections, metadata, etc)
+}
+```
+
+## `/experiments/:experimentId/surveys/latest` (201) POST
+
+Finds latest survey, then redirects to /experiments/:experimentId/surveys/:surveyId (POST)
+
+## `/experiments/:experimentId/surveys/:surveyId` (201) POST
+
+(Note this route can be posted to many times with new question key/value pairs; we submit survey here, then submit anki data here; if we don't want this, then validate that payload has every question from survey)
+Submits the survey response of a participant
+
+Body:
+
+```
+{
+    email: string (temporary due to Anki addon implementation)
+    experimentId: string
+    ...questionKeyValuePairs (temporary due to Anki implementation)
+}
+```
+
+<!-- Ideally:
+{
+participantId: string;
+experimentId: string
+questions: Question[] # array of objects with key, value, type (string, int)
+} -->
+
+### `/experiments/:experimentId/surveys/latest/status?email=email` GET (200)
+
+Returns 0 if email doesn't exist, 1 if readyToSync, 2 if surveyIncomplete, 3 if alreadySubmittedAnkiData (this is a legacy route for Anki implementation)
 
 ## `/experiments/:experimentId/surveys/latest` (POST)
 
@@ -244,91 +322,6 @@ Response:
     ...Participant
 }
 
-```
-
-## Surveys
-
-### `/surveys` GET (200)
-
-Get all surveys
-
-Parameters:
-
-```
-{
-    experimentId?: string # returns surveys that the experiment has administered
-    participantId?: string # returns surveys that the participant has completed
-    surveyId?: string # Returns metadata of just this survey
-}
-```
-
-Response:
-
-```
-{
-    surveys: Survey[] # (metadata e.x title/description/requirements) (if surveyId parameter, this array length is just 1)
-}
-```
-
-### `/surveys` POST (200)
-
-Creates a survey
-
-Body:
-
-```
-{
-    surveyId?: string # If empty, a random id is generated
-    title: string
-    description?: string
-    sections: SurveySection[]
-}
-```
-
-Response:
-
-```
-{
-    surveys: Survey[]
-}
-```
-
-## `/surveys/:surveyId` (200) GET
-
-Gets the metadata and questions/sections of survey
-
-Parameters:
-
-```
-{
-    sections: sectionId[] // only return these sections/questions (good for pagination for example)
-}
-```
-
-Response:
-
-```
-{
-    ...Survey (questions/sections, metadata, etc)
-}
-```
-
-## `/surveys/:surveyId` (201) POST
-
-(or `/surveys/latest` POST which is self-explanatory)
-(Note this route can be posted to many times with new question key/value pairs; we submit survey here, then submit anki data here)
-Submits the survey response of a participant
-
-Body:
-
-```
-{
-    <!-- participantId: string; -->
-    email: string (temporary due to Anki addon implementation)
-    experimentId: string
-    ...questionKeyValuePairs
-    <!-- questions: Question[] # array of objects with key, value, type (string, int) -->
-}
 ```
 
 # Problems
