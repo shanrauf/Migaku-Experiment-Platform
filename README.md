@@ -29,7 +29,8 @@ Using CodePipeline and CodeDeploy, the code is automatically deployed when you p
 
 - Complete API design and validation (using Joi)
 - Authentication (including frontend views based on user roles)
-- Create more complex and organized seeders to test more complex model relationships
+- Secure API (currently, anyone can make any request) via authentication
+- Create more complex and organized seeders to test more complex queries & model relationships
 - Comprehensive test suite
 - Admin dashboard (view status of site; ability to edit experiments/surveys/participants/etc)
 - Experiment data analytics/visualization

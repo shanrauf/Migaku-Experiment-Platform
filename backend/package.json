@@ -7,7 +7,7 @@
     "start": "cross-env NODE_ENV=development nodemon",
     "setup-dev": "npm run force-sync-dev && npm run seed",
     "start-prod": "cross-env NODE_ENV=production node build/app.js",
-    "test": "jest --forceExit",
+    "test": "jest --detectOpenHandles",
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
     "build-tsc": "tsc",
     "force-sync-then-start-prod": "cross-env NODE_ENV=production FORCE_SYNC=true node build/app.js",
@@ -24,6 +24,7 @@
   "author": "Shan Rauf",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.19.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "celebrate": "^11.0.0",
@@ -53,6 +54,7 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.7.7",
     "@types/bcryptjs": "^2.4.2",
     "@types/bluebird": "^3.5.29",
     "@types/express": "^4.17.2",
@@ -64,6 +66,7 @@
     "@types/validator": "^12.0.1",
     "@typescript-eslint/eslint-plugin": "^2.13.0",
     "@typescript-eslint/parser": "^2.13.0",
+    "babel-jest": "^24.9.0",
     "clean-webpack-plugin": "^3.0.0",
     "eslint": "^6.1.0",
     "eslint-config-airbnb": "^18.0.1",
@@ -73,8 +76,10 @@
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-hooks": "^1.7.0",
+    "faker": "^4.1.0",
     "friendly-errors-webpack-plugin": "^1.7.0",
     "jest": "^24.9.0",
+    "moxios": "^0.4.0",
     "nodemon": "^2.0.1",
     "prettier": "^1.19.1",
     "supertest": "^4.0.2",
