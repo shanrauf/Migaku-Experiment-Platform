@@ -4,12 +4,14 @@ import {
   Column,
   Model,
   DataType,
+  CreatedAt,
+  UpdatedAt
 } from 'sequelize-typescript';
 import { SurveySection } from '../surveySection';
 import { Question } from '../question';
 @Table({
   modelName: 'SurveySectionQuestion',
-  tableName: 'SurveySectionQuestions',
+  tableName: 'SurveySectionQuestions'
 })
 export class SurveySectionQuestion extends Model<SurveySectionQuestion> {
   @ForeignKey(() => SurveySection)
@@ -22,4 +24,12 @@ export class SurveySectionQuestion extends Model<SurveySectionQuestion> {
 
   @Column(DataType.TINYINT)
   questionOrder: number;
+
+  @CreatedAt
+  @Column
+  createdAt: Date;
+
+  @UpdatedAt
+  @Column
+  updatedAt: Date;
 }

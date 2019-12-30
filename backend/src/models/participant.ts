@@ -7,6 +7,8 @@ import {
   AllowNull,
   HasMany,
   Unique,
+  UpdatedAt,
+  CreatedAt
 } from 'sequelize-typescript';
 import { Experiment } from './experiment';
 import { ExperimentParticipant } from './intermediary/experimentParticipant';
@@ -19,7 +21,7 @@ export class Participant extends Model<Participant> {
     () => Experiment,
     () => ExperimentParticipant,
     'participantId',
-    'experimentId',
+    'experimentId'
   )
   experiments: Experiment[];
 
@@ -54,4 +56,12 @@ export class Participant extends Model<Participant> {
 
   @Column
   lastLogin: Date;
+
+  @CreatedAt
+  @Column
+  createdAt: Date;
+
+  @UpdatedAt
+  @Column
+  updatedAt: Date;
 }

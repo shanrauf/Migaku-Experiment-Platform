@@ -6,6 +6,8 @@ import {
   BelongsToMany,
   HasMany,
   AllowNull,
+  UpdatedAt,
+  CreatedAt
 } from 'sequelize-typescript';
 import { Experiment } from './experiment';
 import { ExperimentSurvey } from './intermediary/experimentSurvey';
@@ -20,7 +22,7 @@ export class Survey extends Model<Survey> {
     () => Experiment,
     () => ExperimentSurvey,
     'surveyId',
-    'experimentId',
+    'experimentId'
   )
   surveys: Survey[];
 
@@ -28,7 +30,7 @@ export class Survey extends Model<Survey> {
     () => Question,
     () => SurveyQuestion,
     'surveyId',
-    'questionId',
+    'questionId'
   )
   questions: Question[];
 
@@ -50,4 +52,12 @@ export class Survey extends Model<Survey> {
   @AllowNull(true)
   @Column(DataType.STRING(1500))
   description: string;
+
+  @CreatedAt
+  @Column
+  createdAt: Date;
+
+  @UpdatedAt
+  @Column
+  updatedAt: Date;
 }

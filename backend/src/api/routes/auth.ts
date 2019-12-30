@@ -5,7 +5,10 @@ import Container from 'typedi';
 import AuthService from '../../services/auth';
 import middlewares from '../middlewares';
 
-import { IUserInputDTO, IUser } from '../../interfaces/IUser';
+import {
+  IParticipant,
+  IParticipantSignupDTO
+} from '../../interfaces/IParticipant';
 import { Participant } from '../../models/participant';
 import LoggerInstance from '../../loaders/logger';
 
@@ -28,7 +31,7 @@ export default app => {
         }: {
           participant: object;
           token: string;
-        } = await authServiceInstance.SignUp(req.body as IUserInputDTO);
+        } = await authServiceInstance.SignUp(req.body as IParticipantSignupDTO);
         if (!participant) {
           return res.status(403).json({ participant, token });
         }
@@ -57,7 +60,7 @@ export default app => {
             }
             const authServiceInstance = Container.get(AuthService);
             const { participant, token } = await authServiceInstance.SignIn(
-              participantRecord.toJSON() as IUser
+              participantRecord.toJSON() as IParticipant
             );
             /** assign our jwt to the cookie */
             // res.cookie("jwt", token, { httpOnly: true, secure: true });

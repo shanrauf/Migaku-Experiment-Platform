@@ -4,6 +4,8 @@ import {
   Column,
   Model,
   DataType,
+  UpdatedAt,
+  CreatedAt
 } from 'sequelize-typescript';
 import { Survey } from '../survey';
 import { Question } from '../question';
@@ -16,4 +18,12 @@ export class SurveyQuestion extends Model<SurveyQuestion> {
   @ForeignKey(() => Question)
   @Column(DataType.STRING(255))
   questionId: string;
+
+  @CreatedAt
+  @Column
+  createdAt: Date;
+
+  @UpdatedAt
+  @Column
+  updatedAt: Date;
 }

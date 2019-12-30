@@ -5,6 +5,8 @@ import {
   AllowNull,
   ForeignKey,
   DataType,
+  UpdatedAt,
+  CreatedAt
 } from 'sequelize-typescript';
 
 import { Survey } from './survey';
@@ -27,4 +29,12 @@ export class SurveySection extends Model<SurveySection> {
   @AllowNull(true)
   @Column(DataType.STRING(1500))
   description: string;
+
+  @CreatedAt
+  @Column
+  createdAt: Date;
+
+  @UpdatedAt
+  @Column
+  updatedAt: Date;
 }

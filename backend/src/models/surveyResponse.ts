@@ -5,16 +5,16 @@ import {
   Model,
   BelongsTo,
   ForeignKey,
-  AutoIncrement,
   UpdatedAt,
-  CreatedAt
+  CreatedAt,
+  HasMany
 } from 'sequelize-typescript';
-import { Survey } from './survey';
 import { Experiment } from './experiment';
+import { Survey } from './survey';
 import { Participant } from './participant';
-
-@Table({ modelName: 'CardCollection', tableName: 'CardCollections' })
-export class CardCollection extends Model<CardCollection> {
+import { QuestionResponse } from './questionResponse';
+@Table({ modelName: 'SurveyResponse', tableName: 'SurveyResponses' })
+export class SurveyResponse extends Model<SurveyResponse> {
   @BelongsTo(() => Experiment, 'experimentId')
   experiment: Experiment;
 
@@ -24,9 +24,11 @@ export class CardCollection extends Model<CardCollection> {
   @BelongsTo(() => Participant, 'participantId')
   participant: Participant;
 
-  @AutoIncrement
-  @Column({ type: DataType.INTEGER.UNSIGNED, primaryKey: true })
-  id: number;
+  @HasMany(() => QuestionResponse, 'responseId')
+  questionResponses: QuestionResponse[];
+
+  @Column({ type: DataType.STRING(255), primaryKey: true })
+  responseId: string;
 
   @ForeignKey(() => Experiment)
   @Column(DataType.STRING(255))
@@ -39,9 +41,6 @@ export class CardCollection extends Model<CardCollection> {
   @ForeignKey(() => Participant)
   @Column(DataType.STRING(255))
   participantId: string;
-
-  @Column(DataType.JSON)
-  cards: string;
 
   @CreatedAt
   @Column

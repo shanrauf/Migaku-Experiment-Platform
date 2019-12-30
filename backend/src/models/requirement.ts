@@ -6,6 +6,8 @@ import {
   DataType,
   AllowNull,
   Unique,
+  CreatedAt,
+  UpdatedAt
 } from 'sequelize-typescript';
 import { Experiment } from './experiment';
 import { ExperimentRequirement } from './intermediary/experimentRequirement';
@@ -16,7 +18,7 @@ export class Requirement extends Model<Requirement> {
     () => Experiment,
     () => ExperimentRequirement,
     'requirementId',
-    'experimentId',
+    'experimentId'
   )
   experiments: Experiment[];
 
@@ -33,4 +35,12 @@ export class Requirement extends Model<Requirement> {
   @AllowNull(true)
   @Column(DataType.STRING(1000))
   image: string; // URL, can be null
+
+  @CreatedAt
+  @Column
+  createdAt: Date;
+
+  @UpdatedAt
+  @Column
+  updatedAt: Date;
 }

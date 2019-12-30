@@ -4,12 +4,19 @@ import {
   Column,
   Model,
   DataType,
-  AllowNull
+  AllowNull,
+  HasMany,
+  CreatedAt,
+  UpdatedAt
 } from 'sequelize-typescript';
 import { Experiment } from '../experiment';
 import { Survey } from '../survey';
+import { SurveyResponse } from '../surveyResponse';
 @Table({ modelName: 'ExperimentSurvey', tableName: 'ExperimentSurveys' })
 export class ExperimentSurvey extends Model<ExperimentSurvey> {
+  @HasMany(() => SurveyResponse)
+  surveyResponses: SurveyResponse[];
+
   @ForeignKey(() => Experiment)
   @Column(DataType.STRING(255))
   experimentId: string;
@@ -30,4 +37,12 @@ export class ExperimentSurvey extends Model<ExperimentSurvey> {
 
   @Column(DataType.STRING(25))
   visibility: string;
+
+  @CreatedAt
+  @Column
+  createdAt!: Date;
+
+  @UpdatedAt
+  @Column
+  updatedAt: Date;
 }

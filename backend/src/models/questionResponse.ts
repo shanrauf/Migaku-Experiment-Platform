@@ -5,12 +5,16 @@ import {
   Model,
   BelongsTo,
   AllowNull,
-  ForeignKey
+  ForeignKey,
+  AutoIncrement,
+  UpdatedAt,
+  CreatedAt
 } from 'sequelize-typescript';
 import { Question } from './question';
 import { Experiment } from './experiment';
 import { Survey } from './survey';
 import { Participant } from './participant';
+import { SurveyResponse } from './surveyResponse';
 @Table({ modelName: 'QuestionResponse', tableName: 'QuestionResponses' })
 export class QuestionResponse extends Model<QuestionResponse> {
   @BelongsTo(() => Experiment, 'experimentId')
@@ -25,12 +29,20 @@ export class QuestionResponse extends Model<QuestionResponse> {
   @BelongsTo(() => Question, 'questionId')
   question: Question;
 
-  @Column({ type: DataType.STRING(255), primaryKey: true })
-  responseId: string;
+  @BelongsTo(() => SurveyResponse, 'responseId')
+  surveyResponse: SurveyResponse;
+
+  @AutoIncrement
+  @Column({ type: DataType.INTEGER.UNSIGNED, primaryKey: true })
+  id: number;
 
   @ForeignKey(() => Question)
   @Column(DataType.STRING(255))
   questionId: string;
+
+  @ForeignKey(() => SurveyResponse)
+  @Column(DataType.STRING(255))
+  responseId: string;
 
   @ForeignKey(() => Experiment)
   @Column(DataType.STRING(255))
@@ -71,4 +83,12 @@ export class QuestionResponse extends Model<QuestionResponse> {
   @AllowNull(true)
   @Column(DataType.JSON)
   answerJSON: string;
+
+  @CreatedAt
+  @Column
+  createdAt: Date;
+
+  @UpdatedAt
+  @Column
+  updatedAt: Date;
 }

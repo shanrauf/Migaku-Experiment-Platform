@@ -7,6 +7,8 @@ import {
   HasMany,
   AllowNull,
   Unique,
+  UpdatedAt,
+  CreatedAt
 } from 'sequelize-typescript';
 import { Survey } from './survey';
 import { SurveyQuestion } from './intermediary/surveyQuestion';
@@ -17,7 +19,7 @@ export class Question extends Model<Question> {
     () => Survey,
     () => SurveyQuestion,
     'questionId',
-    'surveyId',
+    'surveyId'
   )
   surveys: Survey[];
 
@@ -58,4 +60,12 @@ export class Question extends Model<Question> {
 
   @Column(DataType.STRING(500))
   question: string;
+
+  @CreatedAt
+  @Column
+  createdAt: Date;
+
+  @UpdatedAt
+  @Column
+  updatedAt: Date;
 }

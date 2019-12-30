@@ -5,12 +5,14 @@ import {
   Model,
   DataType,
   AllowNull,
+  CreatedAt,
+  UpdatedAt
 } from 'sequelize-typescript';
 import { Experiment } from '../experiment';
 import { Participant } from '../participant';
 @Table({
   modelName: 'ExperimentParticipant',
-  tableName: 'ExperimentParticipants',
+  tableName: 'ExperimentParticipants'
 })
 export class ExperimentParticipant extends Model<ExperimentParticipant> {
   @ForeignKey(() => Experiment)
@@ -27,4 +29,12 @@ export class ExperimentParticipant extends Model<ExperimentParticipant> {
   @AllowNull(true)
   @Column
   dropoutDate: Date; // can be null
+
+  @CreatedAt
+  @Column
+  createdAt: Date;
+
+  @UpdatedAt
+  @Column
+  updatedAt: Date;
 }

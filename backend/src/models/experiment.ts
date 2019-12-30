@@ -6,7 +6,9 @@ import {
   DataType,
   AllowNull,
   HasMany,
-  Default
+  Default,
+  UpdatedAt,
+  CreatedAt
 } from 'sequelize-typescript';
 import { Participant } from './participant';
 import { ExperimentParticipant } from './intermediary/experimentParticipant';
@@ -67,4 +69,12 @@ export class Experiment extends Model<Experiment> {
 
   @Column(DataType.STRING(25))
   visibility: string;
+
+  @CreatedAt
+  @Column
+  createdAt: Date;
+
+  @UpdatedAt
+  @Column
+  updatedAt: Date;
 }

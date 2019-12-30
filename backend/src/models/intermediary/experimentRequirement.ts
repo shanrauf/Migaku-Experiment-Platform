@@ -5,12 +5,14 @@ import {
   Model,
   DataType,
   AllowNull,
+  CreatedAt,
+  UpdatedAt
 } from 'sequelize-typescript';
 import { Experiment } from '../experiment';
 import { Requirement } from '../requirement';
 @Table({
   modelName: 'ExperimentRequirement',
-  tableName: 'ExperimentRequirements',
+  tableName: 'ExperimentRequirements'
 })
 export class ExperimentRequirement extends Model<ExperimentRequirement> {
   @ForeignKey(() => Experiment)
@@ -30,4 +32,12 @@ export class ExperimentRequirement extends Model<ExperimentRequirement> {
 
   @Column(DataType.STRING(255))
   value: string; // can be null, converted based on requirement dataType
+
+  @CreatedAt
+  @Column
+  createdAt!: Date;
+
+  @UpdatedAt
+  @Column
+  updatedAt: Date;
 }

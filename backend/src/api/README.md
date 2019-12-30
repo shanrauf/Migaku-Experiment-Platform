@@ -281,7 +281,7 @@ Body:
     surveyId?: string # If empty, a random id is generated
     title: string
     description?: string
-    questions: Question[] # must have a sectionId and questionOrder
+    sections: SurveySection[]
 }
 ```
 
