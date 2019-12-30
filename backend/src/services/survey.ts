@@ -7,7 +7,6 @@ import {
   EventDispatcherInterface
 } from '../decorators/eventDispatcher';
 import { Participant } from '../models/participant';
-import { ExperimentSurvey } from '../models/intermediary/experimentSurvey';
 import { QuestionResponse } from '../models/questionResponse';
 import { Survey } from '../models/survey';
 import { SurveySection } from '../models/surveySection';
@@ -83,10 +82,10 @@ export default class SurveyService {
 
   public async GetLatestSurvey(
     experimentId: string
-  ): Promise<{ survey: ExperimentSurvey | null }> {
+  ): Promise<{ survey: Survey | null }> {
     try {
       this.logger.silly('Fetching latest survey');
-      const surveyRecord = await ExperimentSurvey.findOne({
+      const surveyRecord = await Survey.findOne({
         where: { visibility: 'public', experimentId },
         order: [['startDate', 'DESC']]
       }).then(survey => survey);
@@ -342,24 +341,22 @@ export default class SurveyService {
   ): Promise<{ survey: Survey | null }> {
     try {
       this.logger.silly('Creating survey');
-      const surveyRecord = await Survey.create({
-        surveyId: surveyObj.surveyId,
-        title: surveyObj.title,
-        description: surveyObj.description
-      });
-
       const {
         surveyId,
+        title,
+        description,
         startDate,
         endDate,
         surveyCategory,
         visibility
       } = surveyObj;
-      await ExperimentSurvey.create({
+      const surveyRecord = await Survey.create({
+        surveyId,
+        experimentId,
+        title,
+        description,
         startDate,
         endDate,
-        experimentId,
-        surveyId,
         surveyCategory,
         visibility
       });

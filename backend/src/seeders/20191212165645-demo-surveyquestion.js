@@ -23,6 +23,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('surveyquestions', null, {});
+    return queryInterface.bulkDelete('SurveyQuestions', null, {});
   }
 };

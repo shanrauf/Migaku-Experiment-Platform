@@ -151,9 +151,9 @@ Response:
 }
 ```
 
-## `/experiments/:experimentId/surveys/:surveyId` (POST)
+## `/experiments/:experimentId/surveys/latest` (POST)
 
-Redirects to `/surveys:surveyId` with experimentId in body (legacy route to support Anki addon implementation)
+Finds latest survey, then POSTs to `/surveys:surveyId` with experimentId in body (legacy route to support Anki addon implementation)
 
 ## Participants
 
@@ -330,3 +330,17 @@ Body:
     <!-- questions: Question[] # array of objects with key, value, type (string, int) -->
 }
 ```
+
+# Problems
+
+## 1
+
+I am trying to figure out the how to design filtering parameters for a GET request to /experiments
+
+Example queries I would want to run but don't know how to design query parameters for:
+
+1.  All experiments that haven't started yet, but they are going to start sometime between today (12-09-19) and a week from now (12-16-19)
+
+2.  All experiments that haven't
+
+startFrom, startUntil, endFrom, endUntil

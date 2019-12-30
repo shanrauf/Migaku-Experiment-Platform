@@ -12,6 +12,7 @@ import { SurveySection } from './surveySection';
 
 // intermediary tables
 import intermediaryTables from './intermediary';
+import { SurveyResponse } from './surveyResponse';
 
 const models: ModelCtor[] = [
   Participant,
@@ -22,7 +23,8 @@ const models: ModelCtor[] = [
   SurveySection,
   Question,
   CardCollection,
-  ...intermediaryTables,
+  SurveyResponse,
+  ...intermediaryTables
 ];
 
 export default models;

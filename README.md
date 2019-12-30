@@ -29,7 +29,7 @@ Using CodePipeline and CodeDeploy, the code is automatically deployed when you p
 
 - Complete API design and validation (using Joi)
 - Authentication (including frontend views based on user roles)
-- Continuous deployment pipeline (deploy on every commit/merge to master on Github by cloning the repo)
+- Create more complex and organized seeders to test more complex model relationships
 - Comprehensive test suite
 - Admin dashboard (view status of site; ability to edit experiments/surveys/participants/etc)
 - Experiment data analytics/visualization

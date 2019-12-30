@@ -15,7 +15,6 @@ import { ExperimentParticipant } from './intermediary/experimentParticipant';
 import { Requirement } from './requirement';
 import { ExperimentRequirement } from './intermediary/experimentRequirement';
 import { Survey } from './survey';
-import { ExperimentSurvey } from './intermediary/experimentSurvey';
 import { CardCollection } from './cardCollection';
 import { QuestionResponse } from './questionResponse';
 @Table({ modelName: 'Experiment', tableName: 'Experiments' })
@@ -29,20 +28,15 @@ export class Experiment extends Model<Experiment> {
   participants: Participant[];
 
   @BelongsToMany(
-    () => Survey,
-    () => ExperimentSurvey,
-    'experimentId',
-    'surveyId'
-  )
-  surveys: Survey[];
-
-  @BelongsToMany(
     () => Requirement,
     () => ExperimentRequirement,
     'experimentId',
     'requirementId'
   )
   requirements: Requirement[];
+
+  @HasMany(() => Survey, 'experimentId')
+  surveys: Survey[];
 
   @HasMany(() => QuestionResponse, 'experimentId')
   questionResponses: QuestionResponse[];

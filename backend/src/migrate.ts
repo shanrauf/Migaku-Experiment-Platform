@@ -10,5 +10,5 @@ sequelizeLoader()
     });
   })
   .catch(() => {
-    throw new Error('Failed to force sync the database');
+    console.error('Failed to force sync the database');
   });

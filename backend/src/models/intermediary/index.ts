@@ -2,16 +2,14 @@
 
 import { ExperimentParticipant } from './experimentParticipant';
 import { ExperimentRequirement } from './experimentRequirement';
-import { ExperimentSurvey } from './experimentSurvey';
 import { SurveyQuestion } from './surveyQuestion';
 import { SurveySectionQuestion } from './surveySectionQuestion';
 
 const intermediaryTables = [
   ExperimentParticipant,
-  ExperimentSurvey,
   ExperimentRequirement,
   SurveyQuestion,
-  SurveySectionQuestion,
+  SurveySectionQuestion
 ];
 
 export default intermediaryTables;

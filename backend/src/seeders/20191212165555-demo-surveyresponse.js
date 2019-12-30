@@ -3,23 +3,21 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert(
-      'ExperimentRequirements',
+      'SurveyResponses',
       [
         {
+          responseId: 'testSurveyResponse1',
           experimentId: 'abc123',
-          requirementId: 'testRequirementOne',
-          title: 'completedRRTK',
-          description: 'Completed RRTK',
-          value: 'true',
+          surveyId: 'testSurvey',
+          participantId: 'abcd1234',
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
+          responseId: 'testSurveyResponse2',
           experimentId: 'abc123',
-          requirementId: 'testRequirementTwo',
-          title: 'completedPRTK',
-          description: 'Completed PRTK',
-          value: 'true',
+          surveyId: 'testSurvey',
+          participantId: '1234abcd',
           createdAt: new Date(),
           updatedAt: new Date()
         }
@@ -29,6 +27,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('ExperimentRequirements', null, {});
+    return queryInterface.bulkDelete('SurveyResponses', null, {});
   }
 };

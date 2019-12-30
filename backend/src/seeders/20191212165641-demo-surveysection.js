@@ -27,6 +27,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('surveysections', null, {});
+    return queryInterface.bulkDelete('SurveySections', null, {});
   }
 };

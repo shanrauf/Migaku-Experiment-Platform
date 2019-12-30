@@ -20,6 +20,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('cardcollections', null, {});
+    return queryInterface.bulkDelete('CardCollections', null, {});
   }
 };
