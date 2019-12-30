@@ -8,7 +8,6 @@ export interface ISurvey {
   visibility?: string;
   sections?: ISurveySection[];
 }
-
 export interface ISurveySection {
   sectionId: string;
   sectionNumber: number;
@@ -26,4 +25,10 @@ export interface IQuestion {
   rules: string;
   items: string | any[];
   required: boolean;
+}
+
+export interface IQuestionResponse {
+  questionId: string;
+  value: string;
+  dataType: string;
 }
