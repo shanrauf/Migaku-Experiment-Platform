@@ -16,6 +16,7 @@ import { SurveyQuestion } from '../models/intermediary/surveyQuestion';
 import { Experiment } from '../models/experiment';
 import { CardCollection } from '../models/cardCollection';
 import { ISurvey } from '../interfaces/ISurvey';
+import { SurveyResponse } from '../models/surveyResponse';
 
 @Service()
 export default class SurveyService {
@@ -202,13 +203,24 @@ export default class SurveyService {
         return { questionResponses: [] }; // user hasn't filled out survey
       }
 
-      this.logger.silly('Posting survey responses');
+      const responseId = randomIdGenerator();
+
+      this.logger.silly('Creating survey response');
+      await SurveyResponse.create({
+        responseId,
+        experimentId,
+        surveyId,
+        participantId
+      });
+
+      this.logger.silly('Posting question responses');
       const questionResponses = [];
       let question: any;
       for (question of Object.entries(dataPayload)) {
+        // [key, {dataType: "string", value: "asdf"}]
         const questionResponse = {
-          responseId: randomIdGenerator(),
-          questionId: question[0],
+          responseId,
+          questionId: question[0], // question key
           experimentId,
           surveyId,
           participantId,
