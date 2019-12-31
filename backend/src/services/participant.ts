@@ -56,7 +56,7 @@ export default class ParticipantService {
       const participantId = await Participant.findOne({
         where: { email }
       })
-        .then((participant: any) => participant.participantId)
+        .then(participant => participant.participantId)
         .catch(e => {
           this.logger.error(e);
           throw e;

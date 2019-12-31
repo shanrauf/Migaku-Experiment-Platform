@@ -95,7 +95,7 @@ export default app => {
       try {
         const { experimentId } = req.params;
         const surveyService = Container.get(SurveyService);
-        const payload: any = await surveyService.GetLatestSurvey(experimentId);
+        const payload = await surveyService.GetLatestSurvey(experimentId);
         if (!payload.survey) {
           return res.json(payload).status(404);
         }
@@ -115,7 +115,7 @@ export default app => {
 
         // respond based on surveyStatus
         if (surveyStatus === 2) {
-          const surveyLink = 'https://patreon.com/massimmersionapproach';
+          const surveyLink = `http://trials.massimmersionapproach.com/experiments/audiovssentencecards/surveys/${surveyId}`;
           return res.json({ status: 2, data: surveyLink }).status(401);
         }
         if (surveyStatus === 3) {
@@ -138,9 +138,7 @@ export default app => {
       try {
         const { experimentId } = req.params;
         const surveyService = Container.get(SurveyService);
-        const latestSurvey: any = await surveyService.GetLatestSurvey(
-          experimentId
-        );
+        const latestSurvey = await surveyService.GetLatestSurvey(experimentId);
         if (!latestSurvey.survey) {
           return res.json(latestSurvey).status(404);
         }

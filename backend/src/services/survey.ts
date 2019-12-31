@@ -132,17 +132,19 @@ export default class SurveyService {
       }
 
       // check if user submitted an attribute that lucas will submit recently; e.x audioTotalTime
+      // this is not a good idea... not every survey will have this attribute
       const audioTotalTime: any = await QuestionResponse.findOne({
         where: { questionId: 'audioTotalTime', participantId }
       });
 
-      // check if the time submitted foro that attribute is before the date of the most recent survey
+      // check if the time submitted for that attribute is before the date of the most recent survey
 
       const mostRecentSurveyCreatedAt = await Survey.findOne({
         where: { surveyId },
         order: [['createdAt', 'DESC']]
       }).then(survey => survey.createdAt);
 
+      // not very readable code with +new
       const mostRecentAnkiSync = +new Date(audioTotalTime).getTime();
 
       const surveyCreatedAt = new Date(mostRecentSurveyCreatedAt);
@@ -320,15 +322,15 @@ export default class SurveyService {
     surveyId: string,
     participantId: string,
     cards: {}
-  ): Promise<{ cardCollection: any }> {
+  ): Promise<CardCollection> {
     // this method seems overly complicated, but I don't have a test suite yet to change it
     const cardCollection = await CardCollection.create({
       experimentId,
       surveyId,
       participantId,
       cards
-    }).then(c => ({ cards: c }));
-    return { cardCollection };
+    });
+    return cardCollection;
   }
 
   public async CreateSurvey(

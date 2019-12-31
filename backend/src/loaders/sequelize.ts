@@ -1,10 +1,10 @@
-import { Sequelize } from 'sequelize-typescript';
+import { Sequelize, SequelizeOptions } from 'sequelize-typescript';
 import models from '../models';
 import sequelizeConfig from '../config/sequelize';
 import LoggerInstance from './logger';
 
 export default async (): Promise<Sequelize> => {
-  const sequelizeOptions: any = {
+  const sequelizeOptions: SequelizeOptions = {
     host: sequelizeConfig[process.env.NODE_ENV].host,
     dialect: 'mysql',
     port: sequelizeConfig[process.env.NODE_ENV].port,
