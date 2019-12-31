@@ -269,7 +269,7 @@ export default class SurveyService {
       const questionResponses = [];
       let question: [string, any];
       for (question of Object.entries(dataPayload)) {
-        if (question[0].toLowerCase() === 'cards') {
+        if (question[0] === 'cards' || question[0] === 'Cards') {
           this.PostAnkiCardCollection(
             experimentId,
             surveyId,
