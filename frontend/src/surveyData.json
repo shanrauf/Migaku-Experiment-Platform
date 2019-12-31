@@ -1,10 +1,10 @@
 {
   "survey": {
-    "surveyId": "surveyThree",
+    "surveyId": "983wuf4noiahf78sh4",
     "title": "MIA Mid-Experiment Survey #3",
-    "description": "This is the third weekly survey to gauge your progress during the experiment.",
+    "description": "This is the third weekly survey to gauge your progress during the experiment. We're trying out this new platform for experiments, and we'll improve the site slowly over time.",
     "startDate": "2019-12-30 00:00:00",
-    "endDate": "2020-1-02 00:00:00",
+    "endDate": "2020-1-03 00:00:00",
     "surveyCategory": "regular",
     "visibility": "public",
     "sections": [
@@ -32,16 +32,6 @@
             "rules": "maxChar=100&minChar=1&email=true",
             "question": "What is your email?",
             "value": "",
-            "required": true
-          },
-          {
-            "questionId": "age",
-            "label": "Age",
-            "questionType": "select",
-            "dataType": "smallInt",
-            "question": "How old are you?",
-            "value": "",
-            "items": "zeroToOneHundred",
             "required": true
           },
           {

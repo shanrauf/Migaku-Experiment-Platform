@@ -1,9 +1,6 @@
 <template>
   <div class="survey-container">
-    <SideNavigation
-      v-if="getCurrentSurvey.sections"
-      :sections="getCurrentSurveySectionTitles"
-    />
+    <SideNavigation v-if="getCurrentSurvey.sections" :sections="getCurrentSurveySectionTitles" />
     <SurveyBuilder :currentSurvey="getCurrentSurvey" />
 
     <v-btn color="primary" @click="onSubmit">Submit</v-btn>
@@ -52,7 +49,7 @@ export default {
 <style lang="scss" scoped>
 .survey-container {
   margin: auto;
-  margin-top: -125px;
-  width: 750px;
+  margin-top: -40px;
+  width: 650px;
 }
 </style>
