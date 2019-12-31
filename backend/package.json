@@ -16,7 +16,7 @@
     "seed": "npx sequelize-cli db:seed:all",
     "seed-prod": "npx sequelize-cli db:seed:all --env production",
     "force-sync-dev": "cross-env NODE_ENV=development ts-node src/migrate.ts",
-    "force-sync-prod": "cross-env NODE_ENV=production node build/migrate.js --env production",
+    "force-sync-prod": "cross-env NODE_ENV=production ts-node src/migrate.ts --env production",
     "lint": "npm run lint:eslint ",
     "lint:eslint": "eslint --ignore-path .gitignore --ext .ts src/",
     "lint:fix": "npm run lint:eslint -- --fix"

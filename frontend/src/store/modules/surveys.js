@@ -41,21 +41,21 @@ const actions = {
     });
   },
   async submitSurvey({ commit, state }) {
-    let canSubmit = true;
-    state.currentSurvey.sections.forEach(section => {
-      for (let question of section.questions) {
-        if (question.value == '' && canSubmit) {
-          console.log(question);
-          // doesn't allow for questioons where u allow leaving blank
-          canSubmit = false;
-          Vue.notify({
-            title: "You haven't filled out every question yet..",
-            group: 'global'
-          });
-          return false;
-        }
-      }
-    });
+    // let canSubmit = true;
+    // state.currentSurvey.sections.forEach(section => {
+    //   for (let question of section.questions) {
+    //     if (question.value == '' && canSubmit) {
+    //       console.log(question);
+    //       // doesn't allow for questioons where u allow leaving blank
+    //       canSubmit = false;
+    //       Vue.notify({
+    //         title: "You haven't filled out every question yet..",
+    //         group: 'global'
+    //       });
+    //       return false;
+    //     }
+    //   }
+    // });
 
     // formatting payload...
     let payload = {};
