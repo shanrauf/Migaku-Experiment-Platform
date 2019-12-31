@@ -108,6 +108,10 @@ export default app => {
           email
         );
 
+        if (!participantId) {
+          return res.json({ status: 0 }).status(404);
+        }
+
         const surveyStatus = await surveyService.GetSurveyStatus(
           participantId,
           surveyId
@@ -120,10 +124,6 @@ export default app => {
         }
         if (surveyStatus === 3) {
           return res.json({ status: 3 }).status(404);
-        }
-        if (surveyStatus === 0) {
-          // email doesn't exist
-          return res.json({ status: 0 }).status(404);
         }
         return res.json({ status: 1, data: surveyStatus }).status(200); // surveyStatus = surveyCuttof here
       } catch (err) {
@@ -152,11 +152,26 @@ export default app => {
           email
         );
 
+        // get responseId from surveyId and participantId
+        const responseId = await surveyService.GetSurveyResponseId(
+          surveyId,
+          participantId
+        );
+        if (!responseId) {
+          return res.json({ status: 2 }).status(404);
+        }
+
         const dataPayload = req.body;
         Reflect.deleteProperty(dataPayload, 'email');
 
         return surveyService
-          .PostAnkiData(experimentId, surveyId, participantId, dataPayload)
+          .PostAnkiData(
+            experimentId,
+            surveyId,
+            participantId,
+            responseId,
+            dataPayload
+          )
           .then(() => res.json({ status: 1 }).status(200));
       } catch (err) {
         return next(err);

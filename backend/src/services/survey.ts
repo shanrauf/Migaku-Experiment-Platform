@@ -242,12 +242,26 @@ export default class SurveyService {
       throw e;
     }
   }
+  public async GetSurveyResponseId(
+    surveyId: string,
+    participantId: string
+  ): Promise<string | null> {
+    const responseId = SurveyResponse.findOne({
+      where: { surveyId, participantId }
+    }).then(response => response.responseId);
+    if (!responseId) {
+      return null;
+    } else {
+      return responseId;
+    }
+  }
 
   public async PostAnkiData(
     // being hacky and dangerous; checking if question exists, and if doesn,t creating it b4 inserting a QuestionResponse
     experimentId: string,
     surveyId: string,
     participantId: string,
+    responseId: string,
     dataPayload: {}
   ): Promise<{ questionResponses: QuestionResponse[] | null }> {
     try {
@@ -266,10 +280,16 @@ export default class SurveyService {
           // need to get dataType and questionId given question key after questioons created once
 
           // only runs once then throws validation error...
-          const { dataType } = await this.CreateQuestion(surveyId, question);
+          let q = await SurveyQuestion.findOne({
+            where: { questionId: question[0] }
+          });
+          if (!q) {
+            await this.CreateQuestion(surveyId, question);
+          }
 
+          let dataType = inferDataTypeOf(question[1]);
           const questionResponse = {
-            responseId: randomIdGenerator(),
+            responseId,
             questionId: question[0],
             experimentId,
             surveyId,

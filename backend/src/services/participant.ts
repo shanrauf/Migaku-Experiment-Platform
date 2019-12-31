@@ -52,14 +52,13 @@ export default class ParticipantService {
 
   public async GetParticipantIdByEmail(email: string): Promise<string> {
     try {
-      this.logger.silly('Fetching surveys');
+      this.logger.silly('Getting participant by email');
       const participantId = await Participant.findOne({
         where: { email }
       })
         .then(participant => participant.participantId)
         .catch(e => {
-          this.logger.error(e);
-          throw e;
+          return null;
         });
       return participantId;
     } catch (e) {
