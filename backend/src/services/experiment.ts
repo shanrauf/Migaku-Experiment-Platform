@@ -18,10 +18,7 @@ export default class ExperimentService {
     totalCount: number;
   }> {
     this.logger.silly('Fetching experiments');
-    const experimentRecords = await Experiment.findAndCountAll({
-      // offset: 10, implement pagination with this later
-      limit: 10
-    });
+    const experimentRecords = await Experiment.findAndCountAll({});
     if (!experimentRecords.rows) {
       return { experiments: null, totalCount: 0 };
     }

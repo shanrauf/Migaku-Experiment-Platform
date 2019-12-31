@@ -1,19 +1,23 @@
 <template>
   <v-card raised>
-    <v-card-title>{{title}}</v-card-title>
-    <v-card-subtitle>{{formatDate(new Date(startDate))}} to {{formatDate(new Date(endDate))}}</v-card-subtitle>
-    <v-card-text>{{description}}</v-card-text>
+    <v-card-title>{{ title }}</v-card-title>
+    <v-card-subtitle
+      >{{ formatDate(startDate) }} to
+      <span v-if="endDate">{{ formatDate(endDate) }}</span
+      ><span v-else>TBD</span></v-card-subtitle
+    >
+    <v-card-text>{{ description }}</v-card-text>
     <v-card-actions>
-      <v-btn :to="`/experiments/${id}`">Sign up</v-btn>
+      <v-btn :to="`/experiments/${experimentId}`">Sign up</v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
-import { formatDate } from "@/utils/index.js";
+import { formatDate } from '@/utils/index.js';
 export default {
   props: {
-    id: {
+    experimentId: {
       type: String,
       required: true
     },
@@ -26,11 +30,15 @@ export default {
       required: true
     },
     startDate: {
-      type: Number,
+      type: Date,
       required: true
     },
     endDate: {
-      type: Number,
+      type: Date | null,
+      required: true
+    },
+    visibility: {
+      type: String,
       required: true
     }
   },
@@ -40,5 +48,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
