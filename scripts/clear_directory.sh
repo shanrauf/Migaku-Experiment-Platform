@@ -6,10 +6,14 @@ echo "
 ----------------------
 "
 
-export app_root=/opt/mia-experiment
-if [ -d "$app_root" ];then
-    rm -rf /opt/mia-experiment
-    mkdir -p /opt/mia-experiment
+if [ -d "/opt/backend" ];then
+    rm -rf /opt/backend
 else
-    mkdir -p /opt/mia-experiment
+    echo "Backend clear"
+fi
+
+if [ -d "/opt/frontend" ];then
+    rm -rf /opt/frontend
+else
+    echo "Frontend clear"
 fi
