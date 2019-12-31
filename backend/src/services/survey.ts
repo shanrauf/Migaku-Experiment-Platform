@@ -192,13 +192,8 @@ export default class SurveyService {
       // Checking if user has already submitted the survey
       const responseRecordExists = await QuestionResponse.findOne({
         where: { participantId, surveyId }
-      })
-        .then(responseRecord => !!responseRecord)
-        .catch(e => {
-          this.logger.error(e);
-          throw e;
-        });
-      if (responseRecordExists) {
+      });
+      if (!!responseRecordExists) {
         return { questionResponses: [] }; // user hasn't filled out survey
       }
 
@@ -206,6 +201,7 @@ export default class SurveyService {
 
       this.logger.silly('Creating survey response');
       await SurveyResponse.create({
+        // how to execute after questionResponse values validated (i.e execute both queries at same time)
         responseId,
         experimentId,
         surveyId,

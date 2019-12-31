@@ -1,4 +1,4 @@
-import { Request, Response, Router } from 'express';
+import { Request, Response, Router, NextFunction } from 'express';
 // import middlewares from "../middlewares";
 import passport from 'passport';
 import { Container } from 'typedi';
@@ -9,42 +9,48 @@ const route = Router();
 export default app => {
   app.use('/experiments', route);
 
-  route.get('/', async (req: Request, res: Response) => {
-    const experimentService = Container.get(ExperimentService);
-    const payload = await experimentService.GetExperimentListings();
-    if (!payload.experiments) {
-      return res.status(404);
+  route.get('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const experimentService = Container.get(ExperimentService);
+      const payload = await experimentService.GetExperimentListings();
+      if (!payload.experiments) {
+        return res.status(404);
+      }
+      return res.json(payload).status(200);
+    } catch (err) {
+      return next(err);
     }
-    return res.json(payload).status(200);
   });
 
-  route.post('/', async (req: Request, res: Response) => {
-    const experimentService = Container.get(ExperimentService);
-    const payload = await experimentService.CreateExperiment(
-      req.body.experiment
-    );
-    if (!payload.experiment) {
-      return res.status(404);
+  route.post('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const experimentService = Container.get(ExperimentService);
+      const payload = await experimentService.CreateExperiment(
+        req.body.experiment
+      );
+      if (!payload.experiment) {
+        return res.status(404);
+      }
+      return res.json({ experiment: payload.experiment }).status(201);
+    } catch (err) {
+      return next(err);
     }
-    return res.json({ experiment: payload.experiment }).status(201);
   });
 
-  route.get('/:experimentId', async (req: Request, res: Response) => {
-    const { experimentId } = req.params;
-    const experimentService = Container.get(ExperimentService);
-    const payload = await experimentService.GetExperiment(experimentId);
-    if (!payload.experiment) {
-      return res.status(404);
+  route.get(
+    '/:experimentId',
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { experimentId } = req.params;
+        const experimentService = Container.get(ExperimentService);
+        const payload = await experimentService.GetExperiment(experimentId);
+        if (!payload.experiment) {
+          return res.status(404);
+        }
+        return res.json(payload).status(200);
+      } catch (err) {
+        return next(err);
+      }
     }
-    return res.json(payload).status(200);
-  });
-
-  route.put('/:experimentId', async (req: Request, res: Response) =>
-    // custom experimentId
-    res.status(403)
-  );
-
-  route.delete('/:experimentId', async (req: Request, res: Response) =>
-    res.status(403)
   );
 };

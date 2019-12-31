@@ -137,6 +137,7 @@ Parameters:
 {
     participantId?: string # returns surveys that the participant has completed
     surveyId?: string # Returns metadata of specific survey
+    visibility?: string # default "public"; ("public", "private?) (NOTE: avg participants shouldn't be authenticated to request "private" surveys)
 }
 ```
 
