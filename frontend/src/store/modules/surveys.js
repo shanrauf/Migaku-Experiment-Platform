@@ -41,7 +41,7 @@ const actions = {
     });
   },
   async submitSurvey({ commit, state }) {
-    // let canSubmit = true;
+    let canSubmit = true;
     // state.currentSurvey.sections.forEach(section => {
     //   for (let question of section.questions) {
     //     if (question.value == '' && canSubmit) {
