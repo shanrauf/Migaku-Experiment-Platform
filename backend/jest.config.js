@@ -10,6 +10,9 @@ module.exports = {
   // The directory where Jest should store its cached dependency information
   cacheDirectory: '/var/folders/bw/vvybgj3d3kgb98nzjxfmpv5c0000gn/T/jest_dx',
 
+  // Runs before test suite runs
+  setupFiles: ['./setup.ts'],
+
   // An array of file extensions your modules use
   moduleFileExtensions: ['js', 'ts'],
 

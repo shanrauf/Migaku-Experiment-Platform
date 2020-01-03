@@ -14,6 +14,7 @@
     "inspect": "nodemon --inspect src/app.ts",
     "migrate": "npx sequelize-cli db:migrate",
     "seed": "npx sequelize-cli db:seed:all",
+    "seed-test": "npx sequelize-cli db:seed:all --env test",
     "seed-prod": "npx sequelize-cli db:seed:all --env production",
     "force-sync-dev": "cross-env NODE_ENV=development ts-node src/migrate.ts",
     "force-sync-prod": "cross-env NODE_ENV=production ts-node src/migrate.ts --env production",

@@ -9,6 +9,7 @@ import { Experiment } from '../models/experiment';
 @Service()
 export default class ExperimentService {
   constructor(
+    @Inject('Experiment') private experimentModel: typeof Experiment,
     @Inject('logger') private logger: winston.Logger,
     @EventDispatcher() private eventDispatcher: EventDispatcherInterface
   ) {}
@@ -18,7 +19,7 @@ export default class ExperimentService {
     totalCount: number;
   }> {
     this.logger.silly('Fetching experiments');
-    const experimentRecords = await Experiment.findAndCountAll({});
+    const experimentRecords = await this.experimentModel.findAndCountAll();
     if (!experimentRecords.rows) {
       return { experiments: null, totalCount: 0 };
     }
@@ -32,7 +33,7 @@ export default class ExperimentService {
     experimentId: string
   ): Promise<{ experiment: Experiment | null }> {
     this.logger.silly(`Fetching experiment ${experimentId}`);
-    const experimentRecord = await Experiment.findByPk(experimentId);
+    const experimentRecord = await this.experimentModel.findByPk(experimentId);
     if (!experimentRecord) {
       return { experiment: null };
     }
@@ -42,17 +43,16 @@ export default class ExperimentService {
   public async CreateExperiment(experimentObj: {
     experimentId?: string;
     title: string;
-    description: string;
+    description?: string;
     startDate: string;
-    endDate: string | null;
+    endDate?: string | null;
     visibility: string;
   }): Promise<{ experiment: Experiment | null }> {
+    this.logger.silly(`Creating experiment ${experimentObj.experimentId}`);
     if (!experimentObj.hasOwnProperty('experimentId')) {
-      this.logger.silly('Generating random ID');
       experimentObj.experimentId = randomIdGenerator();
     }
-    this.logger.silly(`Creating experiment ${experimentObj.experimentId}`);
-    const experimentRecord = await Experiment.create(experimentObj);
+    const experimentRecord = await this.experimentModel.create(experimentObj);
     if (!experimentRecord) {
       return { experiment: null };
     }
