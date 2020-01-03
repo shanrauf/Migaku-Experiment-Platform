@@ -27,13 +27,13 @@ Using CodePipeline and CodeDeploy, the code is automatically deployed when you p
 
 # Todo (in order of priority):
 
-- JSON dump Anki collection data, create a test using that data
-- Complete API design and validation (using Joi)
+- Complete API design (and add to unit tests)
 - Complete basic test suite that covers all API routes
 - Authentication (including frontend views based on user roles)
-- Secure API (currently, anyone can make any request) via authentication
+- Add API validation (using Joi and/or Typescript type guards)
+- Secure API (currently, anyone can make any request from anywhere) via authentication (add auth cases to unit tests)
 - Significantly improve frontend styling
-- Create more complex and organized seeders to test more complex queries & model relationships
-- Comprehensive test suite
+- Devise system to send error msgs for frontend to display (e.x backend shud return "survey alreadysubmitted" msg for frontend notif to display)
 - Admin dashboard (view status of site; ability to edit experiments/surveys/participants/etc)
 - Experiment data analytics/visualization
+- Comprehensive test suite
