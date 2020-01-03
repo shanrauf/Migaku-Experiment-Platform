@@ -29,15 +29,20 @@ export function inferDataTypeOf(
   if (typeof value === undefined) {
     return null;
   }
+  if (typeof value === null) {
+    return null;
+  }
   if (typeof value === 'string') {
-    if (value.match(/^-{0,1}\d+$/)) {
+    if (value.match(/^[1-9]\d*(\.\d+)?$/)) {
       // value is a number
       if (value.includes('.')) {
+        // this function isn't catching floats...
         // it's a float
         return { dataType: 'float', value: parseFloat(value) };
       }
       const numberValue = parseInt(value, 10);
       if (numberValue < 30000) {
+        // arbitrary value
         return { dataType: 'smallInt', value: numberValue };
       }
       return { dataType: 'int', value: numberValue };
@@ -55,5 +60,10 @@ export function inferDataTypeOf(
     return { dataType: 'text', value };
   }
   // Boolean
-  return { dataType: 'boolean', value };
+  if (typeof value === 'boolean') {
+    return { dataType: 'boolean', value };
+  } else {
+    // throw an error... idk what is going to catch this error though
+    throw new Error('Unknown value');
+  }
 }

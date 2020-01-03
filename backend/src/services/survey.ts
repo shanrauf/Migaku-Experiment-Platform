@@ -20,12 +20,10 @@ import { SurveyResponse } from '../models/surveyResponse';
 @Service()
 export default class SurveyService {
   constructor(
+    @Inject('Survey') private Survey: Survey,
     @Inject('logger') private logger: winston.Logger,
     @EventDispatcher() private eventDispatcher: EventDispatcherInterface
   ) {}
-
-  questionId;
-
   public async GetSurveys(
     experimentId?: string
   ): Promise<{
@@ -184,11 +182,56 @@ export default class SurveyService {
     }
   }
 
+  public async CreateSurveyResponse(
+    experimentId: string,
+    surveyId: string,
+    participantId: string
+  ): Promise<SurveyResponse> {
+    try {
+      return await SurveyResponse.create({
+        responseId: randomIdGenerator(),
+        experimentId,
+        surveyId,
+        participantId
+      });
+    } catch (err) {
+      this.logger.error(err);
+      throw err;
+    }
+  }
+
+  private async FormatQuestionResponse(
+    responseId: string,
+    experimentId: string,
+    surveyId: string,
+    participantId: string,
+    question: [string, { dataType: string; value: any }]
+  ): Promise<object> {
+    const questionResponse = {
+      responseId,
+      questionId: question[0], // question key
+      experimentId,
+      surveyId,
+      participantId,
+      answerSmallInt: null,
+      answerInt: null,
+      answerFloat: null,
+      answerBoolean: null,
+      answerVarchar: null,
+      answerText: null,
+      answerJSON: null
+    };
+    const dataType = capitalize(question[1].dataType);
+    questionResponse[`answer${dataType}`] = question[1].value;
+    return questionResponse;
+  }
+
   public async PostSurveyResponses(
     experimentId: string,
     surveyId: string,
     participantId: string,
-    dataPayload: {}
+    responseId: string,
+    dataPayload: object
   ): Promise<{ questionResponses: QuestionResponse[] | null | any[] }> {
     try {
       // Checking if user has already submitted the survey
@@ -196,43 +239,41 @@ export default class SurveyService {
         where: { participantId, surveyId }
       });
       if (!!responseRecordExists) {
-        return { questionResponses: [] }; // user hasn't filled out survey
+        return { questionResponses: [] }; // user has already filled out survey
       }
 
-      const responseId = randomIdGenerator();
-
-      this.logger.silly('Creating survey response');
-      await SurveyResponse.create({
-        // how to execute after questionResponse values validated (i.e execute both queries at same time)
-        responseId,
-        experimentId,
-        surveyId,
-        participantId
-      });
-
-      this.logger.silly('Posting question responses');
+      this.logger.silly('Processing question responses');
       const questionResponses = [];
       let question: any;
       for (question of Object.entries(dataPayload)) {
-        // [key, {dataType: "string", value: "asdf"}]
-        const questionResponse = {
-          responseId,
-          questionId: question[0], // question key
-          experimentId,
-          surveyId,
-          participantId,
-          answerSmallInt: null,
-          answerInt: null,
-          answerFloat: null,
-          answerBoolean: null,
-          answerVarchar: null,
-          answerText: null,
-          answerJSON: null
-        };
-        const dataType = capitalize(question[1].dataType);
-        questionResponse[`answer${dataType}`] = question[1].value;
-        questionResponses.push(questionResponse);
+        if (question[0] === 'cards' || question[0] === 'Cards') {
+          this.PostAnkiCardCollection(
+            experimentId,
+            surveyId,
+            participantId,
+            question[1] // do we need to check if this hasn't been parsed already?
+          );
+        } else {
+          // check if question exists; only applies to non-survey data cuz survey question rows r created on survey creation
+          let questionExists = await Question.findOne({
+            where: { questionId: question[0] }
+          }).then(questionRecord => !!questionRecord);
+          if (!questionExists) {
+            await this.CreateQuestion(surveyId, question); // this shouldn't be here - during experiment/survey creation, questions r created/assigned. but for now for anki, it's here
+          }
+
+          const questionResponse = await this.FormatQuestionResponse(
+            responseId,
+            experimentId,
+            surveyId,
+            participantId,
+            question
+          );
+          questionResponses.push(questionResponse);
+        }
       }
+
+      this.logger.silly('Posting question responses');
       const questionResponseRecords = await QuestionResponse.bulkCreate(
         questionResponses
       );
@@ -246,6 +287,7 @@ export default class SurveyService {
     surveyId: string,
     participantId: string
   ): Promise<string | null> {
+    this.logger.silly('Getting survey response id');
     const responseId = SurveyResponse.findOne({
       where: { surveyId, participantId }
     }).then(response => response.responseId);
@@ -253,66 +295,6 @@ export default class SurveyService {
       return null;
     } else {
       return responseId;
-    }
-  }
-
-  public async PostAnkiData(
-    // being hacky and dangerous; checking if question exists, and if doesn,t creating it b4 inserting a QuestionResponse
-    experimentId: string,
-    surveyId: string,
-    participantId: string,
-    responseId: string,
-    dataPayload: {}
-  ): Promise<{ questionResponses: QuestionResponse[] | null }> {
-    try {
-      this.logger.silly('Posting survey responses');
-      const questionResponses = [];
-      let question: [string, any];
-      for (question of Object.entries(dataPayload)) {
-        if (question[0] === 'cards' || question[0] === 'Cards') {
-          this.PostAnkiCardCollection(
-            experimentId,
-            surveyId,
-            participantId,
-            JSON.parse(question[1])
-          );
-        } else {
-          // need to get dataType and questionId given question key after questioons created once
-
-          // only runs once then throws validation error...
-          let q = await SurveyQuestion.findOne({
-            where: { questionId: question[0] }
-          });
-          if (!q) {
-            await this.CreateQuestion(surveyId, question);
-          }
-
-          let dataType = inferDataTypeOf(question[1]);
-          const questionResponse = {
-            responseId,
-            questionId: question[0],
-            experimentId,
-            surveyId,
-            participantId,
-            answerSmallInt: null,
-            answerInt: null,
-            answerFloat: null,
-            answerBoolean: null,
-            answerVarchar: null,
-            answerText: null,
-            answerJSON: null
-          };
-          questionResponse[`answer${dataType}`] = question[1].value;
-          questionResponses.push(questionResponse);
-        }
-      }
-      const questionResponseRecords = await QuestionResponse.bulkCreate(
-        questionResponses
-      );
-      return { questionResponses: questionResponseRecords };
-    } catch (e) {
-      this.logger.error(e);
-      throw e;
     }
   }
 
@@ -343,7 +325,7 @@ export default class SurveyService {
     participantId: string,
     cards: {}
   ): Promise<CardCollection> {
-    // this method seems overly complicated, but I don't have a test suite yet to change it
+    this.logger.silly('Posting Anki card collection');
     const cardCollection = await CardCollection.create({
       experimentId,
       surveyId,
@@ -427,5 +409,3 @@ export default class SurveyService {
     }
   }
 }
-
-// need to add something that accounts for if answer type changes

@@ -4,7 +4,7 @@ import SurveyService from '../../services/survey';
 import ParticipantService from '../../services/participant';
 const route = Router({ mergeParams: true });
 
-export default app => {
+export default (app: Router) => {
   app.use('/experiments/:experimentId/surveys', route);
 
   route.get('/', async (req: Request, res: Response, next: NextFunction) => {
@@ -144,35 +144,37 @@ export default app => {
         }
 
         const { surveyId } = latestSurvey.survey;
-        const { email } = req.body;
 
         // get participantId from email
         const participantService = Container.get(ParticipantService);
         const participantId = await participantService.GetParticipantIdByEmail(
-          email
+          req.body.email
         );
 
         // get responseId from surveyId and participantId
-        const responseId = await surveyService.GetSurveyResponseId(
+        let responseId = await surveyService.GetSurveyResponseId(
           surveyId,
           participantId
         );
+
+        // create one if doesn't exist
         if (!responseId) {
-          return res.json({ status: 2 }).status(404);
+          responseId = await surveyService
+            .CreateSurveyResponse(experimentId, surveyId, participantId)
+            .then(response => response.responseId);
         }
-
-        const dataPayload = req.body;
-        Reflect.deleteProperty(dataPayload, 'email');
-
-        return surveyService
-          .PostAnkiData(
-            experimentId,
-            surveyId,
-            participantId,
-            responseId,
-            dataPayload
-          )
-          .then(() => res.json({ status: 1 }).status(200));
+        console.log(req.body.data); // undefined since lucas hasn't changed schema
+        const payload = await surveyService.PostSurveyResponses(
+          experimentId,
+          surveyId,
+          participantId,
+          responseId,
+          req.body.data
+        );
+        if (!payload.questionResponses) {
+          return res.json(payload).status(404);
+        }
+        return res.json(payload).status(200);
       } catch (err) {
         return next(err);
       }
@@ -184,21 +186,34 @@ export default app => {
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { experimentId, surveyId } = req.params;
-        const surveyService = Container.get(SurveyService);
-
         const participantService = Container.get(ParticipantService);
         const participantId = await participantService.GetParticipantIdByEmail(
           req.body.email
         );
 
+        // get responseId from surveyId and participantId
+        const surveyService = Container.get(SurveyService);
+        let responseId = await surveyService.GetSurveyResponseId(
+          surveyId,
+          participantId
+        );
+
+        // create one if doesn't exist
+        if (!responseId) {
+          responseId = await surveyService
+            .CreateSurveyResponse(experimentId, surveyId, participantId)
+            .then(response => response.responseId);
+        }
+
         const payload = await surveyService.PostSurveyResponses(
           experimentId,
           surveyId,
           participantId,
+          responseId,
           req.body.data
         );
         if (!payload.questionResponses) {
-          return res.json(payload).status(200);
+          return res.json(payload).status(404);
         }
         return res.json(payload).status(200);
       } catch (err) {
