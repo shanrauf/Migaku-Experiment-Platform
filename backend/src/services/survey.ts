@@ -116,24 +116,11 @@ export default class SurveyService {
   public async GetSurveyStatus(
     // this method is horrendously large
     participantId: string,
-    surveyId: string
+    surveyId: string,
+    surveyStartDate: Date
   ): Promise<any> {
     try {
       this.logger.silly('Fetching survey status');
-      const participantExists = await this.participantModel
-        .findOne({
-          where: { participantId }
-        })
-        .then(participantRecord => !!participantRecord)
-        .catch(e => {
-          this.logger.error(e);
-          return 0;
-        });
-
-      if (!participantExists) {
-        return 0; // user doesnt exist
-      }
-
       const responseRecordExists = await this.questionResponseModel
         .findOne({
           where: { participantId, surveyId }
@@ -147,42 +134,25 @@ export default class SurveyService {
         return 2; // user hasn't filled out survey
       }
 
-      // check if user submitted an attribute that lucas will submit recently; e.x audioTotalTime
-      // this is not a good idea... not every survey will have this attribute
-      const audioTotalTime: any = await this.questionResponseModel.findOne({
-        where: { questionId: 'audioTotalTime', participantId }
+      // check if user submitted an attribute that Lucas sends from Anki; e.x audioTotalTime
+      // NOTE: This is bad... not every survey will have this attribute
+      const audioTotalTime = await this.questionResponseModel.findOne({
+        attributes: ['createdAt'],
+        where: { questionId: 'audioTotalTime', participantId, surveyId }
       });
-
-      // check if the time submitted for that attribute is before the date of the most recent survey
-
-      const mostRecentSurveyCreatedAt = await this.surveyModel
-        .scope('public')
-        .findOne({
-          where: { surveyId },
-          order: [['createdAt', 'DESC']]
-        })
-        .then(survey => survey.createdAt);
-
-      // not very readable code with +new
-      const mostRecentAnkiSync = +new Date(audioTotalTime).getTime();
-
-      const surveyCreatedAt = new Date(mostRecentSurveyCreatedAt);
-      const surveyCreatedAtTimestamp = surveyCreatedAt.getTime();
-
-      if (audioTotalTime && mostRecentAnkiSync < surveyCreatedAtTimestamp) {
-        return 3; // allready synced
+      // if audioTotalTime is null, then user hasn't synced Anki data for this latest survey
+      if (audioTotalTime) {
+        return 3; // already synced
+      } else {
+        return 1;
       }
-      // get most recent survey created at timestamp into format Lucas wants: "2019,12,07"
-      const d = surveyCreatedAt; // make it easier to read
-      const surveyCutoff = `${d.getFullYear()},${`0${d.getMonth() + 1}`.slice(
-        -2
-      )},${d.getDate()}`;
-      return surveyCutoff; // ready to sync data
     } catch (e) {
       this.logger.error(e);
       throw e;
     }
   }
+
+  // private async GetSurveyCutoff
 
   public async GetSurveySection(
     // could redoo this to return a payload w prev and nextSectionId, which can then use to fetch questions
@@ -314,9 +284,11 @@ export default class SurveyService {
     console.log(surveyId);
     console.log(participantId);
 
-    const responseId = await SurveyResponse.findOne({
-      where: { surveyId, participantId }
-    }).then(response => response.responseId);
+    const responseId = await this.surveyResponseModel
+      .findOne({
+        where: { surveyId, participantId }
+      })
+      .then(response => response.responseId);
     return responseId;
   }
 

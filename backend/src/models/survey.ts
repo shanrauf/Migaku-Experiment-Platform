@@ -64,6 +64,13 @@ export class Survey extends Model<Survey> {
   @Column
   startDate: Date;
 
+  get cutoff() {
+    const d = this.startDate;
+    return `${d.getFullYear()},${`0${d.getMonth() + 1}`.slice(
+      -2
+    )},${d.getDate()}`;
+  }
+
   @AllowNull(true)
   @Column
   endDate: Date; // can be null to represent TBD or indefinite
