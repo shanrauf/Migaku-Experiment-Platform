@@ -43,6 +43,8 @@ export default (app: Router) => {
     '/latest',
     async (req: Request, res: Response, next: NextFunction) => {
       try {
+        console.log('Here2');
+
         const { experimentId } = req.params;
         const surveyService = Container.get(SurveyService);
         const payload = await surveyService.GetLatestSurvey(experimentId);
@@ -63,10 +65,11 @@ export default (app: Router) => {
         const { surveyId } = req.params;
         const surveyService = Container.get(SurveyService);
         const payload = await surveyService.GetSurvey(surveyId);
-        if (!payload.survey) {
-          return res.status(404);
+        if (payload.survey === null) {
+          return res.json(payload).status(404); // returns 200 instead of 404 when null??
+        } else {
+          return res.json(payload).status(200);
         }
-        return res.json(payload).status(200);
       } catch (err) {
         return next(err);
       }
@@ -119,6 +122,7 @@ export default (app: Router) => {
   route.post(
     '/latest',
     async (req: Request, res: Response, next: NextFunction) => {
+      console.log('Request received');
       try {
         const { experimentId } = req.params;
         const surveyService = Container.get(SurveyService);
@@ -140,6 +144,7 @@ export default (app: Router) => {
           surveyId,
           participantId
         );
+        console.log(responseId);
 
         // create one if doesn't exist
         if (!responseId) {
@@ -181,9 +186,12 @@ export default (app: Router) => {
           surveyId,
           participantId
         );
+        console.log('Here');
 
         // create one if doesn't exist
         if (!responseId) {
+          console.log('Here');
+
           responseId = await surveyService
             .CreateSurveyResponse(experimentId, surveyId, participantId)
             .then(response => response.responseId);
@@ -196,9 +204,9 @@ export default (app: Router) => {
           responseId,
           req.body.data
         );
-        if (!payload.questionResponses) {
-          return res.json(payload).status(404);
-        }
+        // if (!payload.questionResponses) {
+        //   return res.json(payload).status(404);
+        // }
         return res.json(payload).status(200);
       } catch (err) {
         return next(err);

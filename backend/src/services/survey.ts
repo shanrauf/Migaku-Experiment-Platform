@@ -25,9 +25,9 @@ export default class SurveyService {
     @Inject('Question') private questionModel: typeof Question,
     @Inject('SurveyQuestion')
     private surveyQuestionModel: typeof SurveyQuestion,
-    @Inject('SurveyResponse')
     @Inject('SurveySection')
     private surveySectionModel: typeof SurveySection,
+    @Inject('SurveyResponse')
     private surveyResponseModel: typeof SurveyResponse,
     @Inject('QuestionResponse')
     private questionResponseModel: typeof QuestionResponse,
@@ -83,9 +83,7 @@ export default class SurveyService {
           surveyId
         }
       });
-      if (!surveyRecord) {
-        return { survey: null };
-      }
+      console.log(surveyRecord);
       return { survey: surveyRecord };
     } catch (e) {
       this.logger.error(e);
@@ -313,16 +311,13 @@ export default class SurveyService {
     participantId: string
   ): Promise<string | null> {
     this.logger.silly('Getting survey response id');
-    const responseId = this.surveyResponseModel
-      .findOne({
-        where: { surveyId, participantId }
-      })
-      .then(response => response.responseId);
-    if (!responseId) {
-      return null;
-    } else {
-      return responseId;
-    }
+    console.log(surveyId);
+    console.log(participantId);
+
+    const responseId = await SurveyResponse.findOne({
+      where: { surveyId, participantId }
+    }).then(response => response.responseId);
+    return responseId;
   }
 
   private async CreateQuestion(surveyId: string, question: [string, any]) {
