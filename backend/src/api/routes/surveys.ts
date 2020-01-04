@@ -80,39 +80,38 @@ export default (app: Router) => {
     '/latest/status',
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        const { experimentId } = req.params;
-        const surveyService = Container.get(SurveyService);
-        const payload = await surveyService.GetLatestSurvey(experimentId);
-        if (!payload.survey) {
-          return res.json(payload).status(404);
-        }
-
-        const { surveyId } = payload.survey;
         const { email } = req.query;
-        // convert to partcipantId
         const participantService = Container.get(ParticipantService);
         const participantId = await participantService.GetParticipantIdByEmail(
           email
         );
-
         if (!participantId) {
           return res.json({ status: 0 }).status(404);
         }
 
+        const { experimentId } = req.params;
+        const surveyService = Container.get(SurveyService);
+        const { survey } = await surveyService.GetLatestSurvey(experimentId);
+        const { surveyId, startDate } = survey;
+
         const surveyStatus = await surveyService.GetSurveyStatus(
           participantId,
-          surveyId
+          surveyId,
+          startDate
         );
 
-        // respond based on surveyStatus
         if (surveyStatus === 2) {
+          // Survey not completed
           const surveyLink = `http://trials.massimmersionapproach.com/experiments/audiovssentencecards/surveys/${surveyId}`;
           return res.json({ status: 2, data: surveyLink }).status(401);
         }
         if (surveyStatus === 3) {
+          // Already synced Anki data
           return res.json({ status: 3 }).status(404);
         }
-        return res.json({ status: 1, data: surveyStatus }).status(200); // surveyStatus = surveyCuttof here
+
+        // get survey cutoff here; create get method on survey for startdate in cutoff format
+        return res.json({ status: 1, data: survey.cutoff }).status(200); // surveyStatus = surveyCuttof here
       } catch (err) {
         return next(err);
       }
@@ -144,7 +143,6 @@ export default (app: Router) => {
           surveyId,
           participantId
         );
-        console.log(responseId);
 
         // create one if doesn't exist
         if (!responseId) {
@@ -152,7 +150,6 @@ export default (app: Router) => {
             .CreateSurveyResponse(experimentId, surveyId, participantId)
             .then(response => response.responseId);
         }
-        console.log(req.body.data); // undefined since lucas hasn't changed schema
         const payload = await surveyService.PostSurveyResponses(
           experimentId,
           surveyId,
