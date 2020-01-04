@@ -39,22 +39,6 @@ export default (app: Router) => {
     }
   });
 
-  route.put('/', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { survey } = req.body;
-      const surveyService = Container.get(SurveyService);
-      const payload = await surveyService.UpdateSurvey(survey);
-      if (!payload) {
-        return res.send(401);
-      }
-      return res
-        .json({ survey: payload.survey, status: 'Survey updated' })
-        .status(200);
-    } catch (err) {
-      return next(err);
-    }
-  });
-
   route.get(
     '/latest',
     async (req: Request, res: Response, next: NextFunction) => {

@@ -8,6 +8,8 @@ export default async ({ sqlConnection }: { sqlConnection: Sequelize }) => {
       Container.set(model[0], model[1]);
     }
 
+    Container.set('sequelize', sqlConnection);
+
     Container.set('logger', LoggerInstance);
     LoggerInstance.info('✌️ Logger injected into container');
   } catch (e) {

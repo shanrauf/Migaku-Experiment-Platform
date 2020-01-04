@@ -1,6 +1,6 @@
 import { Service, Inject } from 'typedi';
 import winston from 'winston';
-import { Model } from 'sequelize-typescript';
+import { Sequelize } from 'sequelize-typescript';
 import { randomIdGenerator, capitalize, inferDataTypeOf } from '../utils';
 import {
   EventDispatcher,
@@ -20,8 +20,21 @@ import { SurveyResponse } from '../models/surveyResponse';
 @Service()
 export default class SurveyService {
   constructor(
-    @Inject('Survey') private Survey: Survey,
+    @Inject('Participant') private participantModel: typeof Participant,
+    @Inject('Survey') private surveyModel: typeof Survey,
+    @Inject('Question') private questionModel: typeof Question,
+    @Inject('SurveyQuestion')
+    private surveyQuestionModel: typeof SurveyQuestion,
+    @Inject('SurveyResponse')
+    @Inject('SurveySection')
+    private surveySectionModel: typeof SurveySection,
+    private surveyResponseModel: typeof SurveyResponse,
+    @Inject('QuestionResponse')
+    private questionResponseModel: typeof QuestionResponse,
+    @Inject('CardCollection')
+    private cardCollectionModel: typeof CardCollection,
     @Inject('logger') private logger: winston.Logger,
+    @Inject('sequelize') private sqlConnection: Sequelize,
     @EventDispatcher() private eventDispatcher: EventDispatcherInterface
   ) {}
   public async GetSurveys(
@@ -32,16 +45,18 @@ export default class SurveyService {
   }> {
     try {
       this.logger.silly('Fetching surveys');
-      const surveyRecords = await Survey.scope('public').findAndCountAll({
-        include: [
-          {
-            model: Experiment,
-            attributes: ['experimentId'],
-            where: { experimentId }
-          }
-        ],
-        limit: 10
-      });
+      const surveyRecords = await this.surveyModel
+        .scope('public')
+        .findAndCountAll({
+          include: [
+            {
+              model: Experiment,
+              attributes: ['experimentId'],
+              where: { experimentId }
+            }
+          ],
+          limit: 10
+        });
       return {
         surveys: surveyRecords.rows,
         totalCount: surveyRecords.count
@@ -55,13 +70,13 @@ export default class SurveyService {
   public async GetSurvey(surveyId: string): Promise<{ survey: Survey }> {
     try {
       this.logger.silly(`Fetching survey ${surveyId}`);
-      const surveyRecord = await Survey.scope('public').findOne({
+      const surveyRecord = await this.surveyModel.scope('public').findOne({
         include: [
           {
             model: SurveySection
           },
           {
-            model: Question
+            model: this.questionModel
           }
         ],
         where: {
@@ -83,7 +98,8 @@ export default class SurveyService {
   ): Promise<{ survey: Survey | null }> {
     try {
       this.logger.silly('Fetching latest survey');
-      const surveyRecord = await Survey.scope('public')
+      const surveyRecord = await this.surveyModel
+        .scope('public')
         .findOne({
           where: { visibility: 'public', experimentId },
           order: [['startDate', 'DESC']]
@@ -106,9 +122,10 @@ export default class SurveyService {
   ): Promise<any> {
     try {
       this.logger.silly('Fetching survey status');
-      const participantExists = await Participant.findOne({
-        where: { participantId }
-      })
+      const participantExists = await this.participantModel
+        .findOne({
+          where: { participantId }
+        })
         .then(participantRecord => !!participantRecord)
         .catch(e => {
           this.logger.error(e);
@@ -119,9 +136,10 @@ export default class SurveyService {
         return 0; // user doesnt exist
       }
 
-      const responseRecordExists = await QuestionResponse.findOne({
-        where: { participantId, surveyId }
-      })
+      const responseRecordExists = await this.questionResponseModel
+        .findOne({
+          where: { participantId, surveyId }
+        })
         .then(responseRecord => !!responseRecord)
         .catch(e => {
           this.logger.error(e);
@@ -133,13 +151,14 @@ export default class SurveyService {
 
       // check if user submitted an attribute that lucas will submit recently; e.x audioTotalTime
       // this is not a good idea... not every survey will have this attribute
-      const audioTotalTime: any = await QuestionResponse.findOne({
+      const audioTotalTime: any = await this.questionResponseModel.findOne({
         where: { questionId: 'audioTotalTime', participantId }
       });
 
       // check if the time submitted for that attribute is before the date of the most recent survey
 
-      const mostRecentSurveyCreatedAt = await Survey.scope('public')
+      const mostRecentSurveyCreatedAt = await this.surveyModel
+        .scope('public')
         .findOne({
           where: { surveyId },
           order: [['createdAt', 'DESC']]
@@ -173,7 +192,7 @@ export default class SurveyService {
   ): Promise<{ surveySection: SurveySection | null }> {
     try {
       this.logger.silly('Fetching survey section');
-      const surveySectionRecord = await SurveySection.findOne({
+      const surveySectionRecord = await this.surveySectionModel.findOne({
         where: { sectionNumber }
       });
       if (!surveySectionRecord) {
@@ -192,7 +211,7 @@ export default class SurveyService {
     participantId: string
   ): Promise<SurveyResponse> {
     try {
-      return await SurveyResponse.create({
+      return await this.surveyResponseModel.create({
         responseId: randomIdGenerator(),
         experimentId,
         surveyId,
@@ -239,7 +258,7 @@ export default class SurveyService {
   ): Promise<{ questionResponses: QuestionResponse[] | null | any[] }> {
     try {
       // Checking if user has already submitted the survey
-      const responseRecordExists = await QuestionResponse.findOne({
+      const responseRecordExists = await this.questionResponseModel.findOne({
         where: { participantId, surveyId }
       });
       if (!!responseRecordExists) {
@@ -259,9 +278,11 @@ export default class SurveyService {
           );
         } else {
           // check if question exists; only applies to non-survey data cuz survey question rows r created on survey creation
-          let questionExists = await Question.findOne({
-            where: { questionId: question[0] }
-          }).then(questionRecord => !!questionRecord);
+          let questionExists = await this.questionModel
+            .findOne({
+              where: { questionId: question[0] }
+            })
+            .then(questionRecord => !!questionRecord);
           if (!questionExists) {
             await this.CreateQuestion(surveyId, question); // this shouldn't be here - during experiment/survey creation, questions r created/assigned. but for now for anki, it's here
           }
@@ -278,7 +299,7 @@ export default class SurveyService {
       }
 
       this.logger.silly('Posting question responses');
-      const questionResponseRecords = await QuestionResponse.bulkCreate(
+      const questionResponseRecords = await this.questionResponseModel.bulkCreate(
         questionResponses
       );
       return { questionResponses: questionResponseRecords };
@@ -292,9 +313,11 @@ export default class SurveyService {
     participantId: string
   ): Promise<string | null> {
     this.logger.silly('Getting survey response id');
-    const responseId = SurveyResponse.findOne({
-      where: { surveyId, participantId }
-    }).then(response => response.responseId);
+    const responseId = this.surveyResponseModel
+      .findOne({
+        where: { surveyId, participantId }
+      })
+      .then(response => response.responseId);
     if (!responseId) {
       return null;
     } else {
@@ -303,26 +326,38 @@ export default class SurveyService {
   }
 
   private async CreateQuestion(surveyId: string, question: [string, any]) {
-    const { dataType } = inferDataTypeOf(question[1]);
-    await Question.create({
-      questionId: question[0],
-      key: question[0],
-      questionType: 'text', // this is prob bad
-      dataType,
-      label: question[0], // bad
-      rules: null,
-      items: null,
-      required: true,
-      note: null,
-      question: question[0] // bad and repetitive XD
-    });
-    await SurveyQuestion.create({
-      questionId: question[0],
-      surveyId
-    });
-    return { dataType };
+    try {
+      const { dataType } = inferDataTypeOf(question[1]);
+      await this.sqlConnection.transaction(async transaction => {
+        await this.questionModel.create(
+          {
+            questionId: question[0],
+            key: question[0],
+            questionType: 'text', // this is bad
+            dataType,
+            label: question[0], // this is bad
+            rules: null,
+            items: null,
+            required: true,
+            note: null,
+            question: question[0] // this is bad
+          },
+          { transaction }
+        );
+        await this.surveyQuestionModel.create(
+          {
+            questionId: question[0],
+            surveyId
+          },
+          { transaction }
+        );
+      });
+      return { dataType };
+    } catch (err) {
+      this.logger.error(err);
+      throw err;
+    }
   }
-
   public async PostAnkiCardCollection(
     experimentId: string,
     surveyId: string,
@@ -330,7 +365,7 @@ export default class SurveyService {
     cards: {}
   ): Promise<CardCollection> {
     this.logger.silly('Posting Anki card collection');
-    const cardCollection = await CardCollection.create({
+    const cardCollection = await this.cardCollectionModel.create({
       experimentId,
       surveyId,
       participantId,
@@ -344,69 +379,54 @@ export default class SurveyService {
     surveyObj: ISurvey
   ): Promise<{ survey: Survey | null }> {
     try {
-      this.logger.silly('Creating survey');
-      const {
-        surveyId,
-        title,
-        description,
-        startDate,
-        endDate,
-        surveyCategory,
-        visibility
-      } = surveyObj;
-      const surveyRecord = await Survey.create({
-        surveyId,
-        experimentId,
-        title,
-        description,
-        startDate,
-        endDate,
-        surveyCategory,
-        visibility
-      });
+      const result = await this.sqlConnection.transaction(async transaction => {
+        this.logger.silly('Creating survey');
+        const {
+          surveyId,
+          title,
+          description,
+          startDate,
+          endDate,
+          surveyCategory,
+          visibility
+        } = surveyObj;
+        const surveyRecord = await this.surveyModel.create(
+          {
+            surveyId,
+            experimentId,
+            title,
+            description,
+            startDate,
+            endDate,
+            surveyCategory,
+            visibility
+          },
+          { transaction }
+        );
 
-      for (const section of surveyObj.sections) {
-        await SurveySection.update(section, {
-          where: { sectionId: section.sectionId }
-        });
-        for (const question of section.questions) {
-          await Question.create(question);
-          await SurveyQuestion.create({
-            questionId: question.questionId,
-            surveyId: surveyObj.surveyId
-          });
+        for (const section of surveyObj.sections) {
+          await this.surveySectionModel.create(section, { transaction });
+          for (const question of section.questions) {
+            let questionExists = await this.questionModel
+              .findOne({
+                where: { questionId: question.questionId }
+              })
+              .then(questionRecord => !!questionRecord);
+            if (!questionExists) {
+              await this.questionModel.create(question, { transaction }); // in theory, frontend should ensure no duplicates, but this is good security; would trying to create question anyway and getting validation error be faster than 2 queries?
+            }
+            await this.surveyQuestionModel.create(
+              {
+                questionId: question.questionId,
+                surveyId: surveyObj.surveyId
+              },
+              { transaction }
+            );
+          }
         }
-      }
-      return { survey: surveyRecord };
-    } catch (e) {
-      this.logger.error(e);
-      throw e;
-    }
-  }
-
-  public async UpdateSurvey(
-    surveyObj: ISurvey
-  ): Promise<{ survey: Survey | null }> {
-    try {
-      this.logger.silly('Updating survey');
-      const surveyRecord = await Survey.build({
-        surveyId: surveyObj.surveyId,
-        title: surveyObj.title,
-        description: surveyObj.description
+        return { survey: surveyRecord };
       });
-      surveyRecord.save();
-
-      for (const section of surveyObj.sections) {
-        await SurveySection.update(section, {
-          where: { sectionId: section.sectionId }
-        });
-        for (const question of section.questions) {
-          await Question.update(question, {
-            where: { questionId: question.questionId }
-          });
-        }
-      }
-      return { survey: surveyRecord };
+      return result;
     } catch (e) {
       this.logger.error(e);
       throw e;

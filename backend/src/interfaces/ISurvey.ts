@@ -18,12 +18,13 @@ export interface ISurveySection {
 
 export interface IQuestion {
   questionId: string;
-  key: string;
+  label: string;
   questionType: string;
   dataType: string;
-  label: string;
   rules: string;
-  items: string | any[];
+  question: string;
+  value: any;
+  items?: string | any[];
   required: boolean;
 }
 
