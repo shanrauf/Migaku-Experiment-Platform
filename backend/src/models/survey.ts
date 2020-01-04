@@ -22,7 +22,6 @@ import { SurveySection } from './surveySection';
 import { SurveyResponse } from './surveyResponse';
 
 @DefaultScope(() => ({
-  where: { visibility: 'public' },
   attributes: [
     'experimentId',
     'surveyId',
@@ -35,6 +34,9 @@ import { SurveyResponse } from './surveyResponse';
   ]
 }))
 @Scopes(() => ({
+  public: {
+    where: { visibility: 'public' }
+  },
   private: {
     where: { visibility: 'private' }
   }

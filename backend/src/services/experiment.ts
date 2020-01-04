@@ -19,7 +19,9 @@ export default class ExperimentService {
     totalCount: number;
   }> {
     this.logger.silly('Fetching experiments');
-    const experimentRecords = await this.experimentModel.findAndCountAll();
+    const experimentRecords = await this.experimentModel
+      .scope('public')
+      .findAndCountAll();
     if (!experimentRecords.rows) {
       return { experiments: null, totalCount: 0 };
     }
@@ -33,7 +35,9 @@ export default class ExperimentService {
     experimentId: string
   ): Promise<{ experiment: Experiment | null }> {
     this.logger.silly(`Fetching experiment ${experimentId}`);
-    const experimentRecord = await this.experimentModel.findByPk(experimentId);
+    const experimentRecord = await this.experimentModel
+      .scope('public')
+      .findByPk(experimentId);
     if (!experimentRecord) {
       return { experiment: null };
     }

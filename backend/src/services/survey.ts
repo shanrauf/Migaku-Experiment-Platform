@@ -32,12 +32,12 @@ export default class SurveyService {
   }> {
     try {
       this.logger.silly('Fetching surveys');
-      const surveyRecords = await Survey.findAndCountAll({
+      const surveyRecords = await Survey.scope('public').findAndCountAll({
         include: [
           {
             model: Experiment,
             attributes: ['experimentId'],
-            where: { experimentId, visibility: 'public' }
+            where: { experimentId }
           }
         ],
         limit: 10
@@ -55,7 +55,7 @@ export default class SurveyService {
   public async GetSurvey(surveyId: string): Promise<{ survey: Survey }> {
     try {
       this.logger.silly(`Fetching survey ${surveyId}`);
-      const surveyRecord = await Survey.findOne({
+      const surveyRecord = await Survey.scope('public').findOne({
         include: [
           {
             model: SurveySection
@@ -83,10 +83,12 @@ export default class SurveyService {
   ): Promise<{ survey: Survey | null }> {
     try {
       this.logger.silly('Fetching latest survey');
-      const surveyRecord = await Survey.findOne({
-        where: { visibility: 'public', experimentId },
-        order: [['startDate', 'DESC']]
-      }).then(survey => survey);
+      const surveyRecord = await Survey.scope('public')
+        .findOne({
+          where: { visibility: 'public', experimentId },
+          order: [['startDate', 'DESC']]
+        })
+        .then(survey => survey);
       if (!surveyRecord) {
         return { survey: null };
       }
@@ -137,10 +139,12 @@ export default class SurveyService {
 
       // check if the time submitted for that attribute is before the date of the most recent survey
 
-      const mostRecentSurveyCreatedAt = await Survey.findOne({
-        where: { surveyId },
-        order: [['createdAt', 'DESC']]
-      }).then(survey => survey.createdAt);
+      const mostRecentSurveyCreatedAt = await Survey.scope('public')
+        .findOne({
+          where: { surveyId },
+          order: [['createdAt', 'DESC']]
+        })
+        .then(survey => survey.createdAt);
 
       // not very readable code with +new
       const mostRecentAnkiSync = +new Date(audioTotalTime).getTime();

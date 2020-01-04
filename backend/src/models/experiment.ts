@@ -21,7 +21,6 @@ import { CardCollection } from './cardCollection';
 import { QuestionResponse } from './questionResponse';
 
 @DefaultScope(() => ({
-  where: { visibility: 'public' },
   attributes: [
     'experimentId',
     'title',
@@ -32,6 +31,9 @@ import { QuestionResponse } from './questionResponse';
   ]
 }))
 @Scopes(() => ({
+  public: {
+    where: { visibility: 'public' }
+  },
   private: {
     where: { visibility: 'private' }
   }
