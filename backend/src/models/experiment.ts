@@ -8,7 +8,9 @@ import {
   HasMany,
   Default,
   UpdatedAt,
-  CreatedAt
+  CreatedAt,
+  DefaultScope,
+  Scopes
 } from 'sequelize-typescript';
 import { Participant } from './participant';
 import { ExperimentParticipant } from './intermediary/experimentParticipant';
@@ -17,33 +19,25 @@ import { ExperimentRequirement } from './intermediary/experimentRequirement';
 import { Survey } from './survey';
 import { CardCollection } from './cardCollection';
 import { QuestionResponse } from './questionResponse';
+
+@DefaultScope(() => ({
+  where: { visibility: 'public' },
+  attributes: [
+    'experimentId',
+    'title',
+    'description',
+    'startDate',
+    'endDate',
+    'visibility'
+  ]
+}))
+@Scopes(() => ({
+  private: {
+    where: { visibility: 'private' }
+  }
+}))
 @Table({ modelName: 'Experiment', tableName: 'Experiments' })
 export class Experiment extends Model<Experiment> {
-  @BelongsToMany(
-    () => Participant,
-    () => ExperimentParticipant,
-    'experimentId',
-    'participantId'
-  )
-  participants: Participant[];
-
-  @BelongsToMany(
-    () => Requirement,
-    () => ExperimentRequirement,
-    'experimentId',
-    'requirementId'
-  )
-  requirements: Requirement[];
-
-  @HasMany(() => Survey, 'experimentId')
-  surveys: Survey[];
-
-  @HasMany(() => QuestionResponse, 'experimentId')
-  questionResponses: QuestionResponse[];
-
-  @HasMany(() => CardCollection)
-  cardCollections: CardCollection[];
-
   @Column({ type: DataType.STRING(255), primaryKey: true })
   experimentId: string;
 
@@ -71,4 +65,29 @@ export class Experiment extends Model<Experiment> {
   @UpdatedAt
   @Column
   updatedAt: Date;
+
+  @BelongsToMany(
+    () => Participant,
+    () => ExperimentParticipant,
+    'experimentId',
+    'participantId'
+  )
+  participants: Participant[];
+
+  @BelongsToMany(
+    () => Requirement,
+    () => ExperimentRequirement,
+    'experimentId',
+    'requirementId'
+  )
+  requirements: Requirement[];
+
+  @HasMany(() => Survey, 'experimentId')
+  surveys: Survey[];
+
+  @HasMany(() => QuestionResponse, 'experimentId')
+  questionResponses: QuestionResponse[];
+
+  @HasMany(() => CardCollection)
+  cardCollections: CardCollection[];
 }

@@ -8,24 +8,29 @@ import {
   AllowNull,
   Unique,
   UpdatedAt,
-  CreatedAt
+  CreatedAt,
+  DefaultScope
 } from 'sequelize-typescript';
 import { Survey } from './survey';
 import { SurveyQuestion } from './intermediary/surveyQuestion';
 import { QuestionResponse } from './questionResponse';
+
+@DefaultScope(() => ({
+  attributes: [
+    'questionId',
+    'key',
+    'questionType',
+    'dataType',
+    'label',
+    'rules',
+    'items',
+    'required',
+    'note',
+    'question'
+  ]
+}))
 @Table({ modelName: 'Question', tableName: 'Questions' })
 export class Question extends Model<Question> {
-  @BelongsToMany(
-    () => Survey,
-    () => SurveyQuestion,
-    'questionId',
-    'surveyId'
-  )
-  surveys: Survey[];
-
-  @HasMany(() => QuestionResponse, 'questionId')
-  questionResponses: QuestionResponse[];
-
   @Column({ type: DataType.STRING(255), primaryKey: true })
   questionId: string;
 
@@ -68,4 +73,15 @@ export class Question extends Model<Question> {
   @UpdatedAt
   @Column
   updatedAt: Date;
+
+  @BelongsToMany(
+    () => Survey,
+    () => SurveyQuestion,
+    'questionId',
+    'surveyId'
+  )
+  surveys: Survey[];
+
+  @HasMany(() => QuestionResponse, 'questionId')
+  questionResponses: QuestionResponse[];
 }

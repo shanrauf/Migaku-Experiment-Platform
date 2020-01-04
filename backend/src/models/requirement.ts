@@ -7,21 +7,17 @@ import {
   AllowNull,
   Unique,
   CreatedAt,
-  UpdatedAt
+  UpdatedAt,
+  DefaultScope
 } from 'sequelize-typescript';
 import { Experiment } from './experiment';
 import { ExperimentRequirement } from './intermediary/experimentRequirement';
 
+@DefaultScope(() => ({
+  attributes: ['requirementId', 'key', 'dataType', 'image']
+}))
 @Table({ modelName: 'Requirement', tableName: 'Requirements' })
 export class Requirement extends Model<Requirement> {
-  @BelongsToMany(
-    () => Experiment,
-    () => ExperimentRequirement,
-    'requirementId',
-    'experimentId'
-  )
-  experiments: Experiment[];
-
   @Column({ type: DataType.STRING(255), primaryKey: true })
   requirementId: string;
 
@@ -43,4 +39,12 @@ export class Requirement extends Model<Requirement> {
   @UpdatedAt
   @Column
   updatedAt: Date;
+
+  @BelongsToMany(
+    () => Experiment,
+    () => ExperimentRequirement,
+    'requirementId',
+    'experimentId'
+  )
+  experiments: Experiment[];
 }

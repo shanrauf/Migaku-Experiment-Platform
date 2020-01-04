@@ -6,11 +6,15 @@ import {
   ForeignKey,
   DataType,
   UpdatedAt,
-  CreatedAt
+  CreatedAt,
+  DefaultScope
 } from 'sequelize-typescript';
 
 import { Survey } from './survey';
 
+@DefaultScope(() => ({
+  attributes: ['sectionId', 'surveyId', 'sectionNumber', 'title', 'description']
+}))
 @Table({ modelName: 'SurveySection', tableName: 'SurveySections' })
 export class SurveySection extends Model<SurveySection> {
   @Column({ type: DataType.STRING(255), primaryKey: true })

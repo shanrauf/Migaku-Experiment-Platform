@@ -7,27 +7,25 @@ import {
   ForeignKey,
   AutoIncrement,
   UpdatedAt,
-  CreatedAt
+  CreatedAt,
+  DefaultScope
 } from 'sequelize-typescript';
 import { Survey } from './survey';
 import { Experiment } from './experiment';
 import { Participant } from './participant';
 import { SurveyResponse } from './surveyResponse';
 
+@DefaultScope(() => ({
+  attributes: [
+    'experimentId',
+    'surveyId',
+    'participantId',
+    'responseId',
+    'cards'
+  ]
+}))
 @Table({ modelName: 'CardCollection', tableName: 'CardCollections' })
 export class CardCollection extends Model<CardCollection> {
-  @BelongsTo(() => Experiment, 'experimentId')
-  experiment: Experiment;
-
-  @BelongsTo(() => Survey, 'surveyId')
-  survey: Survey;
-
-  @BelongsTo(() => Participant, 'participantId')
-  participant: Participant;
-
-  @BelongsTo(() => SurveyResponse, 'responseId')
-  surveyResponse: SurveyResponse;
-
   @AutoIncrement
   @Column({ type: DataType.INTEGER.UNSIGNED, primaryKey: true })
   id: number;
@@ -58,4 +56,16 @@ export class CardCollection extends Model<CardCollection> {
   @UpdatedAt
   @Column
   updatedAt: Date;
+
+  @BelongsTo(() => Experiment, 'experimentId')
+  experiment: Experiment;
+
+  @BelongsTo(() => Survey, 'surveyId')
+  survey: Survey;
+
+  @BelongsTo(() => Participant, 'participantId')
+  participant: Participant;
+
+  @BelongsTo(() => SurveyResponse, 'responseId')
+  surveyResponse: SurveyResponse;
 }

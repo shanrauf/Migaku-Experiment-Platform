@@ -8,30 +8,54 @@ import {
   ForeignKey,
   AutoIncrement,
   UpdatedAt,
-  CreatedAt
+  CreatedAt,
+  DefaultScope,
+  Scopes
 } from 'sequelize-typescript';
 import { Question } from './question';
 import { Experiment } from './experiment';
 import { Survey } from './survey';
 import { Participant } from './participant';
 import { SurveyResponse } from './surveyResponse';
+
+@DefaultScope(() => ({
+  attributes: [
+    'questionId',
+    'responseId',
+    'experimentId',
+    'surveyId',
+    'participantId'
+  ]
+}))
+/* Dynamically query correct answer field using dataType
+let dataType = capitalize("smallInt"); // "SmallInt"
+return await QuestionResponse.scope(['defaultScope, `answer${dataType}`]).findAndCountAll();
+*/
+@Scopes(() => ({
+  answerSmallInt: {
+    attributes: ['answerSmallInt']
+  },
+  answerInt: {
+    attributes: ['answerInt']
+  },
+  answerFloat: {
+    attributes: ['answerFloat']
+  },
+  answerBoolean: {
+    attributes: ['answerBoolean']
+  },
+  answerVarchar: {
+    attributes: ['answerVarchar']
+  },
+  answerText: {
+    attributes: ['answerText']
+  },
+  answerJSON: {
+    attributes: ['answerJSON']
+  }
+}))
 @Table({ modelName: 'QuestionResponse', tableName: 'QuestionResponses' })
 export class QuestionResponse extends Model<QuestionResponse> {
-  @BelongsTo(() => Experiment, 'experimentId')
-  experiment: Experiment;
-
-  @BelongsTo(() => Survey, 'surveyId')
-  survey: Survey;
-
-  @BelongsTo(() => Participant, 'participantId')
-  participant: Participant;
-
-  @BelongsTo(() => Question, 'questionId')
-  question: Question;
-
-  @BelongsTo(() => SurveyResponse, 'responseId')
-  surveyResponse: SurveyResponse;
-
   @AutoIncrement
   @Column({ type: DataType.INTEGER.UNSIGNED, primaryKey: true })
   id: number;
@@ -91,4 +115,19 @@ export class QuestionResponse extends Model<QuestionResponse> {
   @UpdatedAt
   @Column
   updatedAt: Date;
+
+  @BelongsTo(() => Experiment, 'experimentId')
+  experiment: Experiment;
+
+  @BelongsTo(() => Survey, 'surveyId')
+  survey: Survey;
+
+  @BelongsTo(() => Participant, 'participantId')
+  participant: Participant;
+
+  @BelongsTo(() => Question, 'questionId')
+  question: Question;
+
+  @BelongsTo(() => SurveyResponse, 'responseId')
+  surveyResponse: SurveyResponse;
 }

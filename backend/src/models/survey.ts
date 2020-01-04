@@ -9,7 +9,9 @@ import {
   UpdatedAt,
   CreatedAt,
   BelongsTo,
-  ForeignKey
+  ForeignKey,
+  DefaultScope,
+  Scopes
 } from 'sequelize-typescript';
 import { Experiment } from './experiment';
 import { Question } from './question';
@@ -18,37 +20,33 @@ import { CardCollection } from './cardCollection';
 import { QuestionResponse } from './questionResponse';
 import { SurveySection } from './surveySection';
 import { SurveyResponse } from './surveyResponse';
+
+@DefaultScope(() => ({
+  where: { visibility: 'public' },
+  attributes: [
+    'experimentId',
+    'surveyId',
+    'title',
+    'description',
+    'startDate',
+    'endDate',
+    'surveyCategory',
+    'visibility'
+  ]
+}))
+@Scopes(() => ({
+  private: {
+    where: { visibility: 'private' }
+  }
+}))
 @Table({ modelName: 'Survey', tableName: 'Surveys' })
 export class Survey extends Model<Survey> {
-  @BelongsTo(() => Experiment, 'experimentId')
-  experiment: Experiment;
-
-  @BelongsToMany(
-    () => Question,
-    () => SurveyQuestion,
-    'surveyId',
-    'questionId'
-  )
-  questions: Question[];
-
-  @HasMany(() => SurveySection, 'surveyId')
-  surveySections: SurveySection[];
-
-  @HasMany(() => SurveyResponse, 'surveyId')
-  surveyResponses: SurveySection[];
-
-  @HasMany(() => QuestionResponse, 'surveyId')
-  questionResponses: QuestionResponse[];
-
-  @HasMany(() => CardCollection, 'surveyId')
-  cardCollections: CardCollection[];
-
-  @Column({ type: DataType.STRING(255), primaryKey: true })
-  surveyId: string;
-
   @ForeignKey(() => Experiment)
   @Column(DataType.STRING(255))
   experimentId: string;
+
+  @Column({ type: DataType.STRING(255), primaryKey: true })
+  surveyId: string;
 
   @Column(DataType.STRING(255))
   title: string;
@@ -77,4 +75,27 @@ export class Survey extends Model<Survey> {
   @UpdatedAt
   @Column
   updatedAt: Date;
+
+  @BelongsTo(() => Experiment, 'experimentId')
+  experiment: Experiment;
+
+  @BelongsToMany(
+    () => Question,
+    () => SurveyQuestion,
+    'surveyId',
+    'questionId'
+  )
+  questions: Question[];
+
+  @HasMany(() => SurveySection, 'surveyId')
+  surveySections: SurveySection[];
+
+  @HasMany(() => SurveyResponse, 'surveyId')
+  surveyResponses: SurveySection[];
+
+  @HasMany(() => QuestionResponse, 'surveyId')
+  questionResponses: QuestionResponse[];
+
+  @HasMany(() => CardCollection, 'surveyId')
+  cardCollections: CardCollection[];
 }
