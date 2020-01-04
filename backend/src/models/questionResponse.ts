@@ -57,26 +57,32 @@ return await QuestionResponse.scope(['defaultScope, `answer${dataType}`]).findAn
 @Table({ modelName: 'QuestionResponse', tableName: 'QuestionResponses' })
 export class QuestionResponse extends Model<QuestionResponse> {
   @AutoIncrement
+  @AllowNull(false)
   @Column({ type: DataType.INTEGER.UNSIGNED, primaryKey: true })
   id: number;
 
   @ForeignKey(() => Question)
+  @AllowNull(false)
   @Column(DataType.STRING(255))
   questionId: string;
 
   @ForeignKey(() => SurveyResponse)
+  @AllowNull(false)
   @Column(DataType.STRING(255))
   responseId: string;
 
   @ForeignKey(() => Experiment)
+  @AllowNull(false)
   @Column(DataType.STRING(255))
   experimentId: string;
 
   @ForeignKey(() => Survey)
+  @AllowNull(false)
   @Column(DataType.STRING(255))
   surveyId: string;
 
   @ForeignKey(() => Participant)
+  @AllowNull(false)
   @Column(DataType.STRING(255))
   participantId: string;
 

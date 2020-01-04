@@ -16,13 +16,16 @@ import { Participant } from '../participant';
 })
 export class ExperimentParticipant extends Model<ExperimentParticipant> {
   @ForeignKey(() => Experiment)
+  @AllowNull(false)
   @Column(DataType.STRING(255))
   experimentId: string;
 
   @ForeignKey(() => Participant)
+  @AllowNull(false)
   @Column(DataType.STRING(255))
   participantId: string;
 
+  @AllowNull(false)
   @Column
   registerDate: Date;
 

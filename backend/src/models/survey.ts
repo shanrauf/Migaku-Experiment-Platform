@@ -44,12 +44,15 @@ import { SurveyResponse } from './surveyResponse';
 @Table({ modelName: 'Survey', tableName: 'Surveys' })
 export class Survey extends Model<Survey> {
   @ForeignKey(() => Experiment)
+  @AllowNull(false)
   @Column(DataType.STRING(255))
   experimentId: string;
 
+  @AllowNull(false)
   @Column({ type: DataType.STRING(255), primaryKey: true })
   surveyId: string;
 
+  @AllowNull(false)
   @Column(DataType.STRING(255))
   title: string;
 
@@ -57,6 +60,7 @@ export class Survey extends Model<Survey> {
   @Column(DataType.STRING(1500))
   description: string;
 
+  @AllowNull(false)
   @Column
   startDate: Date;
 
@@ -64,9 +68,11 @@ export class Survey extends Model<Survey> {
   @Column
   endDate: Date; // can be null to represent TBD or indefinite
 
+  @AllowNull(false)
   @Column(DataType.STRING(100))
   surveyCategory: string;
 
+  @AllowNull(false)
   @Column(DataType.STRING(25))
   visibility: string;
 

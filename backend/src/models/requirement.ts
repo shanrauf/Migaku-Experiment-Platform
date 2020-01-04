@@ -22,9 +22,11 @@ export class Requirement extends Model<Requirement> {
   requirementId: string;
 
   @Unique
+  @AllowNull(false)
   @Column(DataType.STRING(100))
   key: string;
 
+  @AllowNull(false)
   @Column(DataType.STRING(50))
   dataType: string;
 

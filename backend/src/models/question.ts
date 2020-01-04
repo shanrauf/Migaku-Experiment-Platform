@@ -31,16 +31,20 @@ import { QuestionResponse } from './questionResponse';
 }))
 @Table({ modelName: 'Question', tableName: 'Questions' })
 export class Question extends Model<Question> {
+  @AllowNull(false)
   @Column({ type: DataType.STRING(255), primaryKey: true })
   questionId: string;
 
   @Unique
+  @AllowNull(false)
   @Column(DataType.STRING(100))
   key: string;
 
+  @AllowNull(false)
   @Column(DataType.STRING(50))
   questionType: string;
 
+  @AllowNull(false)
   @Column(DataType.STRING(50))
   dataType: string;
 
@@ -56,6 +60,7 @@ export class Question extends Model<Question> {
   @Column(DataType.STRING(500))
   items: string;
 
+  @AllowNull(false)
   @Column
   required: boolean;
 
@@ -63,6 +68,7 @@ export class Question extends Model<Question> {
   @Column(DataType.STRING(1000))
   note: string;
 
+  @AllowNull(false)
   @Column(DataType.STRING(500))
   question: string;
 

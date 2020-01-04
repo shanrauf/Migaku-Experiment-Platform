@@ -8,7 +8,8 @@ import {
   UpdatedAt,
   CreatedAt,
   HasMany,
-  DefaultScope
+  DefaultScope,
+  AllowNull
 } from 'sequelize-typescript';
 import { Experiment } from './experiment';
 import { Survey } from './survey';
@@ -28,18 +29,22 @@ import { CardCollection } from './cardCollection';
 }))
 @Table({ modelName: 'SurveyResponse', tableName: 'SurveyResponses' })
 export class SurveyResponse extends Model<SurveyResponse> {
+  @AllowNull(false)
   @Column({ type: DataType.STRING(255), primaryKey: true })
   responseId: string;
 
   @ForeignKey(() => Experiment)
+  @AllowNull(false)
   @Column(DataType.STRING(255))
   experimentId: string;
 
   @ForeignKey(() => Survey)
+  @AllowNull(false)
   @Column(DataType.STRING(255))
   surveyId: string;
 
   @ForeignKey(() => Participant)
+  @AllowNull(false)
   @Column(DataType.STRING(255))
   participantId: string;
 

@@ -48,16 +48,20 @@ const publicAttributes = [
 }))
 @Table({ modelName: 'Participant', tableName: 'Participants' })
 export class Participant extends Model<Participant> {
+  @AllowNull(false)
   @Column({ type: DataType.STRING(255), primaryKey: true })
   participantId: string;
 
   @Unique
+  @AllowNull(false)
   @Column(DataType.STRING(100))
   email: string;
 
+  @AllowNull(false)
   @Column(DataType.STRING(60))
   password: string;
 
+  @AllowNull(false)
   @Column(DataType.STRING(100))
   name: string;
 
@@ -65,12 +69,15 @@ export class Participant extends Model<Participant> {
   @Column(DataType.STRING(100))
   discordUsername: string;
 
+  @AllowNull(false)
   @Column(DataType.TINYINT)
   age: number;
 
+  @AllowNull(false)
   @Column(DataType.STRING(20))
   sex: string;
 
+  @AllowNull(false)
   @Column
   lastLogin: Date;
 

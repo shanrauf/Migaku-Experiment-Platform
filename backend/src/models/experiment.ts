@@ -6,7 +6,6 @@ import {
   DataType,
   AllowNull,
   HasMany,
-  Default,
   UpdatedAt,
   CreatedAt,
   DefaultScope,
@@ -40,16 +39,20 @@ import { QuestionResponse } from './questionResponse';
 }))
 @Table({ modelName: 'Experiment', tableName: 'Experiments' })
 export class Experiment extends Model<Experiment> {
+  @AllowNull(false)
   @Column({ type: DataType.STRING(255), primaryKey: true })
   experimentId: string;
 
+  @AllowNull(false)
   @Column(DataType.STRING(255))
   title: string;
 
+  @AllowNull(false)
   @AllowNull(true)
   @Column(DataType.STRING(1500))
   description: string;
 
+  @AllowNull(false)
   @Column
   startDate: Date;
 
@@ -57,6 +60,7 @@ export class Experiment extends Model<Experiment> {
   @Column
   endDate: Date;
 
+  @AllowNull(false)
   @Column(DataType.STRING(25))
   visibility: string;
 
