@@ -6,18 +6,24 @@ module.exports = {
       'Requirements',
       [
         {
-          requirementId: 'testRequirementOne',
-          key: 'completedRRTK',
+          requirementId: 'completedRRTK',
           dataType: 'boolean',
+          title: 'Completed RRTK',
+          description:
+            'Completing RRTK, previously known as Lazy Kanji, will make sentence mining easier',
           image: 'https://www.dropbox.com/s/fcxavuijy65hfem/profile.jpg?dl=1',
+          value: 'true',
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
-          requirementId: 'testRequirementTwo',
-          key: 'completedPRTK',
-          dataType: 'boolean',
-          image: null,
+          requirementId: 'maxKnownWords',
+          dataType: 'number',
+          title: 'Less Than 5000 Known Words',
+          description:
+            'This experiment is not targeting language learners in later stages of MIA',
+          image: 'https://www.dropbox.com/s/fcxavuijy65hfem/profile.jpg?dl=1',
+          value: 'true',
           createdAt: new Date(),
           updatedAt: new Date()
         }

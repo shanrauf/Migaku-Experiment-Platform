@@ -15,18 +15,18 @@ export class ExperimentQuestion extends Model<ExperimentQuestion> {
   @ForeignKey(() => Experiment)
   @AllowNull(false)
   @Column(DataType.STRING(255))
-  experimentId: string;
+  experimentId!: string;
 
   @ForeignKey(() => Question)
   @AllowNull(false)
   @Column(DataType.STRING(255))
-  questionId: string;
+  questionId!: string;
 
   @CreatedAt
   @Column
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdatedAt
   @Column
-  updatedAt: Date;
+  updatedAt!: Date;
 }

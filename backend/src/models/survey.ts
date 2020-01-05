@@ -46,15 +46,15 @@ export class Survey extends Model<Survey> {
   @ForeignKey(() => Experiment)
   @AllowNull(false)
   @Column(DataType.STRING(255))
-  experimentId: string;
+  experimentId!: string;
 
   @AllowNull(false)
   @Column({ type: DataType.STRING(255), primaryKey: true })
-  surveyId: string;
+  surveyId!: string;
 
   @AllowNull(false)
   @Column(DataType.STRING(255))
-  title: string;
+  title!: string;
 
   @AllowNull(true)
   @Column(DataType.STRING(1500))
@@ -77,19 +77,19 @@ export class Survey extends Model<Survey> {
 
   @AllowNull(false)
   @Column(DataType.STRING(100))
-  surveyCategory: string;
+  surveyCategory!: string;
 
   @AllowNull(false)
   @Column(DataType.STRING(25))
-  visibility: string;
+  visibility!: string;
 
   @CreatedAt
   @Column
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdatedAt
   @Column
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @BelongsTo(() => Experiment, 'experimentId')
   experiment: Experiment;

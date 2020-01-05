@@ -50,20 +50,20 @@ const publicAttributes = [
 export class Participant extends Model<Participant> {
   @AllowNull(false)
   @Column({ type: DataType.STRING(255), primaryKey: true })
-  participantId: string;
+  participantId!: string;
 
   @Unique
   @AllowNull(false)
   @Column(DataType.STRING(100))
-  email: string;
+  email!: string;
 
   @AllowNull(false)
   @Column(DataType.STRING(60))
-  password: string;
+  password!: string;
 
   @AllowNull(false)
   @Column(DataType.STRING(100))
-  name: string;
+  name!: string;
 
   @AllowNull(true)
   @Column(DataType.STRING(100))
@@ -71,23 +71,23 @@ export class Participant extends Model<Participant> {
 
   @AllowNull(false)
   @Column(DataType.TINYINT)
-  age: number;
+  age!: number;
 
   @AllowNull(false)
   @Column(DataType.STRING(20))
-  sex: string;
+  sex!: string;
 
   @AllowNull(false)
   @Column
-  lastLogin: Date;
+  lastLogin!: Date;
 
   @CreatedAt
   @Column
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdatedAt
   @Column
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @BelongsToMany(
     () => Experiment,

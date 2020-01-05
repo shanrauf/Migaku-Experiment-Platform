@@ -6,20 +6,20 @@ module.exports = {
       'ExperimentRequirements',
       [
         {
-          experimentId: 'abc123',
-          requirementId: 'testRequirementOne',
-          title: 'completedRRTK',
-          description: 'Completed RRTK',
-          value: 'true',
+          experimentId: 'audiovssentencecards',
+          requirementId: 'completedRRTK',
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          experimentId: 'audiovssentencecards',
+          requirementId: 'maxKnownWords',
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
           experimentId: 'abc123',
-          requirementId: 'testRequirementTwo',
-          title: 'completedPRTK',
-          description: 'Completed PRTK',
-          value: 'true',
+          requirementId: 'maxKnownWords',
           createdAt: new Date(),
           updatedAt: new Date()
         }

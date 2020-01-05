@@ -35,20 +35,20 @@ import { ExperimentQuestion } from './intermediary/experimentQuestion';
 export class Question extends Model<Question> {
   @AllowNull(false)
   @Column({ type: DataType.STRING(255), primaryKey: true })
-  questionId: string;
+  questionId!: string;
 
   @Unique
   @AllowNull(false)
   @Column(DataType.STRING(100))
-  key: string;
+  key!: string;
 
   @AllowNull(false)
   @Column(DataType.STRING(50))
-  questionType: string;
+  questionType!: string;
 
   @AllowNull(false)
   @Column(DataType.STRING(50))
-  dataType: string;
+  dataType!: string;
 
   @AllowNull(true)
   @Column(DataType.STRING(100))
@@ -64,7 +64,7 @@ export class Question extends Model<Question> {
 
   @AllowNull(false)
   @Column
-  required: boolean;
+  required!: boolean;
 
   @AllowNull(true)
   @Column(DataType.STRING(1000))
@@ -72,15 +72,15 @@ export class Question extends Model<Question> {
 
   @AllowNull(false)
   @Column(DataType.STRING(500))
-  question: string;
+  question!: string;
 
   @CreatedAt
   @Column
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdatedAt
   @Column
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @BelongsToMany(
     () => Experiment,

@@ -31,30 +31,30 @@ import { CardCollection } from './cardCollection';
 export class SurveyResponse extends Model<SurveyResponse> {
   @AllowNull(false)
   @Column({ type: DataType.STRING(255), primaryKey: true })
-  responseId: string;
+  responseId!: string;
 
   @ForeignKey(() => Experiment)
   @AllowNull(false)
   @Column(DataType.STRING(255))
-  experimentId: string;
+  experimentId!: string;
 
   @ForeignKey(() => Survey)
   @AllowNull(false)
   @Column(DataType.STRING(255))
-  surveyId: string;
+  surveyId!: string;
 
   @ForeignKey(() => Participant)
   @AllowNull(false)
   @Column(DataType.STRING(255))
-  participantId: string;
+  participantId!: string;
 
   @CreatedAt
   @Column
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdatedAt
   @Column
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @BelongsTo(() => Experiment, 'experimentId')
   experiment: Experiment;

@@ -30,39 +30,39 @@ export class CardCollection extends Model<CardCollection> {
   @AutoIncrement
   @AllowNull(false)
   @Column({ type: DataType.INTEGER.UNSIGNED, primaryKey: true })
-  id: number;
+  id!: number;
 
   @ForeignKey(() => Experiment)
   @AllowNull(false)
   @Column(DataType.STRING(255))
-  experimentId: string;
+  experimentId!: string;
 
   @ForeignKey(() => Survey)
   @AllowNull(false)
   @Column(DataType.STRING(255))
-  surveyId: string;
+  surveyId!: string;
 
   @ForeignKey(() => Participant)
   @AllowNull(false)
   @Column(DataType.STRING(255))
-  participantId: string;
+  participantId!: string;
 
   @ForeignKey(() => SurveyResponse)
   @AllowNull(false)
   @Column(DataType.STRING(255))
-  responseId: string;
+  responseId!: string;
 
   @AllowNull(false)
   @Column(DataType.JSON)
-  cards: string;
+  cards!: string;
 
   @CreatedAt
   @Column
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdatedAt
   @Column
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @BelongsTo(() => Experiment, 'experimentId')
   experiment: Experiment;

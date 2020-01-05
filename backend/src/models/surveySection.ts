@@ -20,19 +20,19 @@ export class SurveySection extends Model<SurveySection> {
   @ForeignKey(() => Survey)
   @AllowNull(false)
   @Column(DataType.STRING(255))
-  surveyId: string;
+  surveyId!: string;
 
   @AllowNull(false)
   @Column({ type: DataType.STRING(255), primaryKey: true })
-  sectionId: string;
+  sectionId!: string;
 
   @AllowNull(false)
   @Column(DataType.TINYINT)
-  sectionNumber: number;
+  sectionNumber!: number;
 
   @AllowNull(false)
   @Column(DataType.STRING(255))
-  title: string;
+  title!: string;
 
   @AllowNull(true)
   @Column(DataType.STRING(1500))
@@ -40,9 +40,9 @@ export class SurveySection extends Model<SurveySection> {
 
   @CreatedAt
   @Column
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdatedAt
   @Column
-  updatedAt: Date;
+  updatedAt!: Date;
 }
