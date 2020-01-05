@@ -83,7 +83,6 @@ export default class SurveyService {
           surveyId
         }
       });
-      console.log(surveyRecord);
       return { survey: surveyRecord };
     } catch (e) {
       this.logger.error(e);
@@ -113,7 +112,7 @@ export default class SurveyService {
     }
   }
 
-  public async GetSurveyStatus(
+  public async GetSurveyCompletionStatus(
     // this method is horrendously large
     participantId: string,
     surveyId: string,
@@ -131,35 +130,29 @@ export default class SurveyService {
           throw e;
         });
       if (!responseRecordExists) {
-        return 2; // user hasn't filled out survey
+        return false;
       }
-
-      /*
-      Since we dont track Anki responses like we do SurveyResponses, we check if user
-      submitted a specific attribute from Anki e.x "audioTotalTime." This is horrendous since
-      not every experiment will have Anki send an "audioTotalTime" attribute.
-      */
-
-      const audioTotalTime = await this.questionResponseModel.count({
-        where: { questionId: 'audioTotalTime', participantId, surveyId }
-      });
-      // if audioTotalTime = 0, the row doesn't exist i.e user hasn't synced Anki data for this survey
-      if (!audioTotalTime) {
-        return 1; // ready to sync Anki data
-      } else {
-        return 3; // already synced
-      }
+      return true;
     } catch (e) {
       this.logger.error(e);
       throw e;
     }
   }
 
-  // private async GetSurveyCutoff
+  public async GetAnkiDataSubmissionStatus(
+    participantId: string,
+    surveyId: string
+  ): Promise<boolean> {
+    // Checks if user submitted their CardCollection for the week's survey.
+    const cardCollectionExists = await this.cardCollectionModel.count({
+      where: { participantId, surveyId }
+    });
+    return !!cardCollectionExists;
+  }
 
   public async GetSurveySection(
-    // could redoo this to return a payload w prev and nextSectionId, which can then use to fetch questions
-    sectionNumber: number
+    // could redo this to return a payload w prev and nextSectionId, which can then use to fetch questions
+    sectionNumber: number // change to sectionId?
   ): Promise<{ surveySection: SurveySection | null }> {
     try {
       this.logger.silly('Fetching survey section');
@@ -206,14 +199,7 @@ export default class SurveyService {
       questionId: question[0], // question key
       experimentId,
       surveyId,
-      participantId,
-      answerSmallInt: null,
-      answerInt: null,
-      answerFloat: null,
-      answerBoolean: null,
-      answerVarchar: null,
-      answerText: null,
-      answerJSON: null
+      participantId
     };
     const dataType = capitalize(question[1].dataType);
     questionResponse[`answer${dataType}`] = question[1].value;
@@ -226,7 +212,7 @@ export default class SurveyService {
     participantId: string,
     responseId: string,
     dataPayload: object
-  ): Promise<{ questionResponses: QuestionResponse[] | null | any[] }> {
+  ): Promise<{ questionResponses: QuestionResponse[] }> {
     try {
       // Checking if user has already submitted the survey
       const responseRecordExists = await this.questionResponseModel.findOne({
@@ -279,20 +265,30 @@ export default class SurveyService {
       throw e;
     }
   }
-  public async GetSurveyResponseId(
+
+  public async findOrCreateResponseId(
+    experimentId: string,
     surveyId: string,
     participantId: string
-  ): Promise<string | null> {
-    this.logger.silly('Getting survey response id');
-    console.log(surveyId);
-    console.log(participantId);
-
-    const responseId = await this.surveyResponseModel
-      .findOne({
+  ): Promise<string> {
+    try {
+      this.logger.silly('Finding survey responseId');
+      const surveyResponse = await this.surveyResponseModel.findOne({
+        attributes: ['responseId'],
         where: { surveyId, participantId }
-      })
-      .then(response => response.responseId);
-    return responseId;
+      });
+      if (!surveyResponse) {
+        return await this.CreateSurveyResponse(
+          experimentId,
+          surveyId,
+          participantId
+        ).then(response => response.responseId);
+      }
+      return surveyResponse.responseId;
+    } catch (err) {
+      this.logger.error(err);
+      throw err;
+    }
   }
 
   private async CreateQuestion(surveyId: string, question: [string, any]) {

@@ -1,16 +1,23 @@
 import { Request, Response, Router, NextFunction } from 'express';
-import Container from 'typedi';
+import { Container } from 'typedi';
+import winston from 'winston';
+
 import SurveyService from '../../services/survey';
 import ParticipantService from '../../services/participant';
+import { ISurvey } from '../../interfaces/ISurvey';
+import logger from '../../loaders/logger';
+
 const route = Router({ mergeParams: true });
 
 export default (app: Router) => {
   app.use('/experiments/:experimentId/surveys', route);
 
   route.get('/', async (req: Request, res: Response, next: NextFunction) => {
+    const { experimentId } = req.params;
     try {
+      logger.debug(`GET /experiments/${experimentId}/surveys with params: %o`);
       const surveyService = Container.get(SurveyService);
-      const payload = await surveyService.GetSurveys(req.params.experimentId);
+      const payload = await surveyService.GetSurveys(experimentId);
       if (!payload.surveys) {
         return res.status(404).send('Not found');
       }
@@ -21,19 +28,23 @@ export default (app: Router) => {
   });
 
   route.post('/', async (req: Request, res: Response, next: NextFunction) => {
+    const { experimentId } = req.params;
+    const { survey } = req.body;
+    logger.debug(
+      `POST /experiments/${experimentId}/surveys with body: %o`,
+      req.body
+    );
     try {
       // Creates a survey
       const surveyService = Container.get(SurveyService);
       const payload = await surveyService.CreateSurvey(
-        req.params.experimentId,
-        req.body.survey
+        experimentId,
+        survey as ISurvey
       );
       if (!payload) {
         return res.send(401);
       }
-      return res
-        .json({ survey: payload.survey, status: 'Survey updated' })
-        .status(200);
+      return res.json({ survey, status: 'Survey updated' }).status(200);
     } catch (err) {
       next(err); // handles the error, but reveals exactly wht the error was...
     }
@@ -42,10 +53,9 @@ export default (app: Router) => {
   route.get(
     '/latest',
     async (req: Request, res: Response, next: NextFunction) => {
+      const { experimentId } = req.params;
+      logger.debug(`GET /experiments/${experimentId}/surveys/latest`);
       try {
-        console.log('Here2');
-
-        const { experimentId } = req.params;
         const surveyService = Container.get(SurveyService);
         const payload = await surveyService.GetLatestSurvey(experimentId);
         if (!payload.survey) {
@@ -61,8 +71,11 @@ export default (app: Router) => {
   route.get(
     '/:surveyId',
     async (req: Request, res: Response, next: NextFunction) => {
+      const { experimentId, surveyId } = req.params;
+      logger.debug(
+        `GET /experiments/${experimentId}/surveys/${req.params.surveyId}`
+      );
       try {
-        const { surveyId } = req.params;
         const surveyService = Container.get(SurveyService);
         const payload = await surveyService.GetSurvey(surveyId);
         if (payload.survey === null) {
@@ -77,10 +90,12 @@ export default (app: Router) => {
   );
 
   route.get(
-    '/latest/status',
+    '/latest/status', // TODO: decouple anki stuff from this route...
     async (req: Request, res: Response, next: NextFunction) => {
+      const { experimentId } = req.params;
+      const { email } = req.query;
+      logger.debug(`GET /experiments/${experimentId}/surveys/latest/status`);
       try {
-        const { email } = req.query;
         const participantService = Container.get(ParticipantService);
         const participantId = await participantService.GetParticipantIdByEmail(
           email
@@ -89,29 +104,33 @@ export default (app: Router) => {
           return res.json({ status: 0 }).status(404);
         }
 
-        const { experimentId } = req.params;
         const surveyService = Container.get(SurveyService);
         const { survey } = await surveyService.GetLatestSurvey(experimentId);
         const { surveyId, startDate } = survey;
 
-        const surveyStatus = await surveyService.GetSurveyStatus(
+        const surveyCompleted = await surveyService.GetSurveyCompletionStatus(
           participantId,
           surveyId,
           startDate
         );
-
-        if (surveyStatus === 2) {
-          // Survey not completed
+        if (!surveyCompleted) {
+          // status 2 = user hasn't submitted survey
           const surveyLink = `http://trials.massimmersionapproach.com/experiments/audiovssentencecards/surveys/${surveyId}`;
           return res.json({ status: 2, data: surveyLink }).status(401);
         }
-        if (surveyStatus === 3) {
-          // Already synced Anki data
-          return res.json({ status: 3 }).status(404);
-        }
 
-        // get survey cutoff here; create get method on survey for startdate in cutoff format
-        return res.json({ status: 1, data: survey.cutoff }).status(200); // surveyStatus = surveyCuttof here
+        const ankiDataSubmitted = await surveyService.GetAnkiDataSubmissionStatus(
+          participantId,
+          surveyId
+        );
+
+        if (ankiDataSubmitted) {
+          // status 3 = user already synced Anki data
+          return res.json({ status: 3 }).status(404);
+        } else {
+          // status 1 = ready to sync Anki data
+          return res.json({ status: 1, data: survey.cutoff }).status(200);
+        }
       } catch (err) {
         return next(err);
       }
@@ -121,9 +140,12 @@ export default (app: Router) => {
   route.post(
     '/latest',
     async (req: Request, res: Response, next: NextFunction) => {
-      console.log('Request received');
+      const { experimentId } = req.params;
+      logger.debug(
+        `POST /experiments/${experimentId}/surveys/latest w/ body %o`,
+        req.body
+      );
       try {
-        const { experimentId } = req.params;
         const surveyService = Container.get(SurveyService);
         const latestSurvey = await surveyService.GetLatestSurvey(experimentId);
         if (!latestSurvey.survey) {
@@ -138,18 +160,12 @@ export default (app: Router) => {
           req.body.email
         );
 
-        // get responseId from surveyId and participantId
-        let responseId = await surveyService.GetSurveyResponseId(
+        let responseId = await surveyService.findOrCreateResponseId(
+          experimentId,
           surveyId,
           participantId
         );
 
-        // create one if doesn't exist
-        if (!responseId) {
-          responseId = await surveyService
-            .CreateSurveyResponse(experimentId, surveyId, participantId)
-            .then(response => response.responseId);
-        }
         const payload = await surveyService.PostSurveyResponses(
           experimentId,
           surveyId,
@@ -170,42 +186,35 @@ export default (app: Router) => {
   route.post(
     '/:surveyId',
     async (req: Request, res: Response, next: NextFunction) => {
+      const { experimentId, surveyId } = req.params;
+      logger.debug(
+        `POST /experiments/${experimentId}/surveys/${surveyId} w/ body %o`,
+        req.body
+      );
       try {
-        const { experimentId, surveyId } = req.params;
         const participantService = Container.get(ParticipantService);
+        const surveyService = Container.get(SurveyService);
+
         const participantId = await participantService.GetParticipantIdByEmail(
           req.body.email
         );
 
-        // get responseId from surveyId and participantId
-        const surveyService = Container.get(SurveyService);
-        let responseId = await surveyService.GetSurveyResponseId(
+        let responseId = await surveyService.findOrCreateResponseId(
+          experimentId,
           surveyId,
           participantId
         );
-        console.log('Here');
 
-        // create one if doesn't exist
-        if (!responseId) {
-          console.log('Here');
-
-          responseId = await surveyService
-            .CreateSurveyResponse(experimentId, surveyId, participantId)
-            .then(response => response.responseId);
-        }
-
-        const payload = await surveyService.PostSurveyResponses(
+        const questionResponses = await surveyService.PostSurveyResponses(
           experimentId,
           surveyId,
           participantId,
           responseId,
           req.body.data
         );
-        // if (!payload.questionResponses) {
-        //   return res.json(payload).status(404);
-        // }
-        return res.json(payload).status(200);
+        return res.json(questionResponses).status(200);
       } catch (err) {
+        logger.error(err);
         return next(err);
       }
     }
