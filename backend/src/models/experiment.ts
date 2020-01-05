@@ -18,6 +18,8 @@ import { ExperimentRequirement } from './intermediary/experimentRequirement';
 import { Survey } from './survey';
 import { CardCollection } from './cardCollection';
 import { QuestionResponse } from './questionResponse';
+import { ExperimentQuestion } from './intermediary/experimentQuestion';
+import { Question } from './question';
 
 @DefaultScope(() => ({
   attributes: [
@@ -47,7 +49,6 @@ export class Experiment extends Model<Experiment> {
   @Column(DataType.STRING(255))
   title: string;
 
-  @AllowNull(false)
   @AllowNull(true)
   @Column(DataType.STRING(1500))
   description: string;
@@ -79,6 +80,14 @@ export class Experiment extends Model<Experiment> {
     'participantId'
   )
   participants: Participant[];
+
+  @BelongsToMany(
+    () => Question,
+    () => ExperimentQuestion,
+    'experimentId',
+    'questionId'
+  )
+  questions: Question[];
 
   @BelongsToMany(
     () => Requirement,

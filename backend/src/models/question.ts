@@ -14,6 +14,8 @@ import {
 import { Survey } from './survey';
 import { SurveyQuestion } from './intermediary/surveyQuestion';
 import { QuestionResponse } from './questionResponse';
+import { Experiment } from './experiment';
+import { ExperimentQuestion } from './intermediary/experimentQuestion';
 
 @DefaultScope(() => ({
   attributes: [
@@ -79,6 +81,14 @@ export class Question extends Model<Question> {
   @UpdatedAt
   @Column
   updatedAt: Date;
+
+  @BelongsToMany(
+    () => Experiment,
+    () => ExperimentQuestion,
+    'questionId',
+    'experimentId'
+  )
+  questions: Question[];
 
   @BelongsToMany(
     () => Survey,

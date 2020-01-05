@@ -17,14 +17,14 @@ import { Survey } from './survey';
 }))
 @Table({ modelName: 'SurveySection', tableName: 'SurveySections' })
 export class SurveySection extends Model<SurveySection> {
-  @AllowNull(false)
-  @Column({ type: DataType.STRING(255), primaryKey: true })
-  sectionId: string;
-
   @ForeignKey(() => Survey)
   @AllowNull(false)
   @Column(DataType.STRING(255))
   surveyId: string;
+
+  @AllowNull(false)
+  @Column({ type: DataType.STRING(255), primaryKey: true })
+  sectionId: string;
 
   @AllowNull(false)
   @Column(DataType.TINYINT)

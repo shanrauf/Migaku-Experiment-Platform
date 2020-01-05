@@ -43,7 +43,7 @@ export default app => {
     '/:experimentId',
     async (req: Request, res: Response, next: NextFunction) => {
       const { experimentId } = req.params;
-      logger.debug(`POST /experiments/${experimentId}`);
+      logger.debug(`GET /experiments/${experimentId}`);
       try {
         const experimentService = Container.get(ExperimentService);
         const payload = await experimentService.GetExperiment(experimentId);
