@@ -30,7 +30,8 @@ export default class SurveyService {
     private surveySectionModel: typeof SurveySection,
     @Inject('SurveyResponse')
     private surveyResponseModel: typeof SurveyResponse,
-    @Inject("SurveySectionQuestion") private surveySectionQuestionModel: typeof SurveySectionQuestion,
+    @Inject('SurveySectionQuestion')
+    private surveySectionQuestionModel: typeof SurveySectionQuestion,
     @Inject('QuestionResponse')
     private questionResponseModel: typeof QuestionResponse,
     @Inject('CardCollection')
@@ -367,10 +368,11 @@ export default class SurveyService {
           },
           { transaction }
         );
-
+        let surveySectionQuestions = [];
         for (const section of surveyObj.sections) {
+          section['surveyId'] = surveyId; // surveyObj sections don't hve surveyId in section rn...
           await this.surveySectionModel.create(section, { transaction });
-          let surveyQuestions = []
+          let surveyQuestions = [];
           for (const question of section.questions) {
             let questionExists = await this.questionModel
               .findOne({
@@ -383,14 +385,22 @@ export default class SurveyService {
             }
             surveyQuestions.push({
               questionId: question.questionId,
-                surveyId: surveyObj.surveyId
-            })
+              surveyId: surveyObj.surveyId
+            });
+            surveySectionQuestions.push({
+              sectionId: section.sectionId,
+              questionId: question.questionId,
+              questionOrder: question.questionOrder
+            });
           }
-          await this.surveyQuestionModel.bulkCreate(surveyQuestions
-            { transaction }
-          );
-          // await this.surveySectionQuestionModel here associate questions to sections...
+          await this.surveyQuestionModel.bulkCreate(surveyQuestions, {
+            transaction
+          });
         }
+        await this.surveySectionQuestionModel.bulkCreate(
+          surveySectionQuestions,
+          { transaction }
+        );
         return { survey: surveyRecord };
       });
       return result;

@@ -26,6 +26,7 @@ export interface IQuestion {
   value: any;
   items?: string | any[];
   required: boolean;
+  questionOrder?: number;
 }
 
 export interface IQuestionResponse {

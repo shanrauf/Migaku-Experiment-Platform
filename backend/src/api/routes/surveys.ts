@@ -45,7 +45,7 @@ export default (app: Router) => {
       }
       return res.json({ survey, status: 'Survey updated' }).status(200);
     } catch (err) {
-      next(err); // handles the error, but reveals exactly wht the error was...
+      return next(err); // handles the error, but reveals exactly wht the error was...
     }
   });
 
@@ -78,7 +78,7 @@ export default (app: Router) => {
         const surveyService = Container.get(SurveyService);
         const payload = await surveyService.GetSurvey(surveyId);
         if (payload.survey === null) {
-          return res.json(payload).status(404); // returns 200 instead of 404 when null??
+          return res.json(payload).status(404);
         } else {
           return res.json(payload).status(200);
         }
@@ -89,8 +89,14 @@ export default (app: Router) => {
   );
 
   route.get(
-    '/latest/status', // TODO: decouple anki stuff from this route...
+    '/latest/status',
     async (req: Request, res: Response, next: NextFunction) => {
+      /**
+       * Status 0: E-mail doesn't exist
+       * Status 1: Ready to sync Anki data
+       * Status 2: Survey not completed
+       * Status 3: Anki data already synced
+       */
       const { experimentId } = req.params;
       const { email } = req.query;
       logger.debug(`GET /experiments/${experimentId}/surveys/latest/status`);
@@ -104,14 +110,13 @@ export default (app: Router) => {
         }
         const surveyService = Container.get(SurveyService);
         const { survey } = await surveyService.GetLatestSurvey(experimentId);
-        const { surveyId, startDate } = survey;
+        const { surveyId } = survey;
 
         const surveyCompleted = await surveyService.GetSurveyCompletionStatus(
           participantId,
           surveyId
         );
         if (!surveyCompleted) {
-          // status 2 = user hasn't submitted survey
           const surveyLink = `http://trials.massimmersionapproach.com/experiments/audiovssentencecards/surveys/${surveyId}`;
           return res.json({ status: 2, data: surveyLink }).status(401);
         }
@@ -122,14 +127,10 @@ export default (app: Router) => {
         );
 
         if (ankiDataSubmitted) {
-          // status 3 = user already synced Anki data
           return res.json({ status: 3 }).status(404);
         } else {
-          // status 1 = ready to sync Anki data
           return res.json({ status: 1, data: survey.cutoff }).status(200);
         }
-        // get survey cutoff here; create get method on survey for startdate in cutoff format
-        return res.json({ status: 1, data: survey.cutoff }).status(200); // surveyStatus = surveyCuttof here
       } catch (err) {
         return next(err);
       }
