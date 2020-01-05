@@ -15,6 +15,9 @@
     "allowJs": true,
     "noEmit": false,
     "esModuleInterop": true
+    // "noImplicitReturns": true, add once fix error handling and null values
+    // "strict": true,
+    // "noUnusedLocals": true
   },
   "include": ["./src/**/*", "./tests/**/*"],
   "exclude": ["./node_modules/**/*"]

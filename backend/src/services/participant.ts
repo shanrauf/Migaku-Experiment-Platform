@@ -1,17 +1,16 @@
 import { Service, Inject } from 'typedi';
 import winston from 'winston';
-import { Model } from 'sequelize-typescript';
 import {
   EventDispatcher,
   EventDispatcherInterface
 } from '../decorators/eventDispatcher';
-import models from '../models';
 import { ExperimentParticipant } from '../models/intermediary/experimentParticipant';
 import { Participant } from '../models/participant';
 
 @Service()
 export default class ParticipantService {
   constructor(
+    @Inject('Participant') private participantModel: typeof Participant,
     @Inject('logger') private logger: winston.Logger,
     @EventDispatcher() private eventDispatcher: EventDispatcherInterface
   ) {}
@@ -53,14 +52,13 @@ export default class ParticipantService {
   public async GetParticipantIdByEmail(email: string): Promise<string> {
     try {
       this.logger.silly('Getting participant by email');
-      const participantId = await Participant.findOne({
+      const participant = await this.participantModel.findOne({
         where: { email }
-      })
-        .then(participant => participant.participantId)
-        .catch(e => {
-          return null;
-        });
-      return participantId;
+      });
+      if (!participant) {
+        throw new Error("Participant email doesn't exist");
+      }
+      return participant.participantId;
     } catch (e) {
       this.logger.error(e);
       throw e;

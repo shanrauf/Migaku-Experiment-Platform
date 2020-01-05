@@ -1,6 +1,5 @@
 import { Request, Response, Router, NextFunction } from 'express';
 import { Container } from 'typedi';
-import winston from 'winston';
 
 import SurveyService from '../../services/survey';
 import ParticipantService from '../../services/participant';

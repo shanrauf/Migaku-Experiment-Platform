@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express';
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
-import Container from 'typedi';
+import { Container } from 'typedi';
 import AuthService from '../../services/auth';
 import middlewares from '../middlewares';
 
