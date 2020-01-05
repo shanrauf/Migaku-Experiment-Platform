@@ -5,7 +5,8 @@ import {
   Model,
   DataType,
   CreatedAt,
-  UpdatedAt
+  UpdatedAt,
+  AllowNull
 } from 'sequelize-typescript';
 import { SurveySection } from '../surveySection';
 import { Question } from '../question';
@@ -15,13 +16,16 @@ import { Question } from '../question';
 })
 export class SurveySectionQuestion extends Model<SurveySectionQuestion> {
   @ForeignKey(() => SurveySection)
+  @AllowNull(false)
   @Column(DataType.STRING(255))
   sectionId: string;
 
   @ForeignKey(() => Question)
+  @AllowNull(false)
   @Column(DataType.STRING(255))
   questionId: string;
 
+  @AllowNull(false)
   @Column(DataType.TINYINT)
   questionOrder: number;
 

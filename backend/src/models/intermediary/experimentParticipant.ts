@@ -31,7 +31,7 @@ export class ExperimentParticipant extends Model<ExperimentParticipant> {
 
   @AllowNull(true)
   @Column
-  dropoutDate: Date; // can be null
+  dropoutDate: Date;
 
   @CreatedAt
   @Column

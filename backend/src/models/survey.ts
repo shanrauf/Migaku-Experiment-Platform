@@ -60,7 +60,7 @@ export class Survey extends Model<Survey> {
   @Column(DataType.STRING(1500))
   description: string;
 
-  @AllowNull(false)
+  @AllowNull(true)
   @Column
   startDate: Date;
 
@@ -73,7 +73,7 @@ export class Survey extends Model<Survey> {
 
   @AllowNull(true)
   @Column
-  endDate: Date; // can be null to represent TBD or indefinite
+  endDate: Date;
 
   @AllowNull(false)
   @Column(DataType.STRING(100))
