@@ -10,7 +10,7 @@ export default app => {
   app.use('/experiments', route);
 
   route.get('/', async (req: Request, res: Response, next: NextFunction) => {
-    logger.debug('GET /experiments with query params: %o', req.query);
+    logger.debug('GET /experiments');
     try {
       const experimentService = Container.get(ExperimentService);
       const payload = await experimentService.GetExperimentListings();

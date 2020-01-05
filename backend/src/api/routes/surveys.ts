@@ -102,15 +102,13 @@ export default (app: Router) => {
         if (!participantId) {
           return res.json({ status: 0 }).status(404);
         }
-
         const surveyService = Container.get(SurveyService);
         const { survey } = await surveyService.GetLatestSurvey(experimentId);
         const { surveyId, startDate } = survey;
 
         const surveyCompleted = await surveyService.GetSurveyCompletionStatus(
           participantId,
-          surveyId,
-          startDate
+          surveyId
         );
         if (!surveyCompleted) {
           // status 2 = user hasn't submitted survey
@@ -130,6 +128,8 @@ export default (app: Router) => {
           // status 1 = ready to sync Anki data
           return res.json({ status: 1, data: survey.cutoff }).status(200);
         }
+        // get survey cutoff here; create get method on survey for startdate in cutoff format
+        return res.json({ status: 1, data: survey.cutoff }).status(200); // surveyStatus = surveyCuttof here
       } catch (err) {
         return next(err);
       }

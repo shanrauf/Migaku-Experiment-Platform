@@ -113,10 +113,9 @@ export default class SurveyService {
   }
 
   public async GetSurveyCompletionStatus(
-    // this method is horrendously large
     participantId: string,
-    surveyId: string,
-    surveyStartDate: Date
+    surveyId: string
+    // surveyStartDate: Date
   ): Promise<any> {
     try {
       this.logger.silly('Fetching survey status');
@@ -129,10 +128,7 @@ export default class SurveyService {
           this.logger.error(e);
           throw e;
         });
-      if (!responseRecordExists) {
-        return false;
-      }
-      return true;
+      return responseRecordExists;
     } catch (e) {
       this.logger.error(e);
       throw e;
