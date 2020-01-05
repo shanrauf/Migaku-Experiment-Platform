@@ -6,15 +6,18 @@ import {
   EventDispatcherInterface
 } from '../decorators/eventDispatcher';
 import { Experiment } from '../models/experiment';
-import { IExperiment } from '../interfaces/IExperiment';
+import { IExperiment, IRequirement } from '../interfaces/IExperiment';
 import { Sequelize } from 'sequelize-typescript';
 import { ExperimentQuestion } from '../models/intermediary/experimentQuestion';
+import { ExperimentRequirement } from '../models/intermediary/experimentRequirement';
 @Service()
 export default class ExperimentService {
   constructor(
     @Inject('Experiment') private experimentModel: typeof Experiment,
     @Inject('ExperimentQuestion')
     private experimentQuestionModel: typeof ExperimentQuestion,
+    @Inject('ExperimentRequirement')
+    private experimentRequirementModel: typeof ExperimentRequirement,
     @Inject('sequelize') private sqlConnection: Sequelize,
     @Inject('logger') private logger: winston.Logger,
     @EventDispatcher() private eventDispatcher: EventDispatcherInterface
@@ -72,9 +75,24 @@ export default class ExperimentService {
             questionId
           };
         });
+        let experimentRequirements = experimentObj.requirements.map(
+          (requirement: IRequirement) => {
+            return {
+              experimentId: experimentObj['experimentId'],
+              requirementId: requirement.requirementId,
+              title: requirement.title,
+              description: requirement.description || null,
+              value: requirement.value
+            };
+          }
+        );
         await this.experimentQuestionModel.bulkCreate(experimentQuestions, {
           transaction
         });
+        await this.experimentRequirementModel.bulkCreate(
+          experimentRequirements,
+          { transaction }
+        );
         return { experiment: experimentRecord };
       });
     } catch (err) {

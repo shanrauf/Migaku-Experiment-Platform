@@ -7,6 +7,7 @@ module.exports = {
       [
         {
           id: 1,
+          responseId: 'testSurveyResponse1',
           experimentId: '123abc',
           participantId: 'abcd1234',
           surveyId: 'testSurvey',

@@ -9,10 +9,10 @@ import { QuestionResponse } from './questionResponse';
 import { Question } from './question';
 import { CardCollection } from './cardCollection';
 import { SurveySection } from './surveySection';
+import { SurveyResponse } from './surveyResponse';
 
 // intermediary tables
 import intermediaryTables from './intermediary';
-import { SurveyResponse } from './surveyResponse';
 
 const models: ModelCtor[] = [
   Participant,

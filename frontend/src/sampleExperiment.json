@@ -1,10 +1,25 @@
 {
   "experiment": {
-    "experimentId": "audiovssentencecards",
+    "experimentId": "testExperiment4",
     "title": "Audio Vs Sentence Cards",
     "description": "Testing whether audio or sentence cards result in higher retention rates",
     "startDate": "2019-12-02 00:00:00",
     "endDate": null,
-    "visibility": "public"
+    "visibility": "public",
+    "questions": ["name", "email"],
+    "requirements": [
+      {
+        "requirementId": "testRequirementOne",
+        "title": "Completed RRTK",
+        "description": null,
+        "value": "true"
+      },
+      {
+        "requirementId": "testRequirementTwo",
+        "title": "Completed PRTK",
+        "description": "Must have completed PRTK, previously known as traditional RTK",
+        "value": "true"
+      }
+    ]
   }
 }

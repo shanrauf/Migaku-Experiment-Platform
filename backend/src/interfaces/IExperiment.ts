@@ -5,7 +5,15 @@ export interface IExperiment {
   startDate?: Date;
   endDate?: Date | null;
   visibility: string;
-  questions: string[];
+  questions?: string[]; // questionId[]
+  requirements?: IRequirement[];
   createdAt?: Date;
   updatedAt?: Date;
+}
+
+export interface IRequirement {
+  requirementId: string;
+  title: string;
+  description?: string;
+  value: string;
 }

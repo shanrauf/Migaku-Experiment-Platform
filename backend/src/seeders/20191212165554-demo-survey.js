@@ -10,6 +10,8 @@ module.exports = {
           surveyId: 'testSurvey',
           title: 'Example Survey 1',
           description: 'Example survey description 1',
+          surveyCategory: 'regular',
+          visibility: 'public',
           createdAt: new Date(),
           updatedAt: new Date()
         },
@@ -18,6 +20,8 @@ module.exports = {
           surveyId: 'testSurveyTwo',
           title: 'Example Survey 2',
           description: 'Example survey description 2',
+          surveyCategory: 'regular',
+          visibility: 'public',
           createdAt: new Date(),
           updatedAt: new Date()
         }

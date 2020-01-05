@@ -35,7 +35,7 @@ export class ExperimentRequirement extends Model<ExperimentRequirement> {
 
   @AllowNull(false)
   @Column(DataType.STRING(255))
-  value: string; // can be null, converted based on requirement dataType
+  value: string; // parse based on requirement dataType i.e value = "5", dataType = INT > parseInt
 
   @CreatedAt
   @Column
