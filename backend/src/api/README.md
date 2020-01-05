@@ -38,6 +38,7 @@ Body:
     startDate: string (ISO string: "2019-12-14T13:19:44.000Z")
     endDate?: string (ISO string: "2019-12-14T13:19:44.000Z")
     visibility: string ("public" | "private")
+    questions: questionId[] # array of questionId strings to add to ExperimentQuestion table
 }
 ```
 

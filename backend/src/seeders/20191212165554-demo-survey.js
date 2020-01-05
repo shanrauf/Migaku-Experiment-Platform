@@ -6,6 +6,7 @@ module.exports = {
       'Surveys',
       [
         {
+          experimentId: 'abc123',
           surveyId: 'testSurvey',
           title: 'Example Survey 1',
           description: 'Example survey description 1',
@@ -13,6 +14,7 @@ module.exports = {
           updatedAt: new Date()
         },
         {
+          experimentId: 'abc123',
           surveyId: 'testSurveyTwo',
           title: 'Example Survey 2',
           description: 'Example survey description 2',

@@ -15,6 +15,7 @@
         "description": "This section is simply for us to identify who is filling out the survey.",
         "questions": [
           {
+            "questionOrder": 1,
             "questionId": "name",
             "label": "Name",
             "questionType": "text",
@@ -25,6 +26,7 @@
             "required": true
           },
           {
+            "questionOrder": 2,
             "questionId": "email",
             "label": "Email",
             "questionType": "text",
@@ -35,6 +37,7 @@
             "required": true
           },
           {
+            "questionOrder": 3,
             "questionId": "preferredCardType",
             "label": "Preferred Card Type",
             "questionType": "select",
@@ -45,6 +48,7 @@
             "required": true
           },
           {
+            "questionOrder": 4,
             "questionId": "difficultyOfDailySentenceMining",
             "label": "Difficulty of Daily Sentence Mining",
             "questionType": "select",
@@ -54,6 +58,7 @@
             "value": ""
           },
           {
+            "questionOrder": 5,
             "questionId": "commentsAboutExperiment",
             "label": "Comments About Experiment",
             "questionType": "text",
@@ -72,6 +77,7 @@
         "description": "This section will help us understand how you study Japanese. Don't feel bad if your answer to any of these questions is zero XD",
         "questions": [
           {
+            "questionOrder": 1,
             "questionId": "avgActiveListening",
             "label": "Average Hours of Active Listening",
             "questionType": "select",
@@ -82,6 +88,7 @@
             "required": true
           },
           {
+            "questionOrder": 2,
             "questionId": "avgPassiveListening",
             "label": "Average Hours of Passive Listening",
             "questionType": "select",
@@ -92,6 +99,7 @@
             "required": true
           },
           {
+            "questionOrder": 3,
             "questionId": "avgReading",
             "label": "Average Hours of Reading",
             "questionType": "select",
@@ -102,6 +110,7 @@
             "required": true
           },
           {
+            "questionOrder": 4,
             "questionId": "activeListeningWithSubtitles",
             "label": "Percentage of Active Listening with Subtitles",
             "questionType": "select",
@@ -112,6 +121,7 @@
             "required": true
           },
           {
+            "questionOrder": 5,
             "questionId": "daysOfActiveImmersionMissed",
             "label": "Days of Active Immersion Missed",
             "questionType": "select",
@@ -122,6 +132,7 @@
             "required": true
           },
           {
+            "questionOrder": 6,
             "questionId": "daysOfReadingMissed",
             "label": "Days of Reading Missed",
             "questionType": "select",
@@ -141,6 +152,7 @@
         "image": "",
         "questions": [
           {
+            "questionOrder": 1,
             "questionId": "difficultyToLearnNewAudioCards",
             "label": "Difficulty to Learn New Audio Cards",
             "questionType": "select",
@@ -151,6 +163,7 @@
             "required": true
           },
           {
+            "questionOrder": 2,
             "questionId": "difficultyToRememberLearnedAudioCards",
             "label": "Difficulty to Remember Learned Audio Cards",
             "questionType": "select",
@@ -161,6 +174,7 @@
             "required": true
           },
           {
+            "questionOrder": 3,
             "questionId": "howEnjoyableIsReviewingAudioCards",
             "label": "How Enjoyable is Reviewing Audio Cards",
             "questionType": "select",
@@ -171,6 +185,7 @@
             "required": true
           },
           {
+            "questionOrder": 4,
             "questionId": "audioCardLeadsToUnderstandingInImmersion",
             "label": "Audio Cards Lead to Understanding In Immersion",
             "questionType": "select",
@@ -190,6 +205,7 @@
         "image": "",
         "questions": [
           {
+            "questionOrder": 1,
             "questionId": "difficultyToLearnNewSentenceCards",
             "label": "Difficulty to Learn New Sentence Cards",
             "questionType": "select",
@@ -200,6 +216,7 @@
             "required": true
           },
           {
+            "questionOrder": 2,
             "questionId": "difficultyToRememberLearnedSentenceCards",
             "label": "Difficulty to Remember Learned Sentence Cards",
             "questionType": "select",
@@ -210,6 +227,7 @@
             "required": true
           },
           {
+            "questionOrder": 3,
             "questionId": "howEnjoyableIsReviewingSentenceCards",
             "label": "How Enjoyable is Reviewing Sentence Cards",
             "questionType": "select",
@@ -220,6 +238,7 @@
             "required": true
           },
           {
+            "questionOrder": 4,
             "questionId": "sentenceCardsLeadsToUnderstandingInImmersion",
             "label": "Sentence Cards Lead to Understanding In Immersion",
             "questionType": "select",

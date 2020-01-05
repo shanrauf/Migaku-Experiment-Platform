@@ -7,6 +7,7 @@ module.exports = {
       [
         {
           sectionId: 'testSectionOne',
+          surveyId: 'testSurvey',
           sectionNumber: 1,
           title: 'Section One',
           description: 'Example survey section description 1',
@@ -14,7 +15,8 @@ module.exports = {
           updatedAt: new Date()
         },
         {
-          sectionId: 'testSectionTwoo',
+          sectionId: 'testSectionTwo',
+          surveyId: 'testSurvey',
           sectionNumber: 2,
           title: 'Section Two',
           description: 'Example survey section description 2',

@@ -16,6 +16,7 @@ import { Experiment } from '../models/experiment';
 import { CardCollection } from '../models/cardCollection';
 import { ISurvey } from '../interfaces/ISurvey';
 import { SurveyResponse } from '../models/surveyResponse';
+import { SurveySectionQuestion } from '../models/intermediary/surveySectionQuestion';
 
 @Service()
 export default class SurveyService {
@@ -29,6 +30,7 @@ export default class SurveyService {
     private surveySectionModel: typeof SurveySection,
     @Inject('SurveyResponse')
     private surveyResponseModel: typeof SurveyResponse,
+    @Inject("SurveySectionQuestion") private surveySectionQuestionModel: typeof SurveySectionQuestion,
     @Inject('QuestionResponse')
     private questionResponseModel: typeof QuestionResponse,
     @Inject('CardCollection')
@@ -368,6 +370,7 @@ export default class SurveyService {
 
         for (const section of surveyObj.sections) {
           await this.surveySectionModel.create(section, { transaction });
+          let surveyQuestions = []
           for (const question of section.questions) {
             let questionExists = await this.questionModel
               .findOne({
@@ -375,16 +378,18 @@ export default class SurveyService {
               })
               .then(questionRecord => !!questionRecord);
             if (!questionExists) {
-              await this.questionModel.create(question, { transaction }); // in theory, frontend should ensure no duplicates, but this is good security; would trying to create question anyway and getting validation error be faster than 2 queries?
+              // TODO: Remove since we don't want questions that arent in experiment schema
+              await this.questionModel.create(question, { transaction });
             }
-            await this.surveyQuestionModel.create(
-              {
-                questionId: question.questionId,
+            surveyQuestions.push({
+              questionId: question.questionId,
                 surveyId: surveyObj.surveyId
-              },
-              { transaction }
-            );
+            })
           }
+          await this.surveyQuestionModel.bulkCreate(surveyQuestions
+            { transaction }
+          );
+          // await this.surveySectionQuestionModel here associate questions to sections...
         }
         return { survey: surveyRecord };
       });
