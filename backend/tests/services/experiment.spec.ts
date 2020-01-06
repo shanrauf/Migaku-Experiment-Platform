@@ -41,3 +41,6 @@
 //     expect(experiment).toEqual(obj);
 //   });
 // });
+it('literally does nothing', () => {
+  expect('nothing').toContain('nothing');
+});

@@ -14,10 +14,11 @@ sudo apt-get install ruby wget aws-cli
 
 echo "
 ----------------------
-  Typescript
+  Typescript, etc
 ----------------------
 "
 sudo npm install -g typescript
+sudo npm install -g cross-env
 
 
 echo "
