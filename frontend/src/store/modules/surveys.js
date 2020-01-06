@@ -59,25 +59,22 @@ const actions = {
 
     // formatting payload...
     let payload = {};
-    let data = {};
+    let questionResponses = {};
     if (canSubmit) {
       state.currentSurvey.sections.forEach(section => {
         section.questions.forEach(question => {
           // add to payload
 
           if (question.questionId == 'email') {
-            data['email'] = question.value;
+            payload['email'] = question.value;
+          } else {
+            questionResponses[question.questionId] = question.value;
           }
-          payload[question.questionId] = {
-            value: question.value,
-            dataType: question.dataType
-          };
         });
       });
-      data['data'] = payload;
+      payload['data'] = questionResponses;
       const SurveyRepository = RepositoryFactory.get('surveys');
-
-      SurveyRepository.post(state.currentSurvey.surveyId, data).then(() => {
+      SurveyRepository.post(state.currentSurvey.surveyId, payload).then(() => {
         router.push('/');
         Vue.notify({
           group: 'global',
@@ -97,7 +94,6 @@ const mutations = {
   },
   setCurrentSurvey(state, payload) {
     state.currentSurvey = payload.currentSurvey;
-    console.log(state.currentSurvey.sections);
   },
   updateQuestionValue(_, payload) {
     // don't need state param since question is a reference to that value in state, and vuex doesn't complain since the mutating is happening in a mutation

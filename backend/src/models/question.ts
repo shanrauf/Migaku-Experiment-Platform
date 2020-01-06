@@ -37,7 +37,6 @@ export class Question extends Model<Question> {
   @Column({ type: DataType.STRING(255), primaryKey: true })
   questionId!: string;
 
-  @Unique
   @AllowNull(false)
   @Column(DataType.STRING(100))
   key!: string;

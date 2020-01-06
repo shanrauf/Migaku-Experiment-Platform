@@ -43,7 +43,7 @@ export default (app: Router) => {
       if (!payload) {
         return res.send(401);
       }
-      return res.json({ survey, status: 'Survey updated' }).status(200);
+      return res.json({ survey, status: 'Survey created' }).status(200);
     } catch (err) {
       return next(err); // handles the error, but reveals exactly wht the error was...
     }
@@ -109,6 +109,7 @@ export default (app: Router) => {
           return res.json({ status: 0 }).status(404);
         }
         const surveyService = Container.get(SurveyService);
+        // this errors when no surveys for the experiment but doesn't throw error
         const { survey } = await surveyService.GetLatestSurvey(experimentId);
         const { surveyId } = survey;
 

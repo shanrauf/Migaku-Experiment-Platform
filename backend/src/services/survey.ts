@@ -191,17 +191,18 @@ export default class SurveyService {
     experimentId: string,
     surveyId: string,
     participantId: string,
-    question: [string, { dataType: string; value: any }]
+    question: [string, any],
+    responseDataType: string
   ): Promise<object> {
     const questionResponse = {
       responseId,
-      questionId: question[0], // question key
+      questionId: question[0],
       experimentId,
       surveyId,
       participantId
     };
-    const dataType = capitalize(question[1].dataType);
-    questionResponse[`answer${dataType}`] = question[1].value;
+    const dataType = capitalize(responseDataType);
+    questionResponse[`answer${dataType}`] = question[1];
     return questionResponse;
   }
 
@@ -213,34 +214,36 @@ export default class SurveyService {
     dataPayload: object
   ): Promise<{ questionResponses: QuestionResponse[] }> {
     try {
-      // Checking if user has already submitted the survey
-      const responseRecordExists = await this.questionResponseModel.findOne({
-        where: { participantId, surveyId }
-      });
-      if (!!responseRecordExists) {
-        return { questionResponses: [] }; // user has already filled out survey
-      }
+      // This won't prevent duplicate survey submssion now since Anki needs to POST here too...
+      // need some way to identify if post coming from survey or anki idk...
+      // const responseRecordExists = await this.questionResponseModel.findOne({
+      //   where: { participantId, surveyId }
+      // });
+      // if (responseRecordExists) {
+      //   return { questionResponses: null }; // user has already filled out survey
+      // }
 
       this.logger.silly('Processing question responses');
       const questionResponses = [];
       let question: any;
       for (question of Object.entries(dataPayload)) {
-        if (question[0] === 'cards' || question[0] === 'Cards') {
+        if (question[0] === 'cards') {
           this.PostAnkiCardCollection(
             experimentId,
             surveyId,
             participantId,
-            question[1] // do we need to check if this hasn't been parsed already?
+            responseId,
+            question[1]
           );
         } else {
-          // check if question exists; only applies to non-survey data cuz survey question rows r created on survey creation
-          let questionExists = await this.questionModel
+          // get question dataType; Error means question doesn't exist
+          const questionDataType = await this.questionModel
             .findOne({
               where: { questionId: question[0] }
             })
-            .then(questionRecord => !!questionRecord);
-          if (!questionExists) {
-            await this.CreateQuestion(surveyId, question); // this shouldn't be here - during experiment/survey creation, questions r created/assigned. but for now for anki, it's here
+            .then(questionRecord => questionRecord.dataType);
+          if (!questionDataType) {
+            throw new Error(`${question[0]} does not exist`);
           }
 
           const questionResponse = await this.FormatQuestionResponse(
@@ -248,7 +251,8 @@ export default class SurveyService {
             experimentId,
             surveyId,
             participantId,
-            question
+            question,
+            questionDataType
           );
           questionResponses.push(questionResponse);
         }
@@ -327,6 +331,7 @@ export default class SurveyService {
     experimentId: string,
     surveyId: string,
     participantId: string,
+    responseId: string,
     cards: {}
   ): Promise<CardCollection> {
     this.logger.silly('Posting Anki card collection');
@@ -334,6 +339,7 @@ export default class SurveyService {
       experimentId,
       surveyId,
       participantId,
+      responseId,
       cards
     });
     return cardCollection;

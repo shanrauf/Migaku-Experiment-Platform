@@ -3,7 +3,6 @@ const resource = 'experiments/audiovssentencecards/surveys'; // change later whe
 
 export default {
   get() {
-    console.log(resource);
     return AxiosClient.get(`${resource}`);
   },
   getSurvey(surveyId) {

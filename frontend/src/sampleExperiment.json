@@ -9,15 +9,15 @@
     "questions": ["name", "email"],
     "requirements": [
       {
-        "requirementId": "testRequirementOne",
+        "requirementId": "completedRRTK",
         "title": "Completed RRTK",
         "description": null,
         "value": "true"
       },
       {
-        "requirementId": "testRequirementTwo",
-        "title": "Completed PRTK",
-        "description": "Must have completed PRTK, previously known as traditional RTK",
+        "requirementId": "maxKnownWords",
+        "title": "Less than {value} known words",
+        "description": "This experiment is not targeting language learners in later stages of MIA",
         "value": "true"
       }
     ]

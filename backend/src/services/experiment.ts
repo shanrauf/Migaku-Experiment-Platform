@@ -76,13 +76,10 @@ export default class ExperimentService {
           };
         });
         let experimentRequirements = experimentObj.requirements.map(
-          (requirement: IRequirement) => {
+          (requirementId: string) => {
             return {
               experimentId: experimentObj['experimentId'],
-              requirementId: requirement.requirementId,
-              title: requirement.title,
-              description: requirement.description || null,
-              value: requirement.value
+              requirementId
             };
           }
         );

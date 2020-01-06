@@ -6,7 +6,7 @@ export interface IExperiment {
   endDate?: Date | null;
   visibility: string;
   questions?: string[]; // questionId[]
-  requirements?: IRequirement[];
+  requirements?: string[]; // requirementId[]
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -15,5 +15,7 @@ export interface IRequirement {
   requirementId: string;
   title: string;
   description?: string;
+  dataType: string;
+  image?: string;
   value: string;
 }
