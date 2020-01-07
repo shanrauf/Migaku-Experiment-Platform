@@ -6,7 +6,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development nodemon",
     "setup-dev": "npm run force-sync-dev && npm run seed",
-    "start-prod": "cross-env NODE_ENV=production node build/app.js",
+    "start-prod": "cross-env NODE_ENV=production PORT=4000 node build/app.js",
     "test": "jest --detectOpenHandles --forceExit",
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
     "build-tsc": "tsc",
