@@ -48,7 +48,6 @@ const publicAttributes = [
 }))
 @Table({ modelName: 'Participant', tableName: 'Participants' })
 export class Participant extends Model<Participant> {
-  @AllowNull(false)
   @Column({ type: DataType.STRING(255), primaryKey: true })
   participantId!: string;
 

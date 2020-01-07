@@ -29,7 +29,6 @@ import { CardCollection } from './cardCollection';
 }))
 @Table({ modelName: 'SurveyResponse', tableName: 'SurveyResponses' })
 export class SurveyResponse extends Model<SurveyResponse> {
-  @AllowNull(false)
   @Column({ type: DataType.STRING(255), primaryKey: true })
   responseId!: string;
 

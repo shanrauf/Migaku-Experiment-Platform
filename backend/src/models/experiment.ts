@@ -41,7 +41,6 @@ import { Question } from './question';
 }))
 @Table({ modelName: 'Experiment', tableName: 'Experiments' })
 export class Experiment extends Model<Experiment> {
-  @AllowNull(false)
   @Column({ type: DataType.STRING(255), primaryKey: true })
   experimentId!: string;
 

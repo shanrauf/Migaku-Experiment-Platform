@@ -43,14 +43,13 @@ import { SurveyResponse } from './surveyResponse';
 }))
 @Table({ modelName: 'Survey', tableName: 'Surveys' })
 export class Survey extends Model<Survey> {
+  @Column({ type: DataType.STRING(255), primaryKey: true })
+  surveyId!: string;
+
   @ForeignKey(() => Experiment)
   @AllowNull(false)
   @Column(DataType.STRING(255))
   experimentId!: string;
-
-  @AllowNull(false)
-  @Column({ type: DataType.STRING(255), primaryKey: true })
-  surveyId!: string;
 
   @AllowNull(false)
   @Column(DataType.STRING(255))

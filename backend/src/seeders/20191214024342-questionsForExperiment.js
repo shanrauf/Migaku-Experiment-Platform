@@ -5,6 +5,246 @@ module.exports = {
     return queryInterface.bulkInsert(
       'Questions',
       [
+        {
+          questionId: 'name',
+          key: 'name',
+          label: 'Name',
+          questionType: 'text',
+          dataType: 'varchar',
+          rules: 'maxChar=100&minChar=1',
+          question: 'What is your name?',
+          required: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          questionId: 'email',
+          key: 'email',
+          label: 'Email',
+          questionType: 'text',
+          dataType: 'varchar',
+          rules: 'maxChar=100&minChar=1&email=true',
+          question: 'What is your email?',
+          required: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          questionId: 'preferredCardType',
+          key: 'preferredCardType',
+          label: 'Preferred Card Type',
+          questionType: 'select',
+          dataType: 'varchar',
+          question: 'Which of the card types do you prefer to review in Anki?',
+          items: 'audioOrSentenceCard',
+          required: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          questionId: 'difficultyOfDailySentenceMining',
+          key: 'difficultyOfDailySentenceMining',
+          label: 'Difficulty of Daily Sentence Mining',
+          questionType: 'select',
+          dataType: 'smallInt',
+          question:
+            'On a scale of 1-5, how difficult do you find it to meet the daily quota of Anki cards for the experiment?',
+          items: 'oneToFiveScale',
+          required: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          questionId: 'commentsAboutExperiment',
+          key: 'commentsAboutExperiment',
+          label: 'Comments About Experiment',
+          questionType: 'text',
+          rules: 'maxChar=500&minChar=1',
+          dataType: 'varchar',
+          question:
+            "Do you have any comments about the experiment so far? (e.x things you found interesting, surprising; insights you've had, etc)",
+          required: false,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          questionId: 'avgActiveListening',
+          key: 'avgActiveListening',
+          label: 'Average Hours of Active Listening',
+          questionType: 'select',
+          dataType: 'smallInt',
+          question: 'How many hours of active listening did you do this week?',
+          items: 'hoursInAWeek',
+          required: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          questionId: 'avgPassiveListening',
+          key: 'avgPassiveListening',
+          label: 'Average Hours of Passive Listening',
+          questionType: 'select',
+          dataType: 'smallInt',
+          question: 'How many hours of passive listening did you do this week?',
+          items: 'hoursInAWeek',
+          required: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          questionId: 'avgReading',
+          key: 'avgReading',
+          label: 'Average Hours of Reading',
+          questionType: 'select',
+          dataType: 'smallInt',
+          question: 'How many hours of reading did you do this week?',
+          items: 'hoursInAWeek',
+          required: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          questionId: 'activeListeningWithSubtitles',
+          key: 'activeListeningWithSubtitles',
+          label: 'Percentage of Active Listening with Subtitles',
+          questionType: 'select',
+          dataType: 'smallInt',
+          question:
+            'What percentage of your active listening happened with subtitles (including the time spent mining sentences from subtitles)?',
+          items: 'percentages',
+          required: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          questionId: 'daysOfActiveImmersionMissed',
+          key: 'daysOfActiveImmersionMissed',
+          label: 'Days of Active Immersion Missed',
+          questionType: 'select',
+          dataType: 'smallInt',
+          question:
+            'How many days of active immersion did you miss this week? (NOTE: If you immersed a bit less than your average immersion time, you can still count that as a day of immersion.)',
+          items: 'daysInAWeek',
+          required: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          questionId: 'daysOfReadingMissed',
+          key: 'daysOfReadingMissed',
+          label: 'Days of Reading Missed',
+          questionType: 'select',
+          dataType: 'smallInt',
+          question: 'How many days of reading did you miss this week?',
+          items: 'daysInAWeek',
+          required: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          questionId: 'difficultyToLearnNewAudioCards',
+          key: 'difficultyToLearnNewAudioCards',
+          label: 'Difficulty to Learn New Audio Cards',
+          questionType: 'select',
+          dataType: 'smallInt',
+          question:
+            'On a scale of 1-5, how difficult do you feel it is to learn new cards with this note type? (1 = extremely easy, 5 = extremely difficult)',
+          items: 'oneToFiveScale',
+          required: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          questionId: 'difficultyToRememberLearnedAudioCards',
+          key: 'difficultyToRememberLearnedAudioCards',
+          label: 'Difficulty to Remember Learned Audio Cards',
+          questionType: 'select',
+          dataType: 'smallInt',
+          question:
+            'On a scale of 1-5, how difficult do you feel it is to remember learned cards with this note type (cards you have reviewed at least once)? (1 = extremely easy, 5 = extremely difficult)',
+          items: 'oneToFiveScale',
+          required: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          questionId: 'howEnjoyableIsReviewingAudioCards',
+          key: 'howEnjoyableIsReviewingAudioCards',
+          label: 'How Enjoyable is Reviewing Audio Cards',
+          questionType: 'select',
+          dataType: 'smallInt',
+          question:
+            'On a scale of 1-5, how enjoyable do you feel it is to review cards with this note type? (1 = horrible to review, 5 = extremely enjoyable to review)',
+          items: 'oneToFiveScale',
+          required: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          questionId: 'audioCardLeadsToUnderstandingInImmersion',
+          key: 'audioCardLeadsToUnderstandingInImmersion',
+          label: 'Audio Cards Lead to Understanding In Immersion',
+          questionType: 'select',
+          dataType: 'smallInt',
+          question:
+            'On a scale of 1-5, how well do you feel cards with this note type lead to improved understanding in immersion? (1 = I almost never notice/understand words I learned with this note type in my immersion, 5 = I very frequently notice/understand words I learned with this note type in my immersion)',
+          items: 'oneToFiveScale',
+          required: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          questionId: 'difficultyToLearnNewSentenceCards',
+          key: 'difficultyToLearnNewSentenceCards',
+          label: 'Difficulty to Learn New Sentence Cards',
+          questionType: 'select',
+          dataType: 'smallInt',
+          question:
+            'On a scale of 1-5, how difficult do you feel it is to learn new cards with this note type? (1 = extremely easy, 5 = extremely difficult)',
+          items: 'oneToFiveScale',
+          required: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          questionId: 'difficultyToRememberLearnedSentenceCards',
+          key: 'difficultyToRememberLearnedSentenceCards',
+          label: 'Difficulty to Remember Learned Sentence Cards',
+          questionType: 'select',
+          dataType: 'smallInt',
+          question:
+            'On a scale of 1-5, how difficult do you feel it is to remember learned cards with this note type (cards you have reviewed at least once)? (1 = extremely easy, 5 = extremely difficult)',
+          items: 'oneToFiveScale',
+          required: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          questionId: 'howEnjoyableIsReviewingSentenceCards',
+          key: 'howEnjoyableIsReviewingSentenceCards',
+          label: 'How Enjoyable is Reviewing Sentence Cards',
+          questionType: 'select',
+          dataType: 'smallInt',
+          question:
+            'On a scale of 1-5, how enjoyable do you feel it is to review cards with this note type? (1 = horrible to review, 5 = extremely enjoyable to review)',
+          items: 'oneToFiveScale',
+          required: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          questionId: 'sentenceCardsLeadsToUnderstandingInImmersion',
+          key: 'sentenceCardsLeadsToUnderstandingInImmersion',
+          label: 'Sentence Cards Lead to Understanding In Immersion',
+          questionType: 'select',
+          dataType: 'smallInt',
+          question:
+            'On a scale of 1-5, how well do you feel cards with this note type lead to improved understanding in immersion? (1 = I almost never notice/understand words I learned with this note type in my immersion, 5 = I very frequently notice/understand words I learned with this note type in my immersion)',
+          items: 'oneToFiveScale',
+          required: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
         // Questions from Anki
         {
           questionId: 'audioAvgTime',

@@ -57,7 +57,6 @@ return await QuestionResponse.scope(['defaultScope, `answer${dataType}`]).findAn
 @Table({ modelName: 'QuestionResponse', tableName: 'QuestionResponses' })
 export class QuestionResponse extends Model<QuestionResponse> {
   @AutoIncrement
-  @AllowNull(false)
   @Column({ type: DataType.INTEGER.UNSIGNED, primaryKey: true })
   id!: number;
 

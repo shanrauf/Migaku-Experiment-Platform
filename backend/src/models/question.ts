@@ -33,7 +33,6 @@ import { ExperimentQuestion } from './intermediary/experimentQuestion';
 }))
 @Table({ modelName: 'Question', tableName: 'Questions' })
 export class Question extends Model<Question> {
-  @AllowNull(false)
   @Column({ type: DataType.STRING(255), primaryKey: true })
   questionId!: string;
 

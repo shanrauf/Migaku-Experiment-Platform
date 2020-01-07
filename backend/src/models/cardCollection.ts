@@ -28,7 +28,6 @@ import { SurveyResponse } from './surveyResponse';
 @Table({ modelName: 'CardCollection', tableName: 'CardCollections' })
 export class CardCollection extends Model<CardCollection> {
   @AutoIncrement
-  @AllowNull(false)
   @Column({ type: DataType.INTEGER.UNSIGNED, primaryKey: true })
   id!: number;
 

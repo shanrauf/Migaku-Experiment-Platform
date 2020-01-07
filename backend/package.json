@@ -12,7 +12,6 @@
     "build-tsc": "tsc",
     "force-sync-then-start-prod": "cross-env NODE_ENV=production FORCE_SYNC=true node build/app.js",
     "inspect": "nodemon --inspect src/app.ts",
-    "migrate": "npx sequelize-cli db:migrate",
     "seed": "npx sequelize-cli db:seed:all",
     "seed:undo": "npx sequelize-cli db:seed:undo:all",
     "seed-test": "npx sequelize-cli db:seed:all --env test",
