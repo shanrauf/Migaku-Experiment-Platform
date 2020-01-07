@@ -7,19 +7,7 @@ echo "
   Installing dependencies
 ----------------------
 "
-sudo yum update -y
-sudo yum install ruby wget -y
-sudo yum install httpd
-sudo apt-get install ruby wget aws-cli
-
-echo "
-----------------------
-  Typescript, etc
-----------------------
-"
-sudo npm install -g typescript
-sudo npm install -g cross-env
-
+sudo apt-get install -y ruby wget
 
 echo "
 ----------------------
@@ -32,6 +20,14 @@ curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 
 # install nodejs and npm
 sudo apt-get install -y nodejs
+
+echo "
+----------------------
+  Typescript, etc
+----------------------
+"
+sudo npm install -g typescript
+sudo npm install -g cross-env
 
 echo "
 ----------------------

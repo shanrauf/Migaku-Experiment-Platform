@@ -7,7 +7,7 @@
     "start": "cross-env NODE_ENV=development nodemon",
     "setup-dev": "npm run force-sync-dev && npm run seed",
     "start-prod": "cross-env NODE_ENV=production node build/app.js",
-    "test": "jest --detectOpenHandles",
+    "test": "jest --detectOpenHandles --forceExit",
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
     "build-tsc": "tsc",
     "force-sync-then-start-prod": "cross-env NODE_ENV=production FORCE_SYNC=true node build/app.js",
