@@ -16,3 +16,5 @@ frontend
 
 src/seeders/20191214024339-experiment-participants.js
 src/seeders/20191214024340-experiment-experimentParticipants.js
+src/seeders/20191214024343-experimentquestion.js
+src/seeders/20191214024342-questionsForExperiment.js
