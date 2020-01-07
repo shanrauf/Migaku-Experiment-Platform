@@ -5,4 +5,4 @@ echo "
   Starting server
 ----------------------
 "
-cd /opt/backend && sudo pm2 start npm -- run start-prod
+cd /opt/backend && sudo pm2 start ./build/app.js
