@@ -56,7 +56,8 @@ export default class ParticipantService {
         where: { email }
       });
       if (!participant) {
-        throw new Error("Participant email doesn't exist");
+        return null; // results in returning 0 to anki unlike below error
+        // throw new Error("Participant email doesn't exist");
       }
       return participant.participantId;
     } catch (e) {
