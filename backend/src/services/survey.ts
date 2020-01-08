@@ -118,7 +118,6 @@ export default class SurveyService {
   public async GetSurveyCompletionStatus(
     participantId: string,
     surveyId: string
-    // surveyStartDate: Date
   ): Promise<any> {
     try {
       this.logger.silly('Fetching survey status');

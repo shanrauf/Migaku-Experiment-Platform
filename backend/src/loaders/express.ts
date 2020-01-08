@@ -21,10 +21,10 @@ export default async ({ app }: { app: express.Application }) => {
   app.use(
     bodyParser.urlencoded({
       extended: true,
-      limit: '50mb'
+      limit: '350mb' // please start using streams or whatever XD
     })
   );
-  app.use(express.json({ limit: '50mb' }));
+  app.use(express.json({ limit: '350mb' })); // please start using streams or whatever XD
   app.use(cookieParser());
 
   // Load API routes
