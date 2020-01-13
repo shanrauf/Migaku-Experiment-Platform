@@ -4,6 +4,7 @@ import { errors } from 'celebrate';
 import cookieParser from 'cookie-parser';
 import routes from '../api';
 import config from '../config';
+import passport from 'passport'; // not decoupled like other loaders...
 
 export default async ({ app }: { app: express.Application }) => {
   app.get('/status', (req, res) => {
@@ -25,7 +26,25 @@ export default async ({ app }: { app: express.Application }) => {
     })
   );
   app.use(express.json({ limit: '350mb' })); // please start using streams or whatever XD
+
   app.use(cookieParser());
+
+  app.use(passport.initialize());
+  app.use(passport.session());
+
+  // Ignores occasional GET requests for favicon.ico
+  app.use(function(req, res, next) {
+    if (
+      req.originalUrl &&
+      req.originalUrl
+        .split('/')
+        .pop()
+        .includes('favicon')
+    ) {
+      return res.sendStatus(204);
+    }
+    return next();
+  });
 
   // Load API routes
   app.use(config.api.prefix, routes());

@@ -1,5 +1,13 @@
 # REST API Design
 
+(NOTE: I think Discord does that "duplication" e.x /experiments/abcd/participants is cleaner than /participants?experimentId=abcd, but u can let both work)
+
+## Auth
+
+### `/auth/discord` GET (200 || 401)
+
+Goes through OAuth 2.0 flow for Discord and returns participant or 401 error
+
 ## Experiments
 
 ### `/experiments` GET (200)
@@ -8,7 +16,7 @@ Returns all experiments
 
 Parameters:
 
-```
+```json
 {
     surveyId?: string # returns all experiments that administered this survey
     participantId?: string # Returns experiments that participant is registered for
@@ -17,7 +25,7 @@ Parameters:
 
 Response:
 
-```
+```json
 {
     experiments: Experiment[]
 }
@@ -30,7 +38,7 @@ Creates an experiment
 
 Body:
 
-```
+```json
 {
     experimentId?: string # If left empty, a random id is generated
     title: string
@@ -49,9 +57,9 @@ Deletes an experiment
 
 Body:
 
-```
+```json
 {
-    experimentId: string
+  "experimentId": string
 }
 ```
 
@@ -61,7 +69,7 @@ Gets an experiment
 
 Response:
 
-```
+```json
 {
     experimentId: string
     title: string
@@ -78,7 +86,7 @@ Updates an experiment
 
 Body:
 
-```
+```json
 {
     ...Experiment?: (any attribute)
 }
@@ -95,7 +103,7 @@ Registers participant for experiment
 
 Body:
 
-```
+```json
 {
     participantId: string;
 }
@@ -103,9 +111,9 @@ Body:
 
 Response:
 
-```
+```json
 {
-    ...Participant
+  ...Participant
 }
 ```
 
@@ -116,15 +124,15 @@ Unregisters participant for experiment
 
 Body:
 
-```
+```json
 {
-    participantId: string
+  "participantId": string
 }
 ```
 
 Response:
 
-```
+```json
 {}
 ```
 
@@ -134,7 +142,7 @@ Get all surveys
 
 Parameters:
 
-```
+```json
 {
     participantId?: string # returns surveys that the participant has completed
     surveyId?: string # Returns metadata of specific survey
@@ -144,7 +152,7 @@ Parameters:
 
 Response:
 
-```
+```json
 {
     surveys: Survey[] # (metadata e.x title/description/requirements) (if surveyId parameter, this array length is just 1)
 }
@@ -156,7 +164,7 @@ Creates a survey
 
 Body:
 
-```
+```json
 {
     surveyId?: string # If empty, a random id is generated
     title: string
@@ -171,7 +179,7 @@ Body:
 
 Response:
 
-```
+```json
 {
     surveys: Survey[]
 }
@@ -187,7 +195,7 @@ Gets the metadata and questions/sections of survey
 
 Parameters:
 
-```
+```json
 {
     sections?: sectionId[] // only return these sections/questions (good for pagination for example)
 }
@@ -195,9 +203,9 @@ Parameters:
 
 Response:
 
-```
+```json
 {
-    ...Survey (questions/sections, metadata, etc)
+  ...Survey(questions / sections, metadata, etc)
 }
 ```
 
@@ -212,7 +220,7 @@ Submits the survey response of a participant
 
 Body:
 
-```
+```json
 {
     email: string (temporary due to Anki addon implementation)
     experimentId: string
@@ -243,7 +251,7 @@ Gets all participants
 
 Parameters:
 
-```
+```json
 {
     experimentId?: returns participants registered for this experiment
     surveyId?: returns participants who completed this survey
@@ -253,7 +261,7 @@ Parameters:
 
 Response:
 
-```
+```json
 
 {
     participants: Participant[]
@@ -268,7 +276,7 @@ Creates a participant (e.x user sign-up)
 
 Body:
 
-```
+```json
 
 {
     experimentId?: string # Gets all participants who signed up for this experiment
@@ -283,12 +291,10 @@ Body:
 
 Response:
 
-```
-
+```json
 {
-    ...Participant
+  ...Participant
 }
-
 ```
 
 ### `/participants/:participantId` GET (200)
@@ -297,12 +303,10 @@ Gets a participant
 
 Response:
 
-```
-
+```json
 {
-    ...Participant
+  ...Participant
 }
-
 ```
 
 ### `/participants/:participantId` PATCH (200)
@@ -311,7 +315,7 @@ Update participant info
 
 Parameters:
 
-```
+```json
 {
     ...Participant? (any attribute)
 }
@@ -319,23 +323,20 @@ Parameters:
 
 Response:
 
-```
+```json
 {
-    ...Participant
+  ...Participant
 }
-
 ```
 
-# Problems
-
-## 1
+## Problems
 
 I am trying to figure out the how to design filtering parameters for a GET request to /experiments
 
 Example queries I would want to run but don't know how to design query parameters for:
 
-1.  All experiments that haven't started yet, but they are going to start sometime between today (12-09-19) and a week from now (12-16-19)
+1. All experiments that haven't started yet, but they are going to start sometime between today (12-09-19) and a week from now (12-16-19)
 
-2.  All experiments that haven't
+2. All experiments that haven't
 
 startFrom, startUntil, endFrom, endUntil

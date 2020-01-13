@@ -4,11 +4,11 @@ import Logger from './logger';
 import dependencyInjectorLoader from './dependencyInjector';
 import passportLoader from './passport';
 
-export default async ({ expressApp }) => {
+export default async ({ expressApp }: { expressApp }) => {
   const sqlConnection = await sequelizeLoader();
   Logger.info('✌️ DB loaded and connected!');
 
-  await passportLoader(); // put in Container ????
+  await passportLoader();
 
   await dependencyInjectorLoader({
     sqlConnection

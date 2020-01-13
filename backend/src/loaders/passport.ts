@@ -1,58 +1,91 @@
-import bcrypt from 'bcryptjs';
 import passport from 'passport';
-
-import LoggerInstance from './logger';
+import express from 'express';
+import logger from './logger';
 import config from '../config';
 import { Participant } from '../models/participant';
+import Container from 'typedi';
+const InternalOAuthError = require('passport-oauth2').InternalOAuthError;
+import axios from 'axios';
+import { randomIdGenerator } from '../utils';
 
-const LocalStrategy = require('passport-local').Strategy;
-const JWTStrategy = require('passport-jwt').Strategy;
-
+const OAuth2Strategy = require('passport-oauth2').Strategy;
 export default async () => {
   try {
-    passport.use(
-      new LocalStrategy(
-        {
-          usernameField: 'email',
-          passwordField: 'password',
-        },
-        async (email, password, done) => {
-          try {
-            const participant = await Participant.findOne({ where: { email } });
-            const passwordsMatch = await bcrypt.compare(
-              password,
-              participant.password,
-            );
-
-            if (passwordsMatch) {
-              return done(null, participant);
+    const discordStrategy = new OAuth2Strategy(
+      {
+        authorizationURL: config.discordAuthorizationURL,
+        tokenURL: 'https://discordapp.com/api/oauth2/token',
+        clientID: config.discordOAuthClientId,
+        clientSecret: config.discordOAuthClientSecret,
+        callbackURL: 'http://localhost:3000/api/auth/discord/redirect'
+      },
+      (accessToken, refreshToken, profile, done) => {
+        // get participant record based on Discord profile, then return it
+        const participantModel = Container.get<typeof Participant>(
+          'Participant'
+        );
+        participantModel
+          .findOrCreate({
+            where: { email: profile.email },
+            defaults: {
+              participantId: randomIdGenerator(),
+              email: profile.email,
+              password: 'test123', // will drop this unused column soon anyway
+              name: profile.username,
+              sex: 'male', // will drop this column or AT LEAST allow null...
+              discordUsername: profile.username,
+              lastLogin: new Date()
             }
-            return done('Incorrect Username / Password');
-          } catch (error) {
-            done(error);
-          }
-        },
-      ),
+          })
+          .then(participantRecord => {
+            done(null, participantRecord);
+          })
+          .catch(err => {
+            logger.error(err);
+            done(err, null);
+          });
+      }
     );
 
-    passport.use(
-      new JWTStrategy(
-        {
-          jwtFromRequest: (req) => req.cookies.jwt,
-          secretOrKey: config.jwtSecret,
-        },
-        (jwtPayload, done) => {
-          if (Date.now() > jwtPayload.expires) {
-            return done('jwt expired');
-          }
+    discordStrategy.userProfile = function(accessToken, done) {
+      axios({
+        url: 'https://discordapp.com/api/users/@me',
+        method: 'GET',
+        headers: { Authorization: `Bearer ${accessToken}` }
+      })
+        .then(profile => {
+          return done(null, profile.data);
+        })
+        .catch(err => {
+          return done(
+            // seems incorrect
+            new InternalOAuthError('Failed to fetch the user profile.', err)
+          );
+        });
+    };
 
-          return done(null, jwtPayload);
-        },
-      ),
-    );
+    passport.serializeUser(function(user: any, done) {
+      done(null, user.participantId);
+    });
+
+    passport.deserializeUser((participantId, done) => {
+      const participantModel = Container.get<typeof Participant>('Participant');
+      participantModel
+        .findOne({ where: { participantId } })
+        .then(participantRecord => {
+          done(null, participantRecord);
+        })
+        .catch(err => {
+          logger.error(err);
+          done(err, null);
+        });
+    });
+
+    passport.use(discordStrategy);
+
     return passport;
   } catch (e) {
-    LoggerInstance.error('🔥 Error on dependency injector loader: %o', e);
+    logger.error('🔥 Error on dependency injector loader: %o', e);
     throw e;
   }
 };

@@ -1,6 +1,7 @@
 import { Container } from 'typedi';
 import { Sequelize } from 'sequelize-typescript';
 import LoggerInstance from './logger';
+import { PassportStatic } from 'passport';
 
 export default async ({ sqlConnection }: { sqlConnection: Sequelize }) => {
   try {

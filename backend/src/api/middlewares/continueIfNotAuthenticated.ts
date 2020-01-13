@@ -1,14 +1,14 @@
-/**
- * Attach user to req.user
- * @param {*} req Express req Object
- * @param {*} res  Express res Object
- * @param {*} next  Express next Function
- */
-const continueIfNotAuthenticated = (req, res, next) => {
-  if (!req.isAuthenticated() && !('jwt' in req.cookies)) {
+import { Request, Response, NextFunction } from 'express';
+
+const continueIfNotAuthenticated = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (!req.isAuthenticated()) {
     return next();
   }
-  res.redirect('/dashboard');
+  // user already signed in... how do I let frontend know...
 };
 
 export default continueIfNotAuthenticated;
