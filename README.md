@@ -31,10 +31,10 @@ Using CodePipeline and CodeDeploy, the code is automatically deployed when you p
 
 ## Todo (in order of priority)
 
-- Complete API design (and add to unit tests)
-- Complete basic test suite that covers all API routes
-- Authentication (including frontend views based on user roles)
+- Integrate auth on frontend and API routes
+- Complete/alter API design (endpoints with similar logic is fine if it's cleaner and easier for user to use...)
 - Add API validation (using Joi and/or Typescript type guards)
+- Complete basic test suite that covers all API routes (testing status codes, response bodies, and model validation)
 - Secure API (currently, anyone can make any request from anywhere) via authentication (add auth cases to unit tests)
 - Significantly improve frontend styling
 - Devise system to send error msgs for frontend to display (e.x backend shud return "survey alreadysubmitted" msg for frontend notif to display)

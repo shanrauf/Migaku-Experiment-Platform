@@ -58,7 +58,8 @@ export default class SurveyService {
               where: { experimentId }
             }
           ],
-          limit: 10
+          limit: 10,
+          order: [['startDate', 'ASC']]
         });
       return {
         surveys: surveyRecords.rows,
@@ -274,13 +275,14 @@ export default class SurveyService {
     participantId: string
   ): Promise<string> {
     try {
-      this.logger.silly('Finding survey responseId');
+      this.logger.silly('Finding or creating survey responseId');
       const surveyResponse = await this.surveyResponseModel.findOne({
         attributes: ['responseId'],
         where: { surveyId, participantId }
       });
       if (!surveyResponse) {
         return await this.CreateSurveyResponse(
+          // bad in POST /:surveyId because not wrapped in transaction
           experimentId,
           surveyId,
           participantId
