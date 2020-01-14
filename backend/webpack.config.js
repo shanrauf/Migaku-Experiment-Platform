@@ -97,7 +97,7 @@ module.exports = {
   target: 'node',
   devtool: 'cheap-module-eval-source-map',
   entry: {
-    main: './src/app.ts'
+    main: './src/server.ts'
   },
   resolve: {
     extensions: ['.js', '.ts']
@@ -114,7 +114,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'build'),
     pathinfo: false,
-    filename: 'app.js',
+    filename: 'server.js',
     chunkFilename: 'chunks/[chunkhash].chunk.js',
     publicPath: '/'
   },

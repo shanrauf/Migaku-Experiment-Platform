@@ -31,7 +31,7 @@ export default class ParticipantSubscriber {
     } catch (e) {
       // Logger.error(`🔥 Error on event ${events.user.signIn}: %o`, e);
 
-      // Throw the error so the process die (check src/app.ts)
+      // Throw the error so the process die (check src/server.ts)
       throw e;
     }
   }
@@ -52,7 +52,7 @@ export default class ParticipantSubscriber {
     } catch (e) {
       // Logger.error(`🔥 Error on event ${events.user.signUp}: %o`, e);
 
-      // Throw the error so the process dies (check src/app.ts)
+      // Throw the error so the process dies (check src/server.ts)
       throw e;
     }
   }
