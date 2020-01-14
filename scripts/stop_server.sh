@@ -5,4 +5,4 @@ echo "
   Stopping server
 ----------------------
 "
-cd ~ && pm2 kill
+cd ~ && sudo pm2 kill
