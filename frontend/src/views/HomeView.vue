@@ -1,17 +1,25 @@
 <template>
   <div class="landing-container">
-    <h1 style="font-size: 60px">MIA Foreign Language Experiments</h1>
+    <h1 style="font-size: 60px">
+      Participate in MIA Foreign Language Experiments!
+    </h1>
 
-    <AccountForm />
+    <BaseButton backgroundColor="#7289DA" rounded @click="loginWithDiscord"
+      >Sign In With Discord</BaseButton
+    >
   </div>
 </template>
 
 <script>
-import AccountForm from "@/components/AccountForm.vue";
-import { mapGetters } from "vuex";
+import axiosClient from '@/api/axiosClient';
+import { mapGetters } from 'vuex';
 export default {
-  components: {
-    AccountForm
+  methods: {
+    loginWithDiscord() {
+      axiosClient.get('/auth/discord/redirect').then(res => {
+        console.log(res);
+      });
+    }
   }
 };
 </script>

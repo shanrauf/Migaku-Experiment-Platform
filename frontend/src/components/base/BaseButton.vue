@@ -1,5 +1,10 @@
 <template>
-  <button type="button" :class="{ rounded, disabled }" v-on="listeners">
+  <button
+    type="button"
+    :class="{ rounded, disabled }"
+    :style="styles"
+    v-on="listeners"
+  >
     <slot></slot>
   </button>
 </template>
@@ -14,12 +19,32 @@ export default {
     disabled: {
       type: Boolean,
       required: false
+    },
+    color: {
+      type: String,
+      required: false
+    },
+    backgroundColor: {
+      type: String,
+      required: false
     }
   },
   computed: {
     listeners() {
       return {
         ...this.$listeners
+      };
+    },
+    colorStyle() {
+      return this.color || '#ffffff';
+    },
+    backgroundColorStyle() {
+      return this.backgroundColor || '#204f70';
+    },
+    styles() {
+      return {
+        color: this.colorStyle,
+        'background-color': this.backgroundColorStyle
       };
     }
   }
@@ -28,8 +53,6 @@ export default {
 
 <style lang="scss" scoped>
 button {
-  background-color: #204f70;
-  color: #ffffff;
   font-size: 12px;
   font-weight: bold;
   padding: 12px 45px;
