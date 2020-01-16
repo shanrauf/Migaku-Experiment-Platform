@@ -20,29 +20,28 @@ export default async () => {
         callbackURL: 'http://localhost:3000/api/auth/discord/redirect'
       },
       (accessToken, refreshToken, profile, done) => {
-        // get participant record based on Discord profile, then return it
         const participantModel = Container.get<typeof Participant>(
           'Participant'
         );
-        participantModel
+        return participantModel
           .findOrCreate({
             where: { email: profile.email },
             defaults: {
               participantId: randomIdGenerator(),
               email: profile.email,
-              password: 'test123', // will drop this unused column soon anyway
+              password: 'test123', // unused column in db
               name: profile.username,
-              sex: 'male', // will drop this column or AT LEAST allow null...
+              sex: 'male', // unused column anyway...
               discordUsername: profile.username,
               lastLogin: new Date()
             }
           })
           .then(participantRecord => {
-            done(null, participantRecord);
+            done(null, participantRecord[0]);
           })
           .catch(err => {
             logger.error(err);
-            done(err, null);
+            done(null, false, { error: 'Deserialization error' });
           });
       }
     );
@@ -54,10 +53,10 @@ export default async () => {
         headers: { Authorization: `Bearer ${accessToken}` }
       })
         .then(profile => {
-          return done(null, profile.data);
+          done(null, profile.data);
         })
         .catch(err => {
-          return done(
+          done(
             // seems incorrect
             new InternalOAuthError('Failed to fetch the user profile.', err)
           );
@@ -66,6 +65,7 @@ export default async () => {
 
     passport.serializeUser(function(user: any, done) {
       done(null, user.participantId);
+      return;
     });
 
     passport.deserializeUser((participantId, done) => {

@@ -7,8 +7,9 @@ const ensureAuthenticated = (
 ) => {
   if (req.isAuthenticated()) {
     return next();
+  } else {
+    res.redirect('/api/auth/discord');
   }
-  // User not logged in, let frontend know
 };
 
 export default ensureAuthenticated;

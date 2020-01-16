@@ -1,13 +1,5 @@
 import { Request, Response, Router, NextFunction } from 'express';
 import passport from 'passport';
-import AuthService from '../../services/auth';
-import middlewares from '../middlewares';
-
-import {
-  IParticipant,
-  IParticipantSignupDTO
-} from '../../interfaces/IParticipant';
-import { Participant } from '../../models/participant';
 import logger from '../../loaders/logger';
 
 const route = Router();
@@ -21,7 +13,7 @@ export default app => {
     passport.authenticate('oauth2'),
     (req: Request, res: Response, next: NextFunction) => {
       try {
-        logger.debug('GET /discord/redirect');
+        logger.debug('GET /discord/redirect with user %o', req.user);
         return res.json({ user: req.user }).status(200);
       } catch (err) {
         logger.error(err);

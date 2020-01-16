@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import routes from '../api';
 import config from '../config';
 import passport from 'passport'; // not decoupled like other loaders...
+import cookieSession from 'cookie-session';
 
 export default async ({ app }: { app: express.Application }) => {
   app.get('/status', (req, res) => {
@@ -26,6 +27,13 @@ export default async ({ app }: { app: express.Application }) => {
     })
   );
   app.use(express.json({ limit: '350mb' })); // please start using streams or whatever XD
+
+  app.use(
+    cookieSession({
+      maxAge: 24 * 60 * 60 * 1000,
+      keys: [config.cookieKey]
+    })
+  );
 
   app.use(cookieParser());
 
