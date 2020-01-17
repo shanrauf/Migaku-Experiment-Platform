@@ -10,6 +10,18 @@ export function randomIdGenerator(): string {
   );
 }
 
+export function formatDate(dateObject: Date, options = {}, language = 'en-US') {
+  // options = {
+  //   weekday: 'long',
+  //   year: 'numeric',
+  //   month: 'long',
+  //   day: 'numeric',
+  //   hour12: true
+  // }
+  // let language = "en-US" || "hi-IN" || "ja-JP"
+  return dateObject.toLocaleDateString(language, options);
+}
+
 function isJsonString(str: string): boolean {
   try {
     JSON.parse(str);

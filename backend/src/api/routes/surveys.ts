@@ -5,26 +5,34 @@ import SurveyService from '../../services/survey';
 import ParticipantService from '../../services/participant';
 import { ISurvey } from '../../interfaces/ISurvey';
 import logger from '../../loaders/logger';
+import middlewares from '../middlewares';
 
 const route = Router({ mergeParams: true });
 
 export default (app: Router) => {
   app.use('/experiments/:experimentId/surveys', route);
 
-  route.get('/', async (req: Request, res: Response, next: NextFunction) => {
-    const { experimentId } = req.params;
-    try {
-      logger.debug(`GET /experiments/${experimentId}/surveys with params: %o`);
-      const surveyService = Container.get(SurveyService);
-      const payload = await surveyService.GetSurveys(experimentId);
-      if (!payload.surveys) {
-        return res.status(404).send('Not found');
+  route.get(
+    '/',
+    middlewares.ensureAuthenticated,
+    middlewares.ensureExperimentParticipant,
+    async (req: Request, res: Response, next: NextFunction) => {
+      const { experimentId } = req.params;
+      try {
+        logger.debug(
+          `GET /experiments/${experimentId}/surveys with params: %o`
+        );
+        const surveyService = Container.get(SurveyService);
+        const payload = await surveyService.GetSurveys(experimentId);
+        if (!payload.surveys) {
+          return res.status(404).send('Not found');
+        }
+        return res.json(payload).status(200);
+      } catch (err) {
+        return next(err);
       }
-      return res.json(payload).status(200);
-    } catch (err) {
-      return next(err);
     }
-  });
+  );
 
   route.post('/', async (req: Request, res: Response, next: NextFunction) => {
     const { experimentId } = req.params;
@@ -69,6 +77,8 @@ export default (app: Router) => {
 
   route.get(
     '/:surveyId',
+    middlewares.ensureAuthenticated,
+    middlewares.ensureExperimentParticipant,
     async (req: Request, res: Response, next: NextFunction) => {
       const { experimentId, surveyId } = req.params;
       logger.debug(
