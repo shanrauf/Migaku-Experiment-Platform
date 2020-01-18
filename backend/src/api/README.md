@@ -6,7 +6,7 @@
 
 ### `/auth/discord` GET (200 || 401)
 
-Goes through OAuth 2.0 flow for Discord and returns participant or 401 error
+Goes through OAuth 2.0 flow for Discord and attaches Participant cookie for future requests or returns 401 error
 
 ## Experiments
 
@@ -16,16 +16,16 @@ Returns all experiments
 
 Parameters:
 
-```json
+```ts
 {
-    surveyId?: string # returns all experiments that administered this survey
-    participantId?: string # Returns experiments that participant is registered for
+    surveyId?: String // returns all experiments that administered this survey
+    participantId?: String // Returns experiments that participant is registered for
 }
 ```
 
 Response:
 
-```json
+```ts
 {
     experiments: Experiment[]
 }
@@ -38,15 +38,15 @@ Creates an experiment
 
 Body:
 
-```json
+```ts
 {
-    experimentId?: string # If left empty, a random id is generated
-    title: string
-    description?: string
-    startDate: string (ISO string: "2019-12-14T13:19:44.000Z")
-    endDate?: string (ISO string: "2019-12-14T13:19:44.000Z")
-    visibility: string ("public" | "private")
-    questions: questionId[] # array of questionId strings to add to ExperimentQuestion table
+    experimentId?: String, // If left empty, a random id is generated
+    title: String,
+    description?: String,
+    startDate: String, // (ISO string: "2019-12-14T13:19:44.000Z")
+    endDate?: String, // (ISO string: "2019-12-14T13:19:44.000Z")
+    visibility: String, // ("public" | "private")
+    questions: questionId[] // array of questionId strings to add to ExperimentQuestion table
 }
 ```
 
@@ -57,9 +57,9 @@ Deletes an experiment
 
 Body:
 
-```json
+```ts
 {
-  "experimentId": string
+  "experimentId": String
 }
 ```
 
@@ -69,14 +69,14 @@ Gets an experiment
 
 Response:
 
-```json
+```ts
 {
-    experimentId: string
-    title: string
-    description: string | null
-    startDate: string (ISO string: "2019-12-14T13:19:44.000Z")
-    endDate: string | null (ISO string: "2019-12-14T13:19:44.000Z")
-    visibility: string ("public" | "private")
+    experimentId: String,
+    title: String,
+    description: String | null,
+    startDate: String, // (ISO string: "2019-12-14T13:19:44.000Z")
+    endDate: String | null, // (ISO string: "2019-12-14T13:19:44.000Z")
+    visibility: String // ("public" | "private")
 }
 ```
 
@@ -86,9 +86,9 @@ Updates an experiment
 
 Body:
 
-```json
+```ts
 {
-    ...Experiment?: (any attribute)
+    ...Experiment? // (any attribute)
 }
 ```
 
@@ -103,15 +103,15 @@ Registers participant for experiment
 
 Body:
 
-```json
+```ts
 {
-    participantId: string;
+  participantId: string;
 }
 ```
 
 Response:
 
-```json
+```ts
 {
   ...Participant
 }
@@ -124,7 +124,7 @@ Unregisters participant for experiment
 
 Body:
 
-```json
+```ts
 {
   "participantId": string
 }
@@ -132,8 +132,9 @@ Body:
 
 Response:
 
-```json
-{}
+```ts
+{
+}
 ```
 
 #### `/experiments/:experimentId/surveys` GET (200)
@@ -142,19 +143,19 @@ Get all surveys
 
 Parameters:
 
-```json
+```ts
 {
-    participantId?: string # returns surveys that the participant has completed
-    surveyId?: string # Returns metadata of specific survey
-    visibility?: string # default "public"; ("public", "private?) (NOTE: avg participants shouldn't be authenticated to request "private" surveys)
+    participantId?: String // returns surveys that the participant has completed
+    surveyId?: String // Returns metadata of specific survey
+    visibility?: String // default = "public"; ("public", "private?) (NOTE: participants shouldn't be authenticated to request "private" surveys)
 }
 ```
 
 Response:
 
-```json
+```ts
 {
-    surveys: Survey[] # (metadata e.x title/description/requirements) (if surveyId parameter, this array length is just 1)
+    surveys: Survey[] // (metadata e.x title/description/requirements) (if surveyId parameter, this array length is just 1)
 }
 ```
 
@@ -164,22 +165,22 @@ Creates a survey
 
 Body:
 
-```json
+```ts
 {
-    surveyId?: string # If empty, a random id is generated
-    title: string
-    description?: string
-    startDate: string (ISO string)
-    endDate?: string (ISO string)
-    surveyCategory: string (any string of your choice; e.x "regular", "initial", "mid-experiment")
-    visibility: string ("public" | "private")
-    sections: SurveySection[] # contains Question[]
+    surveyId?: String, // If empty, a random id is generated
+    title: String,
+    description?: String,
+    startDate: String, // (ISO string)
+    endDate?: String, // (ISO string)
+    surveyCategory: String, // (any string of your choice; e.x "regular", "initial", "mid-experiment")
+    visibility: String, // ("public" | "private")
+    sections: SurveySection[]
 }
 ```
 
 Response:
 
-```json
+```ts
 {
     surveys: Survey[]
 }
@@ -195,7 +196,7 @@ Gets the metadata and questions/sections of survey
 
 Parameters:
 
-```json
+```ts
 {
     sections?: sectionId[] // only return these sections/questions (good for pagination for example)
 }
@@ -203,9 +204,9 @@ Parameters:
 
 Response:
 
-```json
+```ts
 {
-  ...Survey(questions / sections, metadata, etc)
+  ...Survey // (questions / sections, metadata, etc)
 }
 ```
 
@@ -220,11 +221,11 @@ Submits the survey response of a participant
 
 Body:
 
-```json
+```ts
 {
-    email: string (temporary due to Anki addon implementation)
-    experimentId: string
-    ...questionKeyValuePairs (temporary due to Anki implementation)
+    email: String, // (temporary due to Anki addon implementation)
+    experimentId: String,
+    ...questionKeyValuePairs // (temporary due to Anki implementation)
 }
 ```
 
@@ -232,7 +233,7 @@ Body:
 {
 participantId: string;
 experimentId: string
-questions: Question[] # array of objects with key, value, type (string, int)
+questions: Question[] # array of objects with key, value, type (String, int)
 } -->
 
 ### `/experiments/:experimentId/surveys/latest/status?email=email` GET (200)
@@ -251,17 +252,17 @@ Gets all participants
 
 Parameters:
 
-```json
+```ts
 {
-    experimentId?: returns participants registered for this experiment
-    surveyId?: returns participants who completed this survey
-    requirements?: comma-delimited string (e.x "completedPRTK=false,knownWordCount=559")
+    experimentId?: String, // returns participants registered for this experiment
+    surveyId?: String, // returns participants who completed this survey
+    requirements?: String // comma-delimited string (e.x "completedPRTK=false,knownWordCount=559")
 }
 ```
 
 Response:
 
-```json
+```ts
 
 {
     participants: Participant[]
@@ -276,22 +277,22 @@ Creates a participant (e.x user sign-up)
 
 Body:
 
-```json
+```ts
 
 {
-    experimentId?: string # Gets all participants who signed up for this experiment
-    surveyId?: string # Get all participants who filled out this survey
-    description?: string
-    startDate?: string (ISO string: "2019-12-14T13:19:44.000Z")
-    endDate?: string (ISO string: "2019-12-14T13:19:44.000Z")
-    visibility?: string ("public" | "private")
+    experimentId?: String, // # Gets all participants who signed up for this experiment
+    surveyId?: String, // Get all participants who filled out this survey
+    description?: String,
+    startDate?: String, // (ISO string: "2019-12-14T13:19:44.000Z")
+    endDate?: String, // (ISO string: "2019-12-14T13:19:44.000Z")
+    visibility?: String // ("public" | "private")
 }
 
 ```
 
 Response:
 
-```json
+```ts
 {
   ...Participant
 }
@@ -303,7 +304,7 @@ Gets a participant
 
 Response:
 
-```json
+```ts
 {
   ...Participant
 }
@@ -315,15 +316,15 @@ Update participant info
 
 Parameters:
 
-```json
+```ts
 {
-    ...Participant? (any attribute)
+    ...Participant? // (any attribute)
 }
 ```
 
 Response:
 
-```json
+```ts
 {
   ...Participant
 }
