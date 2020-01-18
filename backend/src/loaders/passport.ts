@@ -1,14 +1,14 @@
-import passport from 'passport';
-import express from 'express';
-import logger from './logger';
-import config from '../config';
-import { Participant } from '../models/participant';
-import Container from 'typedi';
-const InternalOAuthError = require('passport-oauth2').InternalOAuthError;
 import axios from 'axios';
+import passport from 'passport';
+import Container from 'typedi';
+import { InternalOAuthError } from 'passport-oauth2';
+const OAuth2Strategy = require('passport-oauth2').Strategy;
+
+import config from '../config';
+import logger from './logger';
+import { Participant } from '../models/participant';
 import { randomIdGenerator } from '../utils';
 
-const OAuth2Strategy = require('passport-oauth2').Strategy;
 export default async () => {
   try {
     const discordStrategy = new OAuth2Strategy(
@@ -29,9 +29,9 @@ export default async () => {
             defaults: {
               participantId: randomIdGenerator(),
               email: profile.email,
-              password: 'test123', // unused column in db
+              password: 'test123', // deprecated column
               name: profile.username,
-              sex: 'male', // unused column anyway...
+              sex: 'male', // deprecated column
               discordUsername: profile.username,
               lastLogin: new Date()
             }
@@ -57,7 +57,6 @@ export default async () => {
         })
         .catch(err => {
           done(
-            // seems incorrect
             new InternalOAuthError('Failed to fetch the user profile.', err)
           );
         });
@@ -85,7 +84,7 @@ export default async () => {
 
     return passport;
   } catch (e) {
-    logger.error('🔥 Error on dependency injector loader: %o', e);
+    logger.error('🔥 Error on passport initialization: %o', e);
     throw e;
   }
 };
