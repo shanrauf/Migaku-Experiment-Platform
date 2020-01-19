@@ -1,9 +1,9 @@
 import RepositoryFactory from '@/api/RepositoryFactory';
 
 export default class Service {
-  constructor(options) {
-    this.experimentRepository = RepositoryFactory.get('experiment');
-  }
+  experimentRepository = RepositoryFactory.get('experiment');
+
+  constructor(options?) {}
 
   getExperiment(experimentId) {
     // return this.experimentRepository.get(...);

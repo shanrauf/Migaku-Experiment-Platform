@@ -151,10 +151,10 @@ module.exports = {
   devtool: 'cheap-module-eval-source-map',
   devServer: devServer,
   entry: {
-    main: './src/main.js'
+    main: './src/main.ts'
   },
   resolve: {
-    extensions: ['.ts', '.js', '.vue'],
+    extensions: ['.js', '.ts', '.vue'],
     alias: {
       vue$: 'vue/dist/vue.runtime.js',
       '@': path.resolve(__dirname, './src')

@@ -13,8 +13,8 @@
   </v-card>
 </template>
 
-<script>
-import { formatDate } from '@/utils/index.js';
+<script lang="ts">
+import { formatDate } from '../utils/index';
 export default {
   props: {
     experimentId: {
@@ -34,7 +34,7 @@ export default {
       required: true
     },
     endDate: {
-      type: Date | null,
+      type: [Date, null],
       required: true
     },
     visibility: {

@@ -1,5 +1,5 @@
 <template>
-  <div :class="flipped ? 'flip-container flipped': 'flip-container'">
+  <div :class="flipped ? 'flip-container flipped' : 'flip-container'">
     <div class="flipper">
       <div class="front">
         <slot name="front"></slot>
@@ -11,10 +11,10 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 // See Github here: https://github.com/andersponders/vue-flip-card
 export default {
-  name: "FlipCard",
+  name: 'FlipCard',
   props: {
     flipped: {
       type: Boolean,

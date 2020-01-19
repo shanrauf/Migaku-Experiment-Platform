@@ -1,5 +1,5 @@
 export default class Service {
-  constructor(options) {}
+  constructor(options?) {}
 
   getProfile() {
     // Mock data.
@@ -20,5 +20,8 @@ export default class Service {
         resolve(parsed);
       }, 500);
     });
+  }
+  loginWithDiscord() {
+    console.log('Integrate auth');
   }
 }

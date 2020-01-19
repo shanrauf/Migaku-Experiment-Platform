@@ -10,7 +10,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Service from './service';
 
 export default {
@@ -18,9 +18,7 @@ export default {
   service: new Service(),
   methods: {
     loginWithDiscord() {
-      axiosClient.get('/auth/discord/redirect').then(res => {
-        console.log(res);
-      });
+      this.$options.service.loginWithDiscord();
     }
   }
 };

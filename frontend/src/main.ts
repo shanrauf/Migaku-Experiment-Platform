@@ -13,13 +13,13 @@ Vue.config.performance = true;
 import Notifications from 'vue-notification';
 Vue.use(Notifications);
 
-import Vuetify from 'vuetify/lib/framework';
+import Vuetify from 'vuetify/lib';
 import 'vuetify/dist/vuetify.min.css';
 import 'material-icons';
 import '@fortawesome/fontawesome-free/css/all.css';
 // import "@mdi/font/css/materialdesignicons.css";
 
-const opts = {
+const opts: any = {
   icons: {
     iconfont: 'md',
     values: {

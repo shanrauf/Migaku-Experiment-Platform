@@ -25,7 +25,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Service from './service';
 import BaseCard from '@/components/BaseCard.vue';
 
@@ -44,13 +44,6 @@ export default {
       startDate: 1575244800000,
       endDate: 1581206400000
     };
-  },
-  methods: {
-    loginWithDiscord() {
-      axiosClient.get('/auth/discord/redirect').then(res => {
-        console.log(res);
-      });
-    }
   }
 };
 </script>

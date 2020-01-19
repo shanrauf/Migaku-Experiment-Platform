@@ -1,4 +1,4 @@
-export function camelCase(str) {
+export function camelCase(str: string): string {
   return str
     .replace(/(?:^\w|[A-Z]|\b\w)/g, function(word, index) {
       return index == 0 ? word.toLowerCase() : word.toUpperCase();
@@ -6,11 +6,15 @@ export function camelCase(str) {
     .replace(/\s+/g, '');
 }
 
-export function dateToISO(dateObject) {
+export function dateToISO(dateObject: Date): string {
   return dateObject.toISOString().slice(0, 10);
 }
 
-export function formatDate(dateObject, options = {}, language = 'en-US') {
+export function formatDate(
+  dateObject: Date,
+  options: object = {},
+  language: string = 'en-US'
+): string {
   // options = {
   //   weekday: 'long',
   //   year: 'numeric',
@@ -22,7 +26,7 @@ export function formatDate(dateObject, options = {}, language = 'en-US') {
   return dateObject.toLocaleDateString(language, options);
 }
 
-export function dateToTimeUntil(dateObject) {
+export function dateToTimeUntil(dateObject: Date): string {
   let oneDay = 8.64e7;
   let oneMonth = 2.678e9;
 
@@ -36,7 +40,7 @@ export function dateToTimeUntil(dateObject) {
   }
 }
 
-export function truncate(value, limit = 150) {
+export function truncate(value: string, limit: number = 150): string {
   if (value.length > limit) {
     return value.slice(0, limit + 1) + '...';
   }

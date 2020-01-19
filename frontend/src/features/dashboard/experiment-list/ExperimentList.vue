@@ -9,7 +9,7 @@
   </v-row>
 </template>
 
-<script>
+<script lang="ts">
 import ExperimentCard from '@/components/ExperimentCard.vue';
 import BaseCreateNewCard from '@/components/BaseCreateNewCard.vue';
 import { mapGetters } from 'vuex';

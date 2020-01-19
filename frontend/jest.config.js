@@ -1,8 +1,9 @@
 module.exports = {
-  moduleFileExtensions: ['js', 'json', 'vue'],
+  preset: 'ts-jest',
+
+  moduleFileExtensions: ['js', 'json', 'vue', 'ts'],
   transform: {
     '^.+\\.vue$': 'vue-jest',
-    '^.+\\.js$': 'babel-jest',
     '.+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$':
       'jest-transform-stub'
   },
@@ -10,7 +11,7 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/src/$1'
   },
   snapshotSerializers: ['jest-serializer-vue'],
-  testMatch: ['**/tests/**/*.spec.(js|jsx|ts|tsx)'],
+  testMatch: ['**/tests/**/*.spec.(ts)'],
   transformIgnorePatterns: ['/node_modules/'],
 
   // Stop running tests after the first failure

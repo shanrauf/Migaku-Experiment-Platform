@@ -10,7 +10,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Service from './service';
 
 import { mapGetters, mapState } from 'vuex';
@@ -49,11 +49,6 @@ export default {
       if (!result) {
         this.$notify('Failed');
       }
-    },
-    loginWithDiscord() {
-      axiosClient.get('/auth/discord/redirect').then(res => {
-        console.log(res);
-      });
     }
   }
 };

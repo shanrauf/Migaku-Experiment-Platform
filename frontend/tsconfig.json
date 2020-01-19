@@ -2,20 +2,33 @@
   "compilerOptions": {
     "target": "es2017",
     "lib": ["es2017", "esnext.asynciterable"],
-    "typeRoots": ["./node_modules/@types", "./src/types"],
+    "typeRoots": [
+      "./node_modules/@types",
+      "./node_modules/vuetify/types",
+      "./src/types"
+    ],
+    "types": ["vuetify", "node", "webpack-env", "jest"],
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noImplicitReturns": true,
     "forceConsistentCasingInFileNames": true,
+    "module": "es2015",
     "moduleResolution": "node",
-    "module": "commonjs",
+    "strict": true,
     "pretty": true,
     "sourceMap": true,
     "outDir": "./build",
     "allowJs": true,
     "noEmit": false,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
-  "include": ["./src/**/*"],
+  "include": ["src/**/*.ts", "src/**/*.vue", "tests/**/*.ts", "tests/**/*.vue"],
   "exclude": ["./node_modules/**/*"]
 }
