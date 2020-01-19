@@ -18,7 +18,10 @@ const routes = [
   {
     path: '*',
     name: 'page-not-found',
-    component: AppPageNotFound
+    component: AppPageNotFound,
+    title: '404 Page | MIA Experiments',
+    layout: 'DefaultLayout',
+    isPublic: true
   }
 ];
 
@@ -32,7 +35,7 @@ const routes = [
  */
 function guardRoute(to, from, next) {
   // work-around to get to the Vuex store (as of Vue 2.0)
-  const isLoggedIn = false;
+  const isLoggedIn = true;
   if (!isLoggedIn) {
     next({ path: '/', query: { redirect: to.fullPath } });
   } else {
@@ -56,23 +59,14 @@ routes.forEach(route => {
 
 const router = new VueRouter({ mode: 'history', routes });
 
-// Isn't the following hook better than the time spent looping over all of the routes?
+// Isn't the following hook better to change document title, etc instead of looping over the routes?
 
-// router.beforeEach((to, _, next) => {
-//   let requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-//   let requiresAdmin = to.matched.some(record => record.meta.requiresAdmin);
-
-//   if (requiresAdmin) {
-//     // if (!store.state.auth.user.isAdmin) {
-//     router.push("/");
-//     // }
-//   } else if (requiresAuth) {
-//     console.log(requiresAuth);
-//     // if (!store.state.auth.user) {
-//     router.push("/");
-//     // }
-//   }
-//   next();
-// });
+router.beforeEach((to, _, next) => {
+  const isAuthenticated = true; // implement
+  if (to.name === 'landing' && isAuthenticated) {
+    router.push('/dashboard');
+  }
+  next();
+});
 
 export default router;

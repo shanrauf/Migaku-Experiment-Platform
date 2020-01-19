@@ -7,21 +7,8 @@ const dashboardRoutes = [
         /* webpackChunkName: "dashboard" */ '@/features/dashboard/main.vue'
       ),
     title: 'Dashboard | MIA Experiments',
-    layout: 'PublicLayout',
+    layout: 'DashboardLayout',
     isPublic: true
-    // children: [
-    //   {
-    //     name: 'experiments',
-    //     path: '/dashboard',
-    //     component: () =>
-    //       import(
-    //         /* webpackChunkName: "dashboard" */ '@/features/dashboard/main.vue'
-    //       ),
-    //     title: 'Dashboard | MIA Experiments',
-    //     layout: 'PublicLayout',
-    //     isPublic: true,
-    //   }
-    // ]
   }
 ];
 

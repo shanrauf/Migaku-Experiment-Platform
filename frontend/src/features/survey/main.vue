@@ -60,13 +60,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.landing-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  width: 80%;
+.survey-container {
   margin: auto;
+  margin-top: -40px;
+  width: 650px;
 }
 </style>

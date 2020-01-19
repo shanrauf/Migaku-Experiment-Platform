@@ -4,6 +4,9 @@ import router from '@/app-routes';
 import store from '@/store';
 import '@/components/_globals';
 
+import { sync } from 'vuex-router-sync';
+sync(store, router);
+
 Vue.config.productionTip = false;
 Vue.config.performance = true;
 
