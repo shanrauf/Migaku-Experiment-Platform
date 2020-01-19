@@ -75,7 +75,7 @@ const actions = {
       payload['data'] = questionResponses;
       const SurveyRepository = RepositoryFactory.get('surveys');
       SurveyRepository.post(state.currentSurvey.surveyId, payload).then(() => {
-        router.push('/');
+        router.push('landing');
         Vue.notify({
           group: 'global',
           title: 'Successfully submitted survey!',
