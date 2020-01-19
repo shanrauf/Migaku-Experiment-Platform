@@ -1,5 +1,5 @@
 const surveyData = require('@/surveyData.json');
-import router from '@/router';
+import router from '@/app-routes';
 import RepositoryFactory from '@/api';
 import Vue from 'vue';
 const state = () => {

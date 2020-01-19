@@ -11,9 +11,11 @@
 </template>
 
 <script>
-import axiosClient from '@/api/axiosClient';
-import { mapGetters } from 'vuex';
+import Service from './service';
+
 export default {
+  name: 'Account',
+  service: new Service(),
   methods: {
     loginWithDiscord() {
       axiosClient.get('/auth/discord/redirect').then(res => {

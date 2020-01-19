@@ -154,7 +154,7 @@ module.exports = {
     main: './src/main.js'
   },
   resolve: {
-    extensions: ['.js', '.vue'],
+    extensions: ['.ts', '.js', '.vue'],
     alias: {
       vue$: 'vue/dist/vue.runtime.js',
       '@': path.resolve(__dirname, './src')
@@ -162,6 +162,18 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /\.ts$/,
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              transpileOnly: true,
+              experimentalWatchApi: true
+            }
+          }
+        ]
+      },
       {
         test: /\.vue$/,
         loader: 'vue-loader'

@@ -25,3 +25,7 @@ export default {
     return AxiosClient.delete(`${resource}/${surveyId}`);
   }
 };
+
+// class SurveyRepository {
+//   constructor() {}
+// }

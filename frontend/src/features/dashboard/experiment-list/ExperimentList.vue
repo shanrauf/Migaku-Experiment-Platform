@@ -13,6 +13,7 @@
 import ExperimentCard from '@/components/ExperimentCard.vue';
 import BaseCreateNewCard from '@/components/BaseCreateNewCard.vue';
 import { mapGetters } from 'vuex';
+
 export default {
   components: {
     ExperimentCard,

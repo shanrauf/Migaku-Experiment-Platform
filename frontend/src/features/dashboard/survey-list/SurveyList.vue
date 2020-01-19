@@ -12,9 +12,9 @@
 </template>
 
 <script>
-import SurveyCard from "@/components/SurveyCard.vue";
-import BaseCreateNewCard from "@/components/BaseCreateNewCard.vue";
-import { mapGetters } from "vuex";
+import SurveyCard from '@/components/SurveyCard.vue';
+import BaseCreateNewCard from '@/components/BaseCreateNewCard.vue';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -22,10 +22,10 @@ export default {
     BaseCreateNewCard
   },
   created() {
-    this.$store.dispatch("createSurveys");
+    this.$store.dispatch('createSurveys');
   },
   computed: {
-    ...mapGetters(["getSurveys"])
+    ...mapGetters(['getSurveys'])
   }
 };
 </script>
