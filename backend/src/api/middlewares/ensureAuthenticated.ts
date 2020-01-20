@@ -8,7 +8,9 @@ const ensureAuthenticated = (
   if (req.isAuthenticated()) {
     return next();
   } else {
-    res.redirect('/api/auth/discord');
+    const err = new Error('You are not authorized for this route');
+    err.name = 'UnauthorizedError';
+    throw err;
   }
 };
 

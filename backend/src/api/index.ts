@@ -3,6 +3,7 @@ import auth from './routes/auth';
 import participant from './routes/participant';
 import experiments from './routes/experiments';
 import surveys from './routes/surveys';
+import questionresponses from './routes/questionresponses';
 
 // guaranteed to get dependencies
 export default () => {
@@ -11,6 +12,7 @@ export default () => {
   participant(app);
   experiments(app);
   surveys(app);
+  questionresponses(app);
 
   return app;
 };
