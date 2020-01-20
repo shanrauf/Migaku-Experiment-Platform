@@ -4,9 +4,11 @@ const surveyRoutes = [
     path: '/experiments/:experimentId/surveys/:surveyId',
     component: () =>
       import(/* webpackChunkName: "survey" */ '@/features/survey/main.vue'),
-    title: 'Survey | MIA Experiments',
-    layout: 'DefaultLayout',
-    isPublic: true
+    meta: {
+      title: 'Survey | MIA Experiments',
+      layout: 'DefaultLayout',
+      isPublic: true
+    }
   }
 ];
 

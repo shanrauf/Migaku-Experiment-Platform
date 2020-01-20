@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2017",
-    "lib": ["es2017", "esnext.asynciterable"],
+    "lib": ["es2017", "esnext.asynciterable", "DOM"],
     "typeRoots": [
       "./node_modules/@types",
       "./node_modules/vuetify/types",
@@ -15,7 +15,8 @@
     "noImplicitThis": true,
     "noImplicitReturns": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "es2015",
+    // "module": "es2015",
+    "module": "commonjs",
     "moduleResolution": "node",
     "strict": true,
     "pretty": true,

@@ -1,4 +1,6 @@
-const experimentRoutes = [
+import { RouteConfig } from 'vue-router';
+
+const experimentRoutes: RouteConfig[] = [
   {
     name: 'experiment',
     path: '/experiments/:experimentId',
@@ -6,9 +8,11 @@ const experimentRoutes = [
       import(
         /* webpackChunkName: "experiment" */ '@/features/experiment/main.vue'
       ),
-    title: 'Experiment | MIA Experiments',
-    layout: 'DefaultLayout',
-    isPublic: false
+    meta: {
+      title: 'Experiment | MIA Experiments',
+      layout: 'DefaultLayout',
+      isPublic: false
+    }
   },
   {
     name: 'surveys',
@@ -17,9 +21,11 @@ const experimentRoutes = [
       import(
         /* webpackChunkName: "experiment" */ '@/features/experiment/survey-list/SurveyList.vue'
       ),
-    title: 'Surveys | MIA Experiments',
-    layout: 'DefaultLayout',
-    isPublic: false
+    meta: {
+      title: 'Surveys | MIA Experiments',
+      layout: 'DefaultLayout',
+      isPublic: false
+    }
   }
 ];
 

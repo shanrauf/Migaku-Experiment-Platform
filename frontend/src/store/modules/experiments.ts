@@ -1,24 +1,24 @@
-// import router from '@/router';
+import { MutationTree, ActionTree, GetterTree } from 'vuex';
+import { RootState } from '@/types';
+
 import RepositoryFactory from '@/api';
 
-const state = () => {
-  return {
-    experiments: [],
-    currentExperiment: {}
-  };
+const defaults = {
+  experiments: [],
+  currentExperiment: {}
 };
 
-const getters = {
+const getters: GetterTree<typeof defaults, RootState> = {
   getExperiments: state => state.experiments
 };
 
-const actions = {
+const actions: ActionTree<typeof defaults, RootState> = {
   async createExperiments({ commit }) {
     const ExperimentRepository = RepositoryFactory.get('experiments');
     let response = await ExperimentRepository.get();
     const { experiments } = response.data;
 
-    experiments.forEach(experiment => {
+    experiments.forEach((experiment: any) => {
       experiment.startDate = new Date(experiment.startDate);
       if (experiment.endDate) {
         experiment.endDate = new Date(experiment.endDate);
@@ -32,14 +32,14 @@ const actions = {
   }
 };
 
-const mutations = {
+const mutations: MutationTree<typeof defaults> = {
   setExperiments(state, payload) {
     state.experiments = payload.experiments;
   }
 };
 
 export default {
-  state,
+  state: Object.assign({}, defaults),
   getters,
   actions,
   mutations

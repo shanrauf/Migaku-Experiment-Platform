@@ -1,21 +1,22 @@
-// import router from '@/router';
+import { MutationTree, ActionTree, GetterTree } from 'vuex';
+import { RootState } from '@/types';
 
-const state = () => {
-  return {
-    user: {}
-    // user: "filler to pass router guards"
-  };
+const defaults = {
+  user: {
+    email: '',
+    isAdmin: false
+  }
 };
 
-const getters = {};
+const getters: GetterTree<typeof defaults, RootState> = {};
 
-const actions = {
+const actions: ActionTree<typeof defaults, RootState> = {
   async signup({ commit }) {
     // axios post to create account, then login and set user and jwt token and stuff
     commit({
-      type: "setUser",
+      type: 'setUser',
       user: {
-        email: "asdf@gmail.com",
+        email: 'asdf@gmail.com',
         isAdmin: true
       }
     });
@@ -24,7 +25,7 @@ const actions = {
     // axios post to login, then set user and jwt token and stuff
     const { email, password } = payload;
     commit({
-      type: "setUser",
+      type: 'setUser',
       user: {
         email,
         password,
@@ -34,14 +35,14 @@ const actions = {
   }
 };
 
-const mutations = {
-  setUser(state, payload) {
+const mutations: MutationTree<typeof defaults> = {
+  setUser(state, payload: typeof defaults) {
     state.user = payload.user;
   }
 };
 
 export default {
-  state,
+  state: Object.assign({}, defaults),
   getters,
   actions,
   mutations

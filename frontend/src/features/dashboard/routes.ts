@@ -1,4 +1,6 @@
-const dashboardRoutes = [
+import { RouteConfig } from 'vue-router';
+
+const dashboardRoutes: RouteConfig[] = [
   {
     name: 'dashboard',
     path: '/dashboard',
@@ -6,9 +8,11 @@ const dashboardRoutes = [
       import(
         /* webpackChunkName: "dashboard" */ '@/features/dashboard/main.vue'
       ),
-    title: 'Dashboard | MIA Experiments',
-    layout: 'DashboardLayout',
-    isPublic: true
+    meta: {
+      title: 'Dashboard | MIA Experiments',
+      layout: 'DashboardLayout',
+      isPublic: true
+    }
   }
 ];
 

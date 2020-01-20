@@ -1,12 +1,16 @@
-const landingRoutes = [
+import { RouteConfig } from 'vue-router';
+
+const landingRoutes: RouteConfig[] = [
   {
     name: 'landing',
     path: '/',
     component: () =>
       import(/* webpackChunkName: "dashboard" */ '@/features/landing/main.vue'),
-    title: 'Landing | MIA Experiments',
-    layout: 'DefaultLayout',
-    isPublic: true
+    meta: {
+      title: 'Landing | MIA Experiments',
+      layout: 'DefaultLayout',
+      isPublic: true
+    }
   }
 ];
 

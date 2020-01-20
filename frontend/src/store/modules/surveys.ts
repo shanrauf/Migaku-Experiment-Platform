@@ -1,16 +1,32 @@
+import { MutationTree, ActionTree, GetterTree } from 'vuex';
+import { RootState } from '@/types';
+
 const surveyData = require('@/surveyData.json');
 import router from '@/app-routes';
 import RepositoryFactory from '@/api';
 import Vue from 'vue';
-const state = () => {
-  return {
-    surveys: [],
-    currentSurvey: {},
-    questions: []
-  };
+const defaults = {
+  surveys: [],
+  currentSurvey: {
+    title: '',
+    description: '',
+    surveyId: '',
+    sections: [
+      {
+        title: '',
+        questions: [
+          {
+            questionId: '',
+            value: ''
+          }
+        ]
+      }
+    ]
+  },
+  questions: [{}]
 };
 
-const getters = {
+const getters: GetterTree<typeof defaults, RootState> = {
   getSurveys: state => state.surveys,
   getCurrentSurvey: state => state.currentSurvey,
   getNumberOfSections: state => state.currentSurvey.sections.length,
@@ -18,7 +34,7 @@ const getters = {
     state.currentSurvey.sections.map(section => section.title)
 };
 
-const actions = {
+const actions: ActionTree<typeof defaults, RootState> = {
   async createSurveys({ commit }) {
     const SurveyRepository = RepositoryFactory.get('surveys');
     let response = await SurveyRepository.get();
@@ -58,8 +74,8 @@ const actions = {
     // });
 
     // formatting payload...
-    let payload = {};
-    let questionResponses = {};
+    let payload: any = {};
+    let questionResponses: any = {};
     if (canSubmit) {
       state.currentSurvey.sections.forEach(section => {
         section.questions.forEach(question => {
@@ -82,13 +98,14 @@ const actions = {
           text: "Don't forget to come back next week to fill out the next one"
         });
       });
+      return true;
     } else {
       return false;
     }
   }
 };
 
-const mutations = {
+const mutations: MutationTree<typeof defaults> = {
   setSurveys(state, payload) {
     state.surveys = payload.surveys;
   },
@@ -114,7 +131,7 @@ const mutations = {
 };
 
 export default {
-  state,
+  state: Object.assign({}, defaults),
   getters,
   actions,
   mutations
