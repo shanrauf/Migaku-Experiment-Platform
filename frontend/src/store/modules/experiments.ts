@@ -1,7 +1,7 @@
-import { MutationTree, ActionTree, GetterTree } from 'vuex';
-import { RootState } from '@/types';
+import { MutationTree, ActionTree, GetterTree } from "vuex";
+import { RootState } from "@/types";
 
-import RepositoryFactory from '@/api';
+import RepositoryFactory from "@/api/index";
 
 const defaults = {
   experiments: [],
@@ -14,7 +14,7 @@ const getters: GetterTree<typeof defaults, RootState> = {
 
 const actions: ActionTree<typeof defaults, RootState> = {
   async createExperiments({ commit }) {
-    const ExperimentRepository = RepositoryFactory.get('experiments');
+    const ExperimentRepository = RepositoryFactory.get("experiments");
     let response = await ExperimentRepository.get();
     const { experiments } = response.data;
 
@@ -26,7 +26,7 @@ const actions: ActionTree<typeof defaults, RootState> = {
     });
 
     commit({
-      type: 'setExperiments',
+      type: "setExperiments",
       experiments
     });
   }

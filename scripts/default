@@ -5,7 +5,7 @@ server {
   # vue app & front-end files
   location / {
     root /opt/frontend/build;
-    try_files $uri /index.html;
+    try_files $uri $uri/ /index.html;
   }
 
   # node api reverse proxy

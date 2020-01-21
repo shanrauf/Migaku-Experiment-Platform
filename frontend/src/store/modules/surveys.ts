@@ -1,23 +1,23 @@
-import { MutationTree, ActionTree, GetterTree } from 'vuex';
-import { RootState } from '@/types';
+import { MutationTree, ActionTree, GetterTree } from "vuex";
+import { RootState } from "@/types";
 
-const surveyData = require('@/surveyData.json');
-import router from '@/app-routes';
-import RepositoryFactory from '@/api';
-import Vue from 'vue';
+const surveyData = require("@/surveyData.json");
+import router from "@/app-routes";
+import RepositoryFactory from "@/api";
+import Vue from "vue";
 const defaults = {
   surveys: [],
   currentSurvey: {
-    title: '',
-    description: '',
-    surveyId: '',
+    title: "",
+    description: "",
+    surveyId: "",
     sections: [
       {
-        title: '',
+        title: "",
         questions: [
           {
-            questionId: '',
-            value: ''
+            questionId: "",
+            value: ""
           }
         ]
       }
@@ -36,12 +36,12 @@ const getters: GetterTree<typeof defaults, RootState> = {
 
 const actions: ActionTree<typeof defaults, RootState> = {
   async createSurveys({ commit }) {
-    const SurveyRepository = RepositoryFactory.get('surveys');
+    const SurveyRepository = RepositoryFactory.get("surveys");
     let response = await SurveyRepository.get();
     const { surveys } = response.data;
 
     commit({
-      type: 'setSurveys',
+      type: "setSurveys",
       surveys: surveys
     });
   },
@@ -52,7 +52,7 @@ const actions: ActionTree<typeof defaults, RootState> = {
     //   `latest?email=${payload.email}`
     // );
     commit({
-      type: 'setCurrentSurvey',
+      type: "setCurrentSurvey",
       currentSurvey: surveyData.survey // doing manually for now
     });
   },
@@ -81,20 +81,20 @@ const actions: ActionTree<typeof defaults, RootState> = {
         section.questions.forEach(question => {
           // add to payload
 
-          if (question.questionId == 'email') {
-            payload['email'] = question.value;
+          if (question.questionId == "email") {
+            payload["email"] = question.value;
           } else {
             questionResponses[question.questionId] = question.value;
           }
         });
       });
-      payload['data'] = questionResponses;
-      const SurveyRepository = RepositoryFactory.get('surveys');
+      payload["data"] = questionResponses;
+      const SurveyRepository = RepositoryFactory.get("surveys");
       SurveyRepository.post(state.currentSurvey.surveyId, payload).then(() => {
-        router.push('landing');
+        router.push("landing");
         Vue.notify({
-          group: 'global',
-          title: 'Successfully submitted survey!',
+          group: "global",
+          title: "Successfully submitted survey!",
           text: "Don't forget to come back next week to fill out the next one"
         });
       });

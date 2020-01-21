@@ -1,9 +1,7 @@
-import RepositoryFactory from '@/api/RepositoryFactory';
+import RepositoryFactory from "@/api/RepositoryFactory";
 
 export default class Service {
-  questionResponseRepository = RepositoryFactory.get('questionResponses');
-
-  constructor(options?) {}
+  constructor(options?: any) {}
 
   testData() {
     const audio = [
