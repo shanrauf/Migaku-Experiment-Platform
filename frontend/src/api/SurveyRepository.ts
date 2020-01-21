@@ -1,28 +1,26 @@
 import AxiosClient from "./axiosClient";
-
+const resource = "/experiments/audiovssentencecards/surveys"; // change later when change survey endpoiont to just /surveys w ?experimentId stuff...
 class SurveyRepository {
-  resource = "/experiments/audiovssentencecards/surveys"; // change later when change survey endpoiont to just /surveys w ?experimentId stuff...
-
   constructor() {}
 
-  get() {
-    return AxiosClient.get(`${this.resource}`);
+  public static get() {
+    return AxiosClient.get(`${resource}`);
   }
   getSurvey(surveyId: string) {
-    return AxiosClient.get(`${this.resource}/${surveyId}`);
+    return AxiosClient.get(`${resource}/${surveyId}`);
   }
   getStatus(surveyId: string) {
     // can be an actual surveyId, or can be "latest"
-    return AxiosClient.get(`${this.resource}/${surveyId}/status`);
+    return AxiosClient.get(`${resource}/${surveyId}/status`);
   }
   post(surveyId: string, payload: any) {
-    return AxiosClient.post(`${this.resource}/${surveyId}`, payload);
+    return AxiosClient.post(`${resource}/${surveyId}`, payload);
   }
   create(surveyId: string, payload: any) {
-    return AxiosClient.post(`${this.resource}`, payload);
+    return AxiosClient.post(`${resource}`, payload);
   }
   delete(surveyId: string) {
-    return AxiosClient.delete(`${this.resource}/${surveyId}`);
+    return AxiosClient.delete(`${resource}/${surveyId}`);
   }
 }
 

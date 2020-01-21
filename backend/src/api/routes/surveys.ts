@@ -5,7 +5,7 @@ import SurveyService from "../../services/survey";
 import ParticipantService from "../../services/participant";
 import { ISurvey } from "../../interfaces/ISurvey";
 import logger from "../../loaders/logger";
-import middlewares from "../middlewares";
+// import middlewares from "../middlewares";
 
 const route = Router({ mergeParams: true });
 

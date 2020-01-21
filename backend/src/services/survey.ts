@@ -1,43 +1,43 @@
-import { Service, Inject } from 'typedi';
-import winston from 'winston';
-import { Sequelize } from 'sequelize-typescript';
-import { randomIdGenerator, capitalize, inferDataTypeOf } from '../utils';
+import { Service, Inject } from "typedi";
+import winston from "winston";
+import { Sequelize } from "sequelize-typescript";
+import { randomIdGenerator, capitalize, inferDataTypeOf } from "../utils";
 import {
   EventDispatcher,
   EventDispatcherInterface
-} from '../decorators/eventDispatcher';
-import { Participant } from '../models/participant';
-import { QuestionResponse } from '../models/questionResponse';
-import { Survey } from '../models/survey';
-import { SurveySection } from '../models/surveySection';
-import { Question } from '../models/question';
-import { SurveyQuestion } from '../models/intermediary/surveyQuestion';
-import { Experiment } from '../models/experiment';
-import { CardCollection } from '../models/cardCollection';
-import { ISurvey } from '../interfaces/ISurvey';
-import { SurveyResponse } from '../models/surveyResponse';
-import { SurveySectionQuestion } from '../models/intermediary/surveySectionQuestion';
+} from "../decorators/eventDispatcher";
+import { Participant } from "../models/participant";
+import { QuestionResponse } from "../models/questionResponse";
+import { Survey } from "../models/survey";
+import { SurveySection } from "../models/surveySection";
+import { Question } from "../models/question";
+import { SurveyQuestion } from "../models/intermediary/surveyQuestion";
+import { Experiment } from "../models/experiment";
+import { CardCollection } from "../models/cardCollection";
+import { ISurvey } from "../interfaces/ISurvey";
+import { SurveyResponse } from "../models/surveyResponse";
+import { SurveySectionQuestion } from "../models/intermediary/surveySectionQuestion";
 
 @Service()
 export default class SurveyService {
   constructor(
-    @Inject('Participant') private participantModel: typeof Participant,
-    @Inject('Survey') private surveyModel: typeof Survey,
-    @Inject('Question') private questionModel: typeof Question,
-    @Inject('SurveyQuestion')
+    @Inject("Participant") private participantModel: typeof Participant,
+    @Inject("Survey") private surveyModel: typeof Survey,
+    @Inject("Question") private questionModel: typeof Question,
+    @Inject("SurveyQuestion")
     private surveyQuestionModel: typeof SurveyQuestion,
-    @Inject('SurveySection')
+    @Inject("SurveySection")
     private surveySectionModel: typeof SurveySection,
-    @Inject('SurveyResponse')
+    @Inject("SurveyResponse")
     private surveyResponseModel: typeof SurveyResponse,
-    @Inject('SurveySectionQuestion')
+    @Inject("SurveySectionQuestion")
     private surveySectionQuestionModel: typeof SurveySectionQuestion,
-    @Inject('QuestionResponse')
+    @Inject("QuestionResponse")
     private questionResponseModel: typeof QuestionResponse,
-    @Inject('CardCollection')
+    @Inject("CardCollection")
     private cardCollectionModel: typeof CardCollection,
-    @Inject('logger') private logger: winston.Logger,
-    @Inject('sequelize') private sqlConnection: Sequelize,
+    @Inject("logger") private logger: winston.Logger,
+    @Inject("sequelize") private sqlConnection: Sequelize,
     @EventDispatcher() private eventDispatcher: EventDispatcherInterface
   ) {}
   public async GetSurveys(
@@ -47,19 +47,19 @@ export default class SurveyService {
     totalCount: number;
   }> {
     try {
-      this.logger.silly('Fetching surveys');
+      this.logger.silly("Fetching surveys");
       const surveyRecords = await this.surveyModel
-        .scope('public')
+        .scope("public")
         .findAndCountAll({
           include: [
             {
               model: Experiment,
-              attributes: ['experimentId'],
+              attributes: ["experimentId"],
               where: { experimentId }
             }
           ],
           limit: 10,
-          order: [['startDate', 'ASC']]
+          order: [["startDate", "ASC"]]
         });
       return {
         surveys: surveyRecords.rows,
@@ -74,7 +74,7 @@ export default class SurveyService {
   public async GetSurvey(surveyId: string): Promise<{ survey: Survey }> {
     try {
       this.logger.silly(`Fetching survey ${surveyId}`);
-      const surveyRecord = await this.surveyModel.scope('public').findOne({
+      const surveyRecord = await this.surveyModel.scope("public").findOne({
         include: [
           {
             model: SurveySection
@@ -98,12 +98,12 @@ export default class SurveyService {
     experimentId: string
   ): Promise<{ survey: Survey | null }> {
     try {
-      this.logger.silly('Fetching latest survey');
+      this.logger.silly("Fetching latest survey");
       const surveyRecord = await this.surveyModel
-        .scope('public')
+        .scope("public")
         .findOne({
-          where: { visibility: 'public', experimentId },
-          order: [['startDate', 'DESC']]
+          where: { visibility: "public", experimentId },
+          order: [["startDate", "DESC"]]
         })
         .then(survey => survey);
       if (!surveyRecord) {
@@ -121,7 +121,7 @@ export default class SurveyService {
     surveyId: string
   ): Promise<any> {
     try {
-      this.logger.silly('Fetching survey status');
+      this.logger.silly("Fetching survey status");
       const responseRecordExists = await this.questionResponseModel
         .findOne({
           where: { participantId, surveyId }
@@ -154,7 +154,7 @@ export default class SurveyService {
     sectionNumber: number // change to sectionId?
   ): Promise<{ surveySection: SurveySection | null }> {
     try {
-      this.logger.silly('Fetching survey section');
+      this.logger.silly("Fetching survey section");
       const surveySectionRecord = await this.surveySectionModel.findOne({
         where: { sectionNumber }
       });
@@ -223,11 +223,11 @@ export default class SurveyService {
       //   return { questionResponses: null }; // user has already filled out survey
       // }
 
-      this.logger.silly('Processing question responses');
+      this.logger.silly("Processing question responses");
       const questionResponses = [];
       let question: any;
       for (question of Object.entries(dataPayload)) {
-        if (question[0] === 'cards') {
+        if (question[0] === "cards") {
           this.PostAnkiCardCollection(
             experimentId,
             surveyId,
@@ -258,7 +258,7 @@ export default class SurveyService {
         }
       }
 
-      this.logger.silly('Posting question responses');
+      this.logger.silly("Posting question responses");
       const questionResponseRecords = await this.questionResponseModel.bulkCreate(
         questionResponses
       );
@@ -275,9 +275,9 @@ export default class SurveyService {
     participantId: string
   ): Promise<string> {
     try {
-      this.logger.silly('Finding or creating survey responseId');
+      this.logger.silly("Finding or creating survey responseId");
       const surveyResponse = await this.surveyResponseModel.findOne({
-        attributes: ['responseId'],
+        attributes: ["responseId"],
         where: { surveyId, participantId }
       });
       if (!surveyResponse) {
@@ -303,7 +303,7 @@ export default class SurveyService {
           {
             questionId: question[0],
             key: question[0],
-            questionType: 'text', // this is bad
+            questionType: "text", // this is bad
             dataType,
             label: question[0], // this is bad
             rules: null,
@@ -335,7 +335,7 @@ export default class SurveyService {
     responseId: string,
     cards: {}
   ): Promise<CardCollection> {
-    this.logger.silly('Posting Anki card collection');
+    this.logger.silly("Posting Anki card collection");
     const cardCollection = await this.cardCollectionModel.create({
       experimentId,
       surveyId,
@@ -352,7 +352,7 @@ export default class SurveyService {
   ): Promise<{ survey: Survey | null }> {
     try {
       const result = await this.sqlConnection.transaction(async transaction => {
-        this.logger.silly('Creating survey');
+        this.logger.silly("Creating survey");
         const {
           surveyId,
           title,
@@ -377,7 +377,7 @@ export default class SurveyService {
         );
         let surveySectionQuestions = [];
         for (const section of surveyObj.sections) {
-          section['surveyId'] = surveyId; // surveyObj sections don't hve surveyId in section rn...
+          section["surveyId"] = surveyId; // surveyObj sections don't hve surveyId in section rn...
           await this.surveySectionModel.create(section, { transaction });
           let surveyQuestions = [];
           for (const question of section.questions) {

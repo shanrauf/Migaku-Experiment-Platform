@@ -11,7 +11,6 @@ const repositories: any = {
 export default class RepositoryFactory {
   constructor() {}
   public static get(repositoryName: string, options?: object) {
-    const Repository = repositories[repositoryName];
-    return new Repository({ ...options });
+    return repositories[repositoryName];
   }
 }

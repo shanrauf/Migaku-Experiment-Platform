@@ -1,23 +1,21 @@
 import AxiosClient from "./axiosClient";
-
+const resource = "/participants";
 export default class ParticipantRepository {
-  resource = "/participants";
-
   constructor() {}
 
-  get() {
-    return AxiosClient.get(`${this.resource}`);
+  public static get() {
+    return AxiosClient.get(`${resource}`);
   }
-  getUser(participantId: string) {
-    return AxiosClient.get(`${this.resource}/${participantId}`);
+  public static getUser(participantId: string) {
+    return AxiosClient.get(`${resource}/${participantId}`);
   }
-  create(payload: any) {
-    return AxiosClient.post(`${this.resource}`, payload);
+  public static create(payload: any) {
+    return AxiosClient.post(`${resource}`, payload);
   }
-  update(payload: any, participantId: string) {
-    return AxiosClient.put(`${this.resource}/${participantId}`, payload);
+  public static update(payload: any, participantId: string) {
+    return AxiosClient.put(`${resource}/${participantId}`, payload);
   }
-  delete(participantId: string) {
-    return AxiosClient.delete(`${this.resource}/${participantId}`);
+  public static delete(participantId: string) {
+    return AxiosClient.delete(`${resource}/${participantId}`);
   }
 }

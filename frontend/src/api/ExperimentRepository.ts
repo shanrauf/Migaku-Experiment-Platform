@@ -1,23 +1,21 @@
 import AxiosClient from "./axiosClient";
-
+const resource = "/experiments";
 export default class ExperimentRepository {
-  resource = "/experiments";
-
   constructor() {}
 
-  get() {
-    return AxiosClient.get(`${this.resource}`);
+  public static get() {
+    return AxiosClient.get(`${resource}`);
   }
-  getExperiment(experimentId: string) {
-    return AxiosClient.get(`${this.resource}/${experimentId}`);
+  public static getExperiment(experimentId: string) {
+    return AxiosClient.get(`${resource}/${experimentId}`);
   }
-  create(payload: any) {
-    return AxiosClient.post(`${this.resource}`, payload);
+  public static create(payload: any) {
+    return AxiosClient.post(`${resource}`, payload);
   }
-  update(payload: any, experimentId: string) {
-    return AxiosClient.put(`${this.resource}/${experimentId}`, payload);
+  public static update(payload: any, experimentId: string) {
+    return AxiosClient.put(`${resource}/${experimentId}`, payload);
   }
-  delete(experimentId: string) {
-    return AxiosClient.delete(`${this.resource}/${experimentId}`);
+  public static delete(experimentId: string) {
+    return AxiosClient.delete(`${resource}/${experimentId}`);
   }
 }
