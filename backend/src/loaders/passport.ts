@@ -1,14 +1,14 @@
-import passport from 'passport';
-import express from 'express';
-import logger from './logger';
-import config from '../config';
-import { Participant } from '../models/participant';
-import Container from 'typedi';
-const InternalOAuthError = require('passport-oauth2').InternalOAuthError;
 import axios from 'axios';
+import passport from 'passport';
+import Container from 'typedi';
+import { InternalOAuthError } from 'passport-oauth2';
+const OAuth2Strategy = require('passport-oauth2').Strategy;
+
+import config from '../config';
+import logger from './logger';
+import { Participant } from '../models/participant';
 import { randomIdGenerator } from '../utils';
 
-const OAuth2Strategy = require('passport-oauth2').Strategy;
 export default async () => {
   try {
     const discordStrategy = new OAuth2Strategy(
@@ -20,29 +20,28 @@ export default async () => {
         callbackURL: 'http://localhost:3000/api/auth/discord/redirect'
       },
       (accessToken, refreshToken, profile, done) => {
-        // get participant record based on Discord profile, then return it
         const participantModel = Container.get<typeof Participant>(
           'Participant'
         );
-        participantModel
+        return participantModel
           .findOrCreate({
             where: { email: profile.email },
             defaults: {
               participantId: randomIdGenerator(),
               email: profile.email,
-              password: 'test123', // will drop this unused column soon anyway
+              password: 'test123', // deprecated column
               name: profile.username,
-              sex: 'male', // will drop this column or AT LEAST allow null...
+              sex: 'male', // deprecated column
               discordUsername: profile.username,
               lastLogin: new Date()
             }
           })
           .then(participantRecord => {
-            done(null, participantRecord);
+            done(null, participantRecord[0]);
           })
           .catch(err => {
             logger.error(err);
-            done(err, null);
+            done(null, false, { error: 'Deserialization error' });
           });
       }
     );
@@ -54,11 +53,10 @@ export default async () => {
         headers: { Authorization: `Bearer ${accessToken}` }
       })
         .then(profile => {
-          return done(null, profile.data);
+          done(null, profile.data);
         })
         .catch(err => {
-          return done(
-            // seems incorrect
+          done(
             new InternalOAuthError('Failed to fetch the user profile.', err)
           );
         });
@@ -66,6 +64,7 @@ export default async () => {
 
     passport.serializeUser(function(user: any, done) {
       done(null, user.participantId);
+      return;
     });
 
     passport.deserializeUser((participantId, done) => {
@@ -85,7 +84,7 @@ export default async () => {
 
     return passport;
   } catch (e) {
-    logger.error('🔥 Error on dependency injector loader: %o', e);
+    logger.error('🔥 Error on passport initialization: %o', e);
     throw e;
   }
 };

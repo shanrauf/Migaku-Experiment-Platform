@@ -1,13 +1,15 @@
 <template>
   <div class="section-label">
     <div class="section-label-text-container">
-      <div class="section-label-text">Section {{sectionId}} of {{numberOfSections}}</div>
+      <div class="section-label-text">
+        Section {{ sectionId }} of {{ numberOfSections }}
+      </div>
     </div>
     <div class="triangle"></div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   props: {
     sectionId: {

@@ -9,8 +9,8 @@
   </v-card>
 </template>
 
-<script>
-import { dateToTimeUntil } from "@/utils/index.js";
+<script lang="ts">
+import { dateToTimeUntil } from '../utils/index';
 export default {
   props: {
     surveyId: {

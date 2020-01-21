@@ -32,15 +32,15 @@
   </v-card>
 </template>
 
-<script>
-import BaseSelect from "@/components/form/BaseSelect.vue";
-import BaseRadioButtons from "@/components/form/BaseRadioButtons.vue";
-import BaseTextField from "@/components/form/BaseTextField.vue";
+<script lang="ts">
+import BaseSelect from '@/components/form/BaseSelect.vue';
+import BaseRadioButtons from '@/components/form/BaseRadioButtons.vue';
+import BaseTextField from '@/components/form/BaseTextField.vue';
 
 // by "keys" I prob meant id of the question
 
 export default {
-  name: "editInputForm",
+  name: 'editInputForm',
   components: {
     BaseSelect,
     BaseRadioButtons,
@@ -48,19 +48,18 @@ export default {
   },
   data() {
     return {
-      currentNote: "",
-      required: "",
-      yesOrNo: ["Yes", "No"],
-      itemsSelection: ["preset item sets"], // import from somewhere
-      possibleComponents: ["BaseSelect", "BaseRadioButtons", "BaseTextField"],
-      currentComponent: "",
-      currentItems: ["asdf"],
-      rules: ["asdf"], // import from somewhere,
-      previousKeys: ["key1", "key2"] // get from DB
+      currentNote: '',
+      required: '',
+      yesOrNo: ['Yes', 'No'],
+      itemsSelection: ['preset item sets'], // import from somewhere
+      possibleComponents: ['BaseSelect', 'BaseRadioButtons', 'BaseTextField'],
+      currentComponent: '',
+      currentItems: ['asdf'],
+      rules: ['asdf'], // import from somewhere,
+      previousKeys: ['key1', 'key2'] // get from DB
     };
   }
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

@@ -15,9 +15,9 @@
   </v-input>
 </template>
 
-<script>
+<script lang="ts">
 export default {
-  name: "BaseTextField",
+  name: 'BaseTextField',
   inheritAttrs: false,
   props: {
     label: {
@@ -27,14 +27,14 @@ export default {
     note: {
       type: String,
       required: false,
-      default: ""
+      default: ''
     },
     value: {
-      type: String | Number,
+      type: [String, Number],
       required: false
     },
     placeholder: {
-      type: String | Number,
+      type: [String, Number],
       required: false
     },
     rules: {
@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     onInput(newVal) {
-      this.$emit("update", newVal);
+      this.$emit('update', newVal);
     }
   }
 };

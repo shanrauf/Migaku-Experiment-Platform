@@ -1,14 +1,23 @@
 module.exports = {
+  root: true,
   env: {
-    browser: true,
-    es6: true,
-    node: true
+    node: true,
+    browser: true
   },
-  parser: 'vue-eslint-parser',
-  extends: ['eslint:recommended', 'plugin:vue/recommended'],
-  globals: {
-    Atomics: 'readonly',
-    SharedArrayBuffer: 'readonly'
+  extends: [
+    'plugin:vue/recommended',
+    'eslint:recommended',
+    'prettier/vue',
+    'plugin:prettier/recommended'
+  ],
+  rules: {
+    'vue/component-name-in-template-casing': ['error', 'PascalCase'],
+    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'vue/max-attributes-per-line': 'off',
+    'vue/singleline-html-element-content-newline': 'off',
+    'vue/multiline-html-element-content-newline': 'off',
+    'vue/html-self-closing': 'off'
   },
   parserOptions: {
     parser: 'babel-eslint',
@@ -20,12 +29,8 @@ module.exports = {
       jsx: false
     }
   },
-  plugins: ['vue'],
-  rules: {
-    'no-console': 0,
-    'vue/max-attributes-per-line': 'off',
-    'vue/singleline-html-element-content-newline': 'off',
-    'vue/multiline-html-element-content-newline': 'off',
-    'vue/html-self-closing': 'off'
+  globals: {
+    Atomics: 'readonly',
+    SharedArrayBuffer: 'readonly'
   }
 };

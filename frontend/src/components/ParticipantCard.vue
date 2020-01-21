@@ -16,16 +16,21 @@
     <template v-slot:back>
       <v-card width="550px" height="500px">
         <h1 style="text-align: center">Weekly Stats</h1>
-        <VueApexCharts v-if="query" type="radar" :options="chartOptions" :series="series" />
+        <VueApexCharts
+          v-if="query"
+          type="radar"
+          :options="chartOptions"
+          :series="series"
+        />
         <v-btn @click="flipped = false">Flip</v-btn>
       </v-card>
     </template>
   </FlipCard>
 </template>
 
-<script>
-const VueApexCharts = () => import("vue-apexcharts");
-import FlipCard from "@/components/FlipCard.vue";
+<script lang="ts">
+const VueApexCharts = () => import('vue-apexcharts');
+import FlipCard from '@/components/FlipCard.vue';
 export default {
   components: {
     FlipCard,
@@ -41,7 +46,7 @@ export default {
     return {
       series: [
         {
-          name: "Shan",
+          name: 'Shan',
           data: [
             this.participant.avgActiveImmersion,
             this.participant.avgPassiveImmersion,
@@ -50,16 +55,16 @@ export default {
           ]
         },
         {
-          name: "Matt",
+          name: 'Matt',
           data: [7, 3, 3, 6]
         }
       ],
       chartOptions: {
         labels: [
-          "Active Immersion",
-          "Passive Immersion",
-          "Reading",
-          "Anki Reviewing"
+          'Active Immersion',
+          'Passive Immersion',
+          'Reading',
+          'Anki Reviewing'
         ]
       },
       query: true,
@@ -69,9 +74,9 @@ export default {
   methods: {
     displayMonths(numOfMonths) {
       if (numOfMonths < 12) {
-        return numOfMonths + " months";
+        return numOfMonths + ' months';
       } else {
-        return parseFloat((numOfMonths / 12).toFixed(2)) + " years.";
+        return parseFloat((numOfMonths / 12).toFixed(2)) + ' years.';
       }
     }
   }

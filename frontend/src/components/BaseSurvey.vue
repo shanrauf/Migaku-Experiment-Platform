@@ -51,16 +51,16 @@
   </v-form>
 </template>
 
-<script>
-import { mapGetters } from "vuex";
-import { formMixin } from "@/mixins/formMixin.js";
-import BaseSelect from "@/components/form/BaseSelect.vue";
-import BaseRadioButtons from "@/components/form/BaseRadioButtons.vue";
-import BaseTextField from "@/components/form/BaseTextField.vue";
-import BaseCreateNewCard from "@/components/BaseCreateNewCard.vue";
-import BaseEditInputForm from "@/components/form/BaseEditInputForm.vue";
+<script lang="ts">
+import { mapGetters } from 'vuex';
+import { formMixin } from '../mixins/formMixin';
+import BaseSelect from '@/components/form/BaseSelect.vue';
+import BaseRadioButtons from '@/components/form/BaseRadioButtons.vue';
+import BaseTextField from '@/components/form/BaseTextField.vue';
+import BaseCreateNewCard from '@/components/BaseCreateNewCard.vue';
+import BaseEditInputForm from '@/components/form/BaseEditInputForm.vue';
 export default {
-  name: "BaseSurvey",
+  name: 'BaseSurvey',
   mixins: [formMixin],
   props: {
     section: {
@@ -89,8 +89,8 @@ export default {
         percentages: [...Array(101).keys()],
         zeroToOneHundred: [...Array(101).keys()],
         trueFalse: [true, false],
-        audioOrSentenceCard: ["Audio Card", "Sentence Card"],
-        yesNo: ["Yes", "No"]
+        audioOrSentenceCard: ['Audio Card', 'Sentence Card'],
+        yesNo: ['Yes', 'No']
       },
       ruleGenerators: {
         maxChar: val => v =>
@@ -98,24 +98,24 @@ export default {
         minChar: val => v =>
           (v && v.length >= val) || `Must be greater than ${val} characters`,
         email: val => {
-          if (val == "true") {
-            return v => /.+@.+\..+/.test(v) || "E-mail must be valid";
+          if (val == 'true') {
+            return v => /.+@.+\..+/.test(v) || 'E-mail must be valid';
           } else {
             return true;
           }
         },
         numberOnly: val => {
-          if (val == "true") {
+          if (val == 'true') {
             return v =>
-              /^[0-9]*$/.test(v) || "Must enter numbers only (no letters)";
+              /^[0-9]*$/.test(v) || 'Must enter numbers only (no letters)';
           } else {
             return true;
           }
         },
         textOnly: val => {
-          if (val == "true") {
+          if (val == 'true') {
             return v =>
-              /^[a-zA-Z ]*$/.test(v) || "Must enter text only (no numbers)";
+              /^[a-zA-Z ]*$/.test(v) || 'Must enter text only (no numbers)';
           } else {
             return true;
           }
@@ -124,18 +124,18 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getNumberOfSections"])
+    ...mapGetters(['getNumberOfSections'])
   },
   methods: {
     submitSurvey() {
       this.confirmOverlay = false;
-      this.$router.push({ name: "surveys" });
+      this.$router.push({ name: 'surveys' });
     },
     updateQuestionValue(question, newValue) {
       this.$store.commit({
-        type: "updateQuestionValue",
+        type: 'updateQuestionValue',
         question,
-        attributeToUpdate: "value",
+        attributeToUpdate: 'value',
         newValue
       });
     },
@@ -144,21 +144,21 @@ export default {
     },
     updateCurrentSurveyMetadata(newVal, surveyAttributeToUpdate) {
       this.$store.commit({
-        type: "updateCurrentSurveyMetadata",
+        type: 'updateCurrentSurveyMetadata',
         section: this.section,
         attributeToUpdate: surveyAttributeToUpdate,
         newVal: newVal.target.innerText
       });
     },
     getItems(questionItems) {
-      if (typeof questionItems == "string") {
+      if (typeof questionItems == 'string') {
         let items = this.items[questionItems];
         if (items === undefined) {
           return [];
         } else {
           return items;
         }
-      } else if (typeof questionItems == "object") {
+      } else if (typeof questionItems == 'object') {
         // if currentSurvey provides their own Array of items
         return questionItems;
       } else {

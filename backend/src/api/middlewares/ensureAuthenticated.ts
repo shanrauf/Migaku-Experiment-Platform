@@ -7,8 +7,11 @@ const ensureAuthenticated = (
 ) => {
   if (req.isAuthenticated()) {
     return next();
+  } else {
+    const err = new Error('You are not authorized for this route');
+    err.name = 'UnauthorizedError';
+    throw err;
   }
-  // User not logged in, let frontend know
 };
 
 export default ensureAuthenticated;

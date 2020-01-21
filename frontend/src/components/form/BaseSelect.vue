@@ -19,9 +19,9 @@
   </v-input>
 </template>
 
-<script>
+<script lang="ts">
 export default {
-  name: "BaseSelect",
+  name: 'BaseSelect',
   props: {
     label: {
       type: String,
@@ -30,14 +30,14 @@ export default {
     note: {
       type: String,
       required: false,
-      default: ""
+      default: ''
     },
     value: {
-      type: String | Number,
+      type: [String, Number],
       required: false
     },
     placeholder: {
-      type: String | Number,
+      type: [String, Number],
       required: false
     },
     items: {
@@ -61,7 +61,7 @@ export default {
         openOnClick: true,
         transition: true
       },
-      inputValue: ""
+      inputValue: ''
     };
   },
   computed: {

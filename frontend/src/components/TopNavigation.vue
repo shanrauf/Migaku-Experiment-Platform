@@ -9,15 +9,15 @@
     </v-toolbar-title>
 
     <v-spacer />
-    <!-- <v-toolbar-items>
+    <v-toolbar-items>
       <v-list-item-avatar>
-        <img src="@/assets/images/profile.png" alt="Profile Photo" />
+        <img src="@/assets/images/defaultProfile.jpg" alt="Profile Photo" />
       </v-list-item-avatar>
-    </v-toolbar-items>-->
+    </v-toolbar-items>
   </v-toolbar>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   data() {
     return {

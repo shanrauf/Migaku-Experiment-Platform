@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import routes from '../api';
 import config from '../config';
 import passport from 'passport'; // not decoupled like other loaders...
+import cookieSession from 'cookie-session';
 
 export default async ({ app }: { app: express.Application }) => {
   app.get('/status', (req, res) => {
@@ -27,7 +28,20 @@ export default async ({ app }: { app: express.Application }) => {
   );
   app.use(express.json({ limit: '350mb' })); // please start using streams or whatever XD
 
-  app.use(cookieParser());
+  app.use(
+    cookieSession({
+      maxAge: 24 * 60 * 60 * 1000,
+      keys: [config.cookieKey]
+    })
+  );
+
+  app.use(
+    cookieParser({
+      sameSite: true, // cookie can only be sent across our domain
+      httpOnly: true // prevents client javascript from accessing cookie
+      //  secure: true // cookie can only be transmitted over HTTPS; add soon
+    })
+  );
 
   app.use(passport.initialize());
   app.use(passport.session());
@@ -60,9 +74,6 @@ export default async ({ app }: { app: express.Application }) => {
 
   // / error handlers
   app.use((err, req, res, next) => {
-    /**
-     * Handle 401 thrown by express-jwt library
-     */
     if (err.name === 'UnauthorizedError') {
       return res
         .status(err.status)

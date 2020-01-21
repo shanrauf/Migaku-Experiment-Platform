@@ -1,5 +1,9 @@
 <template>
-  <v-card :style="sideNavigationCSS" class="side-nav-transition" v-resize="onResize">
+  <v-card
+    :style="sideNavigationCSS"
+    class="side-nav-transition"
+    v-resize="onResize"
+  >
     <v-tabs
       v-model="currentSection"
       background-color="transparent"
@@ -11,13 +15,16 @@
         v-for="section in sections"
         :key="section"
         @click="$vuetify.goTo('#' + camelCase(section), options)"
-      >{{ section }}</v-tab>
+        >{{ section }}</v-tab
+      >
     </v-tabs>
   </v-card>
 </template>
 
-<script>
-import { camelCase } from "@/utils/index.js";
+<script lang="ts">
+import { formatDate } from '../utils/index';
+import { camelCase } from '../utils/index';
+
 export default {
   props: {
     sections: {
@@ -31,21 +38,21 @@ export default {
       options: {
         duration: 600,
         offset: 200,
-        easing: "easeInCubic"
+        easing: 'easeInCubic'
       },
       originalTop: 350,
       sideNavigationCSS: {
-        position: "absolute",
-        width: "200px",
-        left: "400px",
-        top: "300px"
+        position: 'absolute',
+        width: '200px',
+        left: '400px',
+        top: '300px'
       }
     };
   },
   mounted() {
     this.onResize();
     window.onscroll = e => {
-      this.sideNavigationCSS.top = this.originalTop + window.pageYOffset + "px";
+      this.sideNavigationCSS.top = this.originalTop + window.pageYOffset + 'px';
     };
   },
   methods: {
@@ -53,7 +60,7 @@ export default {
     onResize() {
       // either create breakpoints or derive a better function to move the side nav, or find way to move the sidenav relative to FormBuilder
       this.sideNavigationCSS.left =
-        Math.round(window.innerWidth * 0.1 - 50, 1) + "px";
+        Math.round(window.innerWidth * 0.1 - 50) + 'px';
     }
   }
 };

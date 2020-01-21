@@ -17,20 +17,20 @@
   </v-radio-group>
 </template>
 
-<script>
+<script lang="ts">
 export default {
-  name: "BaseRadioButtons",
+  name: 'BaseRadioButtons',
   props: {
     label: {
       type: String,
       required: false
     },
     value: {
-      type: String | Number,
+      type: [String, Number],
       required: false
     },
     placeholder: {
-      type: String | Number,
+      type: [String, Number],
       required: false
     },
     rules: {
@@ -48,7 +48,7 @@ export default {
   },
   data() {
     return {
-      inputValue: ""
+      inputValue: ''
     };
   },
   computed: {
