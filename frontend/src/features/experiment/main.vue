@@ -25,22 +25,22 @@
   </div>
 </template>
 
-<script lang="ts">
-import Service from './service';
-import BaseCard from '@/components/BaseCard.vue';
+<script>
+import Service from "./service";
+import BaseCard from "@/components/BaseCard.vue";
 
 export default {
-  name: 'Account',
+  name: "Account",
   service: new Service(),
   components: {
     BaseCard
   },
   data() {
     return {
-      id: 'sa54df154sa4dffpsdf', // unique identifier
-      title: 'Testing Anki Retention of Audio Cards vs Sentence Cards',
+      id: "sa54df154sa4dffpsdf", // unique identifier
+      title: "Testing Anki Retention of Audio Cards vs Sentence Cards",
       description:
-        '(10 weeks) Participants rep 5 audio cards and 5 sentence card a day and fill out a weekly survey describing how they feel about the two card types.',
+        "(10 weeks) Participants rep 5 audio cards and 5 sentence card a day and fill out a weekly survey describing how they feel about the two card types.",
       startDate: 1575244800000,
       endDate: 1581206400000
     };

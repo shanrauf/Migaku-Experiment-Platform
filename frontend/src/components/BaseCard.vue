@@ -4,6 +4,6 @@
   </v-card>
 </template>
 
-<script lang="ts"></script>
+<script></script>
 
 <style lang="scss" scoped></style>

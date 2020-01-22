@@ -1,24 +1,21 @@
 <template>
   <div class="survey-container">
-    <SideNavigation
-      v-if="getCurrentSurvey.sections"
-      :sections="getCurrentSurveySectionTitles"
-    />
+    <SideNavigation v-if="getCurrentSurvey.sections" :sections="getCurrentSurveySectionTitles" />
     <SurveyBuilder :currentSurvey="getCurrentSurvey" />
 
     <v-btn color="primary" @click="onSubmit">Submit</v-btn>
   </div>
 </template>
 
-<script lang="ts">
-import Service from './service';
+<script>
+import Service from "./service";
 
-import { mapGetters, mapState } from 'vuex';
-import SideNavigation from '@/components/SideNavigation.vue';
-import SurveyBuilder from '@/components/SurveyBuilder.vue';
+import { mapGetters, mapState } from "vuex";
+import SideNavigation from "@/components/SideNavigation.vue";
+import SurveyBuilder from "@/components/SurveyBuilder.vue";
 
 export default {
-  name: 'Account',
+  name: "Account",
   service: new Service(),
   components: {
     SurveyBuilder,
@@ -35,19 +32,19 @@ export default {
     // Note: / and /view are the same component, only /view disables the inputs (whether answersExist or not)
     // /edit will require its own UI on top of the survey UI to build surveys (same for experiments)
     this.$store.dispatch({
-      type: 'createCurrentSurvey',
+      type: "createCurrentSurvey",
       // email: this.user.email, can only add when implemented auth, which idc about rn
       surveyId: this.$route.params.survey
     });
   },
   computed: {
-    ...mapGetters(['getCurrentSurvey', 'getCurrentSurveySectionTitles'])
+    ...mapGetters(["getCurrentSurvey", "getCurrentSurveySectionTitles"])
   },
   methods: {
     onSubmit() {
-      let result = this.$store.dispatch('submitSurvey');
+      let result = this.$store.dispatch("submitSurvey");
       if (!result) {
-        this.$notify('Failed');
+        this.$notify("Failed");
       }
     }
   }

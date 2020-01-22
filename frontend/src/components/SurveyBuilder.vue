@@ -22,7 +22,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { mapGetters, mapMutations } from 'vuex';
 import BaseSurvey from '@/components/BaseSurvey.vue';
 import BaseCard from '@/components/BaseCard.vue';

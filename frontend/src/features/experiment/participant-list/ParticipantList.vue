@@ -8,7 +8,7 @@
   </v-container>
 </template>
 
-<script lang="ts">
+<script>
 import ParticipantCard from '@/components/ParticipantCard.vue';
 
 export default {

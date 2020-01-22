@@ -8,18 +8,13 @@
     :mandatory="required"
     @change="$emit('update', inputValue)"
   >
-    <v-radio
-      v-for="item in items"
-      :key="item"
-      :label="item.toString()"
-      :value="item"
-    />
+    <v-radio v-for="item in items" :key="item" :label="item.toString()" :value="item" />
   </v-radio-group>
 </template>
 
-<script lang="ts">
+<script>
 export default {
-  name: 'BaseRadioButtons',
+  name: "BaseRadioButtons",
   props: {
     label: {
       type: String,
@@ -48,7 +43,7 @@ export default {
   },
   data() {
     return {
-      inputValue: ''
+      inputValue: ""
     };
   },
   computed: {

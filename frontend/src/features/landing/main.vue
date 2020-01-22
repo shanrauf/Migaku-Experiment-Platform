@@ -1,20 +1,16 @@
 <template>
   <div class="landing-container">
-    <h1 style="font-size: 60px">
-      Participate in MIA Foreign Language Experiments!
-    </h1>
+    <h1 style="font-size: 60px">Participate in MIA Foreign Language Experiments!</h1>
 
-    <BaseButton backgroundColor="#7289DA" rounded @click="loginWithDiscord"
-      >Sign In With Discord</BaseButton
-    >
+    <BaseButton backgroundColor="#7289DA" rounded @click="loginWithDiscord">Sign In With Discord</BaseButton>
   </div>
 </template>
 
-<script lang="ts">
-import Service from './service';
+<script>
+import Service from "./service";
 
 export default {
-  name: 'Account',
+  name: "Account",
   service: new Service(),
   methods: {
     loginWithDiscord() {

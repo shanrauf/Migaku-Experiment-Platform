@@ -21,7 +21,7 @@
   </v-card>
 </template>
 
-<script lang="ts">
+<script>
 import { formatDate } from '../utils/index';
 import { camelCase } from '../utils/index';
 

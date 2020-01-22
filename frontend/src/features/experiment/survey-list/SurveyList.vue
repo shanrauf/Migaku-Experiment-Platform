@@ -11,7 +11,7 @@
   </v-container>
 </template>
 
-<script lang="ts">
+<script>
 import SurveyCard from '@/components/SurveyCard.vue';
 import BaseCreateNewCard from '@/components/BaseCreateNewCard.vue';
 import { mapGetters } from 'vuex';

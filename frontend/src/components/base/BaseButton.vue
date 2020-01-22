@@ -1,15 +1,10 @@
 <template>
-  <button
-    type="button"
-    :class="{ rounded, disabled }"
-    :style="styles"
-    v-on="listeners"
-  >
+  <button type="button" :class="{ rounded, disabled }" :style="styles" v-on="listeners">
     <slot></slot>
   </button>
 </template>
 
-<script lang="ts">
+<script>
 export default {
   props: {
     rounded: {
@@ -36,15 +31,15 @@ export default {
       };
     },
     colorStyle() {
-      return this.color || '#ffffff';
+      return this.color || "#ffffff";
     },
     backgroundColorStyle() {
-      return this.backgroundColor || '#204f70';
+      return this.backgroundColor || "#204f70";
     },
     styles() {
       return {
         color: this.colorStyle,
-        'background-color': this.backgroundColorStyle
+        "background-color": this.backgroundColorStyle
       };
     }
   }

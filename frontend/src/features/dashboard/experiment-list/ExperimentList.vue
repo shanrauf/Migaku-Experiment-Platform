@@ -9,10 +9,10 @@
   </v-row>
 </template>
 
-<script lang="ts">
-import ExperimentCard from '@/components/ExperimentCard.vue';
-import BaseCreateNewCard from '@/components/BaseCreateNewCard.vue';
-import { mapGetters } from 'vuex';
+<script>
+import ExperimentCard from "@/components/ExperimentCard.vue";
+import BaseCreateNewCard from "@/components/BaseCreateNewCard.vue";
+import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -20,10 +20,10 @@ export default {
     BaseCreateNewCard
   },
   created() {
-    this.$store.dispatch('createExperiments');
+    this.$store.dispatch("createExperiments");
   },
   computed: {
-    ...mapGetters(['getExperiments'])
+    ...mapGetters(["getExperiments"])
   }
 };
 </script>

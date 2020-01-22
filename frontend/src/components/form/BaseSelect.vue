@@ -19,7 +19,7 @@
   </v-input>
 </template>
 
-<script lang="ts">
+<script>
 export default {
   name: 'BaseSelect',
   props: {

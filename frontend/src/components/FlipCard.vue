@@ -11,10 +11,10 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 // See Github here: https://github.com/andersponders/vue-flip-card
 export default {
-  name: 'FlipCard',
+  name: "FlipCard",
   props: {
     flipped: {
       type: Boolean,
@@ -49,7 +49,9 @@ i.backFlipBtn {
   min-height: 120px;
 }
 .flipper {
+  transform: perspective(1000px);
   -moz-transform: perspective(1000px);
+  transform-style: preserve-3d;
   -moz-transform-style: preserve-3d;
   position: relative;
 }

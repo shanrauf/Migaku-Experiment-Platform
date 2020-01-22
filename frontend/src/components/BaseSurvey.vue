@@ -51,7 +51,7 @@
   </v-form>
 </template>
 
-<script lang="ts">
+<script>
 import { mapGetters } from 'vuex';
 import { formMixin } from '../mixins/formMixin';
 import BaseSelect from '@/components/form/BaseSelect.vue';

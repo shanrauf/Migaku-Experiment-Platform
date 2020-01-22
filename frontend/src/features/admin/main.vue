@@ -1,10 +1,8 @@
 <template>
-  <div>
-    This is the admin dashboard...
-  </div>
+  <div>This is the admin dashboard...</div>
 </template>
 
-<script lang="ts">
+<script>
 export default {};
 </script>
 

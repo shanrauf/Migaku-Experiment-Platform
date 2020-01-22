@@ -1,11 +1,5 @@
 <template>
-  <v-card
-    v-bind="$attrs"
-    :to="to"
-    class="mx-auto card-container"
-    style="text-align: center"
-    raised
-  >
+  <v-card v-bind="$attrs" :to="to" class="mx-auto card-container" style="text-align: center" raised>
     <div class="create-new-container">
       <v-icon color="black" x-large>$vuetify.icons.add</v-icon>
       <h1>Create New</h1>
@@ -13,7 +7,7 @@
   </v-card>
 </template>
 
-<script lang="ts">
+<script>
 export default {
   props: {
     to: {

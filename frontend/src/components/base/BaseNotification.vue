@@ -10,11 +10,7 @@
             <h2>{{ props.item.title }}</h2>
             <p>{{ props.item.text }}</p>
           </div>
-          <v-btn
-            class="message-close js-messageClose"
-            icon
-            @click="props.close"
-          >
+          <v-btn class="message-close js-messageClose" icon @click="props.close">
             <v-icon>$vuetify.icons.close</v-icon>
           </v-btn>
         </div>
@@ -23,19 +19,19 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 export default {
   methods: {
     notificationType(type) {
       switch (type) {
-        case 'success':
-          return 'message--green';
-        case 'error':
-          return 'message-red';
-        case 'info':
-          return 'message-blue';
+        case "success":
+          return "message--green";
+        case "error":
+          return "message-red";
+        case "info":
+          return "message-blue";
         default:
-          return 'message-blue';
+          return "message-blue";
       }
     }
   }
@@ -120,7 +116,7 @@ $c-purples: #532e62, #8e44ad, #9b59b6;
   border: none;
   padding: 10px 15px;
   font-size: 16px;
-  font-family: 'Source Sans Pro';
+  font-family: "Source Sans Pro";
   color: #fff;
   outline: none;
   cursor: pointer;

@@ -32,7 +32,7 @@
   </v-card>
 </template>
 
-<script lang="ts">
+<script>
 import BaseSelect from '@/components/form/BaseSelect.vue';
 import BaseRadioButtons from '@/components/form/BaseRadioButtons.vue';
 import BaseTextField from '@/components/form/BaseTextField.vue';

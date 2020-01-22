@@ -2,9 +2,9 @@
   <h2 class="page-not-found">Page not found</h2>
 </template>
 
-<script lang="ts">
+<script>
 export default {
-  name: 'app-page-not-found'
+  name: "app-page-not-found"
 };
 </script>
 

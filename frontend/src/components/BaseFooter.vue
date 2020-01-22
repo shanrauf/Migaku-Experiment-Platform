@@ -2,9 +2,7 @@
   <v-footer padless class="base-footer">
     <v-card class="flex" flat tile>
       <v-card-title>
-        <strong class="subheading"
-          >Copyright &copy; 2020 Mass Immersion Approach</strong
-        >
+        <strong class="subheading">Copyright &copy; 2020 Mass Immersion Approach</strong>
 
         <v-spacer />
 
@@ -24,25 +22,25 @@
   </v-footer>
 </template>
 
-<script lang="ts">
+<script>
 export default {
   data() {
     return {
       socialLinks: [
         {
-          icon: '$vuetify.icons.twitter',
-          link: 'https://twitter.com/massimmersion',
-          color: '#00acee'
+          icon: "$vuetify.icons.twitter",
+          link: "https://twitter.com/massimmersion",
+          color: "#00acee"
         },
         {
-          icon: '$vuetify.icons.youtube',
-          link: 'https://www.youtube.com/user/MATTvsJapan',
-          color: '#c4302b'
+          icon: "$vuetify.icons.youtube",
+          link: "https://www.youtube.com/user/MATTvsJapan",
+          color: "#c4302b"
         },
         {
-          icon: '$vuetify.icons.facebook',
-          link: 'https://www.facebook.com/MassImmersionApproach/',
-          color: '#3b5998'
+          icon: "$vuetify.icons.facebook",
+          link: "https://www.facebook.com/MassImmersionApproach/",
+          color: "#3b5998"
         }
       ]
     };
