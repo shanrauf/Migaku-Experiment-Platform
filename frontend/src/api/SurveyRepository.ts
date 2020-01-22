@@ -6,20 +6,20 @@ class SurveyRepository {
   public static get() {
     return AxiosClient.get(`${resource}`);
   }
-  getSurvey(surveyId: string) {
+  public static getSurvey(surveyId: string) {
     return AxiosClient.get(`${resource}/${surveyId}`);
   }
-  getStatus(surveyId: string) {
+  public static getStatus(surveyId: string) {
     // can be an actual surveyId, or can be "latest"
     return AxiosClient.get(`${resource}/${surveyId}/status`);
   }
-  post(surveyId: string, payload: any) {
+  public static post(surveyId: string, payload: any) {
     return AxiosClient.post(`${resource}/${surveyId}`, payload);
   }
-  create(surveyId: string, payload: any) {
+  public static create(surveyId: string, payload: any) {
     return AxiosClient.post(`${resource}`, payload);
   }
-  delete(surveyId: string) {
+  public static delete(surveyId: string) {
     return AxiosClient.delete(`${resource}/${surveyId}`);
   }
 }

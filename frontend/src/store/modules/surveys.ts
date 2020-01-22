@@ -91,7 +91,7 @@ const actions: ActionTree<typeof defaults, RootState> = {
       payload["data"] = questionResponses;
       const SurveyRepository = RepositoryFactory.get("surveys");
       SurveyRepository.post(state.currentSurvey.surveyId, payload).then(() => {
-        router.push("landing");
+        router.push({ path: "/dashboard" });
         Vue.notify({
           group: "global",
           title: "Successfully submitted survey!",
