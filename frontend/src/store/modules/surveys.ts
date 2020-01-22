@@ -91,12 +91,12 @@ const actions: ActionTree<typeof defaults, RootState> = {
       payload["data"] = questionResponses;
       const SurveyRepository = RepositoryFactory.get("surveys");
       SurveyRepository.post(state.currentSurvey.surveyId, payload).then(() => {
-        router.push({ path: "/dashboard" });
         Vue.notify({
           group: "global",
           title: "Successfully submitted survey!",
           text: "Don't forget to come back next week to fill out the next one"
         });
+        router.push({ path: "/dashboard" });
       });
       return true;
     } else {
