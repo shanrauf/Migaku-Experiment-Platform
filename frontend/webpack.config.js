@@ -36,9 +36,9 @@ const plugins = [
   new VuetifyLoaderPlugin(),
   new webpack.HotModuleReplacementPlugin(),
   new FriendlyErrorsPlugin(),
-  new CopyPlugin([{ from: "src/assets", to: "assets" }], {
-    copyUnmodified: true
-  }),
+  // new CopyPlugin([{ from: "src/assets", to: "assets" }], {
+  //   copyUnmodified: true
+  // }),
   new HtmlWebpackPlugin({
     template: "src/index.html",
     filename: "index.html",
