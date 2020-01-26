@@ -19,7 +19,9 @@ const actions: ActionTree<typeof defaults, RootState> = {
     const { experiments } = response.data;
 
     experiments.forEach((experiment: any) => {
-      experiment.startDate = new Date(experiment.startDate);
+      if (experiment.startDate) {
+        experiment.startDate = new Date(experiment.startDate);
+      }
       if (experiment.endDate) {
         experiment.endDate = new Date(experiment.endDate);
       }

@@ -3,7 +3,7 @@ export function camelCase(str: string): string {
     .replace(/(?:^\w|[A-Z]|\b\w)/g, function(word, index) {
       return index == 0 ? word.toLowerCase() : word.toUpperCase();
     })
-    .replace(/\s+/g, '');
+    .replace(/\s+/g, "");
 }
 
 export function dateToISO(dateObject: Date): string {
@@ -13,7 +13,7 @@ export function dateToISO(dateObject: Date): string {
 export function formatDate(
   dateObject: Date,
   options: object = {},
-  language: string = 'en-US'
+  language: string = "en-US"
 ): string {
   // options = {
   //   weekday: 'long',
@@ -34,15 +34,17 @@ export function dateToTimeUntil(dateObject: Date): string {
   let millisecondsLeft = dateObject.getTime() - now;
 
   if (millisecondsLeft > oneMonth) {
-    return Math.floor(millisecondsLeft / oneMonth) + ' months left';
+    return Math.floor(millisecondsLeft / oneMonth) + " months left";
   } else if (millisecondsLeft > oneDay) {
-    return Math.floor(millisecondsLeft / oneDay) + ' days left';
+    return Math.floor(millisecondsLeft / oneDay) + " days left";
+  } else {
+    return `End: ${dateObject.toISOString()}`;
   }
 }
 
 export function truncate(value: string, limit: number = 150): string {
   if (value.length > limit) {
-    return value.slice(0, limit + 1) + '...';
+    return value.slice(0, limit + 1) + "...";
   }
   return value;
 }

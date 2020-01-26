@@ -4,9 +4,9 @@ const VueLoaderPlugin = require("vue-loader/lib/plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const FriendlyErrorsPlugin = require("friendly-errors-webpack-plugin");
 const VuetifyLoaderPlugin = require("vuetify-loader/lib/plugin");
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const CopyPlugin = require("copy-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
+const fs = require("fs");
 
 function ifUtil(NODE_ENV) {
   return (dev_value, prod_value) => {
@@ -36,9 +36,6 @@ const plugins = [
   new VuetifyLoaderPlugin(),
   new webpack.HotModuleReplacementPlugin(),
   new FriendlyErrorsPlugin(),
-  // new CopyPlugin([{ from: "src/assets", to: "assets" }], {
-  //   copyUnmodified: true
-  // }),
   new HtmlWebpackPlugin({
     template: "src/index.html",
     filename: "index.html",
@@ -46,7 +43,17 @@ const plugins = [
       collapseWhitespace: true
     },
     hash: true,
-    inject: true
+    inject: true,
+    serviceWorkerLoader: `<script>${fs.readFileSync(
+      path.join(
+        __dirname,
+        ifDevElseProd(
+          "./scripts/service-worker-dev.js",
+          "./scripts/service-worker-prod.js"
+        )
+      ),
+      "utf-8"
+    )}</script>`
   })
 ];
 
@@ -117,27 +124,36 @@ const optimization = {
     maxInitialRequests: 3
   },
   minimizer: [
-    new UglifyJsPlugin({
-      uglifyOptions: {
-        parallel: true,
-        cache: false,
-        warnings: false,
-        comments: false,
-        compress: {
-          drop_console: ifDevElseProd(false, true),
-          inline: false,
-          collapse_vars: ifDevElseProd(false, true)
+    new TerserPlugin({
+      test: /\.js(\?.*)?$/i,
+      terserOptions: {
+        parse: {
+          // we want terser to parse ecma 8 code. However, we don't want it
+          // to apply any minfication steps that turns valid ecma 5 code
+          // into invalid ecma 5 code. This is why the 'compress' and 'output'
+          // sections only apply transformations that are ecma 5 safe
+          // https://github.com/facebook/create-react-app/pull/4234
+          ecma: 8
         },
-        parse: {},
-        mangle: true,
-        toplevel: false,
-        nameCache: null,
-        ie8: false,
-        keep_fnames: false,
+        compress: {
+          // ecma: 5,
+          ecma: 6,
+          warnings: false,
+          comparisons: true,
+          inline: 2
+        },
+        mangle: {
+          safari10: true
+        },
         output: {
-          comments: false
+          ecma: 5,
+          comments: false,
+          ascii_only: true
         }
-      }
+      },
+      cache: true,
+      parallel: true,
+      sourceMap: true // Must be set to true if using source-maps in production
     })
   ]
 };
@@ -145,7 +161,7 @@ const optimization = {
 module.exports = {
   mode: ifDevElseProd("development", "production"),
   target: "web",
-  devtool: "cheap-module-eval-source-map",
+  devtool: ifDevElseProd("cheap-module-eval-source-map", undefined),
   devServer: devServer,
   entry: {
     main: "./src/main.ts"

@@ -34,8 +34,8 @@ export default {
       required: true
     },
     endDate: {
-      type: [Date, null],
-      required: true
+      type: Date,
+      required: false
     },
     visibility: {
       type: String,
