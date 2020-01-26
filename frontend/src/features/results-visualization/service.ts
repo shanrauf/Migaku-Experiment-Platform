@@ -1,5 +1,3 @@
-import RepositoryFactory from "@/api/RepositoryFactory";
-
 export default class Service {
   constructor(options?: any) {}
 

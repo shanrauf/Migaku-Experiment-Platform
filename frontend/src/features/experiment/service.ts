@@ -1,8 +1,6 @@
-import RepositoryFactory from '@/api/RepositoryFactory';
+import ExperimentRepository from "@/api/ExperimentRepository";
 
 export default class Service {
-  experimentRepository = RepositoryFactory.get('experiment');
-
   constructor(options?) {}
 
   getExperiment(experimentId) {

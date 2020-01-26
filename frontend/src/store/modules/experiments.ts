@@ -1,7 +1,7 @@
 import { MutationTree, ActionTree, GetterTree } from "vuex";
 import { RootState } from "@/types";
 
-import RepositoryFactory from "@/api/index";
+import ExperimentRepository from "@/api/ExperimentRepository";
 
 const defaults = {
   experiments: [],
@@ -14,11 +14,10 @@ const getters: GetterTree<typeof defaults, RootState> = {
 
 const actions: ActionTree<typeof defaults, RootState> = {
   async createExperiments({ commit }) {
-    const ExperimentRepository = RepositoryFactory.get("experiments");
-    let response = await ExperimentRepository.get();
-    const { experiments } = response.data;
+    let { experiments } = await ExperimentRepository.get();
 
-    experiments.forEach((experiment: any) => {
+    experiments.forEach(experiment => {
+      // format ISO strings into Date objects
       if (experiment.startDate) {
         experiment.startDate = new Date(experiment.startDate);
       }

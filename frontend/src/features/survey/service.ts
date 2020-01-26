@@ -1,7 +1,6 @@
-import RepositoryFactory from "@/api/RepositoryFactory";
+import SurveyRepository from "@/api/SurveyRepository";
 
 export default class Service {
-  surveyRepository = RepositoryFactory.get("survey");
   constructor(options?) {}
 
   getSurvey(experimentId) {

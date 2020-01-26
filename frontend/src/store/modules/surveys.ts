@@ -3,7 +3,7 @@ import { RootState } from "@/types";
 
 const surveyData = require("@/surveyData.json");
 import router from "@/app-routes";
-import RepositoryFactory from "@/api";
+import SurveyRepository from "@/api/SurveyRepository";
 import Vue from "vue";
 const defaults = {
   surveys: [],
@@ -36,9 +36,7 @@ const getters: GetterTree<typeof defaults, RootState> = {
 
 const actions: ActionTree<typeof defaults, RootState> = {
   async createSurveys({ commit }) {
-    const SurveyRepository = RepositoryFactory.get("surveys");
-    let response = await SurveyRepository.get();
-    const { surveys } = response.data;
+    const { surveys } = await SurveyRepository.get();
 
     commit({
       type: "setSurveys",
@@ -47,7 +45,6 @@ const actions: ActionTree<typeof defaults, RootState> = {
   },
   async createCurrentSurvey({ state, commit }, payload) {
     // if already submitted, then just redirect back and notify already submitted...
-    // const SurveyRepository = RepositoryFactory.get("surveys");
     // const surveyStatus = await SurveyRepository.getStatus(
     //   `latest?email=${payload.email}`
     // );
@@ -89,7 +86,6 @@ const actions: ActionTree<typeof defaults, RootState> = {
         });
       });
       payload["data"] = questionResponses;
-      const SurveyRepository = RepositoryFactory.get("surveys");
       SurveyRepository.post(state.currentSurvey.surveyId, payload).then(() => {
         Vue.notify({
           group: "global",
