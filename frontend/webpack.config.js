@@ -136,8 +136,7 @@ const optimization = {
           ecma: 8
         },
         compress: {
-          // ecma: 5,
-          ecma: 6,
+          ecma: 5,
           warnings: false,
           comparisons: true,
           inline: 2

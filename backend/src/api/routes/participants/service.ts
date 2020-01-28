@@ -1,17 +1,17 @@
-import { Service, Inject } from 'typedi';
-import winston from 'winston';
+import { Service, Inject } from "typedi";
+import winston from "winston";
 import {
   EventDispatcher,
   EventDispatcherInterface
-} from '../decorators/eventDispatcher';
-import { ExperimentParticipant } from '../models/intermediary/experimentParticipant';
-import { Participant } from '../models/participant';
+} from "../../../decorators/eventDispatcher";
+import { ExperimentParticipant } from "../../../models/intermediary/experimentParticipant";
+import { Participant } from "../../../models/participant";
 
 @Service()
 export default class ParticipantService {
   constructor(
-    @Inject('Participant') private participantModel: typeof Participant,
-    @Inject('logger') private logger: winston.Logger,
+    @Inject("Participant") private participantModel: typeof Participant,
+    @Inject("logger") private logger: winston.Logger,
     @EventDispatcher() private eventDispatcher: EventDispatcherInterface
   ) {}
 
@@ -21,7 +21,7 @@ export default class ParticipantService {
     participants: ExperimentParticipant[] | Participant[] | null;
     totalCount: number;
   }> {
-    this.logger.silly('Fetching participants');
+    this.logger.silly("Fetching participants");
     if (experimentId) {
       const participantRecords = await ExperimentParticipant.findAndCountAll({
         where: { experimentId },
@@ -35,7 +35,7 @@ export default class ParticipantService {
         totalCount: participantRecords.count
       };
     }
-    this.logger.debug('Here');
+    this.logger.debug("Here");
     const participantRecords = await Participant.findAndCountAll({
       limit: 100
     });
@@ -51,7 +51,7 @@ export default class ParticipantService {
 
   public async GetParticipantIdByEmail(email: string): Promise<string> {
     try {
-      this.logger.silly('Getting participant by email');
+      this.logger.silly("Getting participant by email");
       const participant = await this.participantModel.findOne({
         where: { email }
       });

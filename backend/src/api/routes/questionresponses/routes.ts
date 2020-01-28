@@ -1,20 +1,22 @@
-import { Request, Response, Router, NextFunction } from 'express';
-import { Container } from 'typedi';
+import { Request, Response, Router, NextFunction } from "express";
+import { Container } from "typedi";
 
-import ExperimentService from '../../services/experiment';
-import logger from '../../loaders/logger';
+import ExperimentService from "../experiments/service";
+import logger from "../../../loaders/logger";
+import QuestionResponseService from "./service";
 
 const route = Router();
 
 export default app => {
-  app.use('/experiments', route);
+  app.use("/questionresponses", route);
 
-  route.get('/', async (req: Request, res: Response, next: NextFunction) => {
-    logger.debug('GET /experiments');
+  route.get("/", async (req: Request, res: Response, next: NextFunction) => {
+    logger.debug("GET test data");
     try {
-      const experimentService = Container.get(ExperimentService);
-      const payload = await experimentService.GetExperimentListings();
-      if (!payload.experiments) {
+      const questionResponseService = Container.get(QuestionResponseService);
+      const payload = await questionResponseService.TestData();
+      console.log(payload);
+      if (!payload) {
         return res.status(404);
       }
       return res.json(payload).status(200);
@@ -23,8 +25,8 @@ export default app => {
     }
   });
 
-  route.post('/', async (req: Request, res: Response, next: NextFunction) => {
-    logger.debug('POST /experiments with body: %o', req.body);
+  route.post("/", async (req: Request, res: Response, next: NextFunction) => {
+    logger.debug("POST /experiments with body: %o", req.body);
     try {
       const experimentService = Container.get(ExperimentService);
       const payload = await experimentService.CreateExperiment(
@@ -40,7 +42,7 @@ export default app => {
   });
 
   route.get(
-    '/:experimentId',
+    "/:experimentId",
     async (req: Request, res: Response, next: NextFunction) => {
       const { experimentId } = req.params;
       logger.debug(`GET /experiments/${experimentId}`);

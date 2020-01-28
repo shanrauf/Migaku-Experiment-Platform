@@ -1,35 +1,35 @@
-import { Service, Inject } from 'typedi';
-import winston from 'winston';
-import { randomIdGenerator } from '../utils';
+import { Service, Inject } from "typedi";
+import winston from "winston";
+import { randomIdGenerator } from "../../../utils";
 import {
   EventDispatcher,
   EventDispatcherInterface
-} from '../decorators/eventDispatcher';
-import { Experiment } from '../models/experiment';
-import { IExperiment, IRequirement } from '../interfaces/IExperiment';
-import { Sequelize } from 'sequelize-typescript';
-import { ExperimentQuestion } from '../models/intermediary/experimentQuestion';
-import { ExperimentRequirement } from '../models/intermediary/experimentRequirement';
+} from "../../../decorators/eventDispatcher";
+import { Experiment } from "../../../models/experiment";
+import { Sequelize } from "sequelize-typescript";
+import { ExperimentQuestion } from "../../../models/intermediary/experimentQuestion";
+import { ExperimentRequirement } from "../../../models/intermediary/experimentRequirement";
+
+import * as requests from "./requests";
+import * as responses from "./responses";
+
 @Service()
 export default class ExperimentService {
   constructor(
-    @Inject('Experiment') private experimentModel: typeof Experiment,
-    @Inject('ExperimentQuestion')
+    @Inject("Experiment") private experimentModel: typeof Experiment,
+    @Inject("ExperimentQuestion")
     private experimentQuestionModel: typeof ExperimentQuestion,
-    @Inject('ExperimentRequirement')
+    @Inject("ExperimentRequirement")
     private experimentRequirementModel: typeof ExperimentRequirement,
-    @Inject('sequelize') private sqlConnection: Sequelize,
-    @Inject('logger') private logger: winston.Logger,
+    @Inject("sequelize") private sqlConnection: Sequelize,
+    @Inject("logger") private logger: winston.Logger,
     @EventDispatcher() private eventDispatcher: EventDispatcherInterface
   ) {}
 
-  public async GetExperimentListings(): Promise<{
-    experiments: Experiment[] | null;
-    totalCount: number;
-  }> {
-    this.logger.silly('Fetching experiments');
+  public async GetExperiments(): Promise<responses.IExperiments> {
+    this.logger.silly("Fetching experiments");
     const experimentRecords = await this.experimentModel
-      .scope('public')
+      .scope("public")
       .findAndCountAll();
     if (!experimentRecords.rows) {
       return { experiments: null, totalCount: 0 };
@@ -42,10 +42,10 @@ export default class ExperimentService {
 
   public async GetExperiment(
     experimentId: string
-  ): Promise<{ experiment: Experiment | null }> {
+  ): Promise<responses.IExperiment> {
     this.logger.silly(`Fetching experiment ${experimentId}`);
     const experimentRecord = await this.experimentModel
-      .scope('public')
+      .scope("public")
       .findByPk(experimentId);
     if (!experimentRecord) {
       return { experiment: null };
@@ -54,12 +54,12 @@ export default class ExperimentService {
   }
 
   public async CreateExperiment(
-    experimentObj: IExperiment
+    experimentObj: requests.IExperiment
   ): Promise<{ experiment: Experiment }> {
     this.logger.silly(`Creating experiment`);
     try {
-      if (!experimentObj.hasOwnProperty('experimentId')) {
-        experimentObj['experimentId'] = randomIdGenerator();
+      if (!experimentObj.hasOwnProperty("experimentId")) {
+        experimentObj["experimentId"] = randomIdGenerator();
       }
       return await this.sqlConnection.transaction(async transaction => {
         const experimentRecord = await this.experimentModel.create(
@@ -71,14 +71,14 @@ export default class ExperimentService {
         let experimentQuestions = experimentObj.questions.map(questionId => {
           // converting questionId[] to object[] w/ experiment & questionId
           return {
-            experimentId: experimentObj['experimentId'],
+            experimentId: experimentObj["experimentId"],
             questionId
           };
         });
         let experimentRequirements = experimentObj.requirements.map(
           (requirementId: string) => {
             return {
-              experimentId: experimentObj['experimentId'],
+              experimentId: experimentObj["experimentId"],
               requirementId
             };
           }

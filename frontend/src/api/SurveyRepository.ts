@@ -1,24 +1,19 @@
 import AxiosClient from "./axiosClient";
 
-import { Survey } from "@/../../backend/src/models/survey";
-
-interface ISurveys {
-  surveys: Survey[];
-}
-
-interface ISurvey {
-  survey: Survey;
-}
+import * as requests from "@/../../backend/src/api/routes/surveys/requests";
+import * as responses from "@/../../backend/src/api/routes/surveys/responses";
 
 const resource = "/experiments/audiovssentencecards/surveys"; // change later when change survey endpoiont to just /surveys w ?experimentId stuff...
 class SurveyRepository {
   constructor() {}
 
-  public static async get(): Promise<ISurveys> {
-    return AxiosClient.get<ISurveys>(`${resource}`).then(res => res.data);
+  public static async get(): Promise<responses.ISurveys> {
+    return AxiosClient.get<responses.ISurveys>(`${resource}`).then(
+      res => res.data
+    );
   }
-  public static getSurvey(surveyId: string): Promise<ISurvey> {
-    return AxiosClient.get<ISurvey>(`${resource}/${surveyId}`).then(
+  public static getSurvey(surveyId: string): Promise<responses.ISurvey> {
+    return AxiosClient.get<responses.ISurvey>(`${resource}/${surveyId}`).then(
       res => res.data
     );
   }

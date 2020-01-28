@@ -1,32 +1,30 @@
-import { Request, Response, Router, NextFunction } from 'express';
-import { Container } from 'typedi';
+import { Request, Response, Router, NextFunction } from "express";
+import { Container } from "typedi";
 
-import ExperimentService from '../../services/experiment';
-import logger from '../../loaders/logger';
-import QuestionResponseService from '../../services/questionresponse';
+import ExperimentService from "./service";
+import logger from "../../../loaders/logger";
 
 const route = Router();
 
 export default app => {
-  app.use('/questionresponses', route);
+  app.use("/experiments", route);
 
-  route.get('/', async (req: Request, res: Response, next: NextFunction) => {
-    logger.debug('GET test data');
+  route.get("/", async (req: Request, res: Response, next: NextFunction) => {
+    logger.debug("GET /experiments");
     try {
-      const questionResponseService = Container.get(QuestionResponseService);
-      const payload = await questionResponseService.TestData();
-      console.log(payload);
-      if (!payload) {
-        return res.status(404);
+      const experimentService = Container.get(ExperimentService);
+      const payload = await experimentService.GetExperiments();
+      if (!payload.experiments.length) {
+        return res.status(404).json(payload);
       }
-      return res.json(payload).status(200);
+      return res.status(200).json(payload);
     } catch (err) {
       return next(err);
     }
   });
 
-  route.post('/', async (req: Request, res: Response, next: NextFunction) => {
-    logger.debug('POST /experiments with body: %o', req.body);
+  route.post("/", async (req: Request, res: Response, next: NextFunction) => {
+    logger.debug("POST /experiments with body: %o", req.body);
     try {
       const experimentService = Container.get(ExperimentService);
       const payload = await experimentService.CreateExperiment(
@@ -42,7 +40,7 @@ export default app => {
   });
 
   route.get(
-    '/:experimentId',
+    "/:experimentId",
     async (req: Request, res: Response, next: NextFunction) => {
       const { experimentId } = req.params;
       logger.debug(`GET /experiments/${experimentId}`);

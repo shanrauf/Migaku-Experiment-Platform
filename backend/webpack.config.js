@@ -57,7 +57,6 @@ if (process.env.BUNDLE_ANALYZER) {
 const optimization = {
   minimize: true,
   namedModules: true,
-  // runtimeChunk: 'single',
   noEmitOnErrors: false,
   splitChunks: {
     hidePathInfo: true,
@@ -95,7 +94,7 @@ const optimization = {
 module.exports = {
   mode: ifDevElseProd("development", "production"),
   target: "node",
-  devtool: "cheap-module-eval-source-map",
+  devtool: ifDevElseProd("cheap-module-eval-source-map", undefined),
   entry: {
     main: "./src/server.ts"
   },

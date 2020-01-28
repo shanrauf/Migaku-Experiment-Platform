@@ -1,3 +1,9 @@
+import { IQuestion } from "../questions/requests";
+
+export interface ISurveys {
+  surveys: ISurvey[];
+}
+
 export interface ISurvey {
   surveyId: string;
   title: string;
@@ -14,23 +20,4 @@ export interface ISurveySection {
   title: string;
   description: string | null;
   questions: IQuestion[];
-}
-
-export interface IQuestion {
-  questionId: string;
-  label: string;
-  questionType: string;
-  dataType: string;
-  rules: string;
-  question: string;
-  value: any;
-  items?: string | any[];
-  required: boolean;
-  questionOrder?: number;
-}
-
-export interface IQuestionResponse {
-  questionId: string;
-  value: string;
-  dataType: string;
 }

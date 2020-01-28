@@ -1,27 +1,22 @@
 import AxiosClient from "./axiosClient";
 
-import { Experiment } from "@/../../backend/src/models/experiment";
-
-interface IExperiments {
-  experiments: Experiment[];
-  totalCount: number;
-}
-
-interface IExperiment {
-  experiment: Experiment;
-}
+import * as responses from "@/../../backend/src/api/routes/experiments/responses";
 
 const resource = "/experiments";
 export default class ExperimentRepository {
   constructor() {}
 
-  public static async get(): Promise<IExperiments> {
-    return AxiosClient.get<IExperiments>(`${resource}`).then(res => res.data);
-  }
-  public static getExperiment(experimentId: string): Promise<IExperiment> {
-    return AxiosClient.get<IExperiment>(`${resource}/${experimentId}`).then(
+  public static async get(): Promise<responses.IExperiments> {
+    return AxiosClient.get<responses.IExperiments>(`${resource}`).then(
       res => res.data
     );
+  }
+  public static getExperiment(
+    experimentId: string
+  ): Promise<responses.IExperiment> {
+    return AxiosClient.get<responses.IExperiment>(
+      `${resource}/${experimentId}`
+    ).then(res => res.data);
   }
   public static create(payload: any) {
     return AxiosClient.post(`${resource}`, payload);

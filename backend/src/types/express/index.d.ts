@@ -1,7 +1,7 @@
-import { IParticipant } from '../../interfaces/IParticipant';
+import { Participant } from "../../models/participant";
 
 declare global {
   namespace Express {
-    export interface User extends IParticipant {}
+    export interface User extends Participant {}
   }
 }

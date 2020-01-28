@@ -1,22 +1,23 @@
 import { Service, Inject } from "typedi";
 import winston from "winston";
 import { Sequelize } from "sequelize-typescript";
-import { randomIdGenerator, capitalize, inferDataTypeOf } from "../utils";
+import { randomIdGenerator, capitalize, inferDataTypeOf } from "../../../utils";
 import {
   EventDispatcher,
   EventDispatcherInterface
-} from "../decorators/eventDispatcher";
-import { Participant } from "../models/participant";
-import { QuestionResponse } from "../models/questionResponse";
-import { Survey } from "../models/survey";
-import { SurveySection } from "../models/surveySection";
-import { Question } from "../models/question";
-import { SurveyQuestion } from "../models/intermediary/surveyQuestion";
-import { Experiment } from "../models/experiment";
-import { CardCollection } from "../models/cardCollection";
-import { ISurvey } from "../interfaces/ISurvey";
-import { SurveyResponse } from "../models/surveyResponse";
-import { SurveySectionQuestion } from "../models/intermediary/surveySectionQuestion";
+} from "../../../decorators/eventDispatcher";
+import { Participant } from "../../../models/participant";
+import { QuestionResponse } from "../../../models/questionResponse";
+import { Survey } from "../../../models/survey";
+import { SurveySection } from "../../../models/surveySection";
+import { Question } from "../../../models/question";
+import { SurveyQuestion } from "../../../models/intermediary/surveyQuestion";
+import { Experiment } from "../../../models/experiment";
+import { CardCollection } from "../../../models/cardCollection";
+import { SurveyResponse } from "../../../models/surveyResponse";
+import { SurveySectionQuestion } from "../../../models/intermediary/surveySectionQuestion";
+import * as requests from "./requests";
+import * as responses from "./responses";
 
 @Service()
 export default class SurveyService {
@@ -348,7 +349,7 @@ export default class SurveyService {
 
   public async CreateSurvey(
     experimentId: string,
-    surveyObj: ISurvey
+    surveyObj: requests.ISurvey
   ): Promise<{ survey: Survey | null }> {
     try {
       const result = await this.sqlConnection.transaction(async transaction => {

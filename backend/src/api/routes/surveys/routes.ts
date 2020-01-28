@@ -1,10 +1,10 @@
 import { Request, Response, Router, NextFunction } from "express";
 import { Container } from "typedi";
 
-import SurveyService from "../../services/survey";
-import ParticipantService from "../../services/participant";
-import { ISurvey } from "../../interfaces/ISurvey";
-import logger from "../../loaders/logger";
+import SurveyService from "./service";
+import ParticipantService from "../participants/service";
+import logger from "../../../loaders/logger";
+import * as requests from "./requests";
 // import middlewares from "../middlewares";
 
 const route = Router({ mergeParams: true });
@@ -46,7 +46,7 @@ export default (app: Router) => {
       const surveyService = Container.get(SurveyService);
       const payload = await surveyService.CreateSurvey(
         experimentId,
-        survey as ISurvey
+        survey as requests.ISurvey
       );
       if (!payload) {
         return res.send(401);
