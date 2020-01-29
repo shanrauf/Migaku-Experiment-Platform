@@ -1,32 +1,31 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import { errors } from 'celebrate';
-import cookieParser from 'cookie-parser';
-import routes from '../api';
-import config from '../config';
-import passport from 'passport'; // not decoupled like other loaders...
-import cookieSession from 'cookie-session';
+import express from "express";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import routes from "../api";
+import config from "../config";
+import passport from "passport"; // not decoupled like other loaders...
+import cookieSession from "cookie-session";
 
 export default async ({ app }: { app: express.Application }) => {
-  app.get('/status', (req, res) => {
+  app.get("/status", (req, res) => {
     res.status(200).end();
   });
-  app.head('/status', (req, res) => {
+  app.head("/status", (req, res) => {
     res.status(200).end();
   });
 
   // Useful if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
   // It shows the real origin IP in the heroku or Cloudwatch logs
-  app.enable('trust proxy');
+  app.enable("trust proxy");
 
   // Middleware that transforms the raw string of req.body into json
   app.use(
     bodyParser.urlencoded({
       extended: true,
-      limit: '350mb' // please start using streams or whatever XD
+      limit: "350mb" // please start using streams or whatever XD
     })
   );
-  app.use(express.json({ limit: '350mb' })); // please start using streams or whatever XD
+  app.use(express.json({ limit: "350mb" })); // please start using streams or whatever XD
 
   app.use(
     cookieSession({
@@ -51,9 +50,9 @@ export default async ({ app }: { app: express.Application }) => {
     if (
       req.originalUrl &&
       req.originalUrl
-        .split('/')
+        .split("/")
         .pop()
-        .includes('favicon')
+        .includes("favicon")
     ) {
       return res.sendStatus(204);
     }
@@ -63,18 +62,18 @@ export default async ({ app }: { app: express.Application }) => {
   // Load API routes
   app.use(config.api.prefix, routes());
 
-  app.use(errors());
+  // app.use(errors()); Add handler foor validatioon errors probably
 
   // / catch 404 and forward to error handler
   app.use((req, res, next) => {
-    const err = new Error('Not Found');
+    const err = new Error("Not Found");
     // err.status = 404; this doesn't work, so how do I indicate it's a 404?
     next(err);
   });
 
   // / error handlers
   app.use((err, req, res, next) => {
-    if (err.name === 'UnauthorizedError') {
+    if (err.name === "UnauthorizedError") {
       return res
         .status(err.status)
         .send({ message: err.message })
