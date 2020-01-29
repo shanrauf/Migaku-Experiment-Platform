@@ -10,7 +10,7 @@ import * as requests from "./requests";
 const route = Router({ mergeParams: true });
 
 export default (app: Router) => {
-  app.use("/surveys", route);
+  app.use("/experiments/:experimentId/surveys", route);
 
   route.get(
     "/",
@@ -44,10 +44,7 @@ export default (app: Router) => {
     try {
       // Creates a survey
       const surveyService = Container.get(SurveyService);
-      const payload = await surveyService.CreateSurvey(
-        experimentId,
-        survey as requests.ISurvey
-      );
+      const payload = await surveyService.CreateSurvey(experimentId, survey);
       if (!payload) {
         return res.send(401);
       }
