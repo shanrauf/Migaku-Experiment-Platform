@@ -9,18 +9,13 @@ Returns all experiments
 Parameters:
 
 ```ts
-{
-    surveyId?: String // returns all experiments that administered this survey
-    participantId?: String // Returns experiments that participant is registered for
-}
+requests.IExperimentFilters
 ```
 
 Response:
 
 ```ts
-{
-    experiments: responses.IExperiment[]
-}
+responses.IExperiments
 ```
 
 ### POST (201)
@@ -31,27 +26,10 @@ Body:
 
 ```ts
 {
-    experimentId!: String, // If left empty, a random id is generated
-    title: String,
-    description?: String,
-    startDate: String, // (ISO string: "2019-12-14T13:19:44.000Z")
-    endDate?: String, // (ISO string: "2019-12-14T13:19:44.000Z")
-    visibility: String, // ("public" | "private")
-    questions: questionId[] // array of questionId strings to add to ExperimentQuestion table
+    requests.IExperiment
 }
 ```
 
-### DELETE (204)
-
-Deletes an experiment
-
-Body:
-
-```ts
-{
-  "experimentId": String
-}
-```
 
 ## `/experiments/:experimentId`
 
@@ -62,73 +40,44 @@ Gets an experiment
 Response:
 
 ```ts
-{
-    experimentId: String,
-    title: String,
-    description: String | null,
-    startDate: String, // (ISO string: "2019-12-14T13:19:44.000Z")
-    endDate: String | null, // (ISO string: "2019-12-14T13:19:44.000Z")
-    visibility: String // ("public" | "private")
-}
+responses.IExperiment;
 ```
 
-### PATCH (200)
+### DELETE (204)
+
+Deletes an experiment
+
+### PATCH (200) (Not implemented)
 
 Updates an experiment
 
 Body:
 
 ```ts
-{
-    ...Experiment? // (any attribute)
-}
+Partial<requests.IExperiment>
 ```
 
 ## `/experiments/:experimentId/participants`
 
+### GET
+
 Redirects to `/participants?experimentId=experimentId`
 
-## `/experiments/:experimentId/participants` POST (201)
+## `/experiments/:experimentId/participants/:participantId`
 
-(shorthand for `/experiments/:experimentId:/participants/:participantId`)
+### PUT
+
 Registers participant for experiment
 
-Body:
-
-```ts
-{
-  participantId: string;
-}
-```
-
 Response:
-
 ```ts
-{
-  ...Participant
-}
+requests.IExperimentParticipant
 ```
 
-## `/experiments/:experimentId/participants` DELETE (204)
+### GET (NOT IMPLEMENTED)
 
-(shorthand for `/experiments/:experimentId/participants/:participantId`)  
-Unregisters participant for experiment
+Redirects to `/participants/:participantId`
 
-Body:
+### DELETE (NOT IMPLEMENTED)
 
-```ts
-{
-  "participantId": string
-}
-```
-
-Response:
-
-```ts
-{
-}
-```
-
-## TODO
-
-- Implement query parameters in code for /experiments
+Drops participant from experiment

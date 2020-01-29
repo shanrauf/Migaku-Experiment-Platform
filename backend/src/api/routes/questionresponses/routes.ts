@@ -15,7 +15,6 @@ export default app => {
     try {
       const questionResponseService = Container.get(QuestionResponseService);
       const payload = await questionResponseService.TestData();
-      console.log(payload);
       if (!payload) {
         return res.status(404);
       }

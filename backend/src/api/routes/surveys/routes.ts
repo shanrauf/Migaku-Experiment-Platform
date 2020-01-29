@@ -10,7 +10,7 @@ import * as requests from "./requests";
 const route = Router({ mergeParams: true });
 
 export default (app: Router) => {
-  app.use("/experiments/:experimentId/surveys", route);
+  app.use("/surveys", route);
 
   route.get(
     "/",

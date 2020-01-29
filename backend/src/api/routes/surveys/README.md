@@ -1,153 +1,117 @@
-#### `/surveys` GET (200)
+# /surveys API
+
+### `/surveys`
+
+### GET (200)
 
 Get all surveys
 
 Parameters:
 
 ```ts
-{
-    experimentId!: String,
-    participantId?: String, // returns surveys that the participant has completed
-    surveyId?: String, // Returns metadata of specific survey
-    visibility?: String // default = "public"; ("public", "private?) (NOTE: participants shouldn't be authenticated to request "private" surveys)
-}
+requests.ISurveyFilters
 ```
 
 Response:
 
 ```ts
-{
-    surveys: Survey[] // (metadata e.x title/description/requirements) (if surveyId parameter, this array length is just 1)
-}
+responses.ISurveys
 ```
 
-### `/surveys` POST (200)
+### POST (200)
 
 Creates a survey
 
-Parameters:
-```ts
-{
-    experimentId!: String
-}
-```
-
 Body:
 
 ```ts
-{
-    surveyId?: String, // If empty, a random id is generated
-    title: String,
-    description?: String,
-    startDate: String, // (ISO string)
-    endDate?: String, // (ISO string)
-    surveyCategory: String, // (any string of your choice; e.x "regular", "initial", "mid-experiment")
-    visibility: String, // ("public" | "private")
-    sections: SurveySection[]
-}
+requests.ISurveyMetadata
 ```
 
 Response:
 
 ```ts
-{
-    surveys: Survey[]
-}
+responses.ISurveyMetadata
 ```
 
-### `/surveys/latest` GET (200)
+## `/surveys/latest`
+
+### GET (200)
 
 Finds latest survey, then redirects to /experiments/:experimentId/surveys/:surveyId (GET)
 
-Parameters:
+Response:
 ```ts
-{
-    experimentId!: String
-}
+responses.ISurveyMetadata
 ```
 
-## `/surveys/:surveyId` (200) GET
+
+## `/surveys/:surveyId`
+
+### (200) GET
 
 Gets the metadata and questions/sections of survey
-
-Parameters:
-
-```ts
-{
-    experimentId!: String,
-    sections?: sectionId[] // only return these sections/questions (good for pagination for example)
-}
-```
 
 Response:
 
 ```ts
-{
-  ...Survey // (questions / sections, metadata, etc)
-}
+responses.ISurveyMetadata
 ```
 
-## `/surveys/latest` (201) POST
+### DELETE
 
-Finds latest survey, then redirects to /experiments/:experimentId/surveys/:surveyId (POST)
+Deletes a survey completely
 
-Parameters:
-```ts
-{
-    experimentId!: String
-}
+Response:
+```
+{}
 ```
 
-## `/surveys/:surveyId` (201) POST
+### PATCH (NOT IMPLEMENTED) (Edit survey metadata, questions, etc)
 
-(Note this route can be posted to many times with new question key/value pairs; we submit survey here, then submit anki data here; if we don't want this, then validate that payload has every question from survey)
-Submits the survey response of a participant
+## /surveys/:surveyId/status?email=email
 
-Parameters:
-```ts
-{
-    experimentId!: String
-}
-```
+### GET (200)
 
-Body:
+## `/surveys/latest/status?email=email`
 
-```ts
-{
-    email: String, // (temporary due to Anki addon implementation)
-    experimentId: String,
-    ...questionKeyValuePairs // (temporary due to Anki implementation)
-}
-```
-
-<!-- Ideally:
-{
-participantId: string;
-experimentId: string
-questions: Question[] # array of objects with key, value, type (String, int)
-} -->
-
-### `/surveys/latest/status?email=email` GET (200)
+### GET (200)
 
 Returns 0 if email doesn't exist, 1 if readyToSync, 2 if surveyIncomplete, 3 if alreadySubmittedAnkiData (this is a legacy route for Anki implementation)
 
 Parameters:
 ```ts
-{
-    experimentId!: String
-}
+requests.ISurveyStatus
 ```
 
-## `/surveys/latest` (POST)
+Response:
+```ts
+responses.ISurveyStatus
+```
 
-Finds latest survey, then POSTs to `/surveys:surveyId` with experimentId in body (legacy route to support Anki addon implementation)
+## `/surveys/:surveyId/responses` (NOT IMPLEMENTED)
+
+### GET
+
+Gets question responses to a survey's questions. (This should just redirect to /questionresponses?surveyId=asdf...)
+
+### POST (survey submission?)
+
+### PATCH (if user can edit submission responses?)
+
+## `/surveys/:surveyId/questions` (NOT IMPLEMENTED)
+
+### GET (Gets questions for the survey)
 
 Parameters:
 ```ts
 {
-    experimentId!: String
+    sectionNumber: Number;
 }
 ```
+
+### POST (associate question with a survey by adding the question to an existing survey section)
+
 
 ## TODO
 - Implement query parameters in code for /surveys

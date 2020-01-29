@@ -1,6 +1,8 @@
-## Participants
+# /participants API
 
-### `/participants` GET (200)
+## `/participants`
+
+### GET (200)
 
 Gets all participants
 
@@ -24,9 +26,8 @@ Response:
 
 ```
 
-### `/participants` POST (201)
+### POST (201)
 
-(or `/participants/:participantId`)
 Creates a participant (e.x user sign-up)
 
 Body:
@@ -52,7 +53,9 @@ Response:
 }
 ```
 
-### `/participants/:participantId` GET (200)
+## `/participants/:participantId`
+
+### GET (200)
 
 Gets a participant
 
@@ -64,7 +67,7 @@ Response:
 }
 ```
 
-### `/participants/:participantId` PATCH (200)
+### PATCH (200)
 
 Update participant info
 
@@ -81,5 +84,24 @@ Response:
 ```ts
 {
   ...Participant
+}
+```
+
+## DELETE (204)
+
+Unregisters participant for experiment
+
+Body:
+
+```ts
+{
+  "participantId": string
+}
+```
+
+Response:
+
+```ts
+{
 }
 ```
