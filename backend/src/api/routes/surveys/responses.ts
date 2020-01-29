@@ -1,28 +1,33 @@
 import { IQuestion } from "../questions/requests";
+import { Survey } from "../../../models/survey";
 
-export interface ISurveys {
-  surveys: ISurvey[];
-}
+export type ISurveys = {
+  surveys: Survey[];
+  totalCount: number;
+};
 
-export interface ISurvey {
-  surveyId: string;
-  title: string;
-  description?: string;
-  startDate?: string;
-  endDate?: string;
-  surveyCategory?: string;
-  visibility?: string;
-  sections?: ISurveySection[];
-}
-export interface ISurveySection {
+// export type ISurvey = {
+//   surveyId: string;
+//   title: string;
+//   description?: string;
+//   startDate?: string;
+//   endDate?: string;
+//   surveyCategory?: string;
+//   visibility?: string;
+//   sections?: ISurveySection[];
+// };
+export type ISurvey = {
+  survey: Survey;
+};
+export type ISurveySection = {
   sectionId: string;
   sectionNumber: number;
   title: string;
   description: string | null;
   questions: IQuestion[];
-}
+};
 
-export class ISurveyMetadata {
+export type ISurveyMetadata = {
   surveyId: string;
   title: string;
   description?: string;
@@ -31,8 +36,8 @@ export class ISurveyMetadata {
   surveyCategory?: string;
   visibility?: string;
   sections?: ISurveySectionMetadata[];
-}
-export class ISurveySectionMetadata {
+};
+export type ISurveySectionMetadata = {
   sectionId: string;
   sectionNumber: number;
   title: string;
@@ -42,7 +47,7 @@ export class ISurveySectionMetadata {
    * questionId[] to create SurveyQuestions
    */
   questions: string[]; // change create survey method foor this part; previosuly would send full questions
-}
+};
 
 /**
  * Status 0: E-mail doesn't exist
@@ -60,4 +65,20 @@ export type ISurveyStatus = {
    * Link to the incomplete survey OR the cutoff of the survey e.x "2019,9,15"
    */
   data?: string;
+};
+
+/**
+ * instead of generic types for questionValue, create or import sequelize value types (for validation)
+ */
+export type ISurveyResponse = {
+  [questionId: string]: string | number | object | Array<any> | null;
+};
+
+export type ISurveyResponses = ISurveyResponse[];
+
+export type ISurveyQuestionList = {
+  /**
+   * questionId[]
+   */
+  questions: string[];
 };

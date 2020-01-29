@@ -10,7 +10,7 @@ export function randomIdGenerator(): string {
   );
 }
 
-export function formatDate(dateObject: Date, options = {}, language = 'en-US') {
+export function formatDate(dateObject: Date, options = {}, language = "en-US") {
   // options = {
   //   weekday: 'long',
   //   year: 'numeric',
@@ -44,38 +44,66 @@ export function inferDataTypeOf(
   if (typeof value === null) {
     return null;
   }
-  if (typeof value === 'string') {
+  if (typeof value === "string") {
     if (value.match(/^[1-9]\d*(\.\d+)?$/)) {
       // value is a number
-      if (value.includes('.')) {
+      if (value.includes(".")) {
         // this function isn't catching floats...
         // it's a float
-        return { dataType: 'float', value: parseFloat(value) };
+        return { dataType: "float", value: parseFloat(value) };
       }
       const numberValue = parseInt(value, 10);
       if (numberValue < 30000) {
         // arbitrary value
-        return { dataType: 'smallInt', value: numberValue };
+        return { dataType: "smallInt", value: numberValue };
       }
-      return { dataType: 'int', value: numberValue };
+      return { dataType: "int", value: numberValue };
     }
     // value is some type of string
     if (isJsonString(value)) {
       // JSON string
-      return { dataType: 'json', value };
+      return { dataType: "json", value };
     }
     if (value.length <= 255) {
       // VARCHAR(255)
-      return { dataType: 'varchar', value };
+      return { dataType: "varchar", value };
     }
     // TEXT
-    return { dataType: 'text', value };
+    return { dataType: "text", value };
   }
   // Boolean
-  if (typeof value === 'boolean') {
-    return { dataType: 'boolean', value };
+  if (typeof value === "boolean") {
+    return { dataType: "boolean", value };
   } else {
     // throw an error... idk what is going to catch this error though
-    throw new Error('Unknown value');
+    throw new Error("Unknown value");
   }
+}
+
+export async function generateSequelizeFilters(
+  sequelizeFilters: object,
+  reqQuery: object
+): Promise<object> {
+  const filters = {
+    where: {},
+    include: []
+  };
+  Object.keys(reqQuery).forEach(key => {
+    const sequelizeFilter = sequelizeFilters[key](reqQuery[key]);
+    Object.keys(sequelizeFilter).forEach(filterKey => {
+      switch (filterKey) {
+        case "where":
+          filters["where"] = {
+            ...filters["where"],
+            ...sequelizeFilter[filterKey]
+          };
+          break;
+
+        case "include":
+          filters["include"].push(...sequelizeFilter[filterKey]);
+          break;
+      }
+    });
+  });
+  return filters;
 }

@@ -60,6 +60,18 @@ export class IExperiment {
 
 export class IExperimentFilters {
   /**
+   * Returns specific experiment
+   */
+  @Expose()
+  experimentId?: string;
+
+  /**
+   * Returns experiments with this visibility
+   */
+  @Expose()
+  visibility?: string;
+
+  /**
    * Returns experiments that administered this survey
    */
   @Expose()

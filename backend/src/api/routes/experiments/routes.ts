@@ -19,7 +19,9 @@ export default (app: Router) => {
       logger.debug("GET /experiments");
       try {
         const experimentService = Container.get(ExperimentService);
-        const payload = await experimentService.GetExperiments(req.query);
+        const payload = await experimentService.GetExperiments(
+          req.query as requests.IExperimentFilters
+        );
         if (!payload.experiments.length) {
           return res.status(404).json(payload);
         }

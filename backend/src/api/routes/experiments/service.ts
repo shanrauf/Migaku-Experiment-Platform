@@ -1,6 +1,6 @@
 import { Service, Inject } from "typedi";
 import winston from "winston";
-import { randomIdGenerator } from "../../../utils";
+import { randomIdGenerator, generateSequelizeFilters } from "../../../utils";
 import {
   EventDispatcher,
   EventDispatcherInterface
@@ -41,7 +41,7 @@ export default class ExperimentService {
             {
               model: this.surveyModel,
               required: true,
-              as: "surveys",
+              attributes: [],
               where: { surveyId }
             }
           ]
@@ -51,33 +51,25 @@ export default class ExperimentService {
         return {
           include: [
             {
-              model: this.experimentParticipantModel,
+              model: this.participantModel,
               required: true,
-              where: { participantId }
+              where: { participantId },
+              attributes: [],
+              through: { attributes: [] }
             }
           ]
         };
+      },
+      experimentId: experimentId => {
+        return {
+          where: { experimentId }
+        };
+      },
+      visibility: visibility => {
+        return {
+          where: { visibility }
+        };
       }
-    };
-  }
-
-  private async GenerateFilters(filters: object) {
-    let where = {};
-    let include = [];
-    Object.keys(filters).forEach(key => {
-      const sequelizeFilter = this.sequelizeFilters[key](filters[key]);
-      Object.keys(sequelizeFilter).forEach(filterKey => {
-        switch (filterKey) {
-          case "where":
-            where = { ...where, ...sequelizeFilter[filterKey] };
-          case "include":
-            include.push(...sequelizeFilter[filterKey]);
-        }
-      });
-    });
-    return {
-      where,
-      include
     };
   }
 
@@ -85,7 +77,11 @@ export default class ExperimentService {
     filters?: requests.IExperimentFilters
   ): Promise<responses.IExperiments> {
     this.logger.silly("Fetching experiments");
-    const queryFilters = await this.GenerateFilters(filters);
+    const queryFilters = await generateSequelizeFilters(
+      this.sequelizeFilters,
+      filters
+    );
+    console.log(queryFilters);
     const experimentRecords = await this.experimentModel
       .scope("public")
       .findAndCountAll(queryFilters);
@@ -168,7 +164,7 @@ export default class ExperimentService {
 
   public async CreateExperiment(
     experimentObj: requests.IExperiment
-  ): Promise<{ experiment: Experiment }> {
+  ): Promise<responses.IExperiment> {
     this.logger.silly(`Creating experiment`);
     try {
       if (!experimentObj["experimentId"]) {

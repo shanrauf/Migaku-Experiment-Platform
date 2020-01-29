@@ -1,7 +1,12 @@
 import { Service, Inject } from "typedi";
 import winston from "winston";
 import { Sequelize } from "sequelize-typescript";
-import { randomIdGenerator, capitalize, inferDataTypeOf } from "../../../utils";
+import {
+  randomIdGenerator,
+  capitalize,
+  inferDataTypeOf,
+  generateSequelizeFilters
+} from "../../../utils";
 import {
   EventDispatcher,
   EventDispatcherInterface
@@ -21,6 +26,8 @@ import * as responses from "./responses";
 
 @Service()
 export default class SurveyService {
+  private sequelizeFilters: object;
+
   constructor(
     @Inject("Participant") private participantModel: typeof Participant,
     @Inject("Survey") private surveyModel: typeof Survey,
@@ -40,28 +47,41 @@ export default class SurveyService {
     @Inject("logger") private logger: winston.Logger,
     @Inject("sequelize") private sqlConnection: Sequelize,
     @EventDispatcher() private eventDispatcher: EventDispatcherInterface
-  ) {}
-  public async GetSurveys(
-    experimentId?: string
-  ): Promise<{
-    surveys: Survey[];
-    totalCount: number;
-  }> {
-    try {
-      this.logger.silly("Fetching surveys");
-      const surveyRecords = await this.surveyModel
-        .scope("public")
-        .findAndCountAll({
+  ) {
+    this.sequelizeFilters = {
+      surveyId: surveyId => {
+        return {
+          where: { surveyId }
+        };
+      },
+      participantId: participantId => {
+        return {
           include: [
             {
-              model: Experiment,
-              attributes: ["experimentId"],
-              where: { experimentId }
+              model: this.surveyResponseModel,
+              required: true,
+              where: { participantId },
+              attributes: []
             }
-          ],
-          limit: 10,
-          order: [["startDate", "ASC"]]
-        });
+          ]
+        };
+      }
+    };
+  }
+
+  public async GetSurveys(
+    filters?: requests.ISurveyFilters
+  ): Promise<responses.ISurveys> {
+    try {
+      this.logger.silly("Fetching surveys");
+      const sequelizeFilters = generateSequelizeFilters(
+        this.sequelizeFilters,
+        filters
+      );
+
+      const surveyRecords = await this.surveyModel
+        .scope("public")
+        .findAndCountAll();
       return {
         surveys: surveyRecords.rows,
         totalCount: surveyRecords.count
@@ -72,7 +92,7 @@ export default class SurveyService {
     }
   }
 
-  public async GetSurvey(surveyId: string): Promise<{ survey: Survey }> {
+  public async GetSurvey(surveyId: string): Promise<responses.ISurvey> {
     try {
       this.logger.silly(`Fetching survey ${surveyId}`);
       const surveyRecord = await this.surveyModel.scope("public").findOne({
@@ -97,7 +117,7 @@ export default class SurveyService {
 
   public async GetLatestSurvey(
     experimentId: string
-  ): Promise<{ survey: Survey | null }> {
+  ): Promise<responses.ISurvey> {
     try {
       this.logger.silly("Fetching latest survey");
       const surveyRecord = await this.surveyModel
@@ -120,7 +140,7 @@ export default class SurveyService {
   public async GetSurveyCompletionStatus(
     participantId: string,
     surveyId: string
-  ): Promise<any> {
+  ): Promise<boolean> {
     try {
       this.logger.silly("Fetching survey status");
       const responseRecordExists = await this.questionResponseModel
@@ -215,7 +235,7 @@ export default class SurveyService {
     dataPayload: object
   ): Promise<{ questionResponses: QuestionResponse[] }> {
     try {
-      // This won't prevent duplicate survey submssion now since Anki needs to POST here too...
+      // This won't prevent duplicate survey submission for now since Anki needs to POST here too...
       // need some way to identify if post coming from survey or anki idk...
       // const responseRecordExists = await this.questionResponseModel.findOne({
       //   where: { participantId, surveyId }

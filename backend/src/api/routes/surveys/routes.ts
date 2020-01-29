@@ -5,25 +5,26 @@ import SurveyService from "./service";
 import ParticipantService from "../participants/service";
 import logger from "../../../loaders/logger";
 import * as requests from "./requests";
-// import middlewares from "../middlewares";
+import middlewares from "../../middlewares";
 
 const route = Router({ mergeParams: true });
 
 export default (app: Router) => {
-  app.use("/experiments/:experimentId/surveys", route);
+  app.use("/surveys", route);
 
   route.get(
     "/",
     // middlewares.ensureAuthenticated,
     // middlewares.ensureExperimentParticipant,
+    middlewares.validateRequestSchema(requests.ISurveyFilters, undefined),
     async (req: Request, res: Response, next: NextFunction) => {
-      const { experimentId } = req.params;
       try {
         logger.debug(
-          `GET /experiments/${experimentId}/surveys with params: %o`
+          `GET /surveys with query: %o`,
+          req.query as requests.ISurveyFilters
         );
         const surveyService = Container.get(SurveyService);
-        const payload = await surveyService.GetSurveys(experimentId);
+        const payload = await surveyService.GetSurveys(req.query);
         if (!payload.surveys) {
           return res.status(404).send("Not found");
         }
@@ -66,29 +67,6 @@ export default (app: Router) => {
           return res.json(payload).status(404);
         }
         return res.json(payload).status(200);
-      } catch (err) {
-        return next(err);
-      }
-    }
-  );
-
-  route.get(
-    "/:surveyId",
-    // middlewares.ensureAuthenticated,
-    // middlewares.ensureExperimentParticipant,
-    async (req: Request, res: Response, next: NextFunction) => {
-      const { experimentId, surveyId } = req.params;
-      logger.debug(
-        `GET /experiments/${experimentId}/surveys/${req.params.surveyId}`
-      );
-      try {
-        const surveyService = Container.get(SurveyService);
-        const payload = await surveyService.GetSurvey(surveyId);
-        if (payload.survey === null) {
-          return res.json(payload).status(404);
-        } else {
-          return res.json(payload).status(200);
-        }
       } catch (err) {
         return next(err);
       }
@@ -185,6 +163,29 @@ export default (app: Router) => {
           return res.json(payload).status(404);
         }
         return res.json(payload).status(200);
+      } catch (err) {
+        return next(err);
+      }
+    }
+  );
+
+  route.get(
+    "/:surveyId",
+    // middlewares.ensureAuthenticated,
+    // middlewares.ensureExperimentParticipant,
+    async (req: Request, res: Response, next: NextFunction) => {
+      const { experimentId, surveyId } = req.params;
+      logger.debug(
+        `GET /experiments/${experimentId}/surveys/${req.params.surveyId}`
+      );
+      try {
+        const surveyService = Container.get(SurveyService);
+        const payload = await surveyService.GetSurvey(surveyId);
+        if (payload.survey === null) {
+          return res.json(payload).status(404);
+        } else {
+          return res.json(payload).status(200);
+        }
       } catch (err) {
         return next(err);
       }
