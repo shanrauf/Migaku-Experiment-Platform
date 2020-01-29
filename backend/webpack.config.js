@@ -1,9 +1,9 @@
 const webpack = require("webpack");
 const path = require("path");
 const FriendlyErrorsPlugin = require("friendly-errors-webpack-plugin");
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const nodeExternals = require("webpack-node-externals");
+const TerserPlugin = require("terser-webpack-plugin");
 
 function ifUtil(NODE_ENV) {
   return (dev_value, prod_value) => {
@@ -66,27 +66,35 @@ const optimization = {
     maxInitialRequests: 3
   },
   minimizer: [
-    new UglifyJsPlugin({
-      uglifyOptions: {
-        parallel: true,
-        cache: false,
-        warnings: true,
-        comments: false,
-        compress: {
-          drop_console: false,
-          inline: false,
-          collapse_vars: false
+    new TerserPlugin({
+      test: /\.js(\?.*)?$/i,
+      terserOptions: {
+        parse: {
+          // we want terser to parse ecma 8 code. However, we don't want it
+          // to apply any minfication steps that turns valid ecma 5 code
+          // into invalid ecma 5 code. This is why the 'compress' and 'output'
+          // sections only apply transformations that are ecma 5 safe
+          // https://github.com/facebook/create-react-app/pull/4234
+          ecma: 8
         },
-        parse: {},
-        mangle: true,
-        toplevel: false,
-        nameCache: null,
-        ie8: false,
-        keep_fnames: true,
+        compress: {
+          ecma: 5,
+          warnings: false,
+          comparisons: true,
+          inline: 2
+        },
+        mangle: {
+          safari10: true
+        },
         output: {
-          comments: false
+          ecma: 5,
+          comments: false,
+          ascii_only: true
         }
-      }
+      },
+      cache: true,
+      parallel: true,
+      sourceMap: true // Must be set to true if using source-maps in production
     })
   ]
 };
