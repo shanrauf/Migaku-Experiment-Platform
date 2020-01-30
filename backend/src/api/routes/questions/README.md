@@ -9,3 +9,17 @@ Response:
     questions: responses.IQuestions
 }
 ```
+
+### POST
+
+### PATCH (NOT IMPLEMENTED)
+
+
+## `/questions/:questionId`
+
+### GET
+
+### POST
+
+### DELETE
+

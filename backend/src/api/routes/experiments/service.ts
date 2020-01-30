@@ -15,6 +15,7 @@ import * as responses from "./responses";
 import { Survey } from "../../../models/survey";
 import { ExperimentParticipant } from "../../../models/intermediary/experimentParticipant";
 import { Participant } from "../../../models/participant";
+import { BaseResponse } from "../responses";
 
 @Service()
 export default class ExperimentService {
@@ -81,7 +82,6 @@ export default class ExperimentService {
       this.sequelizeFilters,
       filters
     );
-    console.log(queryFilters);
     const experimentRecords = await this.experimentModel
       .scope("public")
       .findAndCountAll(queryFilters);
@@ -107,11 +107,16 @@ export default class ExperimentService {
     return { experiment: experimentRecord };
   }
 
-  public async DeleteExperiment(experimentId: string): Promise<number> {
+  public async DeleteExperiment(
+    experimentId: string
+  ): Promise<responses.IDeleteExperiment> {
     try {
-      return await this.experimentModel.destroy({
+      const deletedCount = await this.experimentModel.destroy({
         where: { experimentId }
       });
+      return {
+        deletedCount
+      };
     } catch (err) {
       this.logger.error(err);
       throw err;

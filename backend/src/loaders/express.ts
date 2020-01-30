@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import routes from "../api";
 import config from "../config";
-import passport from "passport"; // not decoupled like other loaders...
+import passport from "passport";
 import cookieSession from "cookie-session";
 
 export default async ({ app }: { app: express.Application }) => {
@@ -62,7 +62,7 @@ export default async ({ app }: { app: express.Application }) => {
   // Load API routes
   app.use(config.api.prefix, routes());
 
-  // app.use(errors()); Add handler foor validatioon errors probably
+  // app.use(errors()); Create error handler for validation errors
 
   // / catch 404 and forward to error handler
   app.use((req, res, next) => {
@@ -71,22 +71,10 @@ export default async ({ app }: { app: express.Application }) => {
     next(err);
   });
 
-  // / error handlers
-  app.use((err, req, res, next) => {
-    if (err.name === "UnauthorizedError") {
-      return res
-        .status(err.status)
-        .send({ message: err.message })
-        .end();
-    }
-    return next(err);
-  });
   app.use((err, req, res, next) => {
     res.status(err.status || 500);
     res.json({
-      errors: {
-        message: err.message
-      }
+      errors: [err.message]
     });
   });
 };

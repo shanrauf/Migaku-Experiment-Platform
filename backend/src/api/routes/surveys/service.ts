@@ -22,6 +22,7 @@ import { SurveyResponse } from "../../../models/surveyResponse";
 import { SurveySectionQuestion } from "../../../models/intermediary/surveySectionQuestion";
 import * as requests from "./requests";
 import * as responses from "./responses";
+import { ExperimentQuestion } from "../../../models/intermediary/experimentQuestion";
 
 @Service()
 export default class SurveyService {
@@ -31,6 +32,8 @@ export default class SurveyService {
     @Inject("Participant") private participantModel: typeof Participant,
     @Inject("Survey") private surveyModel: typeof Survey,
     @Inject("Question") private questionModel: typeof Question,
+    @Inject("ExperimentQuestion")
+    private experimentQuestionModel: typeof ExperimentQuestion,
     @Inject("SurveyQuestion")
     private surveyQuestionModel: typeof SurveyQuestion,
     @Inject("SurveySection")
@@ -337,13 +340,13 @@ export default class SurveyService {
     return cardCollection;
   }
   public async CreateSurvey(
-    experimentId: string,
-    surveyObj: requests.ISurvey
-  ): Promise<{ survey: Survey | null }> {
+    surveyObj: requests.ICreateSurvey
+  ): Promise<responses.ISurveyMetadata> {
     try {
       const result = await this.sqlConnection.transaction(async transaction => {
         this.logger.silly("Creating survey");
         const {
+          experimentId,
           surveyId,
           title,
           description,
@@ -365,29 +368,45 @@ export default class SurveyService {
           },
           { transaction }
         );
+        /**
+         * Iterate over survey sections to create them and the corresponding SurveySectionQuestions'
+         */
         let surveySectionQuestions = [];
         for (const section of surveyObj.sections) {
-          section["surveyId"] = surveyId; // surveyObj sections don't hve surveyId in section rn...
+          section["surveyId"] = surveyId; // SurveySection model requires surveyId foreign key
           await this.surveySectionModel.create(section, { transaction });
           let surveyQuestions = [];
-          for (const question of section.questions) {
-            let questionExists = await this.questionModel
+          for (const [idx, questionId] of section.questions.entries()) {
+            /**
+             * TODO: Would be WAY more efficient to query the whole experiment schema, and check if questions exist in memory.
+             * Where should I put that method... import ExperimentService? or just do it in this service?
+             */
+            let questionExists = await this.experimentQuestionModel
               .findOne({
-                where: { questionId: question.questionId }
+                where: { questionId, experimentId }
               })
               .then(questionRecord => !!questionRecord);
             if (!questionExists) {
-              // TODO: Remove since we don't want questions that arent in experiment schema
-              await this.questionModel.create(question, { transaction });
+              throw new Error(
+                `${questionId} doesn't exist in the experiment schema`
+              );
             }
+            /**
+             * Associate questions with this surveyId.
+             * Used to filter surveys that adminstered specific questions
+             */
             surveyQuestions.push({
-              questionId: question.questionId,
-              surveyId: surveyObj.surveyId
+              questionId,
+              surveyId
             });
+            /**
+             * Associate questions with this section.
+             * Used for pagination when participants fill out surveys (e.x fetch questions from sectionId=asdf)
+             */
             surveySectionQuestions.push({
               sectionId: section.sectionId,
-              questionId: question.questionId,
-              questionOrder: question.questionOrder
+              questionId: questionId,
+              questionOrder: idx + 1
             });
           }
           await this.surveyQuestionModel.bulkCreate(surveyQuestions, {

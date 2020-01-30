@@ -51,18 +51,27 @@ responses.ISurveyMetadata
 
 Deletes a survey completely
 
-Response:
-```
-{}
-```
 
-### PATCH (NOT IMPLEMENTED) (Edit survey metadata, questions, etc)
+### PATCH (NOT IMPLEMENTED)
+
+Edit survey metadata, questions, etc
+
+Response:
+
+```ts
+Partial<responses.ISurveyMetadata>
+```
 
 ## /surveys/:surveyId/status
 
 ### GET (200)
+(legacy route for Anki implementation) (If surveyId="latest", find latest survey, get it's surveyId, then proceed with normal logic)
 
-Returns 0 if email doesn't exist, 1 if readyToSync, 2 if surveyIncomplete, 3 if alreadySubmittedAnkiData (this is a legacy route for Anki implementation). (If surveyId="latest", find latest survey, get it's surveyId, then proceed with normal logic)
+- Status 0: E-mail doesn't exist
+- Status 1: Ready to sync Anki data
+- Status 2: Survey not completed
+- Status 3: Anki data already synced
+
 
 Parameters:
 ```ts

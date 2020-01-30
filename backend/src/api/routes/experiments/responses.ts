@@ -1,31 +1,25 @@
 import { Experiment } from "../../../models/experiment";
 import { Participant } from "../../../models/participant";
 import { ExperimentParticipant } from "../../../models/intermediary/experimentParticipant";
-import { BaseResponse } from "../responses";
-import { Expose } from "class-transformer";
 
-export class IExperiments extends BaseResponse {
-  @Expose()
+export type IExperiments = {
   experiments: Experiment[];
-
-  @Expose()
   totalCount: number;
-}
+};
 
-export class IExperiment extends BaseResponse {
-  @Expose()
+export type IExperiment = {
   experiment: Experiment | null;
-}
+};
 
-export class IExperimentParticipants extends BaseResponse {
-  @Expose()
+export type IExperimentParticipants = {
   participants: Participant[];
-
-  @Expose()
   totalCount: number;
-}
+};
 
-export class IExperimentParticipant extends BaseResponse {
-  @Expose()
+export type IExperimentParticipant = {
   participant: ExperimentParticipant;
-}
+};
+
+export type IDeleteExperiment = {
+  deletedCount: number;
+};

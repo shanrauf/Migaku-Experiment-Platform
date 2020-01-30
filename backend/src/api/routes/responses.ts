@@ -1,9 +1,4 @@
-import { Expose } from "class-transformer";
-
-export class BaseResponse {
-  @Expose()
-  public message?: string;
-
-  @Expose()
-  public errors: Array<string> = [];
-}
+export type BaseResponse = {
+  message: string;
+  errors: Array<string>;
+};

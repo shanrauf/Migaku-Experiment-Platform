@@ -1,4 +1,11 @@
-import { IsISO8601, IsOptional, IsDefined, IsString } from "class-validator";
+import {
+  IsISO8601,
+  IsOptional,
+  IsDefined,
+  IsString,
+  ValidateNested,
+  IsInt
+} from "class-validator";
 import { Expose } from "class-transformer";
 import { IQuestion } from "../questions/requests";
 
@@ -16,12 +23,13 @@ export class IExperiment {
   @Expose()
   @IsOptional()
   @IsString()
-  description?: string;
+  description?: string | null;
 
   /**
    * ISO string (e.x "2019-12-14T13:19:44.000Z")
    */
   @Expose()
+  @IsDefined()
   @IsISO8601()
   startDate!: string;
 
@@ -64,30 +72,35 @@ export class IExperimentFilters {
    * Returns specific experiment
    */
   @Expose()
+  @IsString()
   experimentId?: string;
 
   /**
    * Returns experiments with this visibility
    */
   @Expose()
+  @IsString()
   visibility?: string;
 
   /**
    * Returns experiments that administered this survey
    */
   @Expose()
+  @IsString()
   surveyId?: string;
 
   /**
    * Returns experiments that the participant is registered for
    */
   @Expose()
+  @IsString()
   participantId?: string;
 }
 
 export class IExperimentParticipant {
   @Expose()
   @IsDefined()
+  @IsString()
   experimentId!: string;
 
   @Expose()
@@ -113,42 +126,59 @@ export class IExperimentParticipant {
 
 export class ISurvey {
   @Expose()
-  surveyId: string;
+  @IsDefined()
+  surveyId!: string;
 
   @Expose()
-  title: string;
+  @IsDefined()
+  title!: string;
 
   @Expose()
-  description?: string;
+  @IsOptional()
+  description?: string | null;
 
   @Expose()
+  @IsOptional()
   startDate?: string;
 
   @Expose()
+  @IsOptional()
   endDate?: string;
 
   @Expose()
-  surveyCategory?: string;
+  @IsDefined()
+  surveyCategory!: string;
 
   @Expose()
-  visibility?: string;
+  @IsDefined()
+  visibility!: string;
 
   @Expose()
-  sections?: ISurveySection[];
+  @IsDefined()
+  @ValidateNested()
+  sections!: ISurveySection[];
 }
 export class ISurveySection {
   @Expose()
+  @IsDefined()
   sectionId: string;
 
   @Expose()
+  @IsDefined()
+  @IsInt()
   sectionNumber: number;
 
   @Expose()
+  @IsDefined()
   title: string;
 
   @Expose()
+  @IsOptional()
+  @IsString()
   description: string | null;
 
   @Expose()
+  @IsDefined()
+  @ValidateNested()
   questions: IQuestion[];
 }
