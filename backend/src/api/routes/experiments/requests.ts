@@ -1,5 +1,6 @@
 import { IsISO8601, IsOptional, IsDefined, IsString } from "class-validator";
 import { Expose } from "class-transformer";
+import { IQuestion } from "../questions/requests";
 
 export class IExperiment {
   @Expose()
@@ -108,4 +109,46 @@ export class IExperimentParticipant {
   @IsOptional()
   @IsISO8601()
   dropoutDate: string | null;
+}
+
+export class ISurvey {
+  @Expose()
+  surveyId: string;
+
+  @Expose()
+  title: string;
+
+  @Expose()
+  description?: string;
+
+  @Expose()
+  startDate?: string;
+
+  @Expose()
+  endDate?: string;
+
+  @Expose()
+  surveyCategory?: string;
+
+  @Expose()
+  visibility?: string;
+
+  @Expose()
+  sections?: ISurveySection[];
+}
+export class ISurveySection {
+  @Expose()
+  sectionId: string;
+
+  @Expose()
+  sectionNumber: number;
+
+  @Expose()
+  title: string;
+
+  @Expose()
+  description: string | null;
+
+  @Expose()
+  questions: IQuestion[];
 }

@@ -10,16 +10,25 @@ export default app => {
   app.use("/participants", route);
 
   route.get("/", async (req: Request, res: Response, next: NextFunction) => {
-    logger.debug("GET /participants");
+    logger.debug("GET /participants with params %o", req.query);
     try {
       const participantService = Container.get(ParticipantService);
-      const payload = await participantService.GetParticipants();
+      const payload = await participantService.GetParticipants(req.query);
       if (!payload.participants) {
-        return res.status(404).send("Not found");
+        return res.status(404).json({ message: "Not found" });
       }
       return res.json(payload).status(200);
     } catch (err) {
       return next(err);
     }
   });
+
+  route.get(
+    "/:participantId/experiments",
+    async (req: Request, res: Response, next: NextFunction) => {
+      res.redirect(
+        `../../experiments?participantId=${req.params.participantId}`
+      );
+    }
+  );
 };

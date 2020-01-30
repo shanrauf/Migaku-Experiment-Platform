@@ -4,7 +4,6 @@ import { Sequelize } from "sequelize-typescript";
 import {
   randomIdGenerator,
   capitalize,
-  inferDataTypeOf,
   generateSequelizeFilters
 } from "../../../utils";
 import {
@@ -49,6 +48,11 @@ export default class SurveyService {
     @EventDispatcher() private eventDispatcher: EventDispatcherInterface
   ) {
     this.sequelizeFilters = {
+      experimentId: experimentId => {
+        return {
+          where: { experimentId }
+        };
+      },
       surveyId: surveyId => {
         return {
           where: { surveyId }
@@ -74,14 +78,14 @@ export default class SurveyService {
   ): Promise<responses.ISurveys> {
     try {
       this.logger.silly("Fetching surveys");
-      const sequelizeFilters = generateSequelizeFilters(
+      const sequelizeFilters = await generateSequelizeFilters(
         this.sequelizeFilters,
         filters
       );
 
       const surveyRecords = await this.surveyModel
         .scope("public")
-        .findAndCountAll();
+        .findAndCountAll(sequelizeFilters);
       return {
         surveys: surveyRecords.rows,
         totalCount: surveyRecords.count
@@ -315,40 +319,6 @@ export default class SurveyService {
       throw err;
     }
   }
-
-  private async CreateQuestion(surveyId: string, question: [string, any]) {
-    try {
-      const { dataType } = inferDataTypeOf(question[1]);
-      await this.sqlConnection.transaction(async transaction => {
-        await this.questionModel.create(
-          {
-            questionId: question[0],
-            key: question[0],
-            questionType: "text", // this is bad
-            dataType,
-            label: question[0], // this is bad
-            rules: null,
-            items: null,
-            required: true,
-            note: null,
-            question: question[0] // this is bad
-          },
-          { transaction }
-        );
-        await this.surveyQuestionModel.create(
-          {
-            questionId: question[0],
-            surveyId
-          },
-          { transaction }
-        );
-      });
-      return { dataType };
-    } catch (err) {
-      this.logger.error(err);
-      throw err;
-    }
-  }
   public async PostAnkiCardCollection(
     experimentId: string,
     surveyId: string,
@@ -366,7 +336,6 @@ export default class SurveyService {
     });
     return cardCollection;
   }
-
   public async CreateSurvey(
     experimentId: string,
     surveyObj: requests.ISurvey

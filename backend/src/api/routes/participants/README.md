@@ -105,3 +105,9 @@ Response:
 {
 }
 ```
+
+## `/participants/:participantId/experiments`
+
+### GET
+
+Redirects to /experiments?participantId=asdf

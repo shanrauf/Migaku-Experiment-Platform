@@ -36,12 +36,8 @@ export default (app: Router) => {
   );
 
   route.post("/", async (req: Request, res: Response, next: NextFunction) => {
-    const { experimentId } = req.params;
-    const { survey } = req.body;
-    logger.debug(
-      `POST /experiments/${experimentId}/surveys with body: %o`,
-      req.body
-    );
+    const { survey, experimentId } = req.body;
+    logger.debug(`POST /surveys with body: %o`, req.body);
     try {
       // Creates a survey
       const surveyService = Container.get(SurveyService);

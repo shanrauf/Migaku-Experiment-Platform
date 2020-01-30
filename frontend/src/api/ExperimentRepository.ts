@@ -1,5 +1,6 @@
 import AxiosClient from "./axiosClient";
 
+import * as requests from "@/../../backend/src/api/routes/experiments/requests";
 import * as responses from "@/../../backend/src/api/routes/experiments/responses";
 
 const resource = "/experiments";
@@ -18,13 +19,12 @@ export default class ExperimentRepository {
       `${resource}/${experimentId}`
     ).then(res => res.data);
   }
-  public static create(payload: any) {
+  public static create(
+    payload: requests.IExperiment
+  ): Promise<responses.IExperiment> {
     return AxiosClient.post(`${resource}`, payload);
   }
-  public static update(payload: any, experimentId: string) {
-    return AxiosClient.put(`${resource}/${experimentId}`, payload);
-  }
-  public static delete(experimentId: string) {
+  public static delete(experimentId: string): Promise<{}> {
     return AxiosClient.delete(`${resource}/${experimentId}`);
   }
 }

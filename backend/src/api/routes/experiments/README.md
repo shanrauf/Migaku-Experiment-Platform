@@ -74,10 +74,23 @@ Response:
 requests.IExperimentParticipant
 ```
 
-### GET (NOT IMPLEMENTED)
+### DELETE
 
-Redirects to `/participants/:participantId`
+Drops participant for experiment
 
-### DELETE (NOT IMPLEMENTED)
+Response:
+```ts
+{}
+```
 
-Drops participant from experiment
+## `/experiments/:experimentId/surveys`
+
+### GET
+
+Redirects to /surveys?experimentId=asdf
+
+## `/experiments/:experimentId/questions`
+
+### GET
+
+Redirects to /questions?experimentId=asdf

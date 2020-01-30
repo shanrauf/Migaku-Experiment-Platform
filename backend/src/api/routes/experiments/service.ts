@@ -118,28 +118,6 @@ export default class ExperimentService {
     }
   }
 
-  public async GetParticipants(
-    experimentId: string
-  ): Promise<responses.IExperimentParticipants> {
-    try {
-      const participantRecords = await this.participantModel.findAndCountAll({
-        include: [
-          {
-            model: this.experimentParticipantModel,
-            where: { experimentId }
-          }
-        ]
-      });
-      return {
-        participants: participantRecords.rows,
-        totalCount: participantRecords.count
-      };
-    } catch (err) {
-      this.logger.error(err);
-      throw err;
-    }
-  }
-
   public async RegisterParticipant(
     experimentId: string,
     participantId: string
@@ -211,5 +189,18 @@ export default class ExperimentService {
       this.logger.error(err);
       throw err;
     }
+  }
+  public async DropParticipant(
+    experimentId: string,
+    participantId: string
+  ): Promise<void> {
+    await this.experimentParticipantModel.update(
+      {
+        dropoutDate: new Date(Date.now())
+      },
+      {
+        where: { experimentId, participantId }
+      }
+    );
   }
 }

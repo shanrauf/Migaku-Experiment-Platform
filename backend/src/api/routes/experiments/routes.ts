@@ -90,18 +90,9 @@ export default (app: Router) => {
   route.get(
     "/:experimentId/participants",
     async (req: Request, res: Response, next: NextFunction) => {
-      const { experimentId } = req.params;
-      logger.debug(`GET /experiments/${experimentId}/participants`);
-      try {
-        const experimentService = Container.get(ExperimentService);
-        const payload = await experimentService.GetParticipants(experimentId);
-        if (!payload.participants) {
-          return res.status(404).json(payload);
-        }
-        return res.status(200).json(payload);
-      } catch (err) {
-        return next(err);
-      }
+      res.redirect(
+        `../../participants?experimentId=${req.params.experimentId}`
+      );
     }
   );
 
@@ -122,6 +113,40 @@ export default (app: Router) => {
       } catch (err) {
         return next(err);
       }
+    }
+  );
+
+  route.delete(
+    "/:experimentId/participants/:participantId",
+    async (req: Request, res: Response, next: NextFunction) => {
+      const { experimentId, participantId } = req.params;
+      logger.debug(
+        `DELETE /experiments/${experimentId}/participants/${participantId}`
+      );
+      try {
+        const experimentService = Container.get(ExperimentService);
+        await experimentService.DropParticipant(experimentId, participantId);
+        return res.status(200).json({
+          message: `${participantId} successfully dropped from ${experimentId}`
+        });
+      } catch (err) {
+        return next(err);
+      }
+    }
+  );
+
+  route.get(
+    "/:experimentId/surveys",
+    async (req: Request, res: Response, next: NextFunction) => {
+      res.redirect(`../../surveys?experimentId=${req.params.experimentId}`);
+    }
+  );
+
+  route.post(
+    "/:experimentId/surveys",
+    async (req: Request, res: Response, next: NextFunction) => {
+      req.body["experimentId"] = req.params.experimentId;
+      res.redirect("../../surveys");
     }
   );
 };
