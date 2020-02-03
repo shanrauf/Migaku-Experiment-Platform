@@ -22,9 +22,17 @@ export default class ExperimentRepository {
   public static create(
     payload: requests.IExperiment
   ): Promise<responses.IExperiment> {
-    return AxiosClient.post(`${resource}`, payload);
+    return AxiosClient.post<responses.IExperiment>(`${resource}`, payload).then(
+      res => res.data
+    );
   }
-  public static delete(experimentId: string): Promise<{}> {
+  public static update(
+    payload: Partial<requests.IExperiment>,
+    experimentId: string
+  ) {
+    return AxiosClient.put(`${resource}/${experimentId}`, payload);
+  }
+  public static delete(experimentId: string) {
     return AxiosClient.delete(`${resource}/${experimentId}`);
   }
 }

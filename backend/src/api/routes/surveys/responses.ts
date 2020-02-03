@@ -1,5 +1,6 @@
 import { IQuestion } from "../questions/requests";
 import { Survey } from "../../../models/survey";
+import { BaseResponse } from "../responses";
 
 export type ISurveys = {
   surveys: Survey[];
@@ -30,14 +31,14 @@ export type ISurveyMetadata = {
  *
  * Status 3: Anki data already synced
  */
-export type ISurveyStatus = {
+export class ISurveyStatus extends BaseResponse {
   status: 0 | 1 | 2 | 3;
 
   /**
    * Link to the incomplete survey OR the cutoff of the survey e.x "2019,9,15"
    */
   data?: string;
-};
+}
 
 /**
  * instead of generic types for questionValue, create or import sequelize value types (for validation)

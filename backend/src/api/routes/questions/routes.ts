@@ -1,10 +1,11 @@
 import { Request, Response, Router, NextFunction } from "express";
 import { Container } from "typedi";
 
-import QuestionService from "./service";
 import logger from "../../../loaders/logger";
 import middlewares from "../../middlewares";
 import * as requests from "./requests";
+import validateRequestSchema from "../../middlewares/validateRequestSchema";
+import QuestionService from "./service";
 
 const route = Router();
 
