@@ -1,19 +1,19 @@
-import { Request, Response, Router, NextFunction } from "express";
-import { Container } from "typedi";
+import { Request, Response, Router, NextFunction } from 'express';
+import { Container } from 'typedi';
 
-import SurveyService from "./service";
-import ParticipantService from "../participants/service";
-import logger from "../../../loaders/logger";
-import * as requests from "./requests";
+import SurveyService from './service';
+import ParticipantService from '../participants/service';
+import logger from '../../../loaders/logger';
+import * as requests from './requests';
 // import middlewares from "../middlewares";
 
 const route = Router({ mergeParams: true });
 
 export default (app: Router) => {
-  app.use("/experiments/:experimentId/surveys", route);
+  app.use('/experiments/:experimentId/surveys', route);
 
   route.get(
-    "/",
+    '/',
     // middlewares.ensureAuthenticated,
     // middlewares.ensureExperimentParticipant,
     async (req: Request, res: Response, next: NextFunction) => {
@@ -25,7 +25,7 @@ export default (app: Router) => {
         const surveyService = Container.get(SurveyService);
         const payload = await surveyService.GetSurveys(experimentId);
         if (!payload.surveys) {
-          return res.status(404).send("Not found");
+          return res.status(404).send('Not found');
         }
         return res.json(payload).status(200);
       } catch (err) {
@@ -34,7 +34,7 @@ export default (app: Router) => {
     }
   );
 
-  route.post("/", async (req: Request, res: Response, next: NextFunction) => {
+  route.post('/', async (req: Request, res: Response, next: NextFunction) => {
     const { experimentId } = req.params;
     const { survey } = req.body;
     logger.debug(
@@ -48,14 +48,14 @@ export default (app: Router) => {
       if (!payload) {
         return res.send(401);
       }
-      return res.json({ survey, status: "Survey created" }).status(200);
+      return res.json({ survey, status: 'Survey created' }).status(200);
     } catch (err) {
       return next(err); // handles the error, but reveals exactly wht the error was...
     }
   });
 
   route.get(
-    "/latest",
+    '/latest',
     async (req: Request, res: Response, next: NextFunction) => {
       const { experimentId } = req.params;
       logger.debug(`GET /experiments/${experimentId}/surveys/latest`);
@@ -73,7 +73,7 @@ export default (app: Router) => {
   );
 
   route.get(
-    "/:surveyId",
+    '/:surveyId',
     // middlewares.ensureAuthenticated,
     // middlewares.ensureExperimentParticipant,
     async (req: Request, res: Response, next: NextFunction) => {
@@ -96,7 +96,7 @@ export default (app: Router) => {
   );
 
   route.get(
-    "/latest/status",
+    '/latest/status',
     async (req: Request, res: Response, next: NextFunction) => {
       /**
        * Status 0: E-mail doesn't exist
@@ -146,7 +146,7 @@ export default (app: Router) => {
   );
 
   route.post(
-    "/latest",
+    '/latest',
     async (req: Request, res: Response, next: NextFunction) => {
       const { experimentId } = req.params;
       logger.debug(
@@ -192,7 +192,7 @@ export default (app: Router) => {
   );
 
   route.post(
-    "/:surveyId",
+    '/:surveyId',
     async (req: Request, res: Response, next: NextFunction) => {
       const { experimentId, surveyId } = req.params;
       logger.debug(

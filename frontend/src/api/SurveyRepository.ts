@@ -1,9 +1,9 @@
-import AxiosClient from "./axiosClient";
+import AxiosClient from './axiosClient';
 
-import * as requests from "@/../../backend/src/api/routes/surveys/requests";
-import * as responses from "@/../../backend/src/api/routes/surveys/responses";
+import * as requests from '@/../../backend/src/api/routes/surveys/requests';
+import * as responses from '@/../../backend/src/api/routes/surveys/responses';
 
-const resource = "/experiments/audiovssentencecards/surveys"; // change later when change survey endpoiont to just /surveys w ?experimentId stuff...
+const resource = '/experiments/audiovssentencecards/surveys'; // change later when change survey endpoiont to just /surveys w ?experimentId stuff...
 class SurveyRepository {
   constructor() {}
 
@@ -17,9 +17,14 @@ class SurveyRepository {
       res => res.data
     );
   }
-  public static getStatus(surveyId: string) {
-    // can be an actual surveyId, or can be "latest"
-    return AxiosClient.get(`${resource}/${surveyId}/status`);
+  /**
+   * Returns survey completion status for the participant
+   * @param surveyId Can be a random surveyId or "latest"
+   */
+  public static getStatus(surveyId: string): Promise<responses.ISurveyStatus> {
+    return AxiosClient.get<responses.ISurveyStatus>(
+      `${resource}/${surveyId}/status`
+    ).then(res => res.data);
   }
   public static post(surveyId: string, payload: any) {
     return AxiosClient.post(`${resource}/${surveyId}`, payload);

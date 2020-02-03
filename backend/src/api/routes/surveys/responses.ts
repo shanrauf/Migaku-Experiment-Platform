@@ -1,10 +1,11 @@
-import { IQuestion } from "../questions/requests";
+import { IQuestion } from '../questions/requests';
+import { BaseResponse } from '../responses';
 
-export interface ISurveys {
-  surveys: ISurvey[];
+export class ISurveysMetadata extends BaseResponse {
+  surveys: ISurveyMetadata[];
 }
 
-export interface ISurvey {
+export class ISurvey extends BaseResponse {
   surveyId: string;
   title: string;
   description?: string;
@@ -14,7 +15,7 @@ export interface ISurvey {
   visibility?: string;
   sections?: ISurveySection[];
 }
-export interface ISurveySection {
+export class ISurveySection extends BaseResponse {
   sectionId: string;
   sectionNumber: number;
   title: string;
@@ -22,7 +23,7 @@ export interface ISurveySection {
   questions: IQuestion[];
 }
 
-export class ISurveyMetadata {
+export class ISurveyMetadata extends BaseResponse {
   surveyId: string;
   title: string;
   description?: string;
@@ -32,7 +33,7 @@ export class ISurveyMetadata {
   visibility?: string;
   sections?: ISurveySectionMetadata[];
 }
-export class ISurveySectionMetadata {
+export class ISurveySectionMetadata extends BaseResponse {
   sectionId: string;
   sectionNumber: number;
   title: string;
@@ -53,11 +54,11 @@ export class ISurveySectionMetadata {
  *
  * Status 3: Anki data already synced
  */
-export type ISurveyStatus = {
+export class ISurveyStatus extends BaseResponse {
   status: 0 | 1 | 2 | 3;
 
   /**
    * Link to the incomplete survey OR the cutoff of the survey e.x "2019,9,15"
    */
   data?: string;
-};
+}

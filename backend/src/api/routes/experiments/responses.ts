@@ -1,21 +1,22 @@
-import { Experiment } from "../../../models/experiment";
-import { Participant } from "../../../models/participant";
-import { ExperimentParticipant } from "../../../models/intermediary/experimentParticipant";
+import { Experiment } from '../../../models/experiment';
+import { Participant } from '../../../models/participant';
+import { ExperimentParticipant } from '../../../models/intermediary/experimentParticipant';
+import { BaseResponse } from '../responses';
 
-export type IExperiments = {
+export class IExperiments extends BaseResponse {
   experiments: Experiment[];
   totalCount: number;
-};
+}
 
-export type IExperiment = {
+export class IExperiment extends BaseResponse {
   experiment: Experiment | null;
-};
+}
 
-export type IExperimentParticipants = {
+export class IExperimentParticipants extends BaseResponse {
   participants: Participant[];
   totalCount: number;
-};
+}
 
-export type IExperimentParticipant = {
+export class IExperimentParticipant extends BaseResponse {
   participant: ExperimentParticipant;
-};
+}
