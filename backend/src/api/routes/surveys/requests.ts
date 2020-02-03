@@ -34,6 +34,14 @@ export class ISurveyFilters {
   @IsOptional()
   @IsString()
   visibility?: string;
+
+  // /**
+  //  * Returns the latest survey (the survey with the latest startDate)
+  //  */
+  // @Expose()
+  // @IsOptional()
+  // @IsString()
+  // latest?: string;
 }
 
 export class ISurveyMetadata {

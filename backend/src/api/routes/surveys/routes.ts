@@ -36,33 +36,11 @@ export default (app: Router) => {
     "/",
     middlewares.validateRequestSchema(undefined, requests.ICreateSurvey),
     async (req: Request, res: Response, next: NextFunction) => {
-      logger.debug(`POST /surveys with body: %o`, req.body);
       try {
-        // Creates a survey
+        logger.debug(`POST /surveys with body: %o`, req.body);
         const surveyService = Container.get(SurveyService);
         const payload = await surveyService.CreateSurvey(req.body);
         return res.status(200).json({ survey: req.body });
-      } catch (err) {
-        return next(err);
-      }
-    }
-  );
-
-  route.get(
-    "/latest",
-    async (req: Request, res: Response, next: NextFunction) => {
-      logger.debug(
-        `GET /experiments/${req.params.experimentId}/surveys/latest`
-      );
-      try {
-        const surveyService = Container.get(SurveyService);
-        const payload = await surveyService.GetLatestSurvey(
-          req.params.experimentId
-        );
-        if (!payload.survey) {
-          return res.json(payload).status(404);
-        }
-        return res.json(payload).status(200);
       } catch (err) {
         return next(err);
       }
@@ -78,11 +56,10 @@ export default (app: Router) => {
        * Status 2: Survey not completed
        * Status 3: Anki data already synced
        */
-      const { email } = req.query;
-      logger.debug(
-        `GET /experiments/${req.params.experimentId}/surveys/latest/status`
-      );
       try {
+        const { email } = req.query;
+        const { experimentId } = req.params;
+        logger.debug(`GET /experiments/${experimentId}/surveys/latest/status`);
         const participantService = Container.get(ParticipantService);
         const participantId = await participantService.GetParticipantIdByEmail(
           email
@@ -92,9 +69,7 @@ export default (app: Router) => {
         }
         const surveyService = Container.get(SurveyService);
         // this errors when no surveys for the experiment but doesn't throw error
-        const { survey } = await surveyService.GetLatestSurvey(
-          req.params.experimentId
-        );
+        const { survey } = await surveyService.GetLatestSurvey(experimentId);
 
         const surveyCompleted = await surveyService.GetSurveyCompletionStatus(
           participantId,
@@ -122,17 +97,16 @@ export default (app: Router) => {
   );
 
   route.post(
-    "/latest",
+    "/latest/responses",
     async (req: Request, res: Response, next: NextFunction) => {
-      logger.debug(
-        `POST /experiments/${req.params.experimentId}/surveys/latest w/ body %o`,
-        req.body
-      );
       try {
-        const surveyService = Container.get(SurveyService);
-        const latestSurvey = await surveyService.GetLatestSurvey(
-          req.params.experimentId
+        const { experimentId } = req.params;
+        logger.debug(
+          `POST /experiments/${experimentId}/surveys/latest w/ body %o`,
+          req.body
         );
+        const surveyService = Container.get(SurveyService);
+        const latestSurvey = await surveyService.GetLatestSurvey(experimentId);
         if (!latestSurvey.survey) {
           return res.json(latestSurvey).status(404);
         }
@@ -146,13 +120,13 @@ export default (app: Router) => {
         );
 
         let responseId = await surveyService.findOrCreateResponseId(
-          req.params.experimentId,
+          experimentId,
           surveyId,
           participantId
         );
 
         const payload = await surveyService.PostSurveyResponses(
-          req.params.experimentId,
+          experimentId,
           surveyId,
           participantId,
           responseId,
@@ -173,11 +147,9 @@ export default (app: Router) => {
     // middlewares.ensureAuthenticated,
     // middlewares.ensureExperimentParticipant,
     async (req: Request, res: Response, next: NextFunction) => {
-      const { experimentId, surveyId } = req.params;
-      logger.debug(
-        `GET /experiments/${experimentId}/surveys/${req.params.surveyId}`
-      );
       try {
+        const { experimentId, surveyId } = req.params;
+        logger.debug(`GET /experiments/${experimentId}/surveys/${surveyId}`);
         const surveyService = Container.get(SurveyService);
         const payload = await surveyService.GetSurvey(surveyId);
         if (payload.survey === null) {
@@ -192,14 +164,14 @@ export default (app: Router) => {
   );
 
   route.post(
-    "/:surveyId",
+    "/:surveyId/responses",
     async (req: Request, res: Response, next: NextFunction) => {
-      const { experimentId, surveyId } = req.params;
-      logger.debug(
-        `POST /experiments/${experimentId}/surveys/${surveyId} w/ body %o`,
-        req.body
-      );
       try {
+        const { experimentId, surveyId } = req.params;
+        logger.debug(
+          `POST /experiments/${experimentId}/surveys/${surveyId}/responses w/ body %o`,
+          req.body
+        );
         const participantService = Container.get(ParticipantService);
         const surveyService = Container.get(SurveyService);
 

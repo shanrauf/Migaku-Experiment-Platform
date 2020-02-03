@@ -62,7 +62,7 @@ Response:
 Partial<responses.ISurveyMetadata>
 ```
 
-## /surveys/:surveyId/status
+## `/surveys/latest/status` (WILL DELETE SOON)
 
 ### GET (200)
 (legacy route for Anki implementation) (If surveyId="latest", find latest survey, get it's surveyId, then proceed with normal logic)
@@ -82,6 +82,12 @@ Response:
 ```ts
 responses.ISurveyStatus
 ```
+
+## `/surveys/latest/responses` (WILL DELETE SOON)
+
+### POST
+
+Post Anki data
 
 ## `/surveys/:surveyId/responses`
 
