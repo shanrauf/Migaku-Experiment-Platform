@@ -4,7 +4,6 @@ import { Container } from "typedi";
 import logger from "../../../loaders/logger";
 import middlewares from "../../middlewares";
 import * as requests from "./requests";
-import validateRequestSchema from "../../middlewares/validateRequestSchema";
 import QuestionService from "./service";
 
 const route = Router();
@@ -16,7 +15,7 @@ export default (app: Router) => {
     "/",
     middlewares.validateRequestSchema(requests.IQuestionFilters, undefined),
     async (req: Request, res: Response, next: NextFunction) => {
-      logger.debug("GET /questions");
+      logger.debug("GET /questions with query params: %o", req.query);
       try {
         const questionService = Container.get(QuestionService);
         const payload = await questionService.GetQuestions(

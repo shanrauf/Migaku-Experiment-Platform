@@ -136,13 +136,6 @@ export default (app: Router) => {
   );
 
   route.get(
-    "/:experimentId/surveys",
-    async (req: Request, res: Response, next: NextFunction) => {
-      res.redirect(`../../surveys?experimentId=${req.params.experimentId}`);
-    }
-  );
-
-  route.get(
     "/:experimentId/questions",
     async (req: Request, res: Response, next: NextFunction) => {
       res.redirect(`../../questions?experimentId=${req.params.experimentId}`);
