@@ -1,10 +1,18 @@
 import { Container } from "typedi";
 import { Sequelize } from "sequelize-typescript";
-import LoggerInstance from "./logger";
-import sgMail from "@sendgrid/mail";
-import config from "../config";
+import logger from "./logger";
 
-export default async ({ sqlConnection }: { sqlConnection: Sequelize }) => {
+import { Client } from "discord.js";
+
+export default async ({
+  sqlConnection,
+  discordClient,
+  emailClient
+}: {
+  sqlConnection: Sequelize;
+  discordClient: Client;
+  emailClient: any;
+}) => {
   try {
     for (let model of Object.entries(sqlConnection.models)) {
       Container.set(model[0], model[1]);
@@ -12,13 +20,13 @@ export default async ({ sqlConnection }: { sqlConnection: Sequelize }) => {
 
     Container.set("sequelize", sqlConnection);
 
-    sgMail.setApiKey(config.MAILER_KEY);
-    Container.set("emailClient", sgMail);
+    Container.set("emailClient", emailClient);
+    Container.set("discordClient", discordClient);
 
-    Container.set("logger", LoggerInstance);
-    LoggerInstance.info("✌️ Logger injected into container");
+    Container.set("logger", logger);
+    logger.info("✌️ Logger injected into container");
   } catch (e) {
-    LoggerInstance.error("🔥 Error on dependency injector loader: %o", e);
+    logger.error("🔥 Error on dependency injector loader: %o", e);
     throw e;
   }
 };

@@ -14,7 +14,10 @@
     "outDir": "./build",
     "allowJs": true,
     "noEmit": false,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "compilerOptions": {
+      "assumeChangesOnlyAffectDirectDependencies": true
+    }
     // "noImplicitReturns": true, add once fix error handling and null values
     // "strict": true,
     // "noUnusedLocals": true

@@ -26,5 +26,8 @@ export default {
    */
   api: {
     prefix: "/api"
+  },
+  discord: {
+    DISCORD_TOKEN: process.env.DISCORD_TOKEN
   }
 };

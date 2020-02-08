@@ -1,27 +1,27 @@
-import axios from 'axios';
-import passport from 'passport';
-import Container from 'typedi';
-import { InternalOAuthError } from 'passport-oauth2';
-const OAuth2Strategy = require('passport-oauth2').Strategy;
+import axios from "axios";
+import passport from "passport";
+import Container from "typedi";
+import { InternalOAuthError } from "passport-oauth2";
+const OAuth2Strategy = require("passport-oauth2").Strategy;
 
-import config from '../config';
-import logger from './logger';
-import { Participant } from '../models/participant';
-import { randomIdGenerator } from '../utils';
+import config from "../config";
+import logger from "./logger";
+import { Participant } from "../models/participant";
+import { randomIdGenerator } from "../utils";
 
 export default async () => {
   try {
     const discordStrategy = new OAuth2Strategy(
       {
         authorizationURL: config.discordAuthorizationURL,
-        tokenURL: 'https://discordapp.com/api/oauth2/token',
+        tokenURL: "https://discordapp.com/api/oauth2/token",
         clientID: config.discordOAuthClientId,
         clientSecret: config.discordOAuthClientSecret,
-        callbackURL: 'http://localhost:3000/api/auth/discord/redirect'
+        callbackURL: "http://localhost:3000/api/auth/discord/redirect"
       },
       (accessToken, refreshToken, profile, done) => {
         const participantModel = Container.get<typeof Participant>(
-          'Participant'
+          "Participant"
         );
         return participantModel
           .findOrCreate({
@@ -29,9 +29,9 @@ export default async () => {
             defaults: {
               participantId: randomIdGenerator(),
               email: profile.email,
-              password: 'test123', // deprecated column
+              password: "test123", // deprecated column
               name: profile.username,
-              sex: 'male', // deprecated column
+              sex: "male", // deprecated column
               discordUsername: profile.username,
               lastLogin: new Date()
             }
@@ -41,15 +41,15 @@ export default async () => {
           })
           .catch(err => {
             logger.error(err);
-            done(null, false, { error: 'Deserialization error' });
+            done(null, false, { error: "Deserialization error" });
           });
       }
     );
 
     discordStrategy.userProfile = function(accessToken, done) {
       axios({
-        url: 'https://discordapp.com/api/users/@me',
-        method: 'GET',
+        url: "https://discordapp.com/api/users/@me",
+        method: "GET",
         headers: { Authorization: `Bearer ${accessToken}` }
       })
         .then(profile => {
@@ -57,7 +57,7 @@ export default async () => {
         })
         .catch(err => {
           done(
-            new InternalOAuthError('Failed to fetch the user profile.', err)
+            new InternalOAuthError("Failed to fetch the user profile.", err)
           );
         });
     };
@@ -68,7 +68,7 @@ export default async () => {
     });
 
     passport.deserializeUser((participantId, done) => {
-      const participantModel = Container.get<typeof Participant>('Participant');
+      const participantModel = Container.get<typeof Participant>("Participant");
       participantModel
         .findOne({ where: { participantId } })
         .then(participantRecord => {
@@ -81,10 +81,11 @@ export default async () => {
     });
 
     passport.use(discordStrategy);
+    logger.info("✌️ Passport initialized!");
 
     return passport;
   } catch (e) {
-    logger.error('🔥 Error on passport initialization: %o', e);
+    logger.error("🔥 Error on passport initialization: %o", e);
     throw e;
   }
 };

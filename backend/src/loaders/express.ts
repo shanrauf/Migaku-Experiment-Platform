@@ -5,6 +5,7 @@ import routes from "../api";
 import config from "../config";
 import passport from "passport";
 import cookieSession from "cookie-session";
+import logger from "./logger";
 
 export default async ({ app }: { app: express.Application }) => {
   app.get("/status", (req, res) => {
@@ -77,4 +78,5 @@ export default async ({ app }: { app: express.Application }) => {
       errors: [err.message]
     });
   });
+  logger.info("✌️ Express loaded");
 };

@@ -1,6 +1,6 @@
-# /surveys API
+# /experiments/:experimentId/surveys API
 
-## `/surveys`
+## `/`
 
 ### GET (200)
 
@@ -34,7 +34,7 @@ Response:
 responses.ISurveyMetadata;
 ```
 
-## `/surveys/:surveyId`
+## `/:surveyId`
 
 (surveyId="latest" finds latest surveyId, then proceeds w/ normal logic)
 
@@ -62,7 +62,7 @@ Response:
 Partial<responses.ISurveyMetadata>
 ```
 
-## `/surveys/:surveyId/status` (Will modify responses after Anki stuff)
+## `/:surveyId/status` (Will modify responses after Anki stuff)
 
 ### GET (200)
 
@@ -85,23 +85,17 @@ Response:
 responses.ISurveyStatus;
 ```
 
-## `/surveys/:surveyId/questions`
+## `/:surveyId/questions`
 
 ### GET
 
 Redirects to /questions?experimentId=asdf&surveyId=asdf
 
-## `/surveys/:surveyId/responses`
+## `/:surveyId/responses`
 
 ### GET
 
-Gets question responses to a survey's questions. (This should just redirect to /questionresponses?surveyId=asdf...)
-
-Parameters:
-
-```ts
-requests.ISurveyResponses;
-```
+Redirects to /questionresponses?surveyId=asdf
 
 ### POST
 

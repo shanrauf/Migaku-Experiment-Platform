@@ -1,20 +1,21 @@
-import expressLoader from './express';
-import sequelizeLoader from './sequelize';
-import Logger from './logger';
-import dependencyInjectorLoader from './dependencyInjector';
-import passportLoader from './passport';
+import expressLoader from "./express";
+import sequelizeLoader from "./sequelize";
+import dependencyInjectorLoader from "./dependencyInjector";
+import passportLoader from "./passport";
+import discordLoader from "./discord";
+import emailLoader from "./mailer";
 
 export default async ({ expressApp }: { expressApp }) => {
-  const sqlConnection = await sequelizeLoader();
-  Logger.info('✌️ DB loaded and connected!');
-
   await passportLoader();
+  const sqlConnection = await sequelizeLoader();
+  const discordClient = await discordLoader();
+  const emailClient = await emailLoader();
 
   await dependencyInjectorLoader({
-    sqlConnection
+    sqlConnection,
+    discordClient,
+    emailClient
   });
-  Logger.info('✌️ Dependency Injector loaded');
 
   await expressLoader({ app: expressApp });
-  Logger.info('✌️ Express loaded');
 };
