@@ -1,16 +1,16 @@
 {
   "survey": {
     "experimentId": "audiovssentencecards",
-    "surveyId": "wh1yvvy08x9pvded8k1vyc",
-    "title": "MIA Mid-Experiment Survey #8",
-    "description": "This is the eighth weekly survey to gauge your progress during the experiment.",
-    "startDate": "2020-2-03 00:00:00",
-    "endDate": "2020-2-08 00:00:00",
+    "surveyId": "6f4wknkc5maswdn23yj6nc",
+    "title": "MIA Mid-Experiment Survey #9",
+    "description": "This is the ninth weekly survey to gauge your progress during the experiment.",
+    "startDate": "2020-2-10 00:00:00",
+    "endDate": "2020-2-16 00:00:00",
     "surveyCategory": "regular",
     "visibility": "public",
     "sections": [
       {
-        "sectionId": "kp4c8cez6lkhx4q61vobsi",
+        "sectionId": "ofc7hifui735mg73rz3yl",
         "sectionNumber": 1,
         "title": "Basic Information",
         "description": "This section is simply for us to identify who is filling out the survey.",
@@ -78,7 +78,7 @@
         ]
       },
       {
-        "sectionId": "04qr9c0dj2oj6ximg5yuflw",
+        "sectionId": "mxazggcatcm10vfhbw8cq",
         "sectionNumber": 2,
         "title": "Immersion Stats",
         "description": "This section will help us understand how you study Japanese. Don't feel bad if your answer to any of these questions is zero XD",
@@ -158,7 +158,7 @@
         ]
       },
       {
-        "sectionId": "0nc1u95scwnf5un7q9b3cgn",
+        "sectionId": "hxa2hig12e931wxh4izudk",
         "sectionNumber": 3,
         "title": "Audio Card Type",
         "description": "This section is for us to understand your feelings about the card types we are testing.",
@@ -215,7 +215,7 @@
         ]
       },
       {
-        "sectionId": "hwxpju87ndi43cyqwz5jom",
+        "sectionId": "11tktptw5tukl5m1f5wnim",
         "sectionNumber": 4,
         "description": "This section is for us to understand your feelings about the card types we are testing.",
         "title": "Sentence Card Type",
