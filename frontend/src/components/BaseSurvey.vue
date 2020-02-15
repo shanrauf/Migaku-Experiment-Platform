@@ -90,7 +90,8 @@ export default {
         zeroToOneHundred: [...Array(101).keys()],
         trueFalse: [true, false],
         audioOrSentenceCard: ['Audio Card', 'Sentence Card'],
-        yesNo: ['Yes', 'No']
+        yesNo: ['Yes', 'No'],
+        maleOrFemale: ["male", "female"]
       },
       ruleGenerators: {
         maxChar: val => v =>
