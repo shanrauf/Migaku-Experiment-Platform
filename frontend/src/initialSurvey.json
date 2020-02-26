@@ -1154,6 +1154,212 @@
       "value": "",
       "items": "yesNo",
       "required": true
+    },
+    {
+      "questionId": "percentOfCardsCreatedWhileImmersing",
+      "key": "percentOfCardsCreatedWhileImmersing",
+      "label": "% Of Cards Craeted While Immersing",
+      "questionType": "select",
+      "dataType": "smallInt",
+      "question": "What percent of your Anki cards do you create while in the middle of immersing?",
+      "value": "",
+      "items": "percentages",
+      "required": true
+    },
+    {
+      "questionId": "percentOfCardsCreatedWhileReading",
+      "key": "percentOfCardsCreatedWhileReading",
+      "label": "% Of Cards Craeted While Reading",
+      "questionType": "select",
+      "dataType": "smallInt",
+      "question": "Out of the cards you create while immersing, what percent of your Anki cards do you create while reading?",
+      "value": "",
+      "items": "percentages",
+      "required": true
+    },
+    {
+      "questionId": "percentOfCardsCreatedWhileAudioVisualImmersionAndSubtitles",
+      "key": "percentOfCardsCreatedWhileAudioVisualImmersionAndSubtitles",
+      "label": "% Of Cards Craeted During Audio/Video Immersion With Subtitles",
+      "questionType": "select",
+      "dataType": "smallInt",
+      "question": "Out of the cards you create while immersing, what percent of your Anki cards do you create while immersing with audio/visual content with subtitles?",
+      "value": "",
+      "items": "percentages",
+      "required": true
+    },
+    {
+      "questionId": "percentOfCardsCreatedWhileActiveImmersionNoSubtitles",
+      "key": "percentOfCardsCreatedWhileActiveImmersionNoSubtitles",
+      "label": "% Of Cards Craeted During Active Immersion Without Subtitles",
+      "questionType": "select",
+      "dataType": "smallInt",
+      "question": "Out of the cards you create while immersing, what percent of your Anki cards do you create during active immersion without subtitles?",
+      "value": "",
+      "items": "percentages",
+      "required": true
+    },
+    {
+      "questionId": "cardCreationWorkflowDescription",
+      "key": "cardCreationWorkflowDescription",
+      "label": "Card Creation Workflow Description",
+      "questionType": "text",
+      "dataType": "text",
+      "question": "Please describe your workflow for creating cards while immersing (include how you insert audio into your cards if you do)",
+      "value": "",
+      "required": true
+    },
+    {
+      "questionId": "percentOfCardsCreatedInBulkOutsideOfImmersionTime",
+      "key": "percentOfCardsCreatedInBulkOutsideOfImmersionTime",
+      "label": "% Of Cards Craeted In Bulk Outside Immersion Time",
+      "questionType": "select",
+      "dataType": "smallInt",
+      "question": "What percent of your Anki cards do you create in bulk outside of immersion time?",
+      "value": "",
+      "items": "percentages",
+      "required": true
+    },
+    {
+      "questionId": "percentOfMonolingualCards",
+      "key": "percentOfMonolingualCards",
+      "label": "% Of Monolingual Cards",
+      "questionType": "select",
+      "dataType": "smallInt",
+      "question": "What percent of your Anki cards are monolingual (as opposed to bilingual)?",
+      "value": "",
+      "items": "percentages",
+      "required": true
+    },
+    {
+      "questionId": "percentOfAudioSentenceCards",
+      "key": "percentOfAudioSentenceCards",
+      "label": "% Of Audio-based Sentence Cards",
+      "questionType": "select",
+      "dataType": "smallInt",
+      "question": "What percent of your Anki cards are audio-based sentence cards?",
+      "value": "",
+      "items": "percentages",
+      "required": true
+    },
+    {
+      "questionId": "percentOSentenceCardsWithAudio",
+      "key": "percentOSentenceCardsWithAudio",
+      "label": "% Of Sentence Cards With Audio",
+      "questionType": "select",
+      "dataType": "smallInt",
+      "question": "What percent of your Anki cards are sentence-based but have native sentence audio on the back?",
+      "value": "",
+      "items": "percentages",
+      "required": true
+    },
+    {
+      "questionId": "percentOSentenceCardsWithOriginalSentence",
+      "key": "percentOSentenceCardsWithOriginalSentence",
+      "label": "% Of Sentence Cards With Original Sentence",
+      "questionType": "select",
+      "dataType": "smallInt",
+      "question": "What percent of your Anki cards use the original sentence that you came across the target word in?",
+      "value": "",
+      "items": "percentages",
+      "required": true
+    },
+    {
+      "questionId": "percentOSentenceCardsWithOriginalSentence",
+      "key": "percentOSentenceCardsWithOriginalSentence",
+      "label": "% Of Sentence Cards With Original Sentence",
+      "questionType": "select",
+      "dataType": "smallInt",
+      "question": "What percent of your Anki cards use the original sentence that you came across the target word in?",
+      "value": "",
+      "items": "percentages",
+      "required": true
+    },
+    {
+      "questionId": "alternateSentenceSources",
+      "key": "alternateSentenceSources",
+      "label": "Alternate Sentence Sources",
+      "questionType": "text",
+      "dataType": "text",
+      "question": "If applicable, where do you usually find alternate sentences for Anki cards? (provide links)",
+      "value": "",
+      "items": "percentages",
+      "required": true
+    },
+    {
+      "questionId": "percentOf1TCards",
+      "key": "percentOf1TCards",
+      "label": "% of 1T Cards",
+      "questionType": "select",
+      "dataType": "smallInt",
+      "question": "What percent of your sentence cards are 1T? (as opposed to mulit-target sentences)",
+      "value": "",
+      "items": "percentages",
+      "note": "1T sentence cards contain only one unknown word",
+      "required": true
+    },
+    {
+      "questionId": "learnsNewCardsBeforeDuringOrAfterReviews",
+      "key": "learnsNewCardsBeforeDuringOrAfterReviews",
+      "label": "When New Cards",
+      "questionType": "select",
+      "dataType": "varchar",
+      "question": "Do you learn new cards before your reviews, after your reviews, or do you mix your new cards with your learning/mature cards?",
+      "value": "",
+      "items": "beforeDuringOrMixed",
+      "required": true
+    }, // FINISH SURVEY 2
+    {
+      "questionId": "experienceWhenActiveListening",
+      "key": "experienceWhenActiveListening",
+      "label": "Experience When Active Listening",
+      "questionType": "text",
+      "dataType": "text",
+      "question": "Describe your experience/mindset/goal when actively immersing (we're trying to understand how you immerse)",
+      "value": "",
+      "required": true
+    },
+    {
+      "questionId": "experienceWhenWatchingWithSubs",
+      "key": "experienceWhenWatchingWithSubs",
+      "label": "Experience When Watching With Subtitles",
+      "questionType": "text",
+      "dataType": "text",
+      "question": "Describe your experience/mindset/goal when watching something with subtitles (we're trying to understand how you immerse)",
+      "value": "",
+      "required": true
+    },
+    {
+      "questionId": "experienceWhenReading",
+      "key": "experienceWhenReading",
+      "label": "Experience When Reading",
+      "questionType": "text",
+      "dataType": "text",
+      "question": "Describe your experience/mindset/goal when reading (we're trying to understand how you immerse)",
+      "value": "",
+      "required": true
+    },
+    {
+      "questionId": "hoursOfWeeklyActiveListening",
+      "key": "hoursOfWeeklyActiveListening",
+      "label": "Hours of Weekly Active Listening",
+      "questionType": "select",
+      "dataType": "smallInt",
+      "question": "How many hours of active listening do you do a week in your target languge?",
+      "value": "",
+      "items": "hoursInAWeek",
+      "required": true
+    },
+    {
+      "questionId": "oftenStopsActiveListeningToLookupWords",
+      "key": "oftenStopsActiveListeningToLookupWords",
+      "label": "Stops Immersing To Lookup a Word",
+      "questionType": "select",
+      "dataType": "smallInt",
+      "question": "While actively listening, how often do you stop to look words up? (1 - never; 5 - multiple times a minute)",
+      "value": 0,
+      "items": "oneToFiveScale",
+      "required": true
     }
   ]
 }

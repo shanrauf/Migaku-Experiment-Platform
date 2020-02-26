@@ -120,7 +120,8 @@ export default {
           "Saturday",
           "Sunday"
         ],
-        devices: ["Desktop/Laptop", "Tablet", "Smartphone"]
+        devices: ["Desktop/Laptop", "Tablet", "Smartphone"],
+        beforeDuringOrMixed: ["Before", "Mix reviews and new cards", "After"]
       },
       ruleGenerators: {
         maxChar: val => v =>
