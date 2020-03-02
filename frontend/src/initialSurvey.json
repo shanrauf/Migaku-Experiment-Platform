@@ -1656,6 +1656,157 @@
       "value": 0,
       "items": "oneToFiveScale",
       "required": true
+    },
+    {
+      "questionId": "percentageOfActiveListeningYouDownloadAndConsumeLocally",
+      "key": "percentageOfActiveListeningYouDownloadAndConsumeLocally",
+      "label": "% Of Active Listening You Download",
+      "questionType": "select",
+      "dataType": "smallInt",
+      "question": "What percentage of your active listening content do you download and listen to locally (as opposed to streaming via YouTube, Spotify, etc)?",
+      "value": 0,
+      "items": "percentages",
+      "required": true
+    },
+    {
+      "questionId": "percentageOfActiveListeningYouDownloadAndConsumeLocallyOnComputer",
+      "key": "percentageOfActiveListeningYouDownloadAndConsumeLocallyOnComputer",
+      "label": "% Of Active Listening You Download on Computer",
+      "questionType": "select",
+      "dataType": "smallInt",
+      "question": "Of the active listening content you download locally, what percentage of that do you listen to on your computer (as opposed to your phone)?",
+      "value": 0,
+      "items": "percentages",
+      "required": true
+    },
+    {
+      "questionId": "percentageOfActiveListeningYouDownloadAndConsumeLocallyOnMobile",
+      "key": "percentageOfActiveListeningYouDownloadAndConsumeLocallyOnMobile",
+      "label": "% Of Active Listening You Download on Mobile",
+      "questionType": "select",
+      "dataType": "smallInt",
+      "question": "Of the active listening content you download locally, what percentage of that do you listen to on your phone (as opposed to your computer)?",
+      "value": 0,
+      "items": "percentages",
+      "required": true
+    },
+    {
+      "questionId": "percentageOfActiveImmersionYouStream",
+      "key": "percentageOfActiveImmersionYouStream",
+      "label": "% Of Active Immersion You Stream",
+      "questionType": "select",
+      "dataType": "smallInt",
+      "question": "What % of your active immersion content do you stream?",
+      "value": 0,
+      "items": "percentages",
+      "required": true
+    },
+    {
+      "questionId": "percentageOfActiveImmersionYouStreamOnComputer",
+      "key": "percentageOfActiveImmersionYouStreamOnComputer",
+      "label": "% Of Active Immersion You Stream on Computer",
+      "questionType": "select",
+      "dataType": "smallInt",
+      "question": "Of the active immersion content you stream, what percentage of that do you listen to on your computer (as opposed to your phone)?",
+      "value": 0,
+      "items": "percentages",
+      "required": true
+    },
+    {
+      "questionId": "percentageOfActiveListeningYouStreamOnTelevision",
+      "key": "percentageOfActiveListeningYouStreamOnTelevision",
+      "label": "% Of Active Listening You Stream on Television",
+      "questionType": "select",
+      "dataType": "smallInt",
+      "question": "Of the active listening content you stream, what percentage of that do you consume on TV (as opposed to your phone)?",
+      "value": 0,
+      "items": "percentages",
+      "required": true
+    },
+    {
+      "questionId": "percentageOfActiveListeningYouStreamOnMobile",
+      "key": "percentageOfActiveListeningYouStreamOnMobile",
+      "label": "% Of Active Listening You Stream on Mobile",
+      "questionType": "select",
+      "dataType": "smallInt",
+      "question": "Of the active listening content you stream, what percentage of that do you listen to on your phone (as opposed to your computer)?",
+      "value": 0,
+      "items": "percentages",
+      "required": true
+    },
+    {
+      "questionId": "sourcesOfStreamingContent",
+      "key": "sourcesOfStreamingContent",
+      "label": "Sources of Streaming Content",
+      "questionType": "text",
+      "dataType": "text",
+      "question": "Where do you stream from? (e.x Netflix, YouTube, Hulu, etc)",
+      "value": "",
+      "required": true
+    },
+    {
+      "questionId": "hoursOfWeeklyPassiveListening",
+      "key": "hoursOfWeeklyPassiveListening",
+      "label": "Hrs Of Weekly Passive Listening",
+      "questionType": "select",
+      "dataType": "smallInt",
+      "question": "On average, how many hours of passive listening do you do in a week?",
+      "value": 0,
+      "note": "If you are unsure, refer to the definition of passive listening on the quickstart guide on the MIA site",
+      "required": true
+    },
+    {
+      "questionId": "percentageOfPassiveListeningDoneWithContentAlreadyActivelyListenedTo",
+      "key": "percentageOfPassiveListeningDoneWithContentAlreadyActivelyListenedTo",
+      "label": "% Of Passive Listening With Already-Consumed Content",
+      "questionType": "select",
+      "dataType": "smallInt",
+      "question": "What % of your passive listening is done with content that you ahve already actively listened to at least once?",
+      "value": 0,
+      "items": "percentages",
+      "required": true
+    },
+    {
+      "questionId": "enjoysPassiveListening",
+      "key": "enjoysPassiveListening",
+      "label": "Enjoys Passive Listening",
+      "questionType": "select",
+      "dataType": "smallInt",
+      "question": "How much do you enjoy passive listening? (1 - don't enjoy at all; 5 - love passive listening)",
+      "value": 0,
+      "items": "oneToFiveScale",
+      "required": true
+    },
+    {
+      "questionId": "hoursOfWeeklyBackgroundListening",
+      "key": "hoursOfWeeklyBackgroundListening",
+      "label": "Hrs Of Weekly Background Listening",
+      "questionType": "select",
+      "dataType": "smallInt",
+      "question": "On average, how many hours of background listening do you do in a week?",
+      "note": "If you are unsure, refer to the definition of background listening on the quickstart guide on the MIA site",
+      "value": 0,
+      "required": true
+    },
+    {
+      "questionId": "findsBackgroundListeningDistracting",
+      "key": "findsBackgroundListeningDistracting",
+      "label": "Finds Background Listening Distracting",
+      "questionType": "select",
+      "dataType": "smallInt",
+      "question": "Do you find background listening distracting? (1 - not at all; 5 - it is so distracting that I cannot focus on anything else)",
+      "value": 0,
+      "required": true
+    },
+    {
+      "questionId": "findsBackgroundListeningUseful",
+      "key": "findsBackgroundListeningUseful",
+      "label": "Finds Background Listening Useful",
+      "questionType": "select",
+      "dataType": "smallInt",
+      "question": "Do you find background listening useful? (1 - not at all; 5 - extremely useful)",
+      "value": 0,
+      "required": true
     }
   ]
 }
