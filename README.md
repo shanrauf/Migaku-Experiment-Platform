@@ -5,7 +5,7 @@ Platform for MIA to manage its foreign language learning experiments.
 Features:
 
 - Administer multiple experiments concurrently
-- UI to create/customize experiments, surveys, data payload (i.e experiment data can come from places other than Anki or surveys), etc
+- Admin UI to create/customize experiments, surveys, data payload, etc
 - Analyze experiment data across experiments
 
 ## Development Environment Setup
@@ -31,9 +31,6 @@ Using CodePipeline and CodeDeploy, the code is automatically deployed when you p
 
 ## Todo (in order of priority)
 
-- Integrate auth on frontend and API routes
-- Complete/alter API design (endpoints with similar logic is fine if it's cleaner and easier for user to use...)
-- Add API validation (using Joi and/or Typescript type guards)
 - Complete basic test suite that covers all API routes (testing status codes, response bodies, and model validation)
 - Secure API (currently, anyone can make any request from anywhere) via authentication (add auth cases to unit tests)
 - Significantly improve frontend styling
