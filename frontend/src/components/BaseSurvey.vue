@@ -19,7 +19,9 @@
 
     <div v-if="section.sectionId == getNumberOfSections">
       <v-btn style="margin: 10px" @click="confirmOverlay = true">Back</v-btn>
-      <v-btn style="margin: 10px" color="primary" @click="submitSurvey">Submit</v-btn>
+      <v-btn style="margin: 10px" color="primary" @click="submitSurvey"
+        >Submit</v-btn
+      >
     </div>
 
     <v-overlay :value="editOverlay">
@@ -40,13 +42,13 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import { formMixin } from "../mixins/formMixin";
-import BaseSelect from "@/components/form/BaseSelect.vue";
-import BaseRadioButtons from "@/components/form/BaseRadioButtons.vue";
-import BaseTextField from "@/components/form/BaseTextField.vue";
-import BaseCreateNewCard from "@/components/BaseCreateNewCard.vue";
-import BaseEditInputForm from "@/components/form/BaseEditInputForm.vue";
+import { mapGetters } from 'vuex';
+import { formMixin } from '../mixins/formMixin';
+import BaseSelect from '@/components/form/BaseSelect.vue';
+import BaseRadioButtons from '@/components/form/BaseRadioButtons.vue';
+import BaseTextField from '@/components/form/BaseTextField.vue';
+import BaseCreateNewCard from '@/components/BaseCreateNewCard.vue';
+import BaseEditInputForm from '@/components/form/BaseEditInputForm.vue';
 
 import {
   foreignLanguages,
@@ -54,10 +56,10 @@ import {
   motivationsForLearningTargetLanguage,
   fieldsOfOccupation,
   generalTimeFrames
-} from "@/utils/items.ts";
+} from '@/utils/items.ts';
 
 export default {
-  name: "BaseSurvey",
+  name: 'BaseSurvey',
   mixins: [formMixin],
   props: {
     section: {
@@ -71,9 +73,6 @@ export default {
     BaseTextField,
     BaseCreateNewCard,
     BaseEditInputForm
-  },
-  mounted() {
-    console.log(this.$refs.form.validate());
   },
   data() {
     return {
@@ -95,45 +94,45 @@ export default {
         percentages: [...Array(101).keys()],
         zeroToOneHundred: [...Array(101).keys()],
         trueFalse: [true, false],
-        audioOrSentenceCard: ["Audio Card", "Sentence Card"],
-        yesNo: ["Yes", "No"],
-        maleOrFemale: ["male", "female"],
-        onceOrThroughoutTheDay: ["Once", "Throughout the day"],
+        audioOrSentenceCard: ['Audio Card', 'Sentence Card'],
+        yesNo: ['Yes', 'No'],
+        maleOrFemale: ['male', 'female'],
+        onceOrThroughoutTheDay: ['Once', 'Throughout the day'],
         periodsOfTheDay: [
-          "Early morning (5AM - 8AM)",
-          "Morning (8AM - 12PM)",
-          "Noon (12PM - 2PM)",
-          "Afternoon (2PM - 4PM)",
-          "Evening (4PM - 6PM)",
-          "Around sunset (6PM - 8PM)",
-          "Around nighttime (8PM - 12AM)",
-          "After midnight (12AM - 5AM)"
+          'Early morning (5AM - 8AM)',
+          'Morning (8AM - 12PM)',
+          'Noon (12PM - 2PM)',
+          'Afternoon (2PM - 4PM)',
+          'Evening (4PM - 6PM)',
+          'Around sunset (6PM - 8PM)',
+          'Around nighttime (8PM - 12AM)',
+          'After midnight (12AM - 5AM)'
         ],
         retirementIntervals: [
-          "Never",
-          "1 day",
-          "1 week",
-          "1 month",
-          "3 months",
-          "6 months",
-          "9 months",
-          "1 year",
-          "1.5 years",
-          "2 years",
-          "3+ years"
+          'Never',
+          '1 day',
+          '1 week',
+          '1 month',
+          '3 months',
+          '6 months',
+          '9 months',
+          '1 year',
+          '1.5 years',
+          '2 years',
+          '3+ years'
         ],
         daysOfTheWeek: [
-          "Sunday",
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-          "Sunday"
+          'Sunday',
+          'Monday',
+          'Tuesday',
+          'Wednesday',
+          'Thursday',
+          'Friday',
+          'Saturday',
+          'Sunday'
         ],
-        devices: ["Desktop/Laptop", "Tablet", "Smartphone"],
-        beforeDuringOrMixed: ["Before", "Mix reviews and new cards", "After"]
+        devices: ['Desktop/Laptop', 'Tablet', 'Smartphone'],
+        beforeDuringOrMixed: ['Before', 'Mix reviews and new cards', 'After']
       },
       ruleGenerators: {
         maxChar: val => v =>
@@ -141,24 +140,24 @@ export default {
         minChar: val => v =>
           (v && v.length >= val) || `Must be greater than ${val} characters`,
         email: val => {
-          if (val == "true") {
-            return v => /.+@.+\..+/.test(v) || "E-mail must be valid";
+          if (val == 'true') {
+            return v => /.+@.+\..+/.test(v) || 'E-mail must be valid';
           } else {
             return true;
           }
         },
         numberOnly: val => {
-          if (val == "true") {
+          if (val == 'true') {
             return v =>
-              /^[0-9]*$/.test(v) || "Must enter numbers only (no letters)";
+              /^[0-9]*$/.test(v) || 'Must enter numbers only (no letters)';
           } else {
             return true;
           }
         },
         textOnly: val => {
-          if (val == "true") {
+          if (val == 'true') {
             return v =>
-              /^[a-zA-Z ]*$/.test(v) || "Must enter text only (no numbers)";
+              /^[a-zA-Z ]*$/.test(v) || 'Must enter text only (no numbers)';
           } else {
             return true;
           }
@@ -167,18 +166,18 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getNumberOfSections"])
+    ...mapGetters(['getNumberOfSections'])
   },
   methods: {
     submitSurvey() {
       this.confirmOverlay = false;
-      this.$router.push({ name: "surveys" });
+      this.$router.push({ name: 'surveys' });
     },
     updateQuestionValue(question, newValue) {
       this.$store.commit({
-        type: "updateQuestionValue",
+        type: 'updateQuestionValue',
         question,
-        attributeToUpdate: "value",
+        attributeToUpdate: 'value',
         newValue
       });
     },
@@ -186,14 +185,14 @@ export default {
       this.editOverlay = val;
     },
     getItems(questionItems) {
-      if (typeof questionItems == "string") {
+      if (typeof questionItems == 'string') {
         let items = this.items[questionItems];
         if (items === undefined) {
           return [];
         } else {
           return items;
         }
-      } else if (typeof questionItems == "object") {
+      } else if (typeof questionItems == 'object') {
         // if currentSurvey provides their own Array of items
         return questionItems;
       } else {
