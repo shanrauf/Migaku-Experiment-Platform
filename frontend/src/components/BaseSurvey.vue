@@ -53,6 +53,15 @@ import BaseRadioButtons from "@/components/form/BaseRadioButtons.vue";
 import BaseTextField from "@/components/form/BaseTextField.vue";
 import BaseCreateNewCard from "@/components/BaseCreateNewCard.vue";
 import BaseEditInputForm from "@/components/form/BaseEditInputForm.vue";
+
+import {
+  foreignLanguages,
+  levelsOfEducation,
+  motivationsForLearningTargetLanguage,
+  fieldsOfOccupation,
+  generalTimeFrames
+} from "@/utils/items.ts";
+
 export default {
   name: "BaseSurvey",
   mixins: [formMixin],
@@ -75,6 +84,11 @@ export default {
       editOverlay: false,
       confirmOverlay: false,
       items: {
+        foreignLanguages,
+        levelsOfEducation,
+        motivationsForLearningTargetLanguage,
+        fieldsOfOccupation,
+        generalTimeFrames,
         hoursInADay: [...Array(25).keys()],
         hoursInAWeek: [...Array(169).keys()],
         oneToFiveScale: [...Array(6).keys()].splice(1), // splice selects all but "0"
