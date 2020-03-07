@@ -1,5 +1,7 @@
 import csv
 import json
+import sys
+import requests
 
 csvFile = "initial_survey.csv"
 jsonFilePath = "initial_survey.json"
@@ -42,7 +44,7 @@ with open(csvFile, encoding='utf-8') as csvFile:
             # time = "0" + time
         # datetime = date + " " + convert24(time)
         # csvRow["timestamp"] = datetime
-
+        del csvRow["timestamp"]
         payload = {}
         payload["email"] = csvRow["email"]
         del csvRow["email"]
@@ -55,5 +57,10 @@ with open(csvFile, encoding='utf-8') as csvFile:
         # Add participant response to payload
         data.append(payload)
 
-with open(jsonFilePath, "w", encoding='utf-8') as jsonFile:
-  jsonFile.write(json.dumps(data))
+
+idx = 0
+for response in data:
+  idx += 1
+  data = json.loads(response)
+  with open(str(idx) + ".json", "w", encoding='utf-8') as jsonFile:
+    jsonFile.write(json.dumps(data).replace("ja_", "initial_"))

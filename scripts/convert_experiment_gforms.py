@@ -27,70 +27,50 @@ def convert24(str1):
 
 
 data = []
-for csvFile in files:
-    with open(csvFile["name"], encoding='utf-8') as file:
-        csvReader = csv.DictReader(file)
-        for csvRow in csvReader:
-            # Ideally, createdAt and updatedAt were set to this value for SurveyResponse and
-            # QuestionResponses, but idrc...
-            # Format timestamp: 2019/10/31 4:57:46 PM PDT -> 2019-10-31 16:57:46
-            # date = csvRow["timestamp"].replace("/", "-").split(" ")[0]
-            # time = " ".join(csvRow["timestamp"].replace(
-            #     "/", "-").split(" ")[1:3])
-            # 4:57:46 PM -> 04:57:46 PM to pass to convert24
-            # if len(time.split(":")[0]) == 1:
-                # time = "0" + time
-            # datetime = date + " " + convert24(time)
-            # csvRow["timestamp"] = datetime
+with open(files[1]["name"], encoding='utf-8') as file:
+    csvReader = csv.DictReader(file)
+    for csvRow in csvReader:
+        # Ideally, createdAt and updatedAt were set to this value for SurveyResponse and
+        # QuestionResponses, but idrc...
+        # Format timestamp: 2019/10/31 4:57:46 PM PDT -> 2019-10-31 16:57:46
+        # date = csvRow["timestamp"].replace("/", "-").split(" ")[0]
+        # time = " ".join(csvRow["timestamp"].replace(
+        #     "/", "-").split(" ")[1:3])
+        # 4:57:46 PM -> 04:57:46 PM to pass to convert24
+        # if len(time.split(":")[0]) == 1:
+            # time = "0" + time
+        # datetime = date + " " + convert24(time)
+        # csvRow["timestamp"] = datetime
 
-            # Since I don't care and since this isn't a question
-            if "timestamp" in csvRow:
-                del csvRow["timestamp"]
+        # Since I don't care and since this isn't a question
+        if "timestamp" in csvRow:
+            del csvRow["timestamp"]
 
-            # Format questions that I want as boolean values instead of Yes/No
-            if "completedRRTK" in csvRow and csvRow["completedRRTK"] == "Yes":
-                csvRow["completedRRTK"] = True
-            else:
-                csvRow["completedRRTK"] = False
-            if "completedPRTK" in csvRow and csvRow["completedPRTK"] == "Yes":
-                csvRow["completedPRTK"] = True
-            else:
-                csvRow["completedPRTK"] = False
+        # Format questions that I want as boolean values instead of Yes/No
+        if "completedRRTK" in csvRow and csvRow["completedRRTK"] == "Yes":
+            csvRow["completedRRTK"] = True
+        else:
+            csvRow["completedRRTK"] = False
+        if "completedPRTK" in csvRow and csvRow["completedPRTK"] == "Yes":
+            csvRow["completedPRTK"] = True
+        else:
+            csvRow["completedPRTK"] = False
 
-            postUrl = "http://localhost:3000/api/experiments/audiovssentencecards/surveys/{surveyId}".format(
-                surveyId=csvFile["surveyId"])
+        # Format questions for current endpoint
+        payload = {}
+        email = csvRow["email"]
+        payload["email"] = email
+        payload["data"] = csvRow
+        del payload["data"]["email"]
 
-            # Format questions for current endpoint
-            payload = {}
-            email = csvRow["email"]
-            payload["email"] = email
-            payload["data"] = csvRow
-            del payload["data"]["email"]
+        payload = json.dumps(payload)
+        # Add participant response to payload
+        data.append(payload)
 
-            payload = json.dumps(payload)
 
-            try:
-                headers = {'content-type': 'application/json'}
-                r = requests.post(url=postUrl, data=payload, headers=headers)
-                if r.status_code != 200 and r.status_code != 201:
-                    print("FAILED AT " + email)
-                else:
-                    print("Successfully POST survey response for " +
-                          email)
-            except:
-                print("Error with " + email)
-
-# print("Moving on to initial survey")
-
-# with open("initial_survey.json") as initial_survey:
-#     for response in initial_survey:
-# 	    try:
-# 	        headers = {'content-type': 'application/json'}
-# 	        r = requests.post(url=postUrl, data=payload, headers=headers)
-# 	        if r.status_code != 200 and r.status_code != 201:
-# 	            print("FAILED AT " + email)
-# 	        else:
-# 	            print("Successfully POST survey response for " +
-# 	                  email)
-# 	    except:
-# 	        print("Error with " + email)
+idx = 0
+for response in data:
+    idx += 1
+    data = json.loads(response)
+    with open(str(idx) + ".json", "w", encoding='utf-8') as jsonFile:
+        jsonFile.write(json.dumps(data).replace("ja_", "initial_"))

@@ -179,6 +179,14 @@ export default (app: Router) => {
           req.body.email
         );
 
+        if (!participantId) {
+          return res
+            .json({
+              errors: [`${req.body.email} isn't an existing participant`]
+            })
+            .status(404);
+        }
+
         let responseId = await surveyService.findOrCreateResponseId(
           experimentId,
           surveyId,

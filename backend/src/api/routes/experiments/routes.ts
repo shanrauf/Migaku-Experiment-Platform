@@ -147,6 +147,7 @@ export default (app: Router) => {
   );
 
   route.post(
+    // doesn't work as .put?
     '/:experimentId/questions',
     async (req: Request, res: Response, next: NextFunction) => {
       logger.debug(
