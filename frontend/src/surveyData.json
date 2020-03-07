@@ -1,16 +1,16 @@
 {
   "survey": {
     "experimentId": "audiovssentencecards",
-    "surveyId": "rto0yvvbbcou097gcv3n6p",
-    "title": "MIA Mid-Experiment Survey #11",
-    "description": "This is the eleventh weekly survey to gauge your progress during the experiment.",
-    "startDate": "2020-2-17 00:00:00",
-    "endDate": "2020-2-23 00:00:00",
+    "surveyId": "5pvsnorv9xuupd7ef81hx",
+    "title": "MIA Final Survey",
+    "description": "This is the final survey of the experiment! We'll slowly release results and insights as we come across them during the data analysis.",
+    "startDate": "2020-3-07 00:00:00",
+    "endDate": "2020-3-16 00:00:00",
     "surveyCategory": "regular",
     "visibility": "public",
     "sections": [
       {
-        "sectionId": "vlmsvqyqr6ifxa4xp7ynve",
+        "sectionId": "pxsvvsmbzyog5hh71nu1",
         "sectionNumber": 1,
         "title": "Basic Information",
         "description": "This section is simply for us to identify who is filling out the survey.",
@@ -74,11 +74,23 @@
             "question": "Do you have any comments about the experiment so far? (e.x things you found interesting, surprising; insights you've had, etc)",
             "required": false,
             "value": ""
+          },
+          {
+            "questionOrder": 6,
+            "questionId": "jcatScore",
+            "key": "jcatScore",
+            "label": "J-CAT Score",
+            "questionType": "text",
+            "rules": "isNumber=true&min=0&max=1000",
+            "dataType": "smallInt",
+            "question": "What was the score of the J-CAT test you recently took?",
+            "required": false,
+            "value": ""
           }
         ]
       },
       {
-        "sectionId": "b8owldfw7mezais4pqiro",
+        "sectionId": "3aytuyl77i3tubfcs1g4d9",
         "sectionNumber": 2,
         "title": "Immersion Stats",
         "description": "This section will help us understand how you study Japanese. Don't feel bad if your answer to any of these questions is zero XD",
@@ -158,7 +170,7 @@
         ]
       },
       {
-        "sectionId": "ak8k67itpzb368f3kpn4re",
+        "sectionId": "olrr1wqcwhnc5c40dt4f5",
         "sectionNumber": 3,
         "title": "Audio Card Type",
         "description": "This section is for us to understand your feelings about the card types we are testing.",
@@ -215,7 +227,7 @@
         ]
       },
       {
-        "sectionId": "jd65u918p8j9razc2swkmt",
+        "sectionId": "g0b3byube0cl2a5mccznxp",
         "sectionNumber": 4,
         "description": "This section is for us to understand your feelings about the card types we are testing.",
         "title": "Sentence Card Type",
