@@ -30,6 +30,8 @@ const convertLatestToSurveyId = async (
     const restOfUrl = url.slice(2, url.length);
 
     // Mutating req.url so that next() forwards request to the appropriate handler
+    console.log(restOfUrl);
+    console.log(req.url);
     req.url = `/${surveyId}/` + restOfUrl.join('/');
     return next();
   } catch (err) {
@@ -66,50 +68,14 @@ export default (app: Router) => {
     '/',
     middlewares.validateRequestSchema(undefined, requests.ICreateSurvey),
     async (req: Request, res: Response, next: NextFunction) => {
-      if (req.body?.data?.cards) {
-        /**
-         * This is just a copy-paste of /surveys/:surveyId/responses so that ppl don't hve to update the Anki addon; Will delete right after
-         */
-        try {
-          const { experimentId, surveyId } = req.params;
-          logger.debug(
-            `POST /experiments/${experimentId}/surveys/${surveyId}/responses w/ body %o`,
-            req.body
-          );
-          const participantService = Container.get(ParticipantService);
-          const surveyService = Container.get(SurveyService);
-
-          const participantId = await participantService.GetParticipantIdByEmail(
-            req.body.email
-          );
-
-          let responseId = await surveyService.findOrCreateResponseId(
-            experimentId,
-            surveyId,
-            participantId
-          );
-
-          const questionResponses = await surveyService.PostSurveyResponses(
-            experimentId,
-            surveyId,
-            participantId,
-            responseId,
-            req.body.data
-          );
-          return res.json(questionResponses).status(200);
-        } catch (err) {
-          logger.error(err);
-          return next(err);
-        }
-      } else {
-        try {
-          logger.debug(`POST /surveys with body: %o`, req.body);
-          const surveyService = Container.get(SurveyService);
-          const payload = await surveyService.CreateSurvey(req.body);
-          return res.status(200).json({ survey: req.body });
-        } catch (err) {
-          return next(err);
-        }
+      try {
+        logger.debug(`POST /surveys with body: %o`, req.body);
+        const surveyService = Container.get(SurveyService);
+        const payload = await surveyService.CreateSurvey(req.body);
+        return res.status(200).json({ survey: req.body });
+      } catch (err) {
+        logger.error(err);
+        return next(err);
       }
     }
   );
@@ -150,6 +116,46 @@ export default (app: Router) => {
           req.query
         );
         return res.status(200).json({});
+      } catch (err) {
+        logger.error(err);
+        return next(err);
+      }
+    }
+  );
+
+  route.post(
+    '/:surveyId',
+    async (req: Request, res: Response, next: NextFunction) => {
+      /**
+       * Anki legacy route to submit Anki data (this is just a copy of /responses POST)
+       */
+      try {
+        const { experimentId, surveyId } = req.params;
+        logger.debug(
+          `POST /experiments/${experimentId}/surveys/${surveyId} w/ body %o`,
+          req.body
+        );
+        const participantService = Container.get(ParticipantService);
+        const surveyService = Container.get(SurveyService);
+
+        const participantId = await participantService.GetParticipantIdByEmail(
+          req.body.email
+        );
+
+        let responseId = await surveyService.findOrCreateResponseId(
+          experimentId,
+          surveyId,
+          participantId
+        );
+
+        const questionResponses = await surveyService.PostSurveyResponses(
+          experimentId,
+          surveyId,
+          participantId,
+          responseId,
+          req.body.data
+        );
+        return res.json(questionResponses).status(200);
       } catch (err) {
         logger.error(err);
         return next(err);
