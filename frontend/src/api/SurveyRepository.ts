@@ -27,7 +27,10 @@ class SurveyRepository {
     ).then(res => res.data);
   }
   public static post(surveyId: string, payload: any) {
-    return AxiosClient.post(`${resource}/${surveyId}`, payload);
+    return AxiosClient.post(`${resource}`, payload);
+  }
+  public static postResponses(surveyId: string, payload: any) {
+    return AxiosClient.post(`${resource}/${surveyId}/responses`, payload);
   }
   public static create(surveyId: string, payload: any) {
     return AxiosClient.post(`${resource}`, payload);

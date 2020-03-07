@@ -1,10 +1,6 @@
 <template>
   <!-- <div style="width: 200px;"> -->
-  <v-input
-    :messages="[`${note}`]"
-    :append-icon="icon && '$vuetify.icons.edit'"
-    @click:append="$emit('edit', true)"
-  >
+  <v-input :messages="[`${note}`]">
     <v-select
       v-model="inputValue"
       menu-props="menuProps"
@@ -21,7 +17,7 @@
 
 <script>
 export default {
-  name: 'BaseSelect',
+  name: "BaseSelect",
   props: {
     label: {
       type: String,
@@ -30,7 +26,7 @@ export default {
     note: {
       type: String,
       required: false,
-      default: ''
+      default: ""
     },
     value: {
       type: [String, Number],
@@ -61,17 +57,8 @@ export default {
         openOnClick: true,
         transition: true
       },
-      inputValue: ''
+      inputValue: ""
     };
-  },
-  computed: {
-    icon() {
-      if (!this.editable) {
-        return undefined;
-      } else {
-        return true;
-      }
-    }
   }
 };
 </script>

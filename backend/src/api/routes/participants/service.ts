@@ -1,22 +1,23 @@
-import { Service, Inject } from "typedi";
-import winston from "winston";
+import { Service, Inject } from 'typedi';
+import winston from 'winston';
 import {
   EventDispatcher,
   EventDispatcherInterface
-} from "../../../decorators/eventDispatcher";
-import { ExperimentParticipant } from "../../../models/intermediary/experimentParticipant";
-import { Participant } from "../../../models/participant";
-import { Experiment } from "../../../models/experiment";
-import { generateSequelizeFilters } from "../../../utils";
+} from '../../../decorators/eventDispatcher';
+import { ExperimentParticipant } from '../../../models/intermediary/experimentParticipant';
+import { Participant } from '../../../models/participant';
+import { Experiment } from '../../../models/experiment';
+import { generateSequelizeFilters } from '../../../utils';
+import * as requests from './requests';
 
 @Service()
 export default class ParticipantService {
   private sequelizeFilters: object;
 
   constructor(
-    @Inject("Participant") private participantModel: typeof Participant,
-    @Inject("Experiment") private experimentModel: typeof Experiment,
-    @Inject("logger") private logger: winston.Logger,
+    @Inject('Participant') private participantModel: typeof Participant,
+    @Inject('Experiment') private experimentModel: typeof Experiment,
+    @Inject('logger') private logger: winston.Logger,
     @EventDispatcher() private eventDispatcher: EventDispatcherInterface
   ) {
     this.sequelizeFilters = {
@@ -47,7 +48,7 @@ export default class ParticipantService {
     participants: ExperimentParticipant[] | Participant[] | null;
     totalCount: number;
   }> {
-    this.logger.silly("Fetching participants");
+    this.logger.silly('Fetching participants');
     const queryFilters = await generateSequelizeFilters(
       this.sequelizeFilters,
       filters
@@ -66,7 +67,7 @@ export default class ParticipantService {
 
   public async GetParticipantIdByEmail(email: string): Promise<string> {
     try {
-      this.logger.silly("Getting participant by email");
+      this.logger.silly('Getting participant by email');
       const participant = await this.participantModel.findOne({
         where: { email }
       });
@@ -79,5 +80,11 @@ export default class ParticipantService {
       this.logger.error(e);
       throw e;
     }
+  }
+
+  public async CreateParticipant(
+    participant: requests.ParticipantSignup
+  ): Promise<Participant> {
+    return await this.participantModel.create(participant);
   }
 }

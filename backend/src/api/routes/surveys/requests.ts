@@ -1,5 +1,5 @@
-import { IQuestion } from "../questions/requests";
-import { Expose } from "class-transformer";
+import { IQuestion } from '../questions/requests';
+import { Expose } from 'class-transformer';
 import {
   IsDefined,
   IsISO8601,
@@ -8,7 +8,7 @@ import {
   ValidateNested,
   IsOptional,
   IsInt
-} from "class-validator";
+} from 'class-validator';
 
 export class ISurveyFilters {
   /**
@@ -142,7 +142,6 @@ export class ICreateSurvey extends ISurveyMetadata {
    */
   @Expose()
   @IsDefined()
-  @ValidateNested()
   sections!: ISurveySectionMetadata[];
 }
 
@@ -152,7 +151,6 @@ export class ISurvey extends ISurveyMetadata {
    */
   @Expose()
   @IsDefined()
-  @ValidateNested()
   sections!: ISurveySection[];
 }
 export class ISurveySection {
@@ -178,7 +176,6 @@ export class ISurveySection {
 
   @Expose()
   @IsDefined()
-  @ValidateNested()
   questions: IQuestion[];
 }
 

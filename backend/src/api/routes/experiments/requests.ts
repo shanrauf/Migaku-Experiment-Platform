@@ -5,9 +5,9 @@ import {
   IsString,
   ValidateNested,
   IsInt
-} from "class-validator";
-import { Expose } from "class-transformer";
-import { IQuestion } from "../questions/requests";
+} from 'class-validator';
+import { Expose } from 'class-transformer';
+import { IQuestion } from '../questions/requests';
 
 export class IExperiment {
   @Expose()
@@ -139,10 +139,12 @@ export class ISurvey {
 
   @Expose()
   @IsOptional()
+  @IsISO8601()
   startDate?: string;
 
   @Expose()
   @IsOptional()
+  @IsISO8601()
   endDate?: string;
 
   @Expose()
@@ -155,7 +157,6 @@ export class ISurvey {
 
   @Expose()
   @IsDefined()
-  @ValidateNested()
   sections!: ISurveySection[];
 }
 export class ISurveySection {
@@ -179,6 +180,5 @@ export class ISurveySection {
 
   @Expose()
   @IsDefined()
-  @ValidateNested()
   questions: IQuestion[];
 }

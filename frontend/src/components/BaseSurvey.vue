@@ -1,13 +1,7 @@
 <template>
-  <v-form class="form" lazy-validation>
-    <h1
-      style="margin: 20px 20px 5px 0"
-      @blur="updateCurrentSurveyMetadata($event, 'title')"
-    >{{ section.title }}</h1>
-    <p
-      style="margin: 0 20px 20px 0"
-      @blur="updateCurrentSurveyMetadata($event, 'description')"
-    >{{ section.description }}</p>
+  <v-form ref="form" v-model="valid" class="form" lazy-validation>
+    <h1 style="margin: 20px 20px 5px 0">{{ section.title }}</h1>
+    <p style="margin: 0 20px 20px 0">{{ section.description }}</p>
     <div v-for="question in section.questions" :key="question.key">
       <h4>{{ question.question }}</h4>
       <span v-if="question.note">(Note: {{ question.note }})</span>
@@ -78,8 +72,12 @@ export default {
     BaseCreateNewCard,
     BaseEditInputForm
   },
+  mounted() {
+    console.log(this.$refs.form.validate());
+  },
   data() {
     return {
+      valid: true,
       formInputs: [],
       editOverlay: false,
       confirmOverlay: false,
@@ -186,14 +184,6 @@ export default {
     },
     updateEditOverlay(val) {
       this.editOverlay = val;
-    },
-    updateCurrentSurveyMetadata(newVal, surveyAttributeToUpdate) {
-      this.$store.commit({
-        type: "updateCurrentSurveyMetadata",
-        section: this.section,
-        attributeToUpdate: surveyAttributeToUpdate,
-        newVal: newVal.target.innerText
-      });
     },
     getItems(questionItems) {
       if (typeof questionItems == "string") {

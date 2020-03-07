@@ -1,11 +1,11 @@
-import { Request, Response, Router, NextFunction } from "express";
-import { Container } from "typedi";
+import { Request, Response, Router, NextFunction } from 'express';
+import { Container } from 'typedi';
 
-import SurveyService from "./service";
-import ParticipantService from "../participants/service";
-import logger from "../../../loaders/logger";
-import * as requests from "./requests";
-import middlewares from "../../middlewares";
+import SurveyService from './service';
+import ParticipantService from '../participants/service';
+import logger from '../../../loaders/logger';
+import * as requests from './requests';
+import middlewares from '../../middlewares';
 
 /**
  * Given a url like /latest/responses, this finds the experiment's latest surveyId and forwards the API request.
@@ -18,9 +18,9 @@ const convertLatestToSurveyId = async (
   try {
     const { experimentId } = req.params;
     logger.debug(`Finding the lastest surveyId for ${experimentId}`);
-    const url = req.url.split("/"); // "/latestasdf" becomes ["", "latestasdf"]
+    const url = req.url.split('/'); // "/latestasdf" becomes ["", "latestasdf"]
 
-    if (url[1] !== "latest") {
+    if (url[1] !== 'latest') {
       return next();
     }
     const surveyService = Container.get(SurveyService);
@@ -30,7 +30,7 @@ const convertLatestToSurveyId = async (
     const restOfUrl = url.slice(2, url.length);
 
     // Mutating req.url so that next() forwards request to the appropriate handler
-    req.url = `/${surveyId}/` + restOfUrl.join("/");
+    req.url = `/${surveyId}/` + restOfUrl.join('/');
     return next();
   } catch (err) {
     return next(err);
@@ -40,10 +40,10 @@ const convertLatestToSurveyId = async (
 const route = Router({ mergeParams: true });
 
 export default (app: Router) => {
-  app.use("/experiments/:experimentId/surveys", route);
+  app.use('/experiments/:experimentId/surveys', route);
 
   route.get(
-    "/",
+    '/',
     // middlewares.ensureAuthenticated,
     // middlewares.ensureExperimentParticipant,
     middlewares.validateRequestSchema(requests.ISurveyFilters, undefined),
@@ -63,27 +63,64 @@ export default (app: Router) => {
   );
 
   route.post(
-    "/",
+    '/',
     middlewares.validateRequestSchema(undefined, requests.ICreateSurvey),
     async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        logger.debug(`POST /surveys with body: %o`, req.body);
-        const surveyService = Container.get(SurveyService);
-        const payload = await surveyService.CreateSurvey(req.body);
-        return res.status(200).json({ survey: req.body });
-      } catch (err) {
-        return next(err);
+      if (req.body?.data?.cards) {
+        /**
+         * This is just a copy-paste of /surveys/:surveyId/responses so that ppl don't hve to update the Anki addon; Will delete right after
+         */
+        try {
+          const { experimentId, surveyId } = req.params;
+          logger.debug(
+            `POST /experiments/${experimentId}/surveys/${surveyId}/responses w/ body %o`,
+            req.body
+          );
+          const participantService = Container.get(ParticipantService);
+          const surveyService = Container.get(SurveyService);
+
+          const participantId = await participantService.GetParticipantIdByEmail(
+            req.body.email
+          );
+
+          let responseId = await surveyService.findOrCreateResponseId(
+            experimentId,
+            surveyId,
+            participantId
+          );
+
+          const questionResponses = await surveyService.PostSurveyResponses(
+            experimentId,
+            surveyId,
+            participantId,
+            responseId,
+            req.body.data
+          );
+          return res.json(questionResponses).status(200);
+        } catch (err) {
+          logger.error(err);
+          return next(err);
+        }
+      } else {
+        try {
+          logger.debug(`POST /surveys with body: %o`, req.body);
+          const surveyService = Container.get(SurveyService);
+          const payload = await surveyService.CreateSurvey(req.body);
+          return res.status(200).json({ survey: req.body });
+        } catch (err) {
+          return next(err);
+        }
       }
     }
   );
 
-  route.get("/latest*", convertLatestToSurveyId);
-  route.post("/latest*", convertLatestToSurveyId);
-  route.put("/latest*", convertLatestToSurveyId);
-  route.delete("/latest*", convertLatestToSurveyId);
+  route.get('/latest*', convertLatestToSurveyId);
+  route.post('/latest*', convertLatestToSurveyId);
+  route.put('/latest*', convertLatestToSurveyId);
+  route.delete('/latest*', convertLatestToSurveyId);
 
   route.get(
-    "/:surveyId",
+    '/:surveyId',
     // middlewares.ensureAuthenticated, NOTE THIS CURRENTLY returns a paylaod with "surveySections" key; need to change that key to "sections"
     // middlewares.ensureExperimentParticipant,
     async (req: Request, res: Response, next: NextFunction) => {
@@ -104,7 +141,7 @@ export default (app: Router) => {
   );
 
   route.get(
-    "/:surveyId/responses", // just redirect to questionresponses?surveyId...
+    '/:surveyId/responses', // just redirect to questionresponses?surveyId...
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { experimentId, surveyId } = req.params;
@@ -121,7 +158,7 @@ export default (app: Router) => {
   );
 
   route.post(
-    "/:surveyId/responses",
+    '/:surveyId/responses',
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { experimentId, surveyId } = req.params;
@@ -158,7 +195,7 @@ export default (app: Router) => {
   );
 
   route.get(
-    "/:surveyId/status",
+    '/:surveyId/status',
     async (req: Request, res: Response, next: NextFunction) => {
       /**
        * Status 0: E-mail doesn't exist
@@ -209,7 +246,7 @@ export default (app: Router) => {
   );
 
   route.get(
-    "/:surveyId/questions",
+    '/:surveyId/questions',
     async (req: Request, res: Response, next: NextFunction) => {
       const { experimentId, surveyId } = req.params;
 

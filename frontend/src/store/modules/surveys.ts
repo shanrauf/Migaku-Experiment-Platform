@@ -1,23 +1,23 @@
-import { MutationTree, ActionTree, GetterTree } from "vuex";
-import { RootState } from "@/types";
+import { MutationTree, ActionTree, GetterTree } from 'vuex';
+import { RootState } from '@/types';
 
-const surveyData = require("@/surveyData.json");
-import router from "@/app-routes";
-import SurveyRepository from "@/api/SurveyRepository";
-import Vue from "vue";
+const surveyData = require('@/surveyData.json');
+import router from '@/app-routes';
+import SurveyRepository from '@/api/SurveyRepository';
+import Vue from 'vue';
 const defaults = {
   surveys: [],
   currentSurvey: {
-    title: "",
-    description: "",
-    surveyId: "",
+    title: '',
+    description: '',
+    surveyId: '',
     sections: [
       {
-        title: "",
+        title: '',
         questions: [
           {
-            questionId: "",
-            value: ""
+            questionId: '',
+            value: ''
           }
         ]
       }
@@ -39,7 +39,7 @@ const actions: ActionTree<typeof defaults, RootState> = {
     const { surveys } = await SurveyRepository.get();
 
     commit({
-      type: "setSurveys",
+      type: 'setSurveys',
       surveys: surveys
     });
   },
@@ -49,7 +49,7 @@ const actions: ActionTree<typeof defaults, RootState> = {
     //   `latest?email=${payload.email}`
     // );
     commit({
-      type: "setCurrentSurvey",
+      type: 'setCurrentSurvey',
       currentSurvey: surveyData.survey // doing manually for now
     });
   },
@@ -78,21 +78,24 @@ const actions: ActionTree<typeof defaults, RootState> = {
         section.questions.forEach(question => {
           // add to payload
 
-          if (question.questionId == "email") {
-            payload["email"] = question.value;
+          if (question.questionId == 'email') {
+            payload['email'] = question.value;
           } else {
             questionResponses[question.questionId] = question.value;
           }
         });
       });
-      payload["data"] = questionResponses;
-      SurveyRepository.post(state.currentSurvey.surveyId, payload).then(() => {
+      payload['data'] = questionResponses;
+      SurveyRepository.postResponses(
+        state.currentSurvey.surveyId,
+        payload
+      ).then(() => {
         Vue.notify({
-          group: "global",
-          title: "Successfully submitted survey!",
+          group: 'global',
+          title: 'Successfully submitted survey!',
           text: "Don't forget to come back next week to fill out the next one"
         });
-        router.push({ path: "/dashboard" });
+        router.push({ path: '/dashboard' });
       });
       return true;
     } else {

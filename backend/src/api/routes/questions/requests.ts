@@ -1,17 +1,51 @@
-import { Expose } from "class-transformer";
-import { IsString } from "class-validator";
+import { Expose } from 'class-transformer';
+import { IsString, IsDefined, IsBoolean } from 'class-validator';
 
-export interface IQuestion {
-  questionId: string;
-  label: string;
-  questionType: string;
-  dataType: string;
-  rules: string;
-  question: string;
-  value: any;
-  items?: string | any[];
-  required: boolean;
-  questionOrder?: number;
+export class IQuestion {
+  @Expose()
+  @IsString()
+  questionId!: string;
+
+  @Expose()
+  @IsString()
+  key!: string;
+
+  @Expose()
+  @IsString()
+  label?: string;
+
+  @Expose()
+  @IsString()
+  questionType!: string;
+
+  @Expose()
+  @IsString()
+  dataType!: string;
+
+  @Expose()
+  @IsString()
+  rules?: string;
+
+  @Expose()
+  @IsString()
+  question!: string;
+
+  @Expose()
+  @IsString()
+  items?: string;
+
+  @Expose()
+  @IsBoolean()
+  required!: boolean;
+}
+
+export class ICreateQuestions {
+  /**
+   * Contains questionId[] as opposed to full Question[], which is unnecessary on survey creation
+   */
+  @Expose()
+  @IsDefined()
+  questions!: IQuestion[];
 }
 
 export interface IQuestionResponse {
