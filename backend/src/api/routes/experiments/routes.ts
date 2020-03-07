@@ -145,4 +145,26 @@ export default (app: Router) => {
       res.redirect(`../../questions?experimentId=${req.params.experimentId}`);
     }
   );
+
+  route.post(
+    '/:experimentId/questions',
+    async (req: Request, res: Response, next: NextFunction) => {
+      logger.debug(
+        `POST /experiments/${req.params.experimentId}/questions w/ body %o`,
+        req.body
+      );
+      try {
+        const experimentService = Container.get(ExperimentService);
+        await experimentService.AssociateQuestionsWithExperiment(
+          req.params.experimentId,
+          req.body.questions // questionId[]
+        );
+        return res.status(200).json({
+          message: `${req.body.questions.length} questions associated with ${req.params.experimentId}`
+        });
+      } catch (err) {
+        return next(err);
+      }
+    }
+  );
 };
