@@ -23,10 +23,10 @@ export default async ({ app }: { app: express.Application }) => {
   app.use(
     bodyParser.urlencoded({
       extended: true,
-      limit: '1000mb' // please start using streams or whatever XD
+      limit: '1gb' // please start using streams or whatever XD
     })
   );
-  app.use(express.json({ limit: '1000mb' })); // please start using streams or whatever XD
+  app.use(express.json({ limit: '1gb' })); // please start using streams or whatever XD
 
   app.use(
     cookieSession({
