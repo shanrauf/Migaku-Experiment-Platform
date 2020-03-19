@@ -14,6 +14,7 @@ export default (app: Router) => {
 
   route.get(
     '/',
+    middlewares.ensureAuthenticated,
     middlewares.validateRequestSchema(requests.IExperimentFilters, undefined),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
@@ -34,6 +35,7 @@ export default (app: Router) => {
 
   route.post(
     '/',
+    middlewares.ensureAuthenticated,
     validateRequestSchema(undefined, requests.IExperiment),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
@@ -54,6 +56,7 @@ export default (app: Router) => {
 
   route.get(
     '/:experimentId',
+    middlewares.ensureAuthenticated,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         logger.debug(`GET /experiments/${req.params.experimentId}`);
@@ -73,6 +76,7 @@ export default (app: Router) => {
 
   route.delete(
     '/:experimentId',
+    middlewares.ensureAuthenticated,
     async (req: Request, res: Response, next: NextFunction) => {
       logger.debug(`DELETE /experiments/${req.params.experimentId}`);
       try {
@@ -101,11 +105,15 @@ export default (app: Router) => {
 
   route.put(
     '/:experimentId/participants/:participantId',
+    middlewares.ensureAuthenticated,
     async (req: Request, res: Response, next: NextFunction) => {
       logger.debug(
         `PUT /experiments/${req.params.experimentId}/participants/${req.params.participantId}`
       );
       try {
+        if (req.params.participantId !== req.user.participantId) {
+          return res.status(403).json({message: "You are not authenticated to access this route"});
+        }
         const experimentService = Container.get(ExperimentService);
         const payload = await experimentService.RegisterParticipant(
           req.params.experimentId,
@@ -120,11 +128,15 @@ export default (app: Router) => {
 
   route.delete(
     '/:experimentId/participants/:participantId',
+    middlewares.ensureAuthenticated,
     async (req: Request, res: Response, next: NextFunction) => {
       logger.debug(
         `DELETE /experiments/${req.params.experimentId}/participants/${req.params.participantId}`
       );
       try {
+        if (req.params.participantId !== req.user.participantId) {
+          return res.status(403).json({message: "You are not authenticated to access this route"});
+        }
         const experimentService = Container.get(ExperimentService);
         await experimentService.DropParticipant(
           req.params.experimentId,
@@ -147,8 +159,12 @@ export default (app: Router) => {
   );
 
   route.post(
-    // doesn't work as .put?
+    /**
+     * Admin route.
+     * Adds question to experiment schema.
+     */
     '/:experimentId/questions',
+    // middlewares.blockRoute,
     async (req: Request, res: Response, next: NextFunction) => {
       logger.debug(
         `POST /experiments/${req.params.experimentId}/questions w/ body %o`,

@@ -5,13 +5,14 @@ import ParticipantService from './service';
 import logger from '../../../loaders/logger';
 import validateRequestSchema from '../../middlewares/validateRequestSchema';
 import * as requests from './requests';
+import middlewares from '../../middlewares';
 
 const route = Router();
 
 export default app => {
   app.use('/participants', route);
 
-  route.get('/', async (req: Request, res: Response, next: NextFunction) => {
+  route.get('/', middlewares.ensureAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
     logger.debug('GET /participants with params %o', req.query);
     try {
       const participantService = Container.get(ParticipantService);
@@ -27,6 +28,7 @@ export default app => {
 
   route.post(
     '/',
+    middlewares.ensureAuthenticated,
     validateRequestSchema(undefined, requests.ParticipantSignup),
     async (req: Request, res: Response, next: NextFunction) => {
       try {

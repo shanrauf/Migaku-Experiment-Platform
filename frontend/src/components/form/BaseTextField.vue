@@ -1,9 +1,6 @@
 <template>
-  <!-- <div style="width: 200px;"> can apply this when want UI controls for fields -->
   <v-input
     :messages="[`${note}`]"
-    :append-icon="icon && '$vuetify.icons.edit'"
-    @click:append="$emit('edit', true)"
   >
     <v-text-field
       :value="value"
@@ -42,10 +39,6 @@ export default {
       required: false
     },
     required: {
-      type: Boolean,
-      required: false
-    },
-    editable: {
       type: Boolean,
       required: false
     }

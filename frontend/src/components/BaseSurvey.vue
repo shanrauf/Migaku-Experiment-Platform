@@ -24,6 +24,7 @@ import { formMixin } from "../mixins/formMixin";
 import BaseSelect from "@/components/form/BaseSelect.vue";
 import BaseRadioButtons from "@/components/form/BaseRadioButtons.vue";
 import BaseTextField from "@/components/form/BaseTextField.vue";
+import BaseMultiselect from "@/components/form/BaseMultiselect.vue";
 import BaseCreateNewCard from "@/components/BaseCreateNewCard.vue";
 
 import {
@@ -31,7 +32,8 @@ import {
   levelsOfEducation,
   motivationsForLearningTargetLanguage,
   fieldsOfOccupation,
-  generalTimeFrames
+  generalTimeFrames,
+  countryList
 } from "@/utils/items.ts";
 
 export default {
@@ -47,6 +49,7 @@ export default {
     BaseSelect,
     BaseRadioButtons,
     BaseTextField,
+    BaseMultiselect,
     BaseCreateNewCard
   },
   data() {
@@ -59,6 +62,7 @@ export default {
         motivationsForLearningTargetLanguage,
         fieldsOfOccupation,
         generalTimeFrames,
+        countryList,
         hoursInADay: [...Array(25).keys()],
         hoursInAWeek: [...Array(169).keys()],
         oneToFiveScale: [...Array(6).keys()].splice(1), // splice selects all but "0"

@@ -30,8 +30,6 @@ const convertLatestToSurveyId = async (
     const restOfUrl = url.slice(2, url.length);
 
     // Mutating req.url so that next() forwards request to the appropriate handler
-    console.log(restOfUrl);
-    console.log(req.url);
     req.url = `/${surveyId}/` + restOfUrl.join('/');
     return next();
   } catch (err) {
@@ -46,8 +44,8 @@ export default (app: Router) => {
 
   route.get(
     '/',
-    // middlewares.ensureAuthenticated,
-    // middlewares.ensureExperimentParticipant,
+    middlewares.ensureAuthenticated,
+    middlewares.ensureExperimentParticipant,
     middlewares.validateRequestSchema(requests.ISurveyFilters, undefined),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
@@ -66,6 +64,8 @@ export default (app: Router) => {
 
   route.post(
     '/',
+    middlewares.ensureAuthenticated,
+    middlewares.ensureExperimentParticipant,
     middlewares.validateRequestSchema(undefined, requests.ICreateSurvey),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
@@ -87,8 +87,9 @@ export default (app: Router) => {
 
   route.get(
     '/:surveyId',
-    // middlewares.ensureAuthenticated, NOTE THIS CURRENTLY returns a paylaod with "surveySections" key; need to change that key to "sections"
-    // middlewares.ensureExperimentParticipant,
+    // NOTE THIS CURRENTLY returns a paylaod with "surveySections" key; need to change that key to "sections"
+    middlewares.ensureAuthenticated,
+    middlewares.ensureExperimentParticipant,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { experimentId, surveyId } = req.params;
@@ -124,47 +125,9 @@ export default (app: Router) => {
   );
 
   route.post(
-    '/:surveyId',
-    async (req: Request, res: Response, next: NextFunction) => {
-      /**
-       * Anki legacy route to submit Anki data (this is just a copy of /responses POST)
-       */
-      try {
-        const { experimentId, surveyId } = req.params;
-        logger.debug(
-          `POST /experiments/${experimentId}/surveys/${surveyId} w/ body %o`,
-          req.body
-        );
-        const participantService = Container.get(ParticipantService);
-        const surveyService = Container.get(SurveyService);
-
-        const participantId = await participantService.GetParticipantIdByEmail(
-          req.body.email
-        );
-
-        let responseId = await surveyService.findOrCreateResponseId(
-          experimentId,
-          surveyId,
-          participantId
-        );
-
-        const questionResponses = await surveyService.PostSurveyResponses(
-          experimentId,
-          surveyId,
-          participantId,
-          responseId,
-          req.body.data
-        );
-        return res.json(questionResponses).status(200);
-      } catch (err) {
-        logger.error(err);
-        return next(err);
-      }
-    }
-  );
-
-  route.post(
     '/:surveyId/responses',
+    middlewares.ensureAuthenticated,
+    middlewares.ensureExperimentParticipant,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { experimentId, surveyId } = req.params;
@@ -198,62 +161,14 @@ export default (app: Router) => {
           surveyId,
           participantId,
           responseId,
-          req.body.data
+          req.body.data,
+          req.user.discordId
         );
+
+
         return res.json(questionResponses).status(200);
       } catch (err) {
         logger.error(err);
-        return next(err);
-      }
-    }
-  );
-
-  route.get(
-    '/:surveyId/status',
-    async (req: Request, res: Response, next: NextFunction) => {
-      /**
-       * Status 0: E-mail doesn't exist
-       * Status 1: Ready to sync Anki data
-       * Status 2: Survey not completed
-       * Status 3: Anki data already synced
-       */
-      try {
-        const { email } = req.query; // need to first check if participantId (if user signed in); if not, then if email in query...
-        const { experimentId, surveyId } = req.params;
-        logger.debug(
-          `GET /experiments/${experimentId}/surveys/${surveyId}/status`
-        );
-        const participantService = Container.get(ParticipantService);
-        const participantId = await participantService.GetParticipantIdByEmail(
-          email
-        );
-        if (!participantId) {
-          return res.json({ status: 0 }).status(404);
-        }
-        const surveyService = Container.get(SurveyService);
-        // this errors when no surveys for the experiment but doesn't throw error
-        const { survey } = await surveyService.GetLatestSurvey(experimentId);
-
-        const surveyCompleted = await surveyService.GetSurveyCompletionStatus(
-          participantId,
-          survey.surveyId
-        );
-        if (!surveyCompleted) {
-          const surveyLink = `http://trials.massimmersionapproach.com/experiments/audiovssentencecards/surveys/${survey.surveyId}`;
-          return res.json({ status: 2, data: surveyLink }).status(401);
-        }
-
-        const ankiDataSubmitted = await surveyService.GetAnkiDataSubmissionStatus(
-          participantId,
-          survey.surveyId
-        );
-
-        if (ankiDataSubmitted) {
-          return res.json({ status: 3 }).status(404);
-        } else {
-          return res.json({ status: 1, data: survey.cutoff }).status(200);
-        }
-      } catch (err) {
         return next(err);
       }
     }

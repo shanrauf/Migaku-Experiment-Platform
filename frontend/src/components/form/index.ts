@@ -1,5 +1,5 @@
 const requireComponent = require.context(".", false, /Base[\w-]+\.vue$/);
-let components = {};
+let components: any = {};
 
 requireComponent.keys().forEach(fileName => {
   // Get component config

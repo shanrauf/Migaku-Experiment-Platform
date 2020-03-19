@@ -50,10 +50,11 @@
       "questionId": "countryOfResidence",
       "key": "countryOfResidence",
       "label": "Country of Residence",
-      "questionType": "text",
+      "questionType": "select",
       "dataType": "varchar",
       "rules": null,
       "question": "What country do you currently live in?",
+      "items": "countryList",
       "value": "",
       "required": true
     },
@@ -71,8 +72,8 @@
       "required": true
     },
     {
-      "questionId": "hoursOfWorkAWeek",
-      "key": "hoursOfWorkAWeek",
+      "questionId": "weeklyHoursOfWork",
+      "key": "weeklyHoursOfWork",
       "label": "Hours of Work In a Week",
       "questionType": "select",
       "dataType": "int",
@@ -151,10 +152,10 @@
       "key": "monthsStudyingTargetLanguage",
       "label": "Months Studying Target Language",
       "questionType": "text",
-      "dataType": "float",
-      "rules": null,
+      "dataType": "int",
+      "rules": "isNumber=true&min=0",
       "question": "How many months have you been studying your target language (including before starting immersion-based/MIA-inspired study)",
-      "value": 0.0,
+      "value": 0,
       "required": true
     },
     {
@@ -162,10 +163,10 @@
       "key": "monthsStudyingTargetLanguageUsingMIA",
       "label": "Months Studying Target Language Using Immersion-based Learning",
       "questionType": "text",
-      "dataType": "float",
-      "rules": null,
+      "dataType": "int",
+      "rules": "isNumber=true&min=0",
       "question": "How many months have you been studying your target language using immersion-based learning?",
-      "value": 0.0,
+      "value": 0,
       "required": true
     },
     {

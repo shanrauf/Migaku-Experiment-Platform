@@ -13,6 +13,7 @@ export default (app: Router) => {
 
   route.get(
     '/',
+    middlewares.ensureAuthenticated,
     middlewares.validateRequestSchema(requests.IQuestionFilters, undefined),
     async (req: Request, res: Response, next: NextFunction) => {
       logger.debug('GET /questions with query params: %o', req.query);
@@ -32,6 +33,7 @@ export default (app: Router) => {
   );
   route.post(
     '/',
+    middlewares.ensureAuthenticated,
     middlewares.validateRequestSchema(undefined, requests.ICreateQuestions),
     async (req: Request, res: Response, next: NextFunction) => {
       try {

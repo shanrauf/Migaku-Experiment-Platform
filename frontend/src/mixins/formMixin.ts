@@ -8,6 +8,8 @@ export const formMixin = {
           return 'BaseRadioButtons';
         case 'select':
           return 'BaseSelect';
+        case 'multiselect':
+          return "BaseMultiselect";
         default:
           return 'BaseTextField';
       }
@@ -15,7 +17,7 @@ export const formMixin = {
     parseQuery(queryString: string): object {
       // returns key-value pairs object: {"key1": "val1", "key2": "val2"}
       let keyValueArray = queryString.replace(/^\?/, '').split('&');
-      let queryObject = {};
+      let queryObject: any = {};
       for (let pair of keyValueArray) {
         let key = pair.split('=')[0];
         let value = pair.split('=')[1];

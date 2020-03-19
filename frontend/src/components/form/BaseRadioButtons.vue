@@ -4,7 +4,8 @@
     :rules="rules"
     :placeholder="placeholder"
     :value="value"
-    :label="label"
+    :label="label || 'Select one:'"
+    :items="items"
     :mandatory="required"
     @change="$emit('update', inputValue)"
   >

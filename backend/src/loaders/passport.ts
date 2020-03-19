@@ -37,7 +37,13 @@ export default async () => {
             }
           })
           .then(participantRecord => {
-            done(null, participantRecord[0]);
+            const result = {
+              ...participantRecord[0].toJSON(),
+              accessToken,
+              refreshToken,
+              discordId: profile.id
+            }
+            done(null, result);
           })
           .catch(err => {
             logger.error(err);
@@ -57,27 +63,18 @@ export default async () => {
         })
         .catch(err => {
           done(
-            new InternalOAuthError("Failed to fetch the user profile.", err)
+            new InternalOAuthError("Failed to fetch Discord profile.", err)
           );
         });
     };
 
     passport.serializeUser(function(user: any, done) {
-      done(null, user.participantId);
+      done(null, user);
       return;
     });
 
-    passport.deserializeUser((participantId, done) => {
-      const participantModel = Container.get<typeof Participant>("Participant");
-      participantModel
-        .findOne({ where: { participantId } })
-        .then(participantRecord => {
-          done(null, participantRecord);
-        })
-        .catch(err => {
-          logger.error(err);
-          done(err, null);
-        });
+    passport.deserializeUser((participant, done) => {
+      done(null, participant);
     });
 
     passport.use(discordStrategy);

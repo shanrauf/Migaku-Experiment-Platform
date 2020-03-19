@@ -23,6 +23,7 @@ import { SurveySectionQuestion } from '../../../models/intermediary/surveySectio
 import * as requests from './requests';
 import * as responses from './responses';
 import { ExperimentQuestion } from '../../../models/intermediary/experimentQuestion';
+import events from '../../../subscribers/events';
 
 @Service()
 export default class SurveyService {
@@ -239,7 +240,8 @@ export default class SurveyService {
     surveyId: string,
     participantId: string,
     responseId: string,
-    dataPayload: object
+    dataPayload: object,
+    discordId: string
   ): Promise<{ questionResponses: QuestionResponse[] }> {
     try {
       // This won't prevent duplicate survey submission for now since Anki needs to POST here too...
@@ -290,6 +292,20 @@ export default class SurveyService {
       const questionResponseRecords = await this.questionResponseModel.bulkCreate(
         questionResponses
       );
+      
+      let role: string;
+      switch(surveyId) {
+        case "asdfasd":
+          role = "Shinja"
+        case "fasdfasdf":
+          role = "fasdfasdf"
+        default:
+          console.log("This survey doesn't have discord role rewards");
+      }
+
+      this.eventDispatcher.dispatch(events.survey.completeSurvey, { discordId, role });
+
+
       return { questionResponses: questionResponseRecords };
     } catch (e) {
       this.logger.error(e);

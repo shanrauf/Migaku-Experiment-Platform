@@ -39,7 +39,7 @@ export default async ({ app }: { app: express.Application }) => {
     cookieParser({
       sameSite: true, // cookie can only be sent across our domain
       httpOnly: true // prevents client javascript from accessing cookie
-      //  secure: true // cookie can only be transmitted over HTTPS; add soon
+      //  secure: true // TODO: cookie can only be transmitted over HTTPS
     })
   );
 

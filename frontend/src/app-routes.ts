@@ -64,7 +64,8 @@ const router = new VueRouter({ mode: "history", routes });
 // Isn't the following hook better to change document title, etc instead of looping over the routes?
 
 router.beforeEach((to, _, next) => {
-  const isAuthenticated = true; // implement
+  // TODO: Implement
+  const isAuthenticated = false;
   if (to.name === "landing" && isAuthenticated) {
     router.push("/dashboard");
   }

@@ -6,10 +6,10 @@
       :key="section.sectionId"
     >
       <div v-if="idx == 0">
-        <h1 style="text-align: center" @blur="setTitle">
+        <h1 style="text-align: center">
           {{ currentSurvey.title }}
         </h1>
-        <p style="text-align: center" @blur="setDescription">
+        <p style="text-align: center">
           {{ currentSurvey.description }}
         </p>
       </div>
@@ -45,13 +45,7 @@ export default {
     ...mapGetters(['getNumberOfSections'])
   },
   methods: {
-    camelCase,
-    setTitle(e) {
-      this.$store.commit('setCurrentSurveyTitle', e.target.innerText);
-    },
-    setDescription(e) {
-      this.$store.commit('setCurrentSurveyDescription', e.target.innerText);
-    }
+    camelCase
   }
 };
 </script>

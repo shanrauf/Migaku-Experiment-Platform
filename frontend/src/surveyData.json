@@ -86,6 +86,18 @@
             "question": "What was the score of the J-CAT test you recently took?",
             "required": false,
             "value": ""
+          },
+          {
+            "questionId": "nativeLanguages",
+            "key": "nativeLanguage",
+            "label": "Native language(s)",
+            "questionType": "multiselect",
+            "dataType": "varchar",
+            "rules": null,
+            "question": "Select your native language(s) (Select all that apply)",
+            "value": "",
+            "items": "foreignLanguages",
+            "required": true
           }
         ]
       },

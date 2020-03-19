@@ -3,4 +3,7 @@ export default {
     signUp: 'onParticipantSignUp',
     signIn: 'onParticipantSignIn',
   },
+  survey: {
+    completeSurvey: 'onCompleteSurvey',
+  }
 };

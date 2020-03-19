@@ -15,7 +15,7 @@ export default app => {
       logger.debug("GET /discord");
 
       const state =
-        "redirect" in req.query ? `redirect=${req.query.redirect}` : undefined;
+        "redirect" in req.query ? `redirect=${req.query.redirect}` : null;
       const authenticator = passport.authenticate("oauth2", { state });
       return authenticator(req, res, next);
     }
@@ -28,8 +28,7 @@ export default app => {
       try {
         logger.debug("GET /discord/redirect with user %o", req.user);
 
-        if (req.query.state.includes("redirect")) {
-          // not best implementation of dynamic redirect urls...
+        if (req.query.state?.includes("redirect")) {
           const redirectUrl = decodeURIComponent(req.query.state.split("=")[1]);
           res.status(301).redirect(redirectUrl);
         } else {

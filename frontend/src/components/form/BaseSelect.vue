@@ -1,17 +1,15 @@
 <template>
-  <!-- <div style="width: 200px;"> -->
   <v-input :messages="[`${note}`]">
-    <v-select
-      v-model="inputValue"
-      menu-props="menuProps"
-      hide-selected
-      :items="items"
-      :placeholder="placeholder"
-      :value="value"
-      :rules="rules"
-      :label="label || 'Select one:'"
-      @input="$emit('update', inputValue)"
-    />
+    <v-combobox
+        v-model="inputValue"
+        :rules="[...rules, whitelistRule]"
+        :placeholder="placeholder"
+        :value="value"
+        :items="items"
+        :label="label || 'Select one:'"
+        @change="$emit('update', inputValue)"
+      >
+      </v-combobox>
   </v-input>
 </template>
 
@@ -59,6 +57,19 @@ export default {
       },
       inputValue: ""
     };
+  },
+  computed: {
+    /**
+     * This prevents user from adding items not specified as an option.
+     */
+    whitelistRule() {
+      return v => {
+        if (!this.items.includes(v)) {
+          return `${v} is an invalid option.`;
+        }
+        return true;
+      }
+    }
   }
 };
 </script>
