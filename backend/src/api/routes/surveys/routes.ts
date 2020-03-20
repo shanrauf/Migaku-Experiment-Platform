@@ -137,16 +137,10 @@ export default (app: Router) => {
         );
         const surveyService = Container.get(SurveyService);
 
-        let responseId = await surveyService.findOrCreateResponseId(
-          experimentId,
-          surveyId,
-          req.user.participantId
-        );
-        const questionResponses = await surveyService.PostSurveyResponses(
+        const questionResponses = await surveyService.SubmitSurveyResponse(
           experimentId,
           surveyId,
           req.user.participantId,
-          responseId,
           req.body.data,
           req.user.discordId
         );

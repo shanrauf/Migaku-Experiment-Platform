@@ -220,71 +220,82 @@ export default class SurveyService {
     experimentId: string,
     surveyId: string,
     participantId: string,
-    question: [string, any],
-    responseDataType: string
-  ): Promise<object> {
-    const questionResponse = {
-      responseId,
-      questionId: question[0],
-      experimentId,
-      surveyId,
-      participantId
-    };
-    const dataType = capitalize(responseDataType);
-    questionResponse[`answer${dataType}`] = question[1];
-    return questionResponse;
+    questionResponse: requests.IQuestionResponse
+  ): Promise<object[]> {
+    const questionDataType = await this.questionModel
+    .findOne({
+      where: { questionId: questionResponse[0] }
+    })
+    .then(questionRecord => questionRecord.dataType);
+  if (!questionDataType) {
+    throw new Error(`${questionResponse[0]} does not exist`);
   }
 
-  public async PostSurveyResponses(
+  const questionResponses = [];
+
+  if (questionDataType !== "json" && Array.isArray(questionResponse[1])) {
+    questionResponse[1].forEach(answer => {
+      const response = {
+        responseId,
+        questionId: questionResponse[0],
+        experimentId,
+        surveyId,
+        participantId
+      };
+      const dataType = capitalize(questionDataType);
+      response[`answer${dataType}`] = answer;
+      questionResponses.push(response);
+    })
+  }
+    else {
+      const result = {
+        responseId,
+        questionId: questionResponse[0],
+        experimentId,
+        surveyId,
+        participantId
+      };
+      const dataType = capitalize(questionDataType);
+      result[`answer${dataType}`] = questionResponse[1];
+      questionResponses.push(result);
+    }
+    return questionResponses;
+  }
+
+  public async SubmitSurveyResponse(
     experimentId: string,
     surveyId: string,
     participantId: string,
-    responseId: string,
-    dataPayload: object,
+    dataPayload: requests.IQuestionResponse,
     discordId: string
   ): Promise<{ questionResponses: QuestionResponse[] }> {
     try {
-      // This won't prevent duplicate survey submission for now since Anki needs to POST here too...
-      // need some way to identify if post coming from survey or anki idk...
-      // const responseRecordExists = await this.questionResponseModel.findOne({
-      //   where: { participantId, surveyId }
-      // });
-      // if (responseRecordExists) {
-      //   return { questionResponses: null }; // user has already filled out survey
-      // }
+      let responseId = await this.findOrCreateResponseId(
+        experimentId,
+        surveyId,
+        participantId
+      );
 
       this.logger.silly('Processing question responses');
       const questionResponses = [];
-      // let question: any;
-      // for (question of Object.entries(dataPayload)) {
-      //     // get question dataType; Error means question doesn't exist
-      //     const questionDataType = await this.questionModel
-      //       .findOne({
-      //         where: { questionId: question[0] }
-      //       })
-      //       .then(questionRecord => questionRecord.dataType);
-      //     if (!questionDataType) {
-      //       throw new Error(`${question[0]} does not exist`);
-      //     }
-
-      //     const questionResponse = await this.FormatQuestionResponse(
-      //       responseId,
-      //       experimentId,
-      //       surveyId,
-      //       participantId,
-      //       question,
-      //       questionDataType
-      //     );
-      //     questionResponses.push(questionResponse);
-      // }
+      for (let question of Object.entries(dataPayload)) {
+          const responses = await this.FormatQuestionResponse(
+            responseId,
+            experimentId,
+            surveyId,
+            participantId,
+            question
+          );
+          questionResponses.push(...responses);
+      }
 
       this.logger.silly('Posting question responses');
       const questionResponseRecords = await this.questionResponseModel.bulkCreate(
         questionResponses
       );
+
       const role = this.surveyIdToRole(surveyId);
       this.eventDispatcher.dispatch(events.survey.completeSurvey, { discordId, role });
-
 
       return { questionResponses: questionResponseRecords };
     } catch (e) {
@@ -302,7 +313,10 @@ export default class SurveyService {
     }
   }
 
-  public async findOrCreateResponseId(
+  /**
+   * Checks if participant has already submitted
+   */
+  private async findOrCreateResponseId(
     experimentId: string,
     surveyId: string,
     participantId: string

@@ -194,6 +194,10 @@ export class ISurveyQuestionList {
   questions: string[];
 }
 
+export class IQuestionResponse {
+  [questionId: string]: any;
+}
+
 export class ISurveyResponse {
   @Expose()
   @IsOptional()
@@ -201,9 +205,7 @@ export class ISurveyResponse {
   email?: string; // Legacy property for Anki route since no authentication... perhaps add auth
 
   @Expose()
-  data: {
-    [questionId: string]: string | number | object | Array<any> | null;
-  };
+  data: IQuestionResponse;
 }
 
 export class ISurveyQuestionFilters {
