@@ -27,9 +27,8 @@ const ensureExperimentParticipant = (
           )}`
         })
         .status(403);
-    } else {
-      return next();
     }
+    return next();
   });
 };
 

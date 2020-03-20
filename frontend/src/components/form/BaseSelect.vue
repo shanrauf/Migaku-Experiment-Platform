@@ -6,6 +6,7 @@
         :placeholder="placeholder"
         :value="value"
         :items="items"
+        :required="required"
         :label="label || 'Select one:'"
         @change="$emit('update', inputValue)"
       >
@@ -42,11 +43,10 @@ export default {
       type: Array,
       required: false
     },
-    editable: {
+    required: {
       type: Boolean,
       required: false
-    }
-  },
+    }},
   data() {
     return {
       menuProps: {
@@ -64,6 +64,9 @@ export default {
      */
     whitelistRule() {
       return v => {
+        if (v === null) {
+          return this.required ? "This question is required" : true;
+        }
         if (!this.items.includes(v)) {
           return `${v} is an invalid option.`;
         }

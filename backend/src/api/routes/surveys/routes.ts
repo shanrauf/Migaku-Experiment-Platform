@@ -135,37 +135,21 @@ export default (app: Router) => {
           `POST /experiments/${experimentId}/surveys/${surveyId}/responses w/ body %o`,
           req.body
         );
-        const participantService = Container.get(ParticipantService);
         const surveyService = Container.get(SurveyService);
-
-        const participantId = await participantService.GetParticipantIdByEmail(
-          req.body.email
-        );
-
-        if (!participantId) {
-          return res
-            .json({
-              errors: [`${req.body.email} isn't an existing participant`]
-            })
-            .status(404);
-        }
 
         let responseId = await surveyService.findOrCreateResponseId(
           experimentId,
           surveyId,
-          participantId
+          req.user.participantId
         );
-
         const questionResponses = await surveyService.PostSurveyResponses(
           experimentId,
           surveyId,
-          participantId,
+          req.user.participantId,
           responseId,
           req.body.data,
           req.user.discordId
         );
-
-
         return res.json(questionResponses).status(200);
       } catch (err) {
         logger.error(err);

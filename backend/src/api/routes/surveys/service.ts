@@ -255,54 +255,34 @@ export default class SurveyService {
 
       this.logger.silly('Processing question responses');
       const questionResponses = [];
-      let question: any;
-      for (question of Object.entries(dataPayload)) {
-        if (question[0] === 'cards') {
-          this.PostAnkiCardCollection(
-            experimentId,
-            surveyId,
-            participantId,
-            responseId,
-            question[1]
-          );
-        } else {
-          // get question dataType; Error means question doesn't exist
-          const questionDataType = await this.questionModel
-            .findOne({
-              where: { questionId: question[0] }
-            })
-            .then(questionRecord => questionRecord.dataType);
-          if (!questionDataType) {
-            throw new Error(`${question[0]} does not exist`);
-          }
+      // let question: any;
+      // for (question of Object.entries(dataPayload)) {
+      //     // get question dataType; Error means question doesn't exist
+      //     const questionDataType = await this.questionModel
+      //       .findOne({
+      //         where: { questionId: question[0] }
+      //       })
+      //       .then(questionRecord => questionRecord.dataType);
+      //     if (!questionDataType) {
+      //       throw new Error(`${question[0]} does not exist`);
+      //     }
 
-          const questionResponse = await this.FormatQuestionResponse(
-            responseId,
-            experimentId,
-            surveyId,
-            participantId,
-            question,
-            questionDataType
-          );
-          questionResponses.push(questionResponse);
-        }
-      }
+      //     const questionResponse = await this.FormatQuestionResponse(
+      //       responseId,
+      //       experimentId,
+      //       surveyId,
+      //       participantId,
+      //       question,
+      //       questionDataType
+      //     );
+      //     questionResponses.push(questionResponse);
+      // }
 
       this.logger.silly('Posting question responses');
       const questionResponseRecords = await this.questionResponseModel.bulkCreate(
         questionResponses
       );
-      
-      let role: string;
-      switch(surveyId) {
-        case "asdfasd":
-          role = "Shinja"
-        case "fasdfasdf":
-          role = "fasdfasdf"
-        default:
-          console.log("This survey doesn't have discord role rewards");
-      }
-
+      const role = this.surveyIdToRole(surveyId);
       this.eventDispatcher.dispatch(events.survey.completeSurvey, { discordId, role });
 
 
@@ -310,6 +290,15 @@ export default class SurveyService {
     } catch (e) {
       this.logger.error(e);
       throw e;
+    }
+  }
+
+  private surveyIdToRole(surveyId: string): string {
+    switch(surveyId) {
+      case "5pvsnorv9xuupd7ef81hx":
+        return "信者";
+      default:
+        return null;
     }
   }
 

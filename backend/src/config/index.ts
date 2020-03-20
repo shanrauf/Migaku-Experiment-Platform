@@ -28,6 +28,7 @@ export default {
     prefix: "/api"
   },
   discord: {
-    DISCORD_TOKEN: process.env.DISCORD_TOKEN
+    DISCORD_SERVER: process.env.NODE_ENV === "development" ? process.env.DISCORD_SERVER_DEV : process.env.DISCORD_SERVER,
+    DISCORD_TOKEN: process.env.NODE_ENV === "development" ? process.env.DISCORD_TOKEN_DEV : process.env.DISCORD_TOKEN
   }
 };
