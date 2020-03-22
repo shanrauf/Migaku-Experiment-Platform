@@ -9,7 +9,7 @@ Returns all experiments
 Parameters:
 
 ```ts
-requests.IExperimentFilters
+requests.ExperimentFilters
 ```
 
 Response:

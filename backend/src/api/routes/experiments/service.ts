@@ -15,7 +15,6 @@ import * as responses from './responses';
 import { Survey } from '../../../models/survey';
 import { ExperimentParticipant } from '../../../models/intermediary/experimentParticipant';
 import { Participant } from '../../../models/participant';
-import { BaseResponse } from '../responses';
 
 @Service()
 export default class ExperimentService {
@@ -75,10 +74,10 @@ export default class ExperimentService {
   }
 
   public async GetExperiments(
-    filters?: requests.IExperimentFilters
+    filters?: requests.ExperimentFilters
   ): Promise<responses.IExperiments> {
     this.logger.silly('Fetching experiments');
-    const queryFilters = await generateSequelizeFilters(
+    const queryFilters = generateSequelizeFilters(
       this.sequelizeFilters,
       filters
     );
@@ -197,9 +196,9 @@ export default class ExperimentService {
   }
   public async AssociateQuestionsWithExperiment(
     experimentId: string,
-    questions: string[]
+    questionIds: string[]
   ): Promise<void> {
-    let experimentQuestions = questions.map(questionId => {
+    let experimentQuestions = questionIds.map(questionId => {
       return {
         experimentId,
         questionId

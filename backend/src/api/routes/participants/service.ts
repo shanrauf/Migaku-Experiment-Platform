@@ -43,13 +43,13 @@ export default class ParticipantService {
   }
 
   public async GetParticipants(
-    filters?: object
+    filters?: requests.ParticipantFilters
   ): Promise<{
     participants: ExperimentParticipant[] | Participant[] | null;
     totalCount: number;
   }> {
     this.logger.silly('Fetching participants');
-    const queryFilters = await generateSequelizeFilters(
+    const queryFilters = generateSequelizeFilters(
       this.sequelizeFilters,
       filters
     );

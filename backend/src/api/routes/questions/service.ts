@@ -71,7 +71,7 @@ export default class QuestionService {
     filters?: requests.IQuestionFilters
   ): Promise<responses.IQuestions> {
     this.logger.silly('Fetching questions');
-    const queryFilters = await generateSequelizeFilters(
+    const queryFilters = generateSequelizeFilters(
       this.sequelizeFilters,
       filters
     );

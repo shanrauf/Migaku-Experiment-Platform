@@ -34,10 +34,10 @@ export function capitalize(value: string): string {
 /**
  * Translates an API request's query parameters into a format that Sequelize understands
  */
-export async function generateSequelizeFilters(
+export function generateSequelizeFilters(
   sequelizeFilters: object,
   reqQuery: object
-): Promise<object> {
+): object {
   const filters = {
     where: {},
     include: []

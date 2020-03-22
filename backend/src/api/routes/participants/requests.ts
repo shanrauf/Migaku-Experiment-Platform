@@ -37,3 +37,15 @@ export class ParticipantSignup {
   @IsString()
   sex!: string;
 }
+
+export class ParticipantFilters {
+  @Expose()
+  @IsOptional()
+  @IsString()
+  participantId?: string;
+
+  @Expose()
+  @IsOptional()
+  @IsString()
+  experimentId?: string;
+}

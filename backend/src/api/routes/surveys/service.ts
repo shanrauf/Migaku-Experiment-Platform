@@ -30,7 +30,6 @@ export default class SurveyService {
   private sequelizeFilters: object;
 
   constructor(
-    @Inject('Participant') private participantModel: typeof Participant,
     @Inject('Survey') private surveyModel: typeof Survey,
     @Inject('Question') private questionModel: typeof Question,
     @Inject('ExperimentQuestion')
@@ -82,7 +81,7 @@ export default class SurveyService {
   ): Promise<responses.ISurveys> {
     try {
       this.logger.silly('Fetching surveys');
-      const sequelizeFilters = await generateSequelizeFilters(
+      const sequelizeFilters = generateSequelizeFilters(
         this.sequelizeFilters,
         filters
       );
@@ -262,6 +261,9 @@ export default class SurveyService {
     return questionResponses;
   }
 
+  /**
+   * Submits an array of question responses.
+   */
   public async SubmitSurveyResponse(
     experimentId: string,
     surveyId: string,
@@ -270,34 +272,42 @@ export default class SurveyService {
     discordId: string
   ): Promise<{ questionResponses: QuestionResponse[] }> {
     try {
-      let responseId = await this.findOrCreateResponseId(
-        experimentId,
-        surveyId,
-        participantId
-      );
-
-      this.logger.silly('Processing question responses');
-      const questionResponses = [];
-      for (let question of Object.entries(dataPayload)) {
-          const responses = await this.FormatQuestionResponse(
-            responseId,
+      const result = await this.sqlConnection.transaction(async transaction => {
+        this.logger.silly('Finding or creating survey responseId');
+        const responseId = await this.surveyResponseModel.findOrCreate({
+          where: { surveyId, participantId },
+          defaults: {
             experimentId,
             surveyId,
             participantId,
-            question
-          );
-          questionResponses.push(...responses);
-      }
-
-      this.logger.silly('Posting question responses');
-      const questionResponseRecords = await this.questionResponseModel.bulkCreate(
-        questionResponses
-      );
-
-      const role = this.surveyIdToRole(surveyId);
-      this.eventDispatcher.dispatch(events.survey.completeSurvey, { discordId, role });
-
-      return { questionResponses: questionResponseRecords };
+          },
+          transaction
+        }).then(response => response[0].responseId);
+  
+        this.logger.silly('Processing question responses');
+        const questionResponses = [];
+        for (let question of Object.entries(dataPayload)) {
+            const responses = await this.FormatQuestionResponse(
+              responseId,
+              experimentId,
+              surveyId,
+              participantId,
+              question
+            );
+            questionResponses.push(...responses);
+        }
+  
+        this.logger.silly('Posting question responses');
+        const questionResponseRecords = await this.questionResponseModel.bulkCreate(
+          questionResponses, {transaction}
+        );
+  
+        const role = this.surveyIdToRole(surveyId);
+        this.eventDispatcher.dispatch(events.survey.completeSurvey, { discordId, role });
+  
+        return { questionResponses: questionResponseRecords };
+      });
+      return result;
     } catch (e) {
       this.logger.error(e);
       throw e;
@@ -313,34 +323,6 @@ export default class SurveyService {
     }
   }
 
-  /**
-   * Checks if participant has already submitted
-   */
-  private async findOrCreateResponseId(
-    experimentId: string,
-    surveyId: string,
-    participantId: string
-  ): Promise<string> {
-    try {
-      this.logger.silly('Finding or creating survey responseId');
-      const surveyResponse = await this.surveyResponseModel.findOne({
-        attributes: ['responseId'],
-        where: { surveyId, participantId }
-      });
-      if (!surveyResponse) {
-        return await this.CreateSurveyResponse(
-          // bad in POST /:surveyId because not wrapped in transaction
-          experimentId,
-          surveyId,
-          participantId
-        ).then(response => response.responseId);
-      }
-      return surveyResponse.responseId;
-    } catch (err) {
-      this.logger.error(err);
-      throw err;
-    }
-  }
   public async PostAnkiCardCollection(
     experimentId: string,
     surveyId: string,

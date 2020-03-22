@@ -12,7 +12,7 @@ const route = Router();
 export default app => {
   app.use('/participants', route);
 
-  route.get('/', middlewares.ensureAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
+  route.get('/', middlewares.ensureAuthenticated, validateRequestSchema(requests.ParticipantFilters, null), async (req: Request, res: Response, next: NextFunction) => {
     logger.debug('GET /participants with params %o', req.query);
     try {
       const participantService = Container.get(ParticipantService);

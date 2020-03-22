@@ -2,12 +2,9 @@ import {
   IsISO8601,
   IsOptional,
   IsDefined,
-  IsString,
-  ValidateNested,
-  IsInt
+  IsString
 } from 'class-validator';
 import { Expose } from 'class-transformer';
-import { IQuestion } from '../questions/requests';
 
 export class IExperiment {
   @Expose()
@@ -67,7 +64,7 @@ export class IExperiment {
   requirements?: string[];
 }
 
-export class IExperimentFilters {
+export class ExperimentFilters {
   /**
    * Returns specific experiment
    */
@@ -124,61 +121,14 @@ export class IExperimentParticipant {
   dropoutDate: string | null;
 }
 
-export class ISurvey {
-  @Expose()
-  @IsDefined()
-  surveyId!: string;
-
-  @Expose()
-  @IsDefined()
-  title!: string;
-
+export class IExperimentQuestions {
+  /**
+   * questionId[] to add to ExperimentQuestion table
+   */
   @Expose()
   @IsOptional()
-  description?: string | null;
-
-  @Expose()
-  @IsOptional()
-  @IsISO8601()
-  startDate?: string;
-
-  @Expose()
-  @IsOptional()
-  @IsISO8601()
-  endDate?: string;
-
-  @Expose()
-  @IsDefined()
-  surveyCategory!: string;
-
-  @Expose()
-  @IsDefined()
-  visibility!: string;
-
-  @Expose()
-  @IsDefined()
-  sections!: ISurveySection[];
-}
-export class ISurveySection {
-  @Expose()
-  @IsDefined()
-  sectionId: string;
-
-  @Expose()
-  @IsDefined()
-  @IsInt()
-  sectionNumber: number;
-
-  @Expose()
-  @IsDefined()
-  title: string;
-
-  @Expose()
-  @IsOptional()
-  @IsString()
-  description: string | null;
-
-  @Expose()
-  @IsDefined()
-  questions: IQuestion[];
+  @IsString({
+    each: true
+  })
+  questions!: string[];
 }

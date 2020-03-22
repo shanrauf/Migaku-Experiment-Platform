@@ -15,24 +15,22 @@ export default (app: Router) => {
   route.get(
     '/',
     middlewares.ensureAuthenticated,
-    middlewares.validateRequestSchema(requests.IExperimentFilters, undefined),
+    middlewares.validateRequestSchema(requests.ExperimentFilters, undefined),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         logger.debug('GET /experiments with params %o', req.query);
         const experimentService = Container.get(ExperimentService);
         const payload = await experimentService.GetExperiments(
-          req.query as requests.IExperimentFilters
+          req.query as requests.ExperimentFilters
         );
-        if (!payload.experiments.length) {
-          return res.status(404).json(payload);
-        }
-        return res.status(200).json(payload);
+        return payload.experiments.length ? res.status(200).json(payload) : res.status(404).json(payload);
       } catch (err) {
         return next(err);
       }
     }
   );
 
+  // Admin route
   route.post(
     '/',
     middlewares.ensureAuthenticated,
@@ -44,10 +42,7 @@ export default (app: Router) => {
         const payload = await experimentService.CreateExperiment(
           req.body as requests.IExperiment
         );
-        if (!payload.experiment) {
-          return res.status(404).json(payload);
-        }
-        return res.status(201).json(payload);
+        return !payload.experiment ? res.status(201).json(payload) : res.status(404).json(payload);
       } catch (err) {
         return next(err);
       }
@@ -64,16 +59,14 @@ export default (app: Router) => {
         const payload = await experimentService.GetExperiment(
           req.params.experimentId
         );
-        if (!payload.experiment) {
-          return res.status(404).json(payload);
-        }
-        return res.status(200).json(payload);
+        return !payload.experiment ? res.status(200).json(payload) : res.status(404).json(payload);
       } catch (err) {
         return next(err);
       }
     }
   );
 
+  // Admin route
   route.delete(
     '/:experimentId',
     middlewares.ensureAuthenticated,
@@ -84,22 +77,10 @@ export default (app: Router) => {
         const payload = await experimentService.DeleteExperiment(
           req.params.experimentId
         );
-        if (!payload.deletedCount) {
-          return res.status(404).json(payload);
-        }
-        return res.status(200).json(payload);
+        return !payload.deletedCount ? res.status(200).json(payload) : res.status(400).json(payload);
       } catch (err) {
         return next(err);
       }
-    }
-  );
-
-  route.get(
-    '/:experimentId/participants',
-    async (req: Request, res: Response, next: NextFunction) => {
-      res.redirect(
-        `../../participants?experimentId=${req.params.experimentId}`
-      );
     }
   );
 
@@ -126,6 +107,7 @@ export default (app: Router) => {
     }
   );
 
+  // Admin route
   route.delete(
     '/:experimentId/participants/:participantId',
     middlewares.ensureAuthenticated,
@@ -158,13 +140,21 @@ export default (app: Router) => {
     }
   );
 
+  route.get(
+    '/:experimentId/participants',
+    async (req: Request, res: Response, next: NextFunction) => {
+      res.redirect(
+        `../../participants?experimentId=${req.params.experimentId}`
+      );
+    }
+  );
+
+  /**
+   * Admin route to add questions to an experiment's question schema.
+   */
   route.post(
-    /**
-     * Admin route.
-     * Adds question to experiment schema.
-     */
     '/:experimentId/questions',
-    // middlewares.blockRoute,
+    validateRequestSchema(null, requests.IExperimentQuestions),
     async (req: Request, res: Response, next: NextFunction) => {
       logger.debug(
         `POST /experiments/${req.params.experimentId}/questions w/ body %o`,
@@ -174,7 +164,7 @@ export default (app: Router) => {
         const experimentService = Container.get(ExperimentService);
         await experimentService.AssociateQuestionsWithExperiment(
           req.params.experimentId,
-          req.body.questions // questionId[]
+          req.body.questions
         );
         return res.status(200).json({
           message: `${req.body.questions.length} questions associated with ${req.params.experimentId}`

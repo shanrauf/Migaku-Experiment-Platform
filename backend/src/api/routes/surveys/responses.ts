@@ -1,6 +1,5 @@
 import { IQuestion } from "../questions/requests";
 import { Survey } from "../../../models/survey";
-import { BaseResponse } from "../responses";
 
 export type ISurveys = {
   surveys: Survey[];
@@ -31,7 +30,7 @@ export type ISurveyMetadata = {
  *
  * Status 3: Anki data already synced
  */
-export class ISurveyStatus extends BaseResponse {
+export class ISurveyStatus {
   status: 0 | 1 | 2 | 3;
 
   /**

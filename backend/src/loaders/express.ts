@@ -23,7 +23,7 @@ export default async ({ app }: { app: express.Application }) => {
   app.use(
     bodyParser.urlencoded({
       extended: true,
-      limit: '1gb' // please start using streams or whatever XD
+      limit: '1gb' // TODO: please start using streams or whatever XD
     })
   );
   app.use(express.json({ limit: '1gb' })); // please start using streams or whatever XD
@@ -60,18 +60,24 @@ export default async ({ app }: { app: express.Application }) => {
     return next();
   });
 
-  // Load API routes
+  /**
+   * Load API routes.
+   */
   app.use(config.api.prefix, routes());
 
-  // app.use(errors()); Create error handler for validation errors
-
-  // / catch 404 and forward to error handler
+  /**
+   * Catch 404 errors.
+   */
   app.use((req, res, next) => {
     const err = new Error('Not Found');
-    // err.status = 404; this doesn't work, so how do I indicate it's a 404?
-    next(err);
+    res.json({
+      errors: [err.message]
+    }).status(404);
   });
 
+  /**
+   * Error handler middleware.
+   */
   app.use((err, req, res, next) => {
     res.status(err.status || 500);
     res.json({
