@@ -13,7 +13,7 @@ export function EventDispatcher() {
       object,
       propertyName,
       index,
-      value: () => eventDispatcher,
+      value: () => eventDispatcher
     });
   };
 }

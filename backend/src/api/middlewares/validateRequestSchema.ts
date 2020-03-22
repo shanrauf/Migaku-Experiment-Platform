@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from "express";
-import { validateOrReject, ValidatorOptions, validate } from "class-validator";
-import { plainToClass, classToPlain } from "class-transformer";
+import { Request, Response, NextFunction } from 'express';
+import { validateOrReject, ValidatorOptions, validate } from 'class-validator';
+import { plainToClass, classToPlain } from 'class-transformer';
 
 const validationOptions: ValidatorOptions = {
   forbidUnknownValues: true,

@@ -12,19 +12,24 @@ const route = Router();
 export default app => {
   app.use('/participants', route);
 
-  route.get('/', middlewares.ensureAuthenticated, validateRequestSchema(requests.ParticipantFilters, null), async (req: Request, res: Response, next: NextFunction) => {
-    logger.debug('GET /participants with params %o', req.query);
-    try {
-      const participantService = Container.get(ParticipantService);
-      const payload = await participantService.GetParticipants(req.query);
-      if (!payload.participants) {
-        return res.status(404).json({ message: 'Not found' });
+  route.get(
+    '/',
+    middlewares.ensureAuthenticated,
+    validateRequestSchema(requests.ParticipantFilters, null),
+    async (req: Request, res: Response, next: NextFunction) => {
+      logger.debug('GET /participants with params %o', req.query);
+      try {
+        const participantService = Container.get(ParticipantService);
+        const payload = await participantService.GetParticipants(req.query);
+        if (!payload.participants) {
+          return res.status(404).json({ message: 'Not found' });
+        }
+        return res.json(payload).status(200);
+      } catch (err) {
+        return next(err);
       }
-      return res.json(payload).status(200);
-    } catch (err) {
-      return next(err);
     }
-  });
+  );
 
   route.post(
     '/',

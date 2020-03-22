@@ -222,31 +222,30 @@ export default class SurveyService {
     questionResponse: requests.IQuestionResponse
   ): Promise<object[]> {
     const questionDataType = await this.questionModel
-    .findOne({
-      where: { questionId: questionResponse[0] }
-    })
-    .then(questionRecord => questionRecord.dataType);
-  if (!questionDataType) {
-    throw new Error(`${questionResponse[0]} does not exist`);
-  }
+      .findOne({
+        where: { questionId: questionResponse[0] }
+      })
+      .then(questionRecord => questionRecord.dataType);
+    if (!questionDataType) {
+      throw new Error(`${questionResponse[0]} does not exist`);
+    }
 
-  const questionResponses = [];
+    const questionResponses = [];
 
-  if (questionDataType !== "json" && Array.isArray(questionResponse[1])) {
-    questionResponse[1].forEach(answer => {
-      const response = {
-        responseId,
-        questionId: questionResponse[0],
-        experimentId,
-        surveyId,
-        participantId
-      };
-      const dataType = capitalize(questionDataType);
-      response[`answer${dataType}`] = answer;
-      questionResponses.push(response);
-    })
-  }
-    else {
+    if (questionDataType !== 'json' && Array.isArray(questionResponse[1])) {
+      questionResponse[1].forEach(answer => {
+        const response = {
+          responseId,
+          questionId: questionResponse[0],
+          experimentId,
+          surveyId,
+          participantId
+        };
+        const dataType = capitalize(questionDataType);
+        response[`answer${dataType}`] = answer;
+        questionResponses.push(response);
+      });
+    } else {
       const result = {
         responseId,
         questionId: questionResponse[0],
@@ -274,37 +273,43 @@ export default class SurveyService {
     try {
       const result = await this.sqlConnection.transaction(async transaction => {
         this.logger.silly('Finding or creating survey responseId');
-        const responseId = await this.surveyResponseModel.findOrCreate({
-          where: { surveyId, participantId },
-          defaults: {
-            experimentId,
-            surveyId,
-            participantId,
-          },
-          transaction
-        }).then(response => response[0].responseId);
-  
+        const responseId = await this.surveyResponseModel
+          .findOrCreate({
+            where: { surveyId, participantId },
+            defaults: {
+              experimentId,
+              surveyId,
+              participantId
+            },
+            transaction
+          })
+          .then(response => response[0].responseId);
+
         this.logger.silly('Processing question responses');
         const questionResponses = [];
         for (let question of Object.entries(dataPayload)) {
-            const responses = await this.FormatQuestionResponse(
-              responseId,
-              experimentId,
-              surveyId,
-              participantId,
-              question
-            );
-            questionResponses.push(...responses);
+          const responses = await this.FormatQuestionResponse(
+            responseId,
+            experimentId,
+            surveyId,
+            participantId,
+            question
+          );
+          questionResponses.push(...responses);
         }
-  
+
         this.logger.silly('Posting question responses');
         const questionResponseRecords = await this.questionResponseModel.bulkCreate(
-          questionResponses, {transaction}
+          questionResponses,
+          { transaction }
         );
-  
+
         const role = this.surveyIdToRole(surveyId);
-        this.eventDispatcher.dispatch(events.survey.completeSurvey, { discordId, role });
-  
+        this.eventDispatcher.dispatch(events.survey.completeSurvey, {
+          discordId,
+          role
+        });
+
         return { questionResponses: questionResponseRecords };
       });
       return result;
@@ -315,9 +320,9 @@ export default class SurveyService {
   }
 
   private surveyIdToRole(surveyId: string): string {
-    switch(surveyId) {
-      case "5pvsnorv9xuupd7ef81hx":
-        return "信者";
+    switch (surveyId) {
+      case '5pvsnorv9xuupd7ef81hx':
+        return '信者';
       default:
         return null;
     }

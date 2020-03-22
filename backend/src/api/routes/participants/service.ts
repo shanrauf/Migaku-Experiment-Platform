@@ -1,9 +1,5 @@
 import { Service, Inject } from 'typedi';
 import winston from 'winston';
-import {
-  EventDispatcher,
-  EventDispatcherInterface
-} from '../../../decorators/eventDispatcher';
 import { ExperimentParticipant } from '../../../models/intermediary/experimentParticipant';
 import { Participant } from '../../../models/participant';
 import { Experiment } from '../../../models/experiment';
@@ -17,8 +13,7 @@ export default class ParticipantService {
   constructor(
     @Inject('Participant') private participantModel: typeof Participant,
     @Inject('Experiment') private experimentModel: typeof Experiment,
-    @Inject('logger') private logger: winston.Logger,
-    @EventDispatcher() private eventDispatcher: EventDispatcherInterface
+    @Inject('logger') private logger: winston.Logger
   ) {
     this.sequelizeFilters = {
       participantId: participantId => {

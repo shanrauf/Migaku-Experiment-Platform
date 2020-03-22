@@ -1,5 +1,5 @@
-import { IQuestion } from "../questions/requests";
-import { Survey } from "../../../models/survey";
+import { IQuestion } from '../questions/requests';
+import { Survey } from '../../../models/survey';
 
 export type ISurveys = {
   surveys: Survey[];

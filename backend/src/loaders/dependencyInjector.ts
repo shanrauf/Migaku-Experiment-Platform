@@ -1,8 +1,8 @@
-import { Container } from "typedi";
-import { Sequelize } from "sequelize-typescript";
-import logger from "./logger";
+import { Container } from 'typedi';
+import { Sequelize } from 'sequelize-typescript';
+import { Client } from 'discord.js';
 
-import { Client } from "discord.js";
+import logger from './logger';
 
 export default async ({
   sqlConnection,
@@ -14,19 +14,17 @@ export default async ({
   emailClient: any;
 }) => {
   try {
-    for (let model of Object.entries(sqlConnection.models)) {
+    for (const model of Object.entries(sqlConnection.models)) {
       Container.set(model[0], model[1]);
     }
 
-    Container.set("sequelize", sqlConnection);
-
-    Container.set("emailClient", emailClient);
-    Container.set("discordClient", discordClient);
-
-    Container.set("logger", logger);
-    logger.info("✌️ Logger injected into container");
+    Container.set('sequelize', sqlConnection);
+    Container.set('emailClient', emailClient);
+    Container.set('discordClient', discordClient);
+    Container.set('logger', logger);
+    logger.info('✌️ Logger injected into container');
   } catch (e) {
-    logger.error("🔥 Error on dependency injector loader: %o", e);
+    logger.error('🔥 Error on dependency injector loader: %o', e);
     throw e;
   }
 };
