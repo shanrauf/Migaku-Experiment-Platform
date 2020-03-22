@@ -1,7 +1,7 @@
-import { Sequelize, SequelizeOptions } from 'sequelize-typescript';
+import { Sequelize } from 'sequelize-typescript';
 import models from '../models';
 import sequelizeConfig from '../config/sequelize';
-import cls from 'cls-hooked';
+import mysql2 from 'mysql2';
 import logger from './logger';
 
 export default async (): Promise<Sequelize> => {
@@ -12,6 +12,7 @@ export default async (): Promise<Sequelize> => {
     {
       host: sequelizeConfig[process.env.NODE_ENV].host,
       dialect: 'mysql',
+      dialectModule: mysql2,
       port: sequelizeConfig[process.env.NODE_ENV].port,
       pool: {
         max: 15,

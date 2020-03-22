@@ -11,8 +11,13 @@ Features:
 ## Development Environment Setup
 
 1. `git clone https://github.com/shanrauf/mia-experiment.git`
-2. `./scripts/setup_dev.sh` # This simply forces Git to run unit tests before committing code
+2. Ask Shan for .env files
 3. Ensure MySQL local server is running (necessary for development and testing)
+4. `./scripts/setup_dev.sh` # Installs dependencies, migrates developemt database, etc
+
+## Develop
+
+To run the frontend or backend cd into the directory and run `npm start`
 
 ## Deploy
 
@@ -27,7 +32,8 @@ Using CodePipeline and CodeDeploy, the code is automatically deployed when you p
 5. Add contents of local `/scripts/default` to clipboard (frontend static files and /api proxy)
 6. Paste content into `sudo nano /etc/nginx/sites-available/default`, then Ctrl + X to save
 7. `sudo systemctl restart nginx`
-8. Push code to master to deploy
+8. Manually add `.env` file to `/opt`
+9. Push code to master to deploy
 
 ## Todo (in order of priority)
 
