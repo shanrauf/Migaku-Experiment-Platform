@@ -19,6 +19,6 @@
     // "strict": true,
     // "noUnusedLocals": true
   },
-  "include": ["./src/**/*", "./tests/**/*"],
+  "include": ["./src/**/*", "./tests/**/*", "scripts/db/migrate.ts"],
   "exclude": ["./node_modules/**/*"]
 }

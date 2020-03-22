@@ -11,10 +11,11 @@ module.exports = {
   cacheDirectory: '/var/folders/bw/vvybgj3d3kgb98nzjxfmpv5c0000gn/T/jest_dx',
 
   // Runs before test suite runs
-  setupFiles: ['./setup.ts'],
+  // setupFiles: ['./setup.ts'],
+  globalSetup: './setup.ts',
 
   // An array of file extensions your modules use
-  moduleFileExtensions: ['js', 'ts'],
+  moduleFileExtensions: ['js', 'ts', 'json'],
 
   // Activates notifications for test results
   notify: true,

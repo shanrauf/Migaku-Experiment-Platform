@@ -15,7 +15,7 @@ export function randomIdGenerator(): string {
 /**
  * Converts Date object into a human-readable format
  */
-export function formatDate(dateObject: Date, options = {}, language = "en-US") {
+export function formatDate(dateObject: Date, options = {}, language = 'en-US') {
   // options = {
   //   weekday: 'long',
   //   year: 'numeric',
@@ -42,19 +42,22 @@ export function generateSequelizeFilters(
     where: {},
     include: []
   };
+  if (!reqQuery) {
+    return null;
+  }
   Object.keys(reqQuery).forEach(key => {
     const sequelizeFilter = sequelizeFilters[key](reqQuery[key]);
     Object.keys(sequelizeFilter).forEach(filterKey => {
       switch (filterKey) {
-        case "where":
-          filters["where"] = {
-            ...filters["where"],
+        case 'where':
+          filters['where'] = {
+            ...filters['where'],
             ...sequelizeFilter[filterKey]
           };
           break;
 
-        case "include":
-          filters["include"].push(...sequelizeFilter[filterKey]);
+        case 'include':
+          filters['include'].push(...sequelizeFilter[filterKey]);
           break;
       }
     });

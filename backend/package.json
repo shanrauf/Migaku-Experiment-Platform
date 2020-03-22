@@ -13,8 +13,7 @@
     "inspect": "nodemon --inspect src/server.ts",
     "seed": "npx sequelize-cli db:seed:all",
     "seed:undo": "npx sequelize-cli db:seed:undo:all",
-    "seed-test": "npx sequelize-cli db:seed:all --env test",
-    "force-sync-dev": "cross-env NODE_ENV=development ts-node src/migrate.ts",
+    "force-sync-dev": "cross-env NODE_ENV=development ts-node scripts/db/migrate.ts",
     "lint": "npm run lint:eslint ",
     "lint:eslint": "eslint --ignore-path .gitignore --ext .ts src/",
     "lint:fix": "npm run lint:eslint -- --fix"
@@ -53,7 +52,7 @@
     "@babel/preset-env": "^7.8.3",
     "@types/bluebird": "^3.5.29",
     "@types/express": "^4.17.2",
-    "@types/jest": "^24.9.0",
+    "@types/jest": "^24.9.1",
     "@types/node": "^13.1.8",
     "@types/passport": "^1.0.2",
     "@types/passport-oauth2": "^1.4.8",
