@@ -16,6 +16,7 @@ import { Experiment } from './experiment';
 import { ExperimentParticipant } from './intermediary/experimentParticipant';
 import { CardCollection } from './cardCollection';
 import { QuestionResponse } from './questionResponse';
+import { randomIdGenerator } from '../utils';
 
 const publicAttributes = [
   'participantId',

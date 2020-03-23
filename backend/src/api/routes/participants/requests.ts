@@ -30,6 +30,10 @@ export class ParticipantSignup {
   email!: string;
 
   @Expose()
+  @IsString()
+  password!: string;
+
+  @Expose()
   @IsDefined()
   age!: number;
 

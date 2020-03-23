@@ -17,6 +17,7 @@ import { CardCollection } from '../../../models/cardCollection';
 import { SurveySection } from '../../../models/surveySection';
 import { SurveySectionQuestion } from '../../../models/intermediary/surveySectionQuestion';
 import { randomIdGenerator, generateSequelizeFilters } from '../../../utils';
+import { Question } from '../../../models/question';
 
 @Service()
 export default class ExperimentService {
@@ -26,6 +27,7 @@ export default class ExperimentService {
     @Inject('Experiment') private experimentModel: typeof Experiment,
     @Inject('ExperimentParticipant')
     private experimentParticipantModel: typeof ExperimentParticipant,
+    @Inject('Question') private questionModel: typeof Question,
     @Inject('ExperimentQuestion')
     private experimentQuestionModel: typeof ExperimentQuestion,
     @Inject('ExperimentRequirement')
@@ -188,9 +190,6 @@ export default class ExperimentService {
     experiment: requests.IExperiment
   ): Promise<responses.IExperiment> {
     try {
-      if (!experiment['experimentId']) {
-        experiment['experimentId'] = randomIdGenerator();
-      }
       this.logger.silly(`Creating experiment ${experiment['experimentId']}`);
       return await this.sqlConnection.transaction(async transaction => {
         const experimentRecord = await this.experimentModel.create(experiment, {
@@ -231,7 +230,7 @@ export default class ExperimentService {
     requirementIds: string[],
     transaction?: Transaction
   ): Promise<void> {
-    if (questionIds.length && requirementIds.length) {
+    if (questionIds?.length && requirementIds?.length) {
       await Promise.all([
         this.AssociateQuestionsWithExperiment(
           experimentId,
@@ -244,13 +243,13 @@ export default class ExperimentService {
           transaction
         )
       ]);
-    } else if (questionIds.length) {
+    } else if (questionIds?.length) {
       await this.AssociateQuestionsWithExperiment(
         experimentId,
         questionIds,
         transaction
       );
-    } else if (requirementIds.length) {
+    } else if (requirementIds?.length) {
       await this.AssociateRequirementsWithExperiment(
         experimentId,
         requirementIds,
@@ -425,5 +424,23 @@ export default class ExperimentService {
         where: { experimentId, participantId }
       }
     );
+  }
+
+  public async GetExperimentQuestionSchema(
+    experimentId: string
+  ): Promise<Question[]> {
+    return await this.questionModel.findAll({
+      include: [
+        {
+          model: this.experimentModel,
+          required: true,
+          where: { experimentId },
+          attributes: [],
+          through: {
+            attributes: []
+          }
+        }
+      ]
+    });
   }
 }

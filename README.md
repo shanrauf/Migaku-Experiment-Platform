@@ -40,7 +40,7 @@ Using CodePipeline and CodeDeploy, the code is automatically deployed when you p
 - Complete basic test suite that covers all API routes (testing status codes, response bodies, and model validation)
 - Secure API (currently, anyone can make any request from anywhere) via authentication (add auth cases to unit tests)
 - Significantly improve frontend styling
+- Complete basic e2e test suite through the frontend (i.e filling out form inputs, etc)
 - Devise system to send error msgs for frontend to display (e.x backend shud return "survey alreadysubmitted" msg for frontend notif to display)
 - Admin dashboard (view status of site; ability to edit experiments/surveys/participants/etc)
 - Experiment data analytics/visualization
-- Comprehensive test suite

@@ -9,37 +9,39 @@ import {
   UpdatedAt,
   CreatedAt,
   DefaultScope,
-  Scopes
-} from "sequelize-typescript";
-import { Participant } from "./participant";
-import { ExperimentParticipant } from "./intermediary/experimentParticipant";
-import { Requirement } from "./requirement";
-import { ExperimentRequirement } from "./intermediary/experimentRequirement";
-import { Survey } from "./survey";
-import { CardCollection } from "./cardCollection";
-import { QuestionResponse } from "./questionResponse";
-import { ExperimentQuestion } from "./intermediary/experimentQuestion";
-import { Question } from "./question";
+  Scopes,
+  BeforeCreate
+} from 'sequelize-typescript';
+import { Participant } from './participant';
+import { ExperimentParticipant } from './intermediary/experimentParticipant';
+import { Requirement } from './requirement';
+import { ExperimentRequirement } from './intermediary/experimentRequirement';
+import { Survey } from './survey';
+import { CardCollection } from './cardCollection';
+import { QuestionResponse } from './questionResponse';
+import { ExperimentQuestion } from './intermediary/experimentQuestion';
+import { Question } from './question';
+import { randomIdGenerator } from '../utils';
 
 @DefaultScope(() => ({
   attributes: [
-    "experimentId",
-    "title",
-    "description",
-    "startDate",
-    "endDate",
-    "visibility"
+    'experimentId',
+    'title',
+    'description',
+    'startDate',
+    'endDate',
+    'visibility'
   ]
 }))
 @Scopes(() => ({
   public: {
-    where: { visibility: "public" }
+    where: { visibility: 'public' }
   },
   private: {
-    where: { visibility: "private" }
+    where: { visibility: 'private' }
   }
 }))
-@Table({ modelName: "Experiment", tableName: "Experiments" })
+@Table({ modelName: 'Experiment', tableName: 'Experiments' })
 export class Experiment extends Model<Experiment> {
   @Column({ type: DataType.STRING(255), primaryKey: true })
   experimentId!: string;
@@ -75,31 +77,31 @@ export class Experiment extends Model<Experiment> {
   @BelongsToMany(
     () => Participant,
     () => ExperimentParticipant,
-    "experimentId",
-    "participantId"
+    'experimentId',
+    'participantId'
   )
   participants: Participant[];
 
   @BelongsToMany(
     () => Question,
     () => ExperimentQuestion,
-    "experimentId",
-    "questionId"
+    'experimentId',
+    'questionId'
   )
   questions: Question[];
 
   @BelongsToMany(
     () => Requirement,
     () => ExperimentRequirement,
-    "experimentId",
-    "requirementId"
+    'experimentId',
+    'requirementId'
   )
   requirements: Requirement[];
 
-  @HasMany(() => Survey, "experimentId")
+  @HasMany(() => Survey, 'experimentId')
   surveys: Survey[];
 
-  @HasMany(() => QuestionResponse, "experimentId")
+  @HasMany(() => QuestionResponse, 'experimentId')
   questionResponses: QuestionResponse[];
 
   @HasMany(() => CardCollection)

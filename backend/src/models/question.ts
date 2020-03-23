@@ -16,6 +16,7 @@ import { SurveyQuestion } from './intermediary/surveyQuestion';
 import { QuestionResponse } from './questionResponse';
 import { Experiment } from './experiment';
 import { ExperimentQuestion } from './intermediary/experimentQuestion';
+import { randomIdGenerator } from '../utils';
 
 @DefaultScope(() => ({
   attributes: [

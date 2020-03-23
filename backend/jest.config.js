@@ -3,6 +3,8 @@
 
 module.exports = {
   preset: 'ts-jest',
+  testEnvironment: 'node',
+  silent: true,
 
   // Stop running tests after the first failure
   bail: true,
