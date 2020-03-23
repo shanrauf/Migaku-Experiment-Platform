@@ -96,27 +96,25 @@ describe('GET /experiments', () => {
         'test-experiment-2',
         'test-participant-1'
       );
-      await Promise.all([
-        surveyService.CreateSurvey({
-          experimentId: 'test-experiment-1',
-          surveyId: 'test-survey-1',
-          title: randomIdGenerator(),
-          description: randomIdGenerator(),
-          startDate: new Date(Date.now()).toISOString(),
-          endDate: new Date(Date.now()).toISOString(),
-          surveyCategory: 'regular',
-          visibility: 'public',
-          sections: [
-            {
-              sectionId: randomIdGenerator(),
-              sectionNumber: 1,
-              title: randomIdGenerator(),
-              description: randomIdGenerator(),
-              questions: ['test-question-1']
-            }
-          ]
-        })
-      ]);
+      await surveyService.CreateSurvey({
+        experimentId: 'test-experiment-1',
+        surveyId: 'test-survey-1',
+        title: randomIdGenerator(),
+        description: randomIdGenerator(),
+        startDate: new Date(Date.now()).toISOString(),
+        endDate: new Date(Date.now()).toISOString(),
+        surveyCategory: 'regular',
+        visibility: 'public',
+        sections: [
+          {
+            sectionId: randomIdGenerator(),
+            sectionNumber: 1,
+            title: randomIdGenerator(),
+            description: randomIdGenerator(),
+            questions: ['test-question-1']
+          }
+        ]
+      });
     } catch (err) {
       throw err;
     }
@@ -330,6 +328,342 @@ describe('GET /experiments/:experimentId', () => {
       ]);
       expect(result1.experiment).toBeTruthy();
       expect(result2.experiment).toBeFalsy();
+      done();
+    } catch (err) {
+      done(err);
+    }
+  });
+});
+
+describe('DELETE /experiments/:experimentId', () => {
+  beforeAll(async () => {
+    const experimentService = Container.get(ExperimentService);
+    const questionService = Container.get(QuestionService);
+    const participantService = Container.get(ParticipantService);
+    const surveyService = Container.get(SurveyService);
+
+    const sqlConnection = Container.get<Sequelize>('sequelize');
+
+    try {
+      await sqlConnection.sync({
+        force: true
+      });
+      await Promise.all([
+        questionService.CreateQuestions([
+          {
+            questionId: 'test-question-1',
+            key: 'test-question-1',
+            questionType: 'text',
+            dataType: 'varchar',
+            required: true,
+            question: 'test-question-1'
+          }
+        ]),
+        participantService.CreateParticipant({
+          participantId: 'test-participant-1',
+          age: 99,
+          email: 'test@test.com',
+          password: 'asdf',
+          name: 'Shan Rauf',
+          sex: 'male',
+          lastLogin: new Date(Date.now())
+        })
+      ]);
+      await Promise.all([
+        await experimentService.CreateExperiment({
+          experimentId: 'test-experiment-1',
+          title: 'Test Experiment 1',
+          description: 'This is a test experiment.',
+          startDate: '2020-03-23T08:00:00.000Z',
+          endDate: null,
+          visibility: 'public',
+          questions: ['test-question-1']
+        }),
+        await experimentService.CreateExperiment({
+          experimentId: 'test-experiment-2',
+          title: 'Test Experiment 2',
+          description: 'This is a test experiment.',
+          startDate: '2020-03-23T08:00:00.000Z',
+          endDate: null,
+          visibility: 'public',
+          questions: ['test-question-1']
+        })
+      ]);
+
+      await experimentService.RegisterParticipant(
+        'test-experiment-1',
+        'test-participant-1'
+      );
+
+      await surveyService.CreateSurvey({
+        experimentId: 'test-experiment-1',
+        surveyId: 'test-survey-1',
+        title: randomIdGenerator(),
+        description: randomIdGenerator(),
+        startDate: new Date(Date.now()).toISOString(),
+        endDate: null,
+        surveyCategory: 'regular',
+        visibility: 'public',
+        sections: [
+          {
+            sectionId: randomIdGenerator(),
+            sectionNumber: 1,
+            title: randomIdGenerator(),
+            description: randomIdGenerator(),
+            questions: ['test-question-1']
+          }
+        ]
+      });
+    } catch (err) {
+      throw err;
+    }
+  });
+
+  it('deletes an experiment with no associated surveys, questions, etc', async done => {
+    const experimentService = Container.get(ExperimentService);
+
+    try {
+      const [result1, result2] = await Promise.all([
+        await experimentService.DeleteExperiment('test-experiment-2'),
+        await experimentService.DeleteExperiment(null)
+      ]);
+      expect(result1.deletedCount).toBe(1);
+      expect(result2.deletedCount).toBe(0);
+      done();
+    } catch (err) {
+      done(err);
+    }
+  });
+
+  it('deletes an experiment and all entities associated with it', async done => {
+    const experimentService = Container.get(ExperimentService);
+
+    try {
+      const { deletedCount } = await experimentService.DeleteExperiment(
+        'test-experiment-1'
+      );
+      expect(deletedCount).toBe(1);
+      done();
+    } catch (err) {
+      done(err);
+    }
+  });
+});
+
+describe('PUT /experiments/:experimentId/participants/:participantId', () => {
+  beforeAll(async () => {
+    const experimentService = Container.get(ExperimentService);
+    const participantService = Container.get(ParticipantService);
+    const sqlConnection = Container.get<Sequelize>('sequelize');
+
+    try {
+      await sqlConnection.sync({
+        force: true
+      });
+      await participantService.CreateParticipant({
+        participantId: 'test-participant-1',
+        age: 99,
+        email: 'test@test.com',
+        password: 'asdf',
+        name: 'Shan Rauf',
+        sex: 'male',
+        lastLogin: new Date(Date.now())
+      });
+      await experimentService.CreateExperiment({
+        experimentId: 'test-experiment-1',
+        title: 'Test Experiment 1',
+        description: 'This is a test experiment.',
+        startDate: '2020-03-23T08:00:00.000Z',
+        endDate: null,
+        visibility: 'public'
+      });
+    } catch (err) {
+      throw err;
+    }
+  });
+
+  it('registers the participant for the experiment', async done => {
+    const experimentService = Container.get(ExperimentService);
+
+    try {
+      const nonexistentParticipants = await experimentService.GetActiveParticipants(
+        'test-experiment-1'
+      );
+      expect(nonexistentParticipants.length).toBe(0);
+      await experimentService.RegisterParticipant(
+        'test-experiment-1',
+        'test-participant-1'
+      );
+      const participants = await experimentService.GetActiveParticipants(
+        'test-experiment-1'
+      );
+      expect(participants.length).toBe(1);
+      done();
+    } catch (err) {
+      done(err);
+    }
+  });
+});
+
+describe('DELETE /experiments/:experimentId/participants/:participantId', () => {
+  beforeAll(async () => {
+    const experimentService = Container.get(ExperimentService);
+    const participantService = Container.get(ParticipantService);
+    const sqlConnection = Container.get<Sequelize>('sequelize');
+
+    try {
+      await sqlConnection.sync({
+        force: true
+      });
+      await participantService.CreateParticipant({
+        participantId: 'test-participant-1',
+        age: 99,
+        email: 'test@test.com',
+        password: 'asdf',
+        name: 'Shan Rauf',
+        sex: 'male',
+        lastLogin: new Date(Date.now())
+      });
+      await experimentService.CreateExperiment({
+        experimentId: 'test-experiment-1',
+        title: 'Test Experiment 1',
+        description: 'This is a test experiment.',
+        startDate: '2020-03-23T08:00:00.000Z',
+        endDate: null,
+        visibility: 'public'
+      });
+      await experimentService.RegisterParticipant(
+        'test-experiment-1',
+        'test-participant-1'
+      );
+    } catch (err) {
+      throw err;
+    }
+  });
+
+  it('drops the participant from the experiment', async done => {
+    const experimentService = Container.get(ExperimentService);
+
+    try {
+      const participants = await experimentService.GetActiveParticipants(
+        'test-experiment-1'
+      );
+      expect(participants.length).toBe(1);
+      await experimentService.DropParticipant(
+        'test-experiment-1',
+        'test-participant-1'
+      );
+
+      const nonexistentParticipants = await experimentService.GetActiveParticipants(
+        'test-experiment-1'
+      );
+      expect(nonexistentParticipants.length).toBe(0);
+      done();
+    } catch (err) {
+      done(err);
+    }
+  });
+});
+
+describe('GET /experiments/:experimentId/questions', () => {
+  beforeAll(async () => {
+    const experimentService = Container.get(ExperimentService);
+    const questionService = Container.get(QuestionService);
+    const sqlConnection = Container.get<Sequelize>('sequelize');
+
+    try {
+      await sqlConnection.sync({
+        force: true
+      });
+      await questionService.CreateQuestions([
+        {
+          questionId: 'test-question-1',
+          key: 'test-question-1',
+          questionType: 'text',
+          dataType: 'varchar',
+          required: true,
+          question: 'test-question-1'
+        }
+      ]);
+      await experimentService.CreateExperiment({
+        experimentId: 'test-experiment-1',
+        title: 'Test Experiment 1',
+        description: 'This is a test experiment.',
+        startDate: '2020-03-23T08:00:00.000Z',
+        endDate: null,
+        visibility: 'public'
+      });
+      await experimentService.AddQuestionsToExperimentSchema(
+        'test-experiment-1',
+        ['test-question-1']
+      );
+    } catch (err) {
+      throw err;
+    }
+  });
+
+  it('gets the question in the experiment schema', async done => {
+    const experimentService = Container.get(ExperimentService);
+
+    try {
+      const questions = await experimentService.GetExperimentQuestionSchema(
+        'test-experiment-1'
+      );
+
+      expect(questions.length).toBe(1);
+      done();
+    } catch (err) {
+      done(err);
+    }
+  });
+});
+
+describe('POST /experiments/:experimentId/questions', () => {
+  beforeAll(async () => {
+    const experimentService = Container.get(ExperimentService);
+    const questionService = Container.get(QuestionService);
+    const sqlConnection = Container.get<Sequelize>('sequelize');
+
+    try {
+      await sqlConnection.sync({
+        force: true
+      });
+      await questionService.CreateQuestions([
+        {
+          questionId: 'test-question-1',
+          key: 'test-question-1',
+          questionType: 'text',
+          dataType: 'varchar',
+          required: true,
+          question: 'test-question-1'
+        }
+      ]);
+      await experimentService.CreateExperiment({
+        experimentId: 'test-experiment-1',
+        title: 'Test Experiment 1',
+        description: 'This is a test experiment.',
+        startDate: '2020-03-23T08:00:00.000Z',
+        endDate: null,
+        visibility: 'public'
+      });
+    } catch (err) {
+      throw err;
+    }
+  });
+
+  it('adds the question to the experiment schema', async done => {
+    const experimentService = Container.get(ExperimentService);
+
+    try {
+      await experimentService.AddQuestionsToExperimentSchema(
+        'test-experiment-1',
+        ['test-question-1']
+      );
+
+      const questions = await experimentService.GetExperimentQuestionSchema(
+        'test-experiment-1'
+      );
+      expect(questions.length).toBe(1);
       done();
     } catch (err) {
       done(err);

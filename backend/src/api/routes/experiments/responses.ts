@@ -9,7 +9,7 @@ export class IExperiments extends BaseResponse {
 }
 
 export class IExperiment extends BaseResponse {
-  experiment: Experiment | null;
+  experiment: Experiment;
 }
 
 export class IExperimentParticipant extends BaseResponse {
@@ -22,6 +22,6 @@ export class IDeleteExperiment extends BaseResponse {
     super();
     this.message = `${this.deletedCount} experiment${
       this.deletedCount > 1 ? 's' : ''
-    } created.`;
+    } deleted.`;
   }
 }

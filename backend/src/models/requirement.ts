@@ -14,7 +14,7 @@ import { Experiment } from './experiment';
 import { ExperimentRequirement } from './intermediary/experimentRequirement';
 
 @DefaultScope(() => ({
-  attributes: ['requirementId', 'key', 'dataType', 'image']
+  attributes: ['requirementId', 'dataType', 'image']
 }))
 @Table({ modelName: 'Requirement', tableName: 'Requirements' })
 export class Requirement extends Model<Requirement> {

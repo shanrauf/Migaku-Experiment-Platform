@@ -10,13 +10,11 @@ import {
   EventDispatcher,
   EventDispatcherInterface
 } from '../../../decorators/eventDispatcher';
-import { Participant } from '../../../models/participant';
 import { QuestionResponse } from '../../../models/questionResponse';
 import { Survey } from '../../../models/survey';
 import { SurveySection } from '../../../models/surveySection';
 import { Question } from '../../../models/question';
 import { SurveyQuestion } from '../../../models/intermediary/surveyQuestion';
-import { Experiment } from '../../../models/experiment';
 import { CardCollection } from '../../../models/cardCollection';
 import { SurveyResponse } from '../../../models/surveyResponse';
 import { SurveySectionQuestion } from '../../../models/intermediary/surveySectionQuestion';
@@ -433,6 +431,7 @@ export default class SurveyService {
       });
       return result;
     } catch (e) {
+      this.logger.silly('ASDF');
       this.logger.error(e);
       throw e;
     }

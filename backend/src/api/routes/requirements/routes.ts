@@ -3,7 +3,8 @@ import { Container } from 'typedi';
 
 import logger from '../../../loaders/logger';
 import * as requests from './requests';
-// import middlewares from "../middlewares";
+import RequirementService from './service';
+import middlewares from '../../middlewares';
 
 const route = Router({ mergeParams: true });
 
@@ -14,10 +15,17 @@ export default (app: Router) => {
     '/',
     // middlewares.ensureAuthenticated,
     // middlewares.ensureExperimentParticipant,
+    middlewares.validateRequestSchema(requests.RequirementFilters, null),
     async (req: Request, res: Response, next: NextFunction) => {
-      const { experimentId } = req.params;
       try {
-        logger.debug(`GET /requirements with params: %o`, req.params);
+        logger.debug(`GET /requirements with query: %o`, req.query);
+        const requirementService = Container.get(RequirementService);
+        const payload = await requirementService.GetRequirements(
+          req.query as requests.RequirementFilters
+        );
+        return payload.requirements.length
+          ? res.status(200).json(payload)
+          : res.status(404).json(payload);
         return res.json({ test: 'test' }).status(200);
       } catch (err) {
         return next(err);

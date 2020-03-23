@@ -2,7 +2,6 @@ import { Service, Inject } from 'typedi';
 import winston from 'winston';
 import { Sequelize } from 'sequelize-typescript';
 import { Transaction } from 'sequelize/types';
-
 import * as requests from './requests';
 import * as responses from './responses';
 import { Survey } from '../../../models/survey';
@@ -16,7 +15,7 @@ import { SurveyResponse } from '../../../models/surveyResponse';
 import { CardCollection } from '../../../models/cardCollection';
 import { SurveySection } from '../../../models/surveySection';
 import { SurveySectionQuestion } from '../../../models/intermediary/surveySectionQuestion';
-import { randomIdGenerator, generateSequelizeFilters } from '../../../utils';
+import { generateSequelizeFilters } from '../../../utils';
 import { Question } from '../../../models/question';
 
 @Service()
@@ -126,7 +125,6 @@ export default class ExperimentService {
 
   /**
    * Permanently delete experiment.
-   * TODO: Test...
    */
   public async DeleteExperiment(
     experimentId: string
@@ -135,19 +133,26 @@ export default class ExperimentService {
       this.logger.silly(`Deleting experiment ${experimentId}`);
       return await this.sqlConnection.transaction(async transaction => {
         /**
-         * Delete all question responses, survey responses, surveys, and requirements under this experiment
+         * Delete all question responses, survey responses, surveys, and requirements under this experiment.
          */
-        await Promise.all([
-          this.DeleteAssociatedQuestionResponses(experimentId, transaction),
-          this.DeleteAssociatedSurveyResponses(experimentId, transaction),
-          this.DeleteAssociatedSurveys(experimentId, transaction),
-          this.DeleteAssociatedRequirements(experimentId, transaction),
-          this.DeleteAssociatedCardCollections(experimentId, transaction)
-        ]);
+        await this.DeleteAssociatedQuestionResponses(experimentId, transaction);
+        await this.DeleteAssociatedQuestions(experimentId, transaction);
+        await this.DeleteAssociatedCardCollections(experimentId, transaction);
+        await this.DeleteAssociatedSurveyResponses(experimentId, transaction);
+        await this.DeleteAssociatedSurveys(experimentId, transaction);
+        await this.DeleteAssociatedParticipants(experimentId, transaction);
+        await this.DeleteAssociatedRequirements(experimentId, transaction);
+        const deletedCount = await this.experimentModel.destroy({
+          where: { experimentId },
+          transaction
+        });
+
+        this.logger.silly(
+          `Deleted ${deletedCount} experiment${deletedCount == 1 ? '' : 's'}`
+        );
+
         return {
-          deletedCount: await this.experimentModel.destroy({
-            where: { experimentId }
-          })
+          deletedCount
         };
       });
     } catch (err) {
@@ -164,18 +169,18 @@ export default class ExperimentService {
     participantId: string
   ): Promise<responses.IExperimentParticipant> {
     try {
-      this.logger.silly(
-        `Registering ${participantId} for experiment ${experimentId}`
-      );
+      this.logger.silly(`Registering ${participantId} for ${experimentId}`);
+      const result = await this.experimentParticipantModel.findOrCreate({
+        where: { experimentId, participantId },
+        defaults: {
+          experimentId,
+          participantId,
+          registerDate: new Date(Date.now())
+        }
+      });
+      this.logger.silly(result);
       return {
-        participant: await this.experimentParticipantModel.findOrCreate({
-          where: { experimentId, participantId },
-          defaults: {
-            experimentId,
-            participantId,
-            registerDate: new Date(Date.now())
-          }
-        })[0]
+        participant: result[0]
       };
     } catch (err) {
       this.logger.error(err);
@@ -216,13 +221,17 @@ export default class ExperimentService {
     experimentId: string,
     questionIds: string[]
   ): Promise<void> {
-    await this.AssociateQuestionsWithExperiment(experimentId, questionIds);
+    try {
+      await this.AssociateQuestionsWithExperiment(experimentId, questionIds);
+    } catch (err) {
+      this.logger.error(err);
+      throw err;
+    }
   }
 
   /**
    * Helper method to try concurrently associating questions and requirements
-   * if quesstionIds[] and requirementIds[] aren't null.
-   * TODO: Test... what happens if one of the two methods fail when running concurrently...
+   * if both questionIds[] and requirementIds[] aren't null.
    */
   private async AssociateQuestionsAndRequirements(
     experimentId: string,
@@ -230,31 +239,36 @@ export default class ExperimentService {
     requirementIds: string[],
     transaction?: Transaction
   ): Promise<void> {
-    if (questionIds?.length && requirementIds?.length) {
-      await Promise.all([
-        this.AssociateQuestionsWithExperiment(
+    try {
+      if (questionIds?.length && requirementIds?.length) {
+        await Promise.all([
+          this.AssociateQuestionsWithExperiment(
+            experimentId,
+            questionIds,
+            transaction
+          ),
+          this.AssociateRequirementsWithExperiment(
+            experimentId,
+            requirementIds,
+            transaction
+          )
+        ]);
+      } else if (questionIds?.length) {
+        await this.AssociateQuestionsWithExperiment(
           experimentId,
           questionIds,
           transaction
-        ),
-        this.AssociateRequirementsWithExperiment(
+        );
+      } else if (requirementIds?.length) {
+        await this.AssociateRequirementsWithExperiment(
           experimentId,
           requirementIds,
           transaction
-        )
-      ]);
-    } else if (questionIds?.length) {
-      await this.AssociateQuestionsWithExperiment(
-        experimentId,
-        questionIds,
-        transaction
-      );
-    } else if (requirementIds?.length) {
-      await this.AssociateRequirementsWithExperiment(
-        experimentId,
-        requirementIds,
-        transaction
-      );
+        );
+      }
+    } catch (err) {
+      this.logger.error(err);
+      throw err;
     }
   }
 
@@ -266,15 +280,20 @@ export default class ExperimentService {
     questionIds: string[],
     transaction?: Transaction
   ): Promise<void> {
-    await this.experimentQuestionModel.bulkCreate(
-      questionIds.map(questionId => {
-        return {
-          experimentId,
-          questionId
-        };
-      }),
-      { transaction }
-    );
+    try {
+      await this.experimentQuestionModel.bulkCreate(
+        questionIds.map(questionId => {
+          return {
+            experimentId,
+            questionId
+          };
+        }),
+        { transaction }
+      );
+    } catch (err) {
+      this.logger.error(err);
+      throw err;
+    }
   }
 
   /**
@@ -290,6 +309,43 @@ export default class ExperimentService {
         transaction
       });
     } catch (err) {
+      this.logger.error(err);
+      throw err;
+    }
+  }
+
+  /**
+   * Effectively erase experiment schema
+   */
+  private async DeleteAssociatedQuestions(
+    experimentId: string,
+    transaction?: Transaction
+  ): Promise<void> {
+    try {
+      await this.experimentQuestionModel.destroy({
+        where: { experimentId },
+        transaction
+      });
+    } catch (err) {
+      this.logger.error(err);
+      throw err;
+    }
+  }
+
+  /**
+   * Deletes all experiment participant entries for this experiment
+   */
+  private async DeleteAssociatedParticipants(
+    experimentId: string,
+    transaction?: Transaction
+  ): Promise<void> {
+    try {
+      await this.experimentParticipantModel.destroy({
+        where: { experimentId },
+        transaction
+      });
+    } catch (err) {
+      this.logger.error(err);
       throw err;
     }
   }
@@ -318,15 +374,13 @@ export default class ExperimentService {
         where: { experimentId },
         transaction
       });
-
       const promises = [];
-      for (let surveyId of surveyIds) {
+      for (let { surveyId } of surveyIds) {
         promises.push(
           this.DeleteAssociatedSurveySections(surveyId, transaction)
         );
       }
       await Promise.all(promises);
-
       await this.surveyModel.destroy({
         where: { experimentId },
         transaction
@@ -351,13 +405,12 @@ export default class ExperimentService {
     });
 
     const promises = [];
-    for (let sectionId of sectionIds) {
+    for (let { sectionId } of sectionIds) {
       promises.push(
         this.DeleteAssociatedSurveySectionQuestions(sectionId, transaction)
       );
     }
     await Promise.all(promises);
-
     await this.surveySectionModel.destroy({
       where: { surveyId },
       transaction
@@ -438,6 +491,30 @@ export default class ExperimentService {
           attributes: [],
           through: {
             attributes: []
+          }
+        }
+      ]
+    });
+  }
+
+  /**
+   * Gets participants that have registered for the experiment.
+   */
+  public async GetActiveParticipants(
+    experimentId: string
+  ): Promise<Participant[]> {
+    return await this.participantModel.findAll({
+      include: [
+        {
+          model: this.experimentModel,
+          required: true,
+          attributes: [],
+          through: {
+            attributes: [],
+            where: {
+              experimentId,
+              dropoutDate: null
+            }
           }
         }
       ]
