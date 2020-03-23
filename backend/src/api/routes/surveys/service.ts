@@ -65,8 +65,8 @@ export default class SurveyService {
             {
               model: this.surveyResponseModel,
               required: true,
-              where: { participantId },
-              attributes: []
+              where: { participantId }
+              // attributes: []
             }
           ]
         };
@@ -83,10 +83,11 @@ export default class SurveyService {
         this.sequelizeFilters,
         filters
       );
-
+      this.logger.silly(sequelizeFilters);
       const surveyRecords = await this.surveyModel
         .scope('public')
         .findAndCountAll(sequelizeFilters);
+      this.logger.silly(surveyRecords);
       return {
         surveys: surveyRecords.rows,
         totalCount: surveyRecords.count
@@ -265,8 +266,8 @@ export default class SurveyService {
     experimentId: string,
     surveyId: string,
     participantId: string,
-    dataPayload: requests.IQuestionResponse,
-    discordId: string
+    discordId: string,
+    dataPayload: requests.IQuestionResponse
   ): Promise<{ questionResponses: QuestionResponse[] }> {
     try {
       const result = await this.sqlConnection.transaction(async transaction => {
@@ -275,6 +276,7 @@ export default class SurveyService {
           .findOrCreate({
             where: { surveyId, participantId },
             defaults: {
+              responseId: randomIdGenerator(),
               experimentId,
               surveyId,
               participantId
@@ -282,7 +284,7 @@ export default class SurveyService {
             transaction
           })
           .then(response => response[0].responseId);
-
+        this.logger.silly(responseId + ' RESPONSEID');
         this.logger.silly('Processing question responses');
         const questionResponses = [];
         for (let question of Object.entries(dataPayload)) {
@@ -302,11 +304,13 @@ export default class SurveyService {
           { transaction }
         );
 
-        const role = this.surveyIdToRole(surveyId);
-        this.eventDispatcher.dispatch(events.survey.completeSurvey, {
-          discordId,
-          role
-        });
+        if (discordId) {
+          const role = this.surveyIdToRole(surveyId);
+          this.eventDispatcher.dispatch(events.survey.completeSurvey, {
+            discordId,
+            role
+          });
+        }
 
         return { questionResponses: questionResponseRecords };
       });
@@ -431,7 +435,6 @@ export default class SurveyService {
       });
       return result;
     } catch (e) {
-      this.logger.silly('ASDF');
       this.logger.error(e);
       throw e;
     }

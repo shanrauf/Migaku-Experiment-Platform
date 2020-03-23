@@ -80,6 +80,7 @@ export default class ParticipantService {
   public async CreateParticipant(
     participant: requests.ParticipantSignup
   ): Promise<Participant> {
+    this.logger.silly('Creating participant.');
     return await this.participantModel.create(participant);
   }
 }

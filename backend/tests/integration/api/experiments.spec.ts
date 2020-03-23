@@ -4,8 +4,8 @@ import { Sequelize } from 'sequelize-typescript';
 import sequelizeLoader from '../../../src/loaders/sequelize';
 import dependencyInjectorLoader from '../../../src/loaders/dependencyInjector';
 import passportLoader from '../../../src/loaders/passport';
-import discordLoader from '../../../src/loaders/discord';
-import emailLoader from '../../../src/loaders/mailer';
+// import discordLoader from '../../../src/loaders/discord';
+// import emailLoader from '../../../src/loaders/mailer';
 import ExperimentService from '../../../src/api/routes/experiments/service';
 import QuestionService from '../../../src/api/routes/questions/service';
 import SurveyService from '../../../src/api/routes/surveys/service';
@@ -18,13 +18,13 @@ import ParticipantService from '../../../src/api/routes/participants/service';
 beforeAll(async () => {
   await passportLoader();
   const sqlConnection = await sequelizeLoader();
-  const discordClient = await discordLoader();
-  const emailClient = await emailLoader();
+  // const discordClient = await discordLoader();
+  // const emailClient = await emailLoader();
 
   await dependencyInjectorLoader({
     sqlConnection,
-    discordClient,
-    emailClient
+    discordClient: undefined,
+    emailClient: undefined
   });
 });
 

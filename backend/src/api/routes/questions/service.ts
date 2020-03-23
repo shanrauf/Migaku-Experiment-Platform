@@ -88,6 +88,11 @@ export default class QuestionService {
   }
   public async CreateQuestions(questions: requests.IQuestion[]): Promise<void> {
     try {
+      this.logger.silly(
+        `Creating ${questions.length} question${
+          questions.length === 1 ? '' : 's'
+        }`
+      );
       await this.questionModel.bulkCreate(questions);
     } catch (err) {
       this.logger.error(err);

@@ -8,7 +8,7 @@ import * as requests from './requests';
 import middlewares from '../../middlewares';
 
 /**
- * Given a url like /latest/responses, this finds the experiment's latest surveyId and forwards the API request.
+ * Converts /latest/responses to /:surveyId/responses, where surveyId = the latest survey in the experiment.
  */
 const convertLatestToSurveyId = async (
   req: Request,
@@ -71,8 +71,8 @@ export default (app: Router) => {
       try {
         logger.debug(`POST /surveys with body: %o`, req.body);
         const surveyService = Container.get(SurveyService);
-        const payload = await surveyService.CreateSurvey(req.body);
-        return res.status(200).json({ survey: req.body });
+        const { survey } = await surveyService.CreateSurvey(req.body);
+        return res.status(200).json({ survey });
       } catch (err) {
         logger.error(err);
         return next(err);
@@ -141,8 +141,8 @@ export default (app: Router) => {
           experimentId,
           surveyId,
           req.user.participantId,
-          req.body.data,
-          req.user.discordId
+          req.user.discordId,
+          req.body.data
         );
         return res.json(questionResponses).status(200);
       } catch (err) {
