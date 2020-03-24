@@ -337,6 +337,47 @@ describe('GET /experiments/:experimentId', () => {
   });
 });
 
+describe('PATCH /experiments/:experimentId', () => {
+  beforeAll(async () => {
+    const experimentService = Container.get(ExperimentService);
+    const sqlConnection = Container.get<Sequelize>('sequelize');
+
+    try {
+      await sqlConnection.sync({
+        force: true
+      });
+      await experimentService.CreateExperiment({
+        experimentId: 'test-experiment-1',
+        title: 'Test Experiment 1',
+        description: 'This is a test experiment.',
+        startDate: '2020-03-23T08:00:00.000Z',
+        endDate: null,
+        visibility: 'private'
+      });
+    } catch (err) {
+      throw err;
+    }
+  });
+
+  it('updates the experiment', async done => {
+    const experimentService = Container.get(ExperimentService);
+
+    try {
+      const { experiment } = await experimentService.UpdateExperiment(
+        'test-experiment-1',
+        {
+          title: 'New title',
+          visibility: 'public'
+        }
+      );
+      expect(experiment.title).toBe('New title');
+      done();
+    } catch (err) {
+      done(err);
+    }
+  });
+});
+
 describe('DELETE /experiments/:experimentId', () => {
   beforeAll(async () => {
     const experimentService = Container.get(ExperimentService);

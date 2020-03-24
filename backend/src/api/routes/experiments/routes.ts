@@ -72,6 +72,26 @@ export default (app: Router) => {
     }
   );
 
+  route.patch(
+    '/:experimentId',
+    middlewares.ensureAdmin,
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        logger.debug(`PATCH /experiments/${req.params.experimentId}`);
+        const experimentService = Container.get(ExperimentService);
+        const { experiment } = await experimentService.UpdateExperiment(
+          req.params.experimentId,
+          req.body as Partial<requests.IExperiment>
+        );
+        return experiment
+          ? res.status(200).json({ experiment })
+          : res.status(404).json({ experiment });
+      } catch (err) {
+        return next(err);
+      }
+    }
+  );
+
   // Admin route
   route.delete(
     '/:experimentId',
@@ -104,9 +124,10 @@ export default (app: Router) => {
           req.params.participantId !== req.user.participantId &&
           !req.user.adminId
         ) {
-          return res.status(403).json({
-            message: 'You are not authenticated to access this route'
-          });
+          throw new ErrorHandler(
+            403,
+            'You are not authorized to perform this action.'
+          );
         }
         const experimentService = Container.get(ExperimentService);
         const payload = await experimentService.RegisterParticipant(
@@ -150,16 +171,14 @@ export default (app: Router) => {
   route.get(
     '/:experimentId/questions',
     async (req: Request, res: Response, next: NextFunction) => {
-      res.redirect(`../../questions?experimentId=${req.params.experimentId}`);
+      res.redirect(`questions?experimentId=${req.params.experimentId}`);
     }
   );
 
   route.get(
     '/:experimentId/participants',
     async (req: Request, res: Response, next: NextFunction) => {
-      res.redirect(
-        `../../participants?experimentId=${req.params.experimentId}`
-      );
+      res.redirect(`participants?experimentId=${req.params.experimentId}`);
     }
   );
 

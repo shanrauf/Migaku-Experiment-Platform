@@ -1,3 +1,4 @@
+import { ErrorHandler } from './../../../utils/index';
 import { Service, Inject } from 'typedi';
 import winston from 'winston';
 import { Sequelize } from 'sequelize-typescript';
@@ -170,6 +171,7 @@ export default class ExperimentService {
     participantId: string
   ): Promise<responses.IExperimentParticipant> {
     try {
+      await this.CheckIfOpenForRegistration(experimentId);
       this.logger.silly(`Registering ${participantId} for ${experimentId}`);
       const result = await this.experimentParticipantModel.findOrCreate({
         where: { experimentId, participantId },
@@ -188,6 +190,21 @@ export default class ExperimentService {
     }
   }
 
+  private async CheckIfOpenForRegistration(
+    experimentId: string
+  ): Promise<void> {
+    await this.experimentModel
+      .findOne({ where: { experimentId, visibility: 'public' } })
+      .then(experiment => {
+        if (!experiment) {
+          throw new ErrorHandler(
+            403,
+            'You are not authorized to perform this action'
+          );
+        }
+      });
+  }
+
   /**
    * Creates an experiment.
    */
@@ -197,12 +214,9 @@ export default class ExperimentService {
     try {
       this.logger.silly(`Creating experiment ${experiment['experimentId']}`);
       const result = await this.sqlConnection.transaction(async transaction => {
-        this.logger.silly('asdf');
-
         const experimentRecord = await this.experimentModel.create(experiment, {
           transaction
         });
-        this.logger.silly('ASSOCIATIONs');
         await this.AssociateQuestionsAndRequirements(
           experiment.experimentId,
           experiment.questions,
@@ -216,6 +230,27 @@ export default class ExperimentService {
       this.logger.error(err);
       throw err;
     }
+  }
+
+  public async UpdateExperiment(
+    experimentId: string,
+    experimentObj: Partial<requests.IExperiment>
+  ): Promise<responses.IExperiment> {
+    const experiment = await this.experimentModel.findByPk(experimentId);
+    if (!experiment) {
+      throw new ErrorHandler(
+        404,
+        `Experiment ${experimentObj.experimentId} not found.`
+      );
+    }
+    for (let [attribute, newValue] of Object.entries(experimentObj)) {
+      if (attribute === 'experimentId') {
+        throw new ErrorHandler(403, "You can't change the experimentId");
+      }
+      experiment[attribute] = newValue;
+    }
+    await experiment.save();
+    return { experiment };
   }
 
   /**
