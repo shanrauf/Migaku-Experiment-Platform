@@ -44,7 +44,7 @@ export default (app: Router) => {
         const payload = await experimentService.CreateExperiment(
           req.body as requests.IExperiment
         );
-        return !payload.experiment
+        return payload.experiment
           ? res.status(201).json(payload)
           : res.status(404).json(payload);
       } catch (err) {
@@ -63,7 +63,7 @@ export default (app: Router) => {
         const payload = await experimentService.GetExperiment(
           req.params.experimentId
         );
-        return !payload.experiment
+        return payload.experiment
           ? res.status(200).json(payload)
           : res.status(404).json(payload);
       } catch (err) {
@@ -75,7 +75,7 @@ export default (app: Router) => {
   // Admin route
   route.delete(
     '/:experimentId',
-    middlewares.ensureAuthenticated,
+    middlewares.ensureAdmin,
     async (req: Request, res: Response, next: NextFunction) => {
       logger.debug(`DELETE /experiments/${req.params.experimentId}`);
       try {
@@ -83,7 +83,7 @@ export default (app: Router) => {
         const payload = await experimentService.DeleteExperiment(
           req.params.experimentId
         );
-        return !payload.deletedCount
+        return payload.deletedCount
           ? res.status(200).json(payload)
           : res.status(400).json(payload);
       } catch (err) {
@@ -100,7 +100,10 @@ export default (app: Router) => {
         `PUT /experiments/${req.params.experimentId}/participants/${req.params.participantId}`
       );
       try {
-        if (req.params.participantId !== req.user.participantId) {
+        if (
+          req.params.participantId !== req.user.participantId &&
+          !req.user.adminId
+        ) {
           return res.status(403).json({
             message: 'You are not authenticated to access this route'
           });
@@ -117,10 +120,9 @@ export default (app: Router) => {
     }
   );
 
-  // Admin route
   route.delete(
     '/:experimentId/participants/:participantId',
-    middlewares.ensureAuthenticated,
+    middlewares.ensureAdmin,
     async (req: Request, res: Response, next: NextFunction) => {
       logger.debug(
         `DELETE /experiments/${req.params.experimentId}/participants/${req.params.participantId}`
@@ -166,6 +168,7 @@ export default (app: Router) => {
    */
   route.post(
     '/:experimentId/questions',
+    middlewares.ensureAdmin,
     validateRequestSchema(null, requests.IExperimentQuestions),
     async (req: Request, res: Response, next: NextFunction) => {
       logger.debug(

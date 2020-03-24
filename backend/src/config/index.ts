@@ -5,7 +5,10 @@ if (!dotenv.config()) {
 }
 
 export default {
-  port: process.env.NODE_ENV === 'development' ? 3000 : 3306,
+  port:
+    process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
+      ? 3000
+      : 3306,
   cookieKey: process.env.JWT_SECRET,
   MAILER_KEY: process.env.MAILER_KEY,
   /**
@@ -22,11 +25,11 @@ export default {
   },
   discord: {
     DISCORD_SERVER:
-      process.env.NODE_ENV === 'development'
+      process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
         ? process.env.DISCORD_SERVER_DEV
         : process.env.DISCORD_SERVER,
     DISCORD_TOKEN:
-      process.env.NODE_ENV === 'development'
+      process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
         ? process.env.DISCORD_TOKEN_DEV
         : process.env.DISCORD_TOKEN,
     discordOAuthClientId: process.env.discordOAuthClientId,

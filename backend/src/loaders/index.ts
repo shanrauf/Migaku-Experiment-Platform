@@ -3,7 +3,7 @@ import sequelizeLoader from './sequelize';
 import dependencyInjectorLoader from './dependencyInjector';
 import passportLoader from './passport';
 import discordLoader from './discord';
-import emailLoader from './mailer';
+// import emailLoader from './mailer';
 
 /**
  * Events must be imported so that they can be triggered.
@@ -11,15 +11,16 @@ import emailLoader from './mailer';
 import './events';
 
 export default async ({ expressApp }: { expressApp }) => {
-  await passportLoader();
+  const passport = await passportLoader();
   const sqlConnection = await sequelizeLoader();
   const discordClient = await discordLoader();
-  const emailClient = await emailLoader();
+  // const emailClient = await emailLoader();
 
   await dependencyInjectorLoader({
     sqlConnection,
     discordClient,
-    emailClient
+    emailClient: undefined,
+    passport
   });
 
   await expressLoader({ app: expressApp });

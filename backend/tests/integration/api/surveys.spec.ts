@@ -1,6 +1,3 @@
-test('test', () => {
-  expect(1).toBe(1);
-});
 import { Container } from 'typedi';
 import { Sequelize } from 'sequelize-typescript';
 
@@ -19,7 +16,7 @@ import { randomIdGenerator } from '../../../src/utils';
  * Configure the database and dependencies before testing API routes
  */
 beforeAll(async () => {
-  await passportLoader();
+  // const passport = await passportLoader();
   const sqlConnection = await sequelizeLoader();
   // const discordClient = await discordLoader();
   // const emailClient = await emailLoader();
@@ -27,7 +24,8 @@ beforeAll(async () => {
   await dependencyInjectorLoader({
     sqlConnection,
     discordClient: undefined,
-    emailClient: undefined
+    emailClient: undefined,
+    passport: undefined
   });
 });
 
@@ -60,7 +58,7 @@ describe('GET /experiments/:experimentId/surveys', () => {
         password: 'asdf',
         name: 'Shan Rauf',
         sex: 'male',
-        lastLogin: new Date(Date.now())
+        lastLogin: new Date(Date.now()).toISOString()
       });
       await participantService.CreateParticipant({
         participantId: 'test-participant-2',
@@ -69,7 +67,7 @@ describe('GET /experiments/:experimentId/surveys', () => {
         password: 'asdf',
         name: 'Shan Rauf',
         sex: 'male',
-        lastLogin: new Date(Date.now())
+        lastLogin: new Date(Date.now()).toISOString()
       });
       await experimentService.CreateExperiment({
         experimentId: 'test-experiment-1',
@@ -204,11 +202,80 @@ describe('GET /experiments/:experimentId/surveys', () => {
   });
 });
 
-describe('POST /experiments/:experimentId/surveys', () => {
+describe('GET /experiments/:experimentId/surveys/:surveyId', () => {
+  beforeAll(async () => {
+    const experimentService = Container.get(ExperimentService);
+    const questionService = Container.get(QuestionService);
+    const surveyService = Container.get(SurveyService);
+    const sqlConnection = Container.get<Sequelize>('sequelize');
+
+    try {
+      await sqlConnection.sync({
+        force: true
+      });
+      await questionService.CreateQuestions([
+        {
+          questionId: 'test-question-1',
+          key: 'test-question-1',
+          questionType: 'text',
+          dataType: 'varchar',
+          required: true,
+          question: 'test-question-1'
+        }
+      ]);
+
+      await experimentService.CreateExperiment({
+        experimentId: 'test-experiment-1',
+        title: 'Test Experiment 1',
+        description: 'This is a test experiment.',
+        startDate: '2020-03-23T08:00:00.000Z',
+        endDate: null,
+        visibility: 'public',
+        questions: ['test-question-1']
+      });
+      await surveyService.CreateSurvey({
+        experimentId: 'test-experiment-1',
+        surveyId: 'test-survey-1',
+        title: randomIdGenerator(),
+        description: randomIdGenerator(),
+        startDate: new Date(Date.now()).toISOString(),
+        endDate: null,
+        surveyCategory: 'regular',
+        visibility: 'public',
+        sections: [
+          {
+            sectionId: randomIdGenerator(),
+            sectionNumber: 1,
+            title: randomIdGenerator(),
+            description: randomIdGenerator(),
+            questions: ['test-question-1']
+          }
+        ]
+      });
+    } catch (err) {
+      throw err;
+    }
+  });
+
+  it('fetches the survey by surveyId', async done => {
+    const surveyService = Container.get(SurveyService);
+
+    try {
+      const { survey } = await surveyService.GetSurvey('test-survey-1');
+      expect(survey.surveyId).toBe('test-survey-1');
+      done();
+    } catch (err) {
+      done(err);
+    }
+  });
+});
+
+describe('POST /experiments/:experimentId/surveys/:surveyId', () => {
   beforeAll(async () => {
     const experimentService = Container.get(ExperimentService);
     const questionService = Container.get(QuestionService);
     const participantService = Container.get(ParticipantService);
+    const surveyService = Container.get(SurveyService);
     const sqlConnection = Container.get<Sequelize>('sequelize');
 
     try {
@@ -232,16 +299,7 @@ describe('POST /experiments/:experimentId/surveys', () => {
         password: 'asdf',
         name: 'Shan Rauf',
         sex: 'male',
-        lastLogin: new Date(Date.now())
-      });
-      await participantService.CreateParticipant({
-        participantId: 'test-participant-2',
-        age: 99,
-        email: 'test2@test.com',
-        password: 'asdf',
-        name: 'Shan Rauf',
-        sex: 'male',
-        lastLogin: new Date(Date.now())
+        lastLogin: new Date(Date.now()).toISOString()
       });
       await experimentService.CreateExperiment({
         experimentId: 'test-experiment-1',
@@ -252,23 +310,6 @@ describe('POST /experiments/:experimentId/surveys', () => {
         visibility: 'public',
         questions: ['test-question-1']
       });
-      await experimentService.CreateExperiment({
-        experimentId: 'test-experiment-2',
-        title: 'Test Experiment 2',
-        description: 'This is a test experiment.',
-        startDate: '2020-03-23T08:00:00.000Z',
-        endDate: null,
-        visibility: 'public',
-        questions: ['test-question-1']
-      });
-    } catch (err) {
-      throw err;
-    }
-  });
-
-  it('creates a survey under experimentId', async done => {
-    const surveyService = Container.get(SurveyService);
-    try {
       await surveyService.CreateSurvey({
         experimentId: 'test-experiment-1',
         surveyId: 'test-survey-1',
@@ -288,38 +329,46 @@ describe('POST /experiments/:experimentId/surveys', () => {
           }
         ]
       });
-      const { survey } = await surveyService.GetSurvey('test-survey-1');
-      expect(survey.surveyId).toBe('test-survey-1');
+    } catch (err) {
+      throw err;
+    }
+  });
+
+  /**
+   * TODO: Query questionresponses to see if record exists in db.
+   */
+  it('accepts question responses', async done => {
+    const surveyService = Container.get(SurveyService);
+    try {
+      const { questionResponses } = await surveyService.SubmitSurveyResponse(
+        'test-experiment-1',
+        'test-survey-1',
+        'test-participant-1',
+        null,
+        {
+          'test-question-1': randomIdGenerator()
+        }
+      );
+      expect(questionResponses.length).toBe(1);
       done();
     } catch (err) {
       done(err);
     }
   });
 
-  it('prevents adding a question to a survey that is not in the experiment schema', async done => {
+  it('rejects unknown question repsonses', async done => {
     const surveyService = Container.get(SurveyService);
-
     try {
       expect(
-        surveyService.CreateSurvey({
-          experimentId: 'test-experiment-1',
-          surveyId: 'test-survey-3',
-          title: randomIdGenerator(),
-          description: randomIdGenerator(),
-          startDate: new Date(Date.now()).toISOString(),
-          endDate: new Date(Date.now()).toISOString(),
-          surveyCategory: 'regular',
-          visibility: 'public',
-          sections: [
-            {
-              sectionId: randomIdGenerator(),
-              sectionNumber: 1,
-              title: randomIdGenerator(),
-              description: randomIdGenerator(),
-              questions: ['test-question-2']
-            }
-          ]
-        })
+        surveyService.SubmitSurveyResponse(
+          'test-experiment-1',
+          'test-survey-1',
+          'test-participant-1',
+          null,
+          {
+            'nonexistent-question': randomIdGenerator()
+          }
+        )
       ).rejects.toThrow();
       done();
     } catch (err) {

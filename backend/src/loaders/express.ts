@@ -1,12 +1,15 @@
-import express from 'express';
+import { ErrorHandler } from './../utils/index';
+import { Container } from 'typedi';
+import express, { NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import passport from 'passport';
 import cookieSession from 'cookie-session';
 
 import routes from '../api';
 import config from '../config';
 import logger from './logger';
+import { PassportStatic } from 'passport';
+import { handleError } from '../utils';
 
 export default async ({ app }: { app: express.Application }) => {
   app.get('/status', (req, res) => {
@@ -48,6 +51,7 @@ export default async ({ app }: { app: express.Application }) => {
     })
   );
 
+  const passport = Container.get<PassportStatic>('passport');
   app.use(passport.initialize());
   app.use(passport.session());
 
@@ -75,23 +79,15 @@ export default async ({ app }: { app: express.Application }) => {
   /**
    * Catch 404 errors.
    */
-  app.use((req, res, next) => {
-    const err = new Error('Not Found');
-    res
-      .json({
-        errors: [err.message]
-      })
-      .status(404);
-  });
+  // app.use((req, res, next) => {
+  //   return next(new ErrorHandler(404, 'Not found.'));
+  // });
 
   /**
    * Error handler middleware.
    */
   app.use((err, req, res, next) => {
-    res.status(err.status || 500);
-    res.json({
-      errors: [err.message]
-    });
+    handleError(err, res);
   });
   logger.info('✌️ Express loaded');
 };

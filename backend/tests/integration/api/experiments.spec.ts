@@ -16,7 +16,7 @@ import ParticipantService from '../../../src/api/routes/participants/service';
  * Configure the database and dependencies before testing API routes
  */
 beforeAll(async () => {
-  await passportLoader();
+  // const passport = await passportLoader();
   const sqlConnection = await sequelizeLoader();
   // const discordClient = await discordLoader();
   // const emailClient = await emailLoader();
@@ -24,7 +24,8 @@ beforeAll(async () => {
   await dependencyInjectorLoader({
     sqlConnection,
     discordClient: undefined,
-    emailClient: undefined
+    emailClient: undefined,
+    passport: undefined
   });
 });
 
@@ -57,7 +58,7 @@ describe('GET /experiments', () => {
         password: 'asdf',
         name: 'Shan Rauf',
         sex: 'male',
-        lastLogin: new Date(Date.now())
+        lastLogin: new Date(Date.now()).toISOString()
       });
       await Promise.all([
         experimentService.CreateExperiment({
@@ -122,6 +123,7 @@ describe('GET /experiments', () => {
 
   it('Fetches all public experiments by default', async done => {
     const experimentService = Container.get(ExperimentService);
+
     try {
       const { experiments } = await experimentService.GetExperiments();
       expect(experiments.length).toBe(2);
@@ -219,7 +221,7 @@ describe('POST /experiments', () => {
         password: 'asdf',
         name: 'Shan Rauf',
         sex: 'male',
-        lastLogin: new Date(Date.now())
+        lastLogin: new Date(Date.now()).toISOString()
       });
     } catch (err) {
       throw err;
@@ -366,7 +368,7 @@ describe('DELETE /experiments/:experimentId', () => {
           password: 'asdf',
           name: 'Shan Rauf',
           sex: 'male',
-          lastLogin: new Date(Date.now())
+          lastLogin: new Date(Date.now()).toISOString()
         })
       ]);
       await Promise.all([
@@ -467,7 +469,7 @@ describe('PUT /experiments/:experimentId/participants/:participantId', () => {
         password: 'asdf',
         name: 'Shan Rauf',
         sex: 'male',
-        lastLogin: new Date(Date.now())
+        lastLogin: new Date(Date.now()).toISOString()
       });
       await experimentService.CreateExperiment({
         experimentId: 'test-experiment-1',
@@ -522,7 +524,7 @@ describe('DELETE /experiments/:experimentId/participants/:participantId', () => 
         password: 'asdf',
         name: 'Shan Rauf',
         sex: 'male',
-        lastLogin: new Date(Date.now())
+        lastLogin: new Date(Date.now()).toISOString()
       });
       await experimentService.CreateExperiment({
         experimentId: 'test-experiment-1',

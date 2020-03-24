@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import { validateOrReject, ValidatorOptions, validate } from 'class-validator';
+import { ValidatorOptions, validate } from 'class-validator';
 import { plainToClass, classToPlain } from 'class-transformer';
+import { ErrorHandler } from '../../utils';
+import logger from '../../loaders/logger';
 
 const validationOptions: ValidatorOptions = {
   forbidUnknownValues: true,
@@ -18,51 +20,60 @@ const validationOptions: ValidatorOptions = {
  */
 const validateRequestSchema = (reqQueryClass?, reqBodyClass?) => {
   return async (req: Request, res: Response, next: NextFunction) => {
-    let allErrors = [];
+    try {
+      let allErrors = [];
 
-    if (!reqQueryClass) {
-      req.query = null;
-    }
-    if (!reqBodyClass) {
-      req.body = null;
-    }
+      if (!reqQueryClass) {
+        req.query = null;
+      }
+      if (!reqBodyClass) {
+        req.body = null;
+      }
 
-    if (req.query) {
-      const query = plainToClass(reqQueryClass, req.query, {
-        excludeExtraneousValues: true
-      });
-      const errors = await validate(query, validationOptions);
-      allErrors.push(...errors);
+      if (req.query) {
+        const query = plainToClass(reqQueryClass, req.query, {
+          excludeExtraneousValues: true
+        });
+        const errors = await validate(query, validationOptions);
+        allErrors.push(...errors);
 
-      /**
-       * Removes undefined key-value pairs from above.
-       */
-      req.query = classToPlain(query);
-      Object.keys(req.query).forEach(key =>
-        req.query[key] === undefined ? delete req.query[key] : {}
+        /**
+         * Removes undefined key-value pairs from above.
+         */
+        req.query = classToPlain(query);
+        Object.keys(req.query).forEach(key =>
+          req.query[key] === undefined ? delete req.query[key] : {}
+        );
+      }
+
+      if (req.body) {
+        const body = plainToClass(reqBodyClass, req.body, {
+          excludeExtraneousValues: true
+        });
+        const errors = await validate(body, validationOptions);
+        allErrors.push(...errors);
+
+        /**
+         * Removes undefined key-value pairs from above.
+         */
+        req.body = classToPlain(body);
+        Object.keys(req.body).forEach(key =>
+          req.body[key] === undefined ? delete req.body[key] : {}
+        );
+      }
+
+      if (allErrors.length > 0) {
+        res.status(400).json({ errors: allErrors });
+      } else {
+        return next();
+      }
+    } catch (err) {
+      return next(
+        new ErrorHandler(
+          404,
+          'There was an error while validating your request params/body'
+        )
       );
-    }
-
-    if (req.body) {
-      const body = plainToClass(reqBodyClass, req.body, {
-        excludeExtraneousValues: true
-      });
-      const errors = await validate(body, validationOptions);
-      allErrors.push(...errors);
-
-      /**
-       * Removes undefined key-value pairs from above.
-       */
-      req.body = classToPlain(body);
-      Object.keys(req.body).forEach(key =>
-        req.body[key] === undefined ? delete req.body[key] : {}
-      );
-    }
-
-    if (allErrors.length > 0) {
-      res.status(400).json({ errors: allErrors });
-    } else {
-      return next();
     }
   };
 };

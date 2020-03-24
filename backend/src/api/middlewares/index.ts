@@ -4,6 +4,7 @@ import ensureExperimentParticipant from './ensureExperimentParticipant';
 import sanitizeRedirectUrl from './sanitizeRedirectUrl';
 import validateRequestSchema from './validateRequestSchema';
 import blockRoute from './blockRoute';
+import ensureAdmin from './ensureAdmin';
 
 export default {
   continueIfNotAuthenticated,
@@ -11,5 +12,6 @@ export default {
   ensureExperimentParticipant,
   sanitizeRedirectUrl,
   validateRequestSchema,
-  blockRoute
+  blockRoute,
+  ensureAdmin
 };

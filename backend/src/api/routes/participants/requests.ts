@@ -23,7 +23,7 @@ export class ParticipantSignup {
 
   @Expose()
   @IsISO8601()
-  lastLogin?: Date;
+  lastLogin?: string;
 
   @Expose()
   @IsEmail()

@@ -108,19 +108,12 @@ export default (app: Router) => {
   );
 
   route.get(
-    '/:surveyId/responses', // just redirect to questionresponses?surveyId...
+    '/:surveyId/responses',
     async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const { experimentId, surveyId } = req.params;
-        logger.debug(
-          `GET /experiments/${experimentId}/surveys/${surveyId}/responses with query params: %o`,
-          req.query
-        );
-        return res.status(200).json({});
-      } catch (err) {
-        logger.error(err);
-        return next(err);
-      }
+      const { experimentId, surveyId } = req.params;
+      res.redirect(
+        `../../../../questionresponses?experimentId=${experimentId}&surveyId=${surveyId}`
+      );
     }
   );
 

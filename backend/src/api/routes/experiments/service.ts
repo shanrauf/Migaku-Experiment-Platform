@@ -163,6 +163,7 @@ export default class ExperimentService {
 
   /**
    * Registers participant for the experiment.
+   * TODO: Why can't I just return await this.experimentParticipantModel....
    */
   public async RegisterParticipant(
     experimentId: string,
@@ -178,7 +179,6 @@ export default class ExperimentService {
           registerDate: new Date(Date.now())
         }
       });
-      this.logger.silly(result);
       return {
         participant: result[0]
       };
@@ -196,10 +196,13 @@ export default class ExperimentService {
   ): Promise<responses.IExperiment> {
     try {
       this.logger.silly(`Creating experiment ${experiment['experimentId']}`);
-      return await this.sqlConnection.transaction(async transaction => {
+      const result = await this.sqlConnection.transaction(async transaction => {
+        this.logger.silly('asdf');
+
         const experimentRecord = await this.experimentModel.create(experiment, {
           transaction
         });
+        this.logger.silly('ASSOCIATIONs');
         await this.AssociateQuestionsAndRequirements(
           experiment.experimentId,
           experiment.questions,
@@ -208,6 +211,7 @@ export default class ExperimentService {
         );
         return { experiment: experimentRecord };
       });
+      return result;
     } catch (err) {
       this.logger.error(err);
       throw err;

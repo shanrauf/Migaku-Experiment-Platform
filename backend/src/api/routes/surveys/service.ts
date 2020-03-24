@@ -83,11 +83,9 @@ export default class SurveyService {
         this.sequelizeFilters,
         filters
       );
-      this.logger.silly(sequelizeFilters);
       const surveyRecords = await this.surveyModel
         .scope('public')
         .findAndCountAll(sequelizeFilters);
-      this.logger.silly(surveyRecords);
       return {
         surveys: surveyRecords.rows,
         totalCount: surveyRecords.count
@@ -284,7 +282,6 @@ export default class SurveyService {
             transaction
           })
           .then(response => response[0].responseId);
-        this.logger.silly(responseId + ' RESPONSEID');
         this.logger.silly('Processing question responses');
         const questionResponses = [];
         for (let question of Object.entries(dataPayload)) {
@@ -304,8 +301,8 @@ export default class SurveyService {
           { transaction }
         );
 
-        if (discordId) {
-          const role = this.surveyIdToRole(surveyId);
+        const role = this.surveyIdToRole(surveyId);
+        if (discordId && role) {
           this.eventDispatcher.dispatch(events.survey.completeSurvey, {
             discordId,
             role

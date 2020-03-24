@@ -1,3 +1,4 @@
+import { Response } from 'express';
 /**
  * Generates a random 20-22 character string
  */
@@ -64,3 +65,29 @@ export function generateSequelizeFilters(
   });
   return filters;
 }
+
+export class ErrorHandler extends Error {
+  public statusCode: number;
+
+  constructor(statusCode: number, message: string) {
+    super();
+    this.statusCode = statusCode;
+    this.message = message;
+  }
+}
+
+export const handleError = (err: ErrorHandler, res: Response) => {
+  let { statusCode, message } = err;
+
+  /**
+   * If I don't handle an error and want to hide the actual message/stack trace
+   */
+  if (statusCode >= 500) {
+    message = 'There was an error while processing your request.';
+  }
+  res.status(statusCode).json({
+    status: 'error',
+    statusCode,
+    message
+  });
+};

@@ -1,11 +1,14 @@
+import { Container } from 'typedi';
 import { Request, Response, Router, NextFunction } from 'express';
-import passport from 'passport';
 import logger from '../../../loaders/logger';
 import middlewares from '../../middlewares';
+import { PassportStatic } from 'passport';
 
 const route = Router();
 
-export default app => {
+export default (app: Router) => {
+  const passport = Container.get<PassportStatic>('passport');
+
   app.use('/auth', route);
 
   route.get(

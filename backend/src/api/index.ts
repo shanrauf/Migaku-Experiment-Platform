@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import auth from './routes/auth/routes';
 import participant from './routes/participants/routes';
 import experiments from './routes/experiments/routes';
@@ -14,6 +14,13 @@ export default () => {
   surveys(app);
   questions(app);
   questionresponses(app);
+
+  app.get(
+    '/health',
+    async (req: Request, res: Response, next: NextFunction) => {
+      return res.json({ status: 'success' }).status(200);
+    }
+  );
 
   return app;
 };

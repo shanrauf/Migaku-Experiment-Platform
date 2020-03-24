@@ -1,10 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
+import { ErrorHandler } from '../../utils';
 
-const ensureAuthenticated = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const ensureAdmin = (req: Request, res: Response, next: NextFunction) => {
   if (process.env.NODE_ENV === 'test') {
     req.user = {
       adminId: 'asdfasdfasdf',
@@ -22,13 +19,13 @@ const ensureAuthenticated = (
     };
     return next();
   }
-  if (req.isAuthenticated()) {
+
+  if (req.user.adminId) {
     return next();
-  } else {
-    const err = new Error('You are not authorized for this route');
-    err.name = 'UnauthorizedError';
-    throw err;
   }
+  return next(
+    new ErrorHandler(403, 'You are not authorized to access this route.')
+  );
 };
 
-export default ensureAuthenticated;
+export default ensureAdmin;

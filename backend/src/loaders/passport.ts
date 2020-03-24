@@ -1,5 +1,5 @@
 import axios from 'axios';
-import passport from 'passport';
+import passport, { PassportStatic } from 'passport';
 import Container from 'typedi';
 import { InternalOAuthError } from 'passport-oauth2';
 const OAuth2Strategy = require('passport-oauth2').Strategy;
@@ -9,7 +9,7 @@ import logger from './logger';
 import { Participant } from '../models/participant';
 import { randomIdGenerator } from '../utils';
 
-export default async () => {
+export default async (): Promise<PassportStatic> => {
   try {
     const discordStrategy = new OAuth2Strategy(
       {
@@ -29,6 +29,7 @@ export default async () => {
             defaults: {
               participantId: randomIdGenerator(),
               email: profile.email,
+              age: 18,
               password: 'test123', // deprecated column
               name: profile.username,
               sex: 'male', // deprecated column
