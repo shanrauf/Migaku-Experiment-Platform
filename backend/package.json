@@ -7,7 +7,7 @@
     "start": "cross-env NODE_ENV=development nodemon",
     "setup-dev": "npm run force-sync-dev && npm run seed",
     "start-prod": "cross-env NODE_ENV=production PORT=4000 node build/server.js",
-    "test": "jest --detectOpenHandles --forceExit",
+    "test": "jest --detectOpenHandles --forceExit --no-cache",
     "build": "cross-env NODE_ENV=production webpack --debug --progress --display-error-details --verbose --config webpack.config.js",
     "build-tsc": "tsc",
     "inspect": "nodemon --inspect src/server.ts",

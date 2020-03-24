@@ -1,5 +1,5 @@
-import { IExperiment } from '@/api/routes/experiments/requests';
-import { randomIdGenerator } from '@/utils';
+import { IExperiment } from '../../../../src/api/routes/experiments/requests';
+import { randomIdGenerator } from '../../../../src/utils';
 
 export const testExperiment: IExperiment = {
   experimentId: randomIdGenerator(),

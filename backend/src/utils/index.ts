@@ -77,7 +77,10 @@ export class ErrorHandler extends Error {
 }
 
 export const handleError = (err: ErrorHandler, res: Response) => {
-  let { statusCode, message } = err;
+  let {
+    statusCode = 500,
+    message = 'There was an error while processing your request.'
+  } = err;
 
   /**
    * If I don't handle an error and want to hide the actual message/stack trace

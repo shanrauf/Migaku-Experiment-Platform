@@ -43,7 +43,7 @@ export default app => {
           req.body as requests.ParticipantSignup
         );
 
-        return res.json({ participant }).status(200);
+        return res.status(201).json({ participant });
       } catch (err) {
         logger.error(err);
         return next(err);

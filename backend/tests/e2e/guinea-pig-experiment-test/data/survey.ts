@@ -1,6 +1,6 @@
 import { testExperiment } from './experiment';
-import { ICreateSurvey } from '@/api/routes/surveys/requests';
-import { randomIdGenerator } from '@/utils';
+import { ICreateSurvey } from '../../../../src/api/routes/surveys/requests';
+import { randomIdGenerator } from '../../../../src/utils';
 
 const { experimentId } = testExperiment;
 

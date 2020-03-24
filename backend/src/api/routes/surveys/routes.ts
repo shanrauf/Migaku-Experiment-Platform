@@ -53,9 +53,9 @@ export default (app: Router) => {
         const surveyService = Container.get(SurveyService);
         const payload = await surveyService.GetSurveys(req.query);
         if (!payload.surveys) {
-          return res.status(404).json(payload);
+          return res.json(payload).status(404);
         }
-        return res.status(200).json(payload);
+        return res.json(payload).status(200);
       } catch (err) {
         return next(err);
       }
@@ -72,7 +72,7 @@ export default (app: Router) => {
         logger.debug(`POST /surveys with body: %o`, req.body);
         const surveyService = Container.get(SurveyService);
         const { survey } = await surveyService.CreateSurvey(req.body);
-        return res.status(200).json({ survey });
+        return res.status(201).json({ survey });
       } catch (err) {
         logger.error(err);
         return next(err);

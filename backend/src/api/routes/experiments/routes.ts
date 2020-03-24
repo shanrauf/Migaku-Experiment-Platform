@@ -1,3 +1,4 @@
+import { ErrorHandler } from './../../../utils/index';
 import { Request, Response, Router, NextFunction } from 'express';
 import { Container } from 'typedi';
 

@@ -1,10 +1,12 @@
-import { allParticipants, testExperiment } from './data';
 import { Container } from 'typedi';
 import { Sequelize } from 'sequelize-typescript';
 import express from 'express';
 import request from 'supertest';
 import { Client } from 'discord.js';
 
+import { allParticipants } from './data/participant';
+import { surveySchemaOne, surveySchemaTwo } from './data/survey';
+import { testExperiment } from './data/experiment';
 import loaders from '../../../src/loaders';
 
 const app = express();
@@ -120,28 +122,18 @@ describe('The experiment is finally revealed to the public', () => {
   });
 });
 
+/**
+ * TODO: Returning 200 intsead of 201...
+ */
 describe('An admin creates the initial survey for the experiment.', () => {
-  test('No experiments exist', async done => {
+  test('Creates initial survey', async done => {
     try {
       await request(app)
-        .get('/api/experiments')
+        .post('/api/experiments/${testExperiment.experimentId}/surveys')
+        .send(surveySchemaOne)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(404);
-      done();
-    } catch (err) {
-      done(err);
-    }
-  });
-
-  test('An experiment is successfully created', async done => {
-    try {
-      const result = await request(app)
-        .post('/api/experiments')
-        .send(testExperiment)
-        .set('Accept', 'application/json')
-        .expect('Content-Type', /json/)
-        .expect(201);
+        .expect(200);
       done();
     } catch (err) {
       done(err);

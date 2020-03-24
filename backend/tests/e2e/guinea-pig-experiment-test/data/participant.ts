@@ -1,5 +1,5 @@
-import { randomIdGenerator } from '@/utils';
-import { ParticipantSignup } from '@/api/routes/participants/requests';
+import { randomIdGenerator } from '../../../../src/utils';
+import { ParticipantSignup } from '../../../../src/api/routes/participants/requests';
 
 /**
  * 100 participants
