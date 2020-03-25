@@ -21,7 +21,7 @@ const validationOptions: ValidatorOptions = {
 const validateRequestSchema = (reqQueryClass?, reqBodyClass?) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      let allErrors = [];
+      const allErrors = [];
 
       if (!reqQueryClass) {
         req.query = null;

@@ -1,9 +1,9 @@
 export default {
   participant: {
     signUp: 'onParticipantSignUp',
-    signIn: 'onParticipantSignIn',
+    signIn: 'onParticipantSignIn'
   },
   survey: {
-    completeSurvey: 'onCompleteSurvey',
+    completeSurvey: 'onCompleteSurvey'
   }
 };

@@ -1,3 +1,5 @@
 .vscode
 scripts/*.csv
 scripts/*.json
+/node_modules
+package-lock.json

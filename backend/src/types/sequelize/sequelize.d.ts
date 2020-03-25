@@ -1,4 +1,4 @@
-import { Model } from "sequelize-typescript";
+import { Model } from 'sequelize-typescript';
 
 // TODO: Add sequelize-typescript's types to this. I only created this to add my comments and make this.sequelizeFilters clearer in services
 export type SequelizeFilters = {
@@ -20,7 +20,7 @@ export type SequelizeFilters = {
       /**
        * Ensures the attributes you want to include from this model exist; if they don't exist, Sequelize throws an error
        */
-      required?: Boolean;
+      required?: boolean;
       /**
        * Attributes on the model specified in this object.
        *

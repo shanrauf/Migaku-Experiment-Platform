@@ -243,7 +243,7 @@ export default class ExperimentService {
         `Experiment ${experimentObj.experimentId} not found.`
       );
     }
-    for (let [attribute, newValue] of Object.entries(experimentObj)) {
+    for (const [attribute, newValue] of Object.entries(experimentObj)) {
       if (attribute === 'experimentId') {
         throw new ErrorHandler(403, "You can't change the experimentId");
       }
@@ -414,7 +414,7 @@ export default class ExperimentService {
         transaction
       });
       const promises = [];
-      for (let { surveyId } of surveyIds) {
+      for (const { surveyId } of surveyIds) {
         promises.push(
           this.DeleteAssociatedSurveySections(surveyId, transaction)
         );
@@ -444,7 +444,7 @@ export default class ExperimentService {
     });
 
     const promises = [];
-    for (let { sectionId } of sectionIds) {
+    for (const { sectionId } of sectionIds) {
       promises.push(
         this.DeleteAssociatedSurveySectionQuestions(sectionId, transaction)
       );

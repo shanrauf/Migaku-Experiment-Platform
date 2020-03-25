@@ -1,4 +1,4 @@
-import { Service, Inject } from "typedi";
+import { Service, Inject } from 'typedi';
 
 export type SendgridMessage = {
   to: string;
@@ -21,14 +21,14 @@ export type SendgridMessage = {
 
 @Service()
 export default class MailerService {
-  constructor(@Inject("emailClient") private emailClient) {}
+  constructor(@Inject('emailClient') private emailClient) {}
 
   public async SendWelcomeEmail(email) {
     const msg: SendgridMessage = {
       to: email,
-      from: "massimmersionapproach@gmail.com",
-      subject: "MIA Message",
-      text: "Thanks for being a part of MIA!"
+      from: 'massimmersionapproach@gmail.com',
+      subject: 'MIA Message',
+      text: 'Thanks for being a part of MIA!'
     };
 
     this.SendEmail(msg);

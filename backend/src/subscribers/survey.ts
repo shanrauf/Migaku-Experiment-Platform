@@ -1,7 +1,7 @@
-import { Container } from "typedi";
-import { EventSubscriber, On } from "event-dispatch";
-import events from "./events";
-import DiscordService from "../services/discord/discord";
+import { Container } from 'typedi';
+import { EventSubscriber, On } from 'event-dispatch';
+import events from './events';
+import DiscordService from '../services/discord/discord';
 import logger from '../loaders/logger';
 
 @EventSubscriber()
@@ -11,7 +11,13 @@ export default class SurveySubscriber {
    * then save the latest in Redis/Memcache or something similar
    */
   @On(events.survey.completeSurvey)
-  public async onCompleteSurvey({discordId, role}: {role: string, discordId: string}) {
+  public async onCompleteSurvey({
+    discordId,
+    role
+  }: {
+    role: string;
+    discordId: string;
+  }) {
     const discordService = Container.get(DiscordService);
     try {
       logger.debug(`${events.survey.completeSurvey} event triggered`);

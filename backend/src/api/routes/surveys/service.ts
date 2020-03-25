@@ -284,7 +284,7 @@ export default class SurveyService {
           .then(response => response[0].responseId);
         this.logger.silly('Processing question responses');
         const questionResponses = [];
-        for (let question of Object.entries(dataPayload)) {
+        for (const question of Object.entries(dataPayload)) {
           const responses = await this.FormatQuestionResponse(
             responseId,
             experimentId,
@@ -376,17 +376,17 @@ export default class SurveyService {
         /**
          * Iterate over survey sections to create them and the corresponding SurveySectionQuestions'
          */
-        let surveySectionQuestions = [];
+        const surveySectionQuestions = [];
         for (const section of surveyObj.sections) {
           section['surveyId'] = surveyId; // SurveySection model requires surveyId foreign key
           await this.surveySectionModel.create(section, { transaction });
-          let surveyQuestions = [];
+          const surveyQuestions = [];
           for (const [idx, questionId] of section.questions.entries()) {
             /**
              * TODO: Would be WAY more efficient to query the whole experiment schema, and check if questions exist in memory.
              * Where should I put that method... import ExperimentService? or just do it in this service?
              */
-            let questionExists = await this.experimentQuestionModel
+            const questionExists = await this.experimentQuestionModel
               .findOne({
                 where: { questionId, experimentId }
               })
