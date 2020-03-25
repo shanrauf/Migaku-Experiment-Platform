@@ -1,3 +1,4 @@
+import { ErrorHandler } from './../../utils/index';
 import { Request, Response, NextFunction } from 'express';
 
 const ensureAuthenticated = (
@@ -25,9 +26,10 @@ const ensureAuthenticated = (
   if (req.isAuthenticated()) {
     return next();
   } else {
-    const err = new Error('You are not authorized for this route');
-    err.name = 'UnauthorizedError';
-    throw err;
+    throw new ErrorHandler(
+      403,
+      'You are not authorized to perform this action'
+    );
   }
 };
 

@@ -1,7 +1,6 @@
 import { Request, Response, Router, NextFunction } from 'express';
 import { Container } from 'typedi';
 
-import ExperimentService from '../experiments/service';
 import logger from '../../../loaders/logger';
 import QuestionResponseService from './service';
 
@@ -11,10 +10,10 @@ export default app => {
   app.use('/questionresponses', route);
 
   route.get('/', async (req: Request, res: Response, next: NextFunction) => {
-    logger.debug('GET test data');
+    logger.debug('GET question responses');
     try {
       const questionResponseService = Container.get(QuestionResponseService);
-      const payload = await questionResponseService.TestData();
+      const payload = await questionResponseService.GetQuestionResponses();
       if (!payload) {
         return res.status(404);
       }
