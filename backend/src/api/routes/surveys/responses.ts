@@ -43,7 +43,7 @@ export class ISurveyStatus {
  * instead of generic types for questionValue, create or import sequelize value types (for validation)
  */
 export type ISurveyResponse = {
-  [questionId: string]: string | number | object | Array<any> | null;
+  [questionId: string]: string | number | object | Array<unknown> | null;
 };
 
 export type ISurveyResponses = {

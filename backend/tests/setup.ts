@@ -5,6 +5,6 @@ import 'reflect-metadata'; // Needed for @decorators in services
  */
 import '../src/loaders/events';
 
-module.exports = async function() {
+export default async (): Promise<void> => {
   console.log('\nInstalled global dependencies.');
 };

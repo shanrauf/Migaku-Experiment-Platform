@@ -1,0 +1,4 @@
+/src/seeders
+/src/migrations
+/src/config/sequelize.js
+/node_modules

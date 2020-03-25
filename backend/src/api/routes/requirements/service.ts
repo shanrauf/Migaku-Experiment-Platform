@@ -21,7 +21,7 @@ export default class RequirementService {
     @Inject('logger') private logger: winston.Logger
   ) {
     this.sequelizeFilters = {
-      experimentId: experimentId => {
+      experimentId: (experimentId: string): object => {
         return {
           include: [
             {
@@ -84,7 +84,7 @@ export default class RequirementService {
   ): Promise<responses.IDeleteRequirement> {
     try {
       this.logger.silly(`Deleting experiment ${requirementId}`);
-      return await this.sqlConnection.transaction(async transaction => {
+      return await this.sqlConnection.transaction(async (transaction) => {
         await this.experimentRequirementModel.destroy({
           where: { requirementId },
           transaction
@@ -108,13 +108,13 @@ export default class RequirementService {
   public async AddRequirementToExperiment(
     requirementId: string,
     experimentId: string
-  ): Promise<any> {
+  ): Promise<object> {
     try {
       this.logger.silly(
         `Adding ${requirementId} for experiment ${experimentId}`
       );
       return {
-        participant: await this.experimentRequirementModel.findOrCreate({
+        requirement: await this.experimentRequirementModel.findOrCreate({
           where: { experimentId, requirementId },
           defaults: {
             experimentId,
@@ -132,7 +132,7 @@ export default class RequirementService {
    * Creates a requirement.
    */
   public async CreateRequirement(
-    requirement: any
+    requirement: object
   ): Promise<responses.IRequirement> {
     try {
       this.logger.silly(`Creating requirement ${requirement['requirementId']}`);

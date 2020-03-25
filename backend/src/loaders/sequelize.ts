@@ -29,7 +29,7 @@ export default async (): Promise<Sequelize> => {
   sqlConnection
     .authenticate()
     .then(() => logger.info('DB authenticated'))
-    .catch(err => {
+    .catch((err) => {
       logger.error('Unable to connect to the database:', err);
     });
   logger.info('✌️ DB loaded and connected!');

@@ -49,24 +49,23 @@ export default class SurveyService {
     @EventDispatcher() private eventDispatcher: EventDispatcherInterface
   ) {
     this.sequelizeFilters = {
-      experimentId: experimentId => {
+      experimentId: (experimentId: string): object => {
         return {
           where: { experimentId }
         };
       },
-      surveyId: surveyId => {
+      surveyId: (surveyId: string): object => {
         return {
           where: { surveyId }
         };
       },
-      participantId: participantId => {
+      participantId: (participantId: string): object => {
         return {
           include: [
             {
               model: this.surveyResponseModel,
               required: true,
               where: { participantId }
-              // attributes: []
             }
           ]
         };
@@ -130,7 +129,7 @@ export default class SurveyService {
           where: { visibility: 'public', experimentId },
           order: [['startDate', 'DESC']]
         })
-        .then(survey => survey);
+        .then((survey) => survey);
       if (!surveyRecord) {
         return { survey: null };
       }
@@ -151,8 +150,8 @@ export default class SurveyService {
         .findOne({
           where: { participantId, surveyId }
         })
-        .then(responseRecord => !!responseRecord)
-        .catch(e => {
+        .then((responseRecord) => !!responseRecord)
+        .catch((e) => {
           this.logger.error(e);
           throw e;
         });
@@ -222,7 +221,7 @@ export default class SurveyService {
       .findOne({
         where: { questionId: questionResponse[0] }
       })
-      .then(questionRecord => questionRecord.dataType);
+      .then((questionRecord) => questionRecord.dataType);
     if (!questionDataType) {
       throw new Error(`${questionResponse[0]} does not exist`);
     }
@@ -230,7 +229,7 @@ export default class SurveyService {
     const questionResponses = [];
 
     if (questionDataType !== 'json' && Array.isArray(questionResponse[1])) {
-      questionResponse[1].forEach(answer => {
+      questionResponse[1].forEach((answer) => {
         const response = {
           responseId,
           questionId: questionResponse[0],
@@ -268,49 +267,51 @@ export default class SurveyService {
     dataPayload: requests.IQuestionResponse
   ): Promise<{ questionResponses: QuestionResponse[] }> {
     try {
-      const result = await this.sqlConnection.transaction(async transaction => {
-        this.logger.silly('Finding or creating survey responseId');
-        const responseId = await this.surveyResponseModel
-          .findOrCreate({
-            where: { surveyId, participantId },
-            defaults: {
-              responseId: randomIdGenerator(),
+      const result = await this.sqlConnection.transaction(
+        async (transaction) => {
+          this.logger.silly('Finding or creating survey responseId');
+          const responseId = await this.surveyResponseModel
+            .findOrCreate({
+              where: { surveyId, participantId },
+              defaults: {
+                responseId: randomIdGenerator(),
+                experimentId,
+                surveyId,
+                participantId
+              },
+              transaction
+            })
+            .then((response) => response[0].responseId);
+          this.logger.silly('Processing question responses');
+          const questionResponses = [];
+          for (const question of Object.entries(dataPayload)) {
+            const responses = await this.FormatQuestionResponse(
+              responseId,
               experimentId,
               surveyId,
-              participantId
-            },
-            transaction
-          })
-          .then(response => response[0].responseId);
-        this.logger.silly('Processing question responses');
-        const questionResponses = [];
-        for (const question of Object.entries(dataPayload)) {
-          const responses = await this.FormatQuestionResponse(
-            responseId,
-            experimentId,
-            surveyId,
-            participantId,
-            question
+              participantId,
+              question
+            );
+            questionResponses.push(...responses);
+          }
+
+          this.logger.silly('Posting question responses');
+          const questionResponseRecords = await this.questionResponseModel.bulkCreate(
+            questionResponses,
+            { transaction }
           );
-          questionResponses.push(...responses);
+
+          const role = this.surveyIdToRole(surveyId);
+          if (discordId && role) {
+            this.eventDispatcher.dispatch(events.survey.completeSurvey, {
+              discordId,
+              role
+            });
+          }
+
+          return { questionResponses: questionResponseRecords };
         }
-
-        this.logger.silly('Posting question responses');
-        const questionResponseRecords = await this.questionResponseModel.bulkCreate(
-          questionResponses,
-          { transaction }
-        );
-
-        const role = this.surveyIdToRole(surveyId);
-        if (discordId && role) {
-          this.eventDispatcher.dispatch(events.survey.completeSurvey, {
-            discordId,
-            role
-          });
-        }
-
-        return { questionResponses: questionResponseRecords };
-      });
+      );
       return result;
     } catch (e) {
       this.logger.error(e);
@@ -348,88 +349,90 @@ export default class SurveyService {
     surveyObj: requests.ICreateSurvey
   ): Promise<responses.ISurveyMetadata> {
     try {
-      const result = await this.sqlConnection.transaction(async transaction => {
-        this.logger.silly('Creating survey');
-        const {
-          experimentId,
-          surveyId,
-          title,
-          description,
-          startDate,
-          endDate,
-          surveyCategory,
-          visibility
-        } = surveyObj;
-        const surveyRecord = await this.surveyModel.create(
-          {
-            surveyId,
+      const result = await this.sqlConnection.transaction(
+        async (transaction) => {
+          this.logger.silly('Creating survey');
+          const {
             experimentId,
+            surveyId,
             title,
             description,
             startDate,
             endDate,
             surveyCategory,
             visibility
-          },
-          { transaction }
-        );
-        /**
-         * Iterate over survey sections to create them and the corresponding SurveySectionQuestions'
-         */
-        const surveySectionQuestions = [];
-        for (const section of surveyObj.sections) {
-          section['surveyId'] = surveyId; // SurveySection model requires surveyId foreign key
-          await this.surveySectionModel.create(section, { transaction });
-          const surveyQuestions = [];
-          for (const [idx, questionId] of section.questions.entries()) {
-            /**
-             * TODO: Would be WAY more efficient to query the whole experiment schema, and check if questions exist in memory.
-             * Where should I put that method... import ExperimentService? or just do it in this service?
-             */
-            const questionExists = await this.experimentQuestionModel
-              .findOne({
-                where: { questionId, experimentId }
-              })
-              .then(questionRecord => !!questionRecord);
-            if (!questionExists) {
-              throw new Error(
-                `${questionId} doesn't exist in the experiment schema`
-              );
+          } = surveyObj;
+          const surveyRecord = await this.surveyModel.create(
+            {
+              surveyId,
+              experimentId,
+              title,
+              description,
+              startDate,
+              endDate,
+              surveyCategory,
+              visibility
+            },
+            { transaction }
+          );
+          /**
+           * Iterate over survey sections to create them and the corresponding SurveySectionQuestions'
+           */
+          const surveySectionQuestions = [];
+          for (const section of surveyObj.sections) {
+            section['surveyId'] = surveyId; // SurveySection model requires surveyId foreign key
+            await this.surveySectionModel.create(section, { transaction });
+            const surveyQuestions = [];
+            for (const [idx, questionId] of section.questions.entries()) {
+              /**
+               * TODO: Would be WAY more efficient to query the whole experiment schema, and check if questions exist in memory.
+               * Where should I put that method... import ExperimentService? or just do it in this service?
+               */
+              const questionExists = await this.experimentQuestionModel
+                .findOne({
+                  where: { questionId, experimentId }
+                })
+                .then((questionRecord) => !!questionRecord);
+              if (!questionExists) {
+                throw new Error(
+                  `${questionId} doesn't exist in the experiment schema`
+                );
+              }
+              /**
+               * Associate questions with this surveyId.
+               * Used to filter surveys that adminstered specific questions
+               */
+              surveyQuestions.push({
+                questionId,
+                surveyId
+              });
+              /**
+               * Associate questions with this section.
+               * Used for pagination when participants fill out surveys (e.x fetch questions from sectionId=asdf)
+               */
+              surveySectionQuestions.push({
+                sectionId: section.sectionId,
+                questionId: questionId,
+                questionOrder: idx + 1
+              });
             }
             /**
-             * Associate questions with this surveyId.
-             * Used to filter surveys that adminstered specific questions
+             * Associate questions with this survey
              */
-            surveyQuestions.push({
-              questionId,
-              surveyId
-            });
-            /**
-             * Associate questions with this section.
-             * Used for pagination when participants fill out surveys (e.x fetch questions from sectionId=asdf)
-             */
-            surveySectionQuestions.push({
-              sectionId: section.sectionId,
-              questionId: questionId,
-              questionOrder: idx + 1
+            await this.surveyQuestionModel.bulkCreate(surveyQuestions, {
+              transaction
             });
           }
           /**
-           * Associate questions with this survey
+           * Associate questions with their survey section
            */
-          await this.surveyQuestionModel.bulkCreate(surveyQuestions, {
-            transaction
-          });
+          await this.surveySectionQuestionModel.bulkCreate(
+            surveySectionQuestions,
+            { transaction }
+          );
+          return { survey: surveyRecord };
         }
-        /**
-         * Associate questions with their survey section
-         */
-        await this.surveySectionQuestionModel.bulkCreate(
-          surveySectionQuestions,
-          { transaction }
-        );
-        return { survey: surveyRecord };
-      });
+      );
       return result;
     } catch (e) {
       this.logger.error(e);

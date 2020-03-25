@@ -16,12 +16,12 @@ export default class ParticipantService {
     @Inject('logger') private logger: winston.Logger
   ) {
     this.sequelizeFilters = {
-      participantId: participantId => {
+      participantId: (participantId) => {
         return {
           where: { participantId }
         };
       },
-      experimentId: experimentId => {
+      experimentId: (experimentId) => {
         return {
           include: [
             {

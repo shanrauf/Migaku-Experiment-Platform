@@ -43,7 +43,7 @@ export default (app: Router) => {
         }
       } catch (err) {
         logger.error(err);
-        return next(err);
+        next(err);
       }
     }
   );

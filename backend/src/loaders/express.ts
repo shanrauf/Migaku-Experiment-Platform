@@ -1,6 +1,5 @@
-import { ErrorHandler } from './../utils/index';
 import { Container } from 'typedi';
-import express, { NextFunction } from 'express';
+import express from 'express';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cookieSession from 'cookie-session';
@@ -11,10 +10,12 @@ import logger from './logger';
 import { PassportStatic } from 'passport';
 import { handleError } from '../utils';
 
-export default async ({ app }: { app: express.Application }) => {
+export default async ({ app }: { app: express.Application }): Promise<void> => {
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental */
   app.get('/status', (req, res) => {
     res.status(200).end();
   });
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental */
   app.head('/status', (req, res) => {
     res.status(200).end();
   });
@@ -61,14 +62,11 @@ export default async ({ app }: { app: express.Application }) => {
   app.use((req, res, next) => {
     if (
       req.originalUrl &&
-      req.originalUrl
-        .split('/')
-        .pop()
-        .includes('favicon')
+      req.originalUrl.split('/').pop().includes('favicon')
     ) {
       return res.sendStatus(204);
     }
-    return next();
+    next();
   });
 
   /**
@@ -80,12 +78,13 @@ export default async ({ app }: { app: express.Application }) => {
    * Catch 404 errors.
    */
   // app.use((req, res, next) => {
-  //   return next(new ErrorHandler(404, 'Not found.'));
+  //   next(new ErrorHandler(404, 'Not found.'));
   // });
 
   /**
    * Error handler middleware.
    */
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental */
   app.use((err, req, res, next) => {
     handleError(err, res);
   });

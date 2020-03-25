@@ -6,7 +6,7 @@ import QuestionResponseService from './service';
 
 const route = Router();
 
-export default app => {
+export default (app) => {
   app.use('/questionresponses', route);
 
   route.get('/', async (req: Request, res: Response, next: NextFunction) => {
@@ -19,7 +19,7 @@ export default app => {
       }
       return res.json(payload).status(200);
     } catch (err) {
-      return next(err);
+      next(err);
     }
   });
 };

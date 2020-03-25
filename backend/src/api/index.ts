@@ -17,6 +17,7 @@ export default () => {
 
   app.get(
     '/health',
+    /* eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental */
     async (req: Request, res: Response, next: NextFunction) => {
       return res.json({ status: 'success' }).status(200);
     }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars-experimental */
 import {
   Table,
   Model,
@@ -9,8 +10,7 @@ import {
   UpdatedAt,
   CreatedAt,
   DefaultScope,
-  Scopes,
-  BeforeCreate
+  Scopes
 } from 'sequelize-typescript';
 import { Participant } from './participant';
 import { ExperimentParticipant } from './intermediary/experimentParticipant';

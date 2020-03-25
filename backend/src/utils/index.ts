@@ -4,19 +4,19 @@ import { Response } from 'express';
  */
 export function randomIdGenerator(): string {
   return (
-    Math.random()
-      .toString(36)
-      .substring(2, 15) +
-    Math.random()
-      .toString(36)
-      .substring(2, 15)
+    Math.random().toString(36).substring(2, 15) +
+    Math.random().toString(36).substring(2, 15)
   );
 }
 
 /**
  * Converts Date object into a human-readable format
  */
-export function formatDate(dateObject: Date, options = {}, language = 'en-US') {
+export function formatDate(
+  dateObject: Date,
+  options = {},
+  language = 'en-US'
+): string {
   // options = {
   //   weekday: 'long',
   //   year: 'numeric',
@@ -46,9 +46,9 @@ export function generateSequelizeFilters(
   if (!reqQuery) {
     return null;
   }
-  Object.keys(reqQuery).forEach(key => {
+  Object.keys(reqQuery).forEach((key) => {
     const sequelizeFilter = sequelizeFilters[key](reqQuery[key]);
-    Object.keys(sequelizeFilter).forEach(filterKey => {
+    Object.keys(sequelizeFilter).forEach((filterKey) => {
       switch (filterKey) {
         case 'where':
           filters['where'] = {
@@ -76,18 +76,17 @@ export class ErrorHandler extends Error {
   }
 }
 
-export const handleError = (err: ErrorHandler, res: Response) => {
-  let {
-    statusCode = 500,
-    message = 'There was an error while processing your request.'
-  } = err;
+export const handleError = (err: ErrorHandler, res: Response): void => {
+  const { statusCode } = err;
 
   /**
    * If I don't handle an error and want to hide the actual message/stack trace
    */
-  if (statusCode >= 500) {
-    message = 'There was an error while processing your request.';
-  }
+  const message =
+    statusCode >= 500
+      ? 'There was an error while processing your request.'
+      : err.message;
+
   res.status(statusCode).json({
     status: 'error',
     statusCode,

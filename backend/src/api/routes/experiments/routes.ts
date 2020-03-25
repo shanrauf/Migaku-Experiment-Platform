@@ -15,7 +15,6 @@ export default (app: Router) => {
 
   route.get(
     '/',
-    middlewares.ensureAuthenticated,
     middlewares.validateRequestSchema(requests.ExperimentFilters, undefined),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
@@ -28,7 +27,7 @@ export default (app: Router) => {
           ? res.status(200).json(payload)
           : res.status(404).json(payload);
       } catch (err) {
-        return next(err);
+        next(err);
       }
     }
   );
@@ -36,7 +35,6 @@ export default (app: Router) => {
   // Admin route
   route.post(
     '/',
-    // middlewares.ensureAuthenticated,
     validateRequestSchema(undefined, requests.IExperiment),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
@@ -49,14 +47,13 @@ export default (app: Router) => {
           ? res.status(201).json(payload)
           : res.status(404).json(payload);
       } catch (err) {
-        return next(err);
+        next(err);
       }
     }
   );
 
   route.get(
     '/:experimentId',
-    middlewares.ensureAuthenticated,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         logger.debug(`GET /experiments/${req.params.experimentId}`);
@@ -68,14 +65,13 @@ export default (app: Router) => {
           ? res.status(200).json(payload)
           : res.status(404).json(payload);
       } catch (err) {
-        return next(err);
+        next(err);
       }
     }
   );
 
   route.patch(
     '/:experimentId',
-    middlewares.ensureAdmin,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         logger.debug(`PATCH /experiments/${req.params.experimentId}`);
@@ -88,7 +84,7 @@ export default (app: Router) => {
           ? res.status(200).json({ experiment })
           : res.status(404).json({ experiment });
       } catch (err) {
-        return next(err);
+        next(err);
       }
     }
   );
@@ -96,7 +92,6 @@ export default (app: Router) => {
   // Admin route
   route.delete(
     '/:experimentId',
-    middlewares.ensureAdmin,
     async (req: Request, res: Response, next: NextFunction) => {
       logger.debug(`DELETE /experiments/${req.params.experimentId}`);
       try {
@@ -108,28 +103,18 @@ export default (app: Router) => {
           ? res.status(200).json(payload)
           : res.status(400).json(payload);
       } catch (err) {
-        return next(err);
+        next(err);
       }
     }
   );
 
   route.put(
     '/:experimentId/participants/:participantId',
-    middlewares.ensureAuthenticated,
     async (req: Request, res: Response, next: NextFunction) => {
       logger.debug(
         `PUT /experiments/${req.params.experimentId}/participants/${req.params.participantId}`
       );
       try {
-        if (
-          req.params.participantId !== req.user.participantId &&
-          !req.user.adminId
-        ) {
-          throw new ErrorHandler(
-            403,
-            'You are not authorized to perform this action.'
-          );
-        }
         const experimentService = Container.get(ExperimentService);
         const payload = await experimentService.RegisterParticipant(
           req.params.experimentId,
@@ -137,14 +122,13 @@ export default (app: Router) => {
         );
         return res.status(200).json(payload);
       } catch (err) {
-        return next(err);
+        next(err);
       }
     }
   );
 
   route.delete(
     '/:experimentId/participants/:participantId',
-    middlewares.ensureAdmin,
     async (req: Request, res: Response, next: NextFunction) => {
       logger.debug(
         `DELETE /experiments/${req.params.experimentId}/participants/${req.params.participantId}`
@@ -164,7 +148,7 @@ export default (app: Router) => {
           message: `${req.params.participantId} successfully dropped from ${req.params.experimentId}`
         });
       } catch (err) {
-        return next(err);
+        next(err);
       }
     }
   );
@@ -188,7 +172,6 @@ export default (app: Router) => {
    */
   route.post(
     '/:experimentId/questions',
-    middlewares.ensureAdmin,
     validateRequestSchema(null, requests.IExperimentQuestions),
     async (req: Request, res: Response, next: NextFunction) => {
       logger.debug(
@@ -205,7 +188,7 @@ export default (app: Router) => {
           message: `${req.body.questions.length} questions associated with ${req.params.experimentId}`
         });
       } catch (err) {
-        return next(err);
+        next(err);
       }
     }
   );

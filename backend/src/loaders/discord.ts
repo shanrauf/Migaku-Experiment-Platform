@@ -1,7 +1,6 @@
 import Discord from 'discord.js';
 
 import logger from './logger';
-import botCommands from '../services/discord/commands';
 import config from '../config';
 
 const bot = new Discord.Client();
@@ -11,17 +10,13 @@ const TOKEN = config.discord.DISCORD_TOKEN;
 
 export default async (): Promise<Discord.Client> => {
   try {
-    Object.keys(botCommands).map(key => {
-      bot['commands'].set(botCommands[key].name, botCommands[key]);
-    });
-
     bot.login(TOKEN);
 
     bot.on('ready', () => {
       logger.silly(`Logged in as ${bot.user.tag}!`);
     });
 
-    bot.on('message', msg => {
+    bot.on('message', (msg) => {
       const args = msg.content.split(/ +/);
       const command = args.shift().toLowerCase();
       logger.silly(`Called command: ${command}`);

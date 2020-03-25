@@ -1,17 +1,32 @@
 import axios from 'axios';
 import passport, { PassportStatic } from 'passport';
 import Container from 'typedi';
-import { InternalOAuthError } from 'passport-oauth2';
-const OAuth2Strategy = require('passport-oauth2').Strategy;
+import { InternalOAuthError, VerifyCallback } from 'passport-oauth2';
+import { Strategy } from 'passport-oauth2';
 
 import config from '../config';
 import logger from './logger';
 import { Participant } from '../models/participant';
 import { randomIdGenerator } from '../utils';
 
+type DiscordProfile = {
+  id: string;
+  username: string;
+  discriminator: string;
+  avatar: string;
+  bot?: boolean;
+  system?: boolean;
+  mfa_enabled?: boolean;
+  local?: string;
+  verified?: true;
+  email?: string;
+  flags?: number;
+  premium_type?: number;
+};
+
 export default async (): Promise<PassportStatic> => {
   try {
-    const discordStrategy = new OAuth2Strategy(
+    const discordStrategy = new Strategy(
       {
         authorizationURL: config.discord.discordAuthorizationURL,
         tokenURL: 'https://discordapp.com/api/oauth2/token',
@@ -19,7 +34,12 @@ export default async (): Promise<PassportStatic> => {
         clientSecret: config.discord.discordOAuthClientSecret,
         callbackURL: 'http://localhost:3000/api/auth/discord/redirect'
       },
-      (accessToken, refreshToken, profile, done) => {
+      (
+        accessToken: string,
+        refreshToken: string,
+        profile: DiscordProfile,
+        done: VerifyCallback
+      ) => {
         const participantModel = Container.get<typeof Participant>(
           'Participant'
         );
@@ -37,7 +57,7 @@ export default async (): Promise<PassportStatic> => {
               lastLogin: new Date()
             }
           })
-          .then(participantRecord => {
+          .then((participantRecord) => {
             const result = {
               ...participantRecord[0].toJSON(),
               accessToken,
@@ -46,34 +66,36 @@ export default async (): Promise<PassportStatic> => {
             };
             done(null, result);
           })
-          .catch(err => {
+          .catch((err) => {
             logger.error(err);
-            done(null, false, { error: 'Deserialization error' });
+            done(null, { error: 'Deserialization error' });
           });
       }
     );
 
-    discordStrategy.userProfile = function(accessToken, done) {
-      axios({
-        url: 'https://discordapp.com/api/users/@me',
-        method: 'GET',
-        headers: { Authorization: `Bearer ${accessToken}` }
-      })
-        .then(profile => {
-          done(null, profile.data);
+    discordStrategy.userProfile = (
+      accessToken: string,
+      done: Function
+    ): void => {
+      axios
+        .get<DiscordProfile>('https://discordapp.com/api/users/@me', {
+          headers: { Authorization: `Bearer ${accessToken}` }
         })
-        .catch(err => {
+        .then(({ data }) => {
+          done(null, data);
+        })
+        .catch((err) => {
           done(new InternalOAuthError('Failed to fetch Discord profile.', err));
         });
     };
 
-    passport.serializeUser(function(user: any, done) {
+    passport.serializeUser(function (user: object, done: Function) {
       done(null, user);
       return;
     });
 
-    passport.deserializeUser((participant, done) => {
-      done(null, participant);
+    passport.deserializeUser((user: object, done: Function) => {
+      done(null, user);
     });
 
     passport.use(discordStrategy);

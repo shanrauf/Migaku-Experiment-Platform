@@ -34,22 +34,22 @@ export default class QuestionResponseService {
     @EventDispatcher() private eventDispatcher: EventDispatcherInterface
   ) {
     this.sequelizeFilters = {
-      participantId: participantId => {
+      participantId: (participantId) => {
         return {
           where: { participantId }
         };
       },
-      experimentId: experimentId => {
+      experimentId: (experimentId) => {
         return {
           where: { experimentId }
         };
       },
-      surveyId: surveyId => {
+      surveyId: (surveyId) => {
         return {
           where: { surveyId }
         };
       },
-      responseId: responseId => {
+      responseId: (responseId) => {
         return {
           where: { responseId }
         };

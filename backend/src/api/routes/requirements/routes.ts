@@ -8,13 +8,11 @@ import middlewares from '../../middlewares';
 
 const route = Router({ mergeParams: true });
 
-export default (app: Router) => {
+export default (app: Router): void => {
   app.use('/surveys', route);
 
   route.get(
     '/',
-    // middlewares.ensureAuthenticated,
-    // middlewares.ensureExperimentParticipant,
     middlewares.validateRequestSchema(requests.RequirementFilters, null),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
@@ -28,7 +26,7 @@ export default (app: Router) => {
           : res.status(404).json(payload);
         return res.json({ test: 'test' }).status(200);
       } catch (err) {
-        return next(err);
+        next(err);
       }
     }
   );

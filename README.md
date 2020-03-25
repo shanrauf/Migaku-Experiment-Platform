@@ -12,8 +12,8 @@ Features:
 
 1. `git clone https://github.com/shanrauf/mia-experiment.git`
 2. Ask Shan for .env files
-3. Ensure MySQL local server is running (necessary for development and testing)
-4. `./scripts/setup_dev.sh` # Installs dependencies, migrates developemt database, etc
+3. Ensure MySQL local server is running (see Shan's config [here](https://gyazo.com/1ea29a7b388c8b86dc9fc6ef9d455423))
+4. `npm run setup` # Installs dependencies, migrates developemt database, etc
 
 ## Develop
 

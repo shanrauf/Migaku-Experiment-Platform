@@ -2,7 +2,6 @@ import { Request, Response, Router, NextFunction } from 'express';
 import { Container } from 'typedi';
 
 import SurveyService from './service';
-import ParticipantService from '../participants/service';
 import logger from '../../../loaders/logger';
 import * as requests from './requests';
 import middlewares from '../../middlewares';
@@ -10,18 +9,19 @@ import middlewares from '../../middlewares';
 /**
  * Converts /latest/responses to /:surveyId/responses, where surveyId = the latest survey in the experiment.
  */
+/* eslint-disable @typescript-eslint/no-unused-vars-experimental */
 const convertLatestToSurveyId = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const { experimentId } = req.params;
     logger.debug(`Finding the lastest surveyId for ${experimentId}`);
     const url = req.url.split('/'); // "/latestasdf" becomes ["", "latestasdf"]
 
     if (url[1] !== 'latest') {
-      return next();
+      next();
     }
     const surveyService = Container.get(SurveyService);
     // when experiment has no surveys or experiment doesn't exist: Cannot destructure property `surveyId` of 'undefined' or 'null
@@ -31,21 +31,19 @@ const convertLatestToSurveyId = async (
 
     // Mutating req.url so that next() forwards request to the appropriate handler
     req.url = `/${surveyId}/` + restOfUrl.join('/');
-    return next();
+    next();
   } catch (err) {
-    return next(err);
+    next(err);
   }
 };
 
 const route = Router({ mergeParams: true });
 
-export default (app: Router) => {
+export default (app: Router): void => {
   app.use('/experiments/:experimentId/surveys', route);
 
   route.get(
     '/',
-    middlewares.ensureAuthenticated,
-    middlewares.ensureExperimentParticipant,
     middlewares.validateRequestSchema(requests.ISurveyFilters, undefined),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
@@ -57,15 +55,13 @@ export default (app: Router) => {
         }
         return res.json(payload).status(200);
       } catch (err) {
-        return next(err);
+        next(err);
       }
     }
   );
 
   route.post(
     '/',
-    middlewares.ensureAuthenticated,
-    middlewares.ensureExperimentParticipant,
     middlewares.validateRequestSchema(undefined, requests.ICreateSurvey),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
@@ -75,7 +71,7 @@ export default (app: Router) => {
         return res.status(201).json({ survey });
       } catch (err) {
         logger.error(err);
-        return next(err);
+        next(err);
       }
     }
   );
@@ -88,8 +84,6 @@ export default (app: Router) => {
   route.get(
     '/:surveyId',
     // NOTE THIS CURRENTLY returns a paylaod with "surveySections" key; need to change that key to "sections"
-    middlewares.ensureAuthenticated,
-    middlewares.ensureExperimentParticipant,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { experimentId, surveyId } = req.params;
@@ -102,13 +96,14 @@ export default (app: Router) => {
           return res.status(200).json(payload);
         }
       } catch (err) {
-        return next(err);
+        next(err);
       }
     }
   );
 
   route.get(
     '/:surveyId/responses',
+    /* eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental */
     async (req: Request, res: Response, next: NextFunction) => {
       const { experimentId, surveyId } = req.params;
       res.redirect(
@@ -119,8 +114,6 @@ export default (app: Router) => {
 
   route.post(
     '/:surveyId/responses',
-    middlewares.ensureAuthenticated,
-    middlewares.ensureExperimentParticipant,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { experimentId, surveyId } = req.params;
@@ -140,13 +133,14 @@ export default (app: Router) => {
         return res.json(questionResponses).status(200);
       } catch (err) {
         logger.error(err);
-        return next(err);
+        next(err);
       }
     }
   );
 
   route.get(
     '/:surveyId/questions',
+    /* eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental */
     async (req: Request, res: Response, next: NextFunction) => {
       const { experimentId, surveyId } = req.params;
 

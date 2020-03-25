@@ -41,7 +41,7 @@ const validateRequestSchema = (reqQueryClass?, reqBodyClass?) => {
          * Removes undefined key-value pairs from above.
          */
         req.query = classToPlain(query);
-        Object.keys(req.query).forEach(key =>
+        Object.keys(req.query).forEach((key) =>
           req.query[key] === undefined ? delete req.query[key] : {}
         );
       }
@@ -57,7 +57,7 @@ const validateRequestSchema = (reqQueryClass?, reqBodyClass?) => {
          * Removes undefined key-value pairs from above.
          */
         req.body = classToPlain(body);
-        Object.keys(req.body).forEach(key =>
+        Object.keys(req.body).forEach((key) =>
           req.body[key] === undefined ? delete req.body[key] : {}
         );
       }
@@ -65,10 +65,10 @@ const validateRequestSchema = (reqQueryClass?, reqBodyClass?) => {
       if (allErrors.length > 0) {
         res.status(400).json({ errors: allErrors });
       } else {
-        return next();
+        next();
       }
     } catch (err) {
-      return next(
+      next(
         new ErrorHandler(
           404,
           'There was an error while validating your request params/body'

@@ -3,7 +3,8 @@ import { Sequelize } from 'sequelize-typescript';
 import { Client } from 'discord.js';
 
 import logger from './logger';
-import { PassportStatic } from 'passport';
+import type { PassportStatic } from 'passport';
+import type MailerService from '@sendgrid/mail';
 
 export default async ({
   sqlConnection,
@@ -13,9 +14,9 @@ export default async ({
 }: {
   sqlConnection: Sequelize;
   discordClient: Client;
-  emailClient: any;
-  passport: any;
-}) => {
+  emailClient: typeof MailerService;
+  passport: PassportStatic;
+}): Promise<void> => {
   try {
     for (const model of Object.entries(sqlConnection.models)) {
       Container.set(model[0], model[1]);

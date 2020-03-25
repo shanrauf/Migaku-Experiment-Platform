@@ -23,7 +23,7 @@ export type SendgridMessage = {
 export default class MailerService {
   constructor(@Inject('emailClient') private emailClient) {}
 
-  public async SendWelcomeEmail(email) {
+  public async SendWelcomeEmail(email): Promise<object> {
     const msg: SendgridMessage = {
       to: email,
       from: 'massimmersionapproach@gmail.com',
@@ -32,11 +32,11 @@ export default class MailerService {
     };
 
     this.SendEmail(msg);
-    // this.emailClient.messages().send(data);
-    // return { delivered: 1, status: "ok" };
+    this.emailClient.messages().send(data);
+    return { delivered: 1, status: 'ok' };
   }
 
-  private async SendEmail(message: SendgridMessage) {
-    //   this.emailClient.send(message);
+  private async SendEmail(message: SendgridMessage): Promise<void> {
+    this.emailClient.send(message);
   }
 }

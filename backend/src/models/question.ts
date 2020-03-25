@@ -6,7 +6,6 @@ import {
   BelongsToMany,
   HasMany,
   AllowNull,
-  Unique,
   UpdatedAt,
   CreatedAt,
   DefaultScope
@@ -16,7 +15,6 @@ import { SurveyQuestion } from './intermediary/surveyQuestion';
 import { QuestionResponse } from './questionResponse';
 import { Experiment } from './experiment';
 import { ExperimentQuestion } from './intermediary/experimentQuestion';
-import { randomIdGenerator } from '../utils';
 
 @DefaultScope(() => ({
   attributes: [
@@ -89,12 +87,7 @@ export class Question extends Model<Question> {
   )
   questions: Question[];
 
-  @BelongsToMany(
-    () => Survey,
-    () => SurveyQuestion,
-    'questionId',
-    'surveyId'
-  )
+  @BelongsToMany(() => Survey, () => SurveyQuestion, 'questionId', 'surveyId')
   surveys: Survey[];
 
   @HasMany(() => QuestionResponse, 'questionId')

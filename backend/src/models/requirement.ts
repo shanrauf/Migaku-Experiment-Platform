@@ -5,7 +5,6 @@ import {
   BelongsToMany,
   DataType,
   AllowNull,
-  Unique,
   CreatedAt,
   UpdatedAt,
   DefaultScope

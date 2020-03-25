@@ -16,16 +16,16 @@ const sanitizeRedirectUrl = (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): void => {
   if ('redirect' in req.query) {
     const { host, href } = new URL(req.query.redirect);
 
     if (hostWhitelist.includes(host)) {
-      return next();
+      next();
     }
     throw new Error(`The following is an invalid redirect url: ${href}`);
   }
-  return res.status(400).json({ message: 'Missing a redirect URL' });
+  res.status(400).json({ message: 'Missing a redirect URL' });
 };
 
 export default sanitizeRedirectUrl;

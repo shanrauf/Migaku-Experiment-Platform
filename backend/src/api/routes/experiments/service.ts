@@ -47,7 +47,7 @@ export default class ExperimentService {
     @Inject('logger') private logger: winston.Logger
   ) {
     this.sequelizeFilters = {
-      surveyId: surveyId => {
+      surveyId: (surveyId) => {
         return {
           include: [
             {
@@ -59,7 +59,7 @@ export default class ExperimentService {
           ]
         };
       },
-      participantId: participantId => {
+      participantId: (participantId) => {
         return {
           include: [
             {
@@ -72,12 +72,12 @@ export default class ExperimentService {
           ]
         };
       },
-      experimentId: experimentId => {
+      experimentId: (experimentId) => {
         return {
           where: { experimentId }
         };
       },
-      visibility: visibility => {
+      visibility: (visibility) => {
         return {
           where: { visibility }
         };
@@ -132,7 +132,7 @@ export default class ExperimentService {
   ): Promise<responses.IDeleteExperiment> {
     try {
       this.logger.silly(`Deleting experiment ${experimentId}`);
-      return await this.sqlConnection.transaction(async transaction => {
+      return await this.sqlConnection.transaction(async (transaction) => {
         /**
          * Delete all question responses, survey responses, surveys, and requirements under this experiment.
          */
@@ -195,7 +195,7 @@ export default class ExperimentService {
   ): Promise<void> {
     await this.experimentModel
       .findOne({ where: { experimentId, visibility: 'public' } })
-      .then(experiment => {
+      .then((experiment) => {
         if (!experiment) {
           throw new ErrorHandler(
             403,
@@ -213,18 +213,23 @@ export default class ExperimentService {
   ): Promise<responses.IExperiment> {
     try {
       this.logger.silly(`Creating experiment ${experiment['experimentId']}`);
-      const result = await this.sqlConnection.transaction(async transaction => {
-        const experimentRecord = await this.experimentModel.create(experiment, {
-          transaction
-        });
-        await this.AssociateQuestionsAndRequirements(
-          experiment.experimentId,
-          experiment.questions,
-          experiment.requirements,
-          transaction
-        );
-        return { experiment: experimentRecord };
-      });
+      const result = await this.sqlConnection.transaction(
+        async (transaction) => {
+          const experimentRecord = await this.experimentModel.create(
+            experiment,
+            {
+              transaction
+            }
+          );
+          await this.AssociateQuestionsAndRequirements(
+            experiment.experimentId,
+            experiment.questions,
+            experiment.requirements,
+            transaction
+          );
+          return { experiment: experimentRecord };
+        }
+      );
       return result;
     } catch (err) {
       this.logger.error(err);
@@ -321,7 +326,7 @@ export default class ExperimentService {
   ): Promise<void> {
     try {
       await this.experimentQuestionModel.bulkCreate(
-        questionIds.map(questionId => {
+        questionIds.map((questionId) => {
           return {
             experimentId,
             questionId
@@ -393,40 +398,30 @@ export default class ExperimentService {
     experimentId: string,
     transaction?: Transaction
   ): Promise<void> {
-    try {
-      await this.surveyResponseModel.destroy({
-        where: { experimentId },
-        transaction
-      });
-    } catch (err) {
-      throw err;
-    }
+    await this.surveyResponseModel.destroy({
+      where: { experimentId },
+      transaction
+    });
   }
 
   private async DeleteAssociatedSurveys(
     experimentId: string,
     transaction?: Transaction
   ): Promise<void> {
-    try {
-      const surveyIds = await this.surveyModel.findAll({
-        attributes: ['surveyId'],
-        where: { experimentId },
-        transaction
-      });
-      const promises = [];
-      for (const { surveyId } of surveyIds) {
-        promises.push(
-          this.DeleteAssociatedSurveySections(surveyId, transaction)
-        );
-      }
-      await Promise.all(promises);
-      await this.surveyModel.destroy({
-        where: { experimentId },
-        transaction
-      });
-    } catch (err) {
-      throw err;
+    const surveyIds = await this.surveyModel.findAll({
+      attributes: ['surveyId'],
+      where: { experimentId },
+      transaction
+    });
+    const promises = [];
+    for (const { surveyId } of surveyIds) {
+      promises.push(this.DeleteAssociatedSurveySections(surveyId, transaction));
     }
+    await Promise.all(promises);
+    await this.surveyModel.destroy({
+      where: { experimentId },
+      transaction
+    });
   }
 
   /**
@@ -492,7 +487,7 @@ export default class ExperimentService {
     transaction?: Transaction
   ): Promise<void> {
     await this.experimentRequirementModel.bulkCreate(
-      requirementIds.map(requirementId => {
+      requirementIds.map((requirementId) => {
         return {
           experimentId,
           requirementId

@@ -1,13 +1,13 @@
-const webpack = require("webpack");
-const path = require("path");
-const FriendlyErrorsPlugin = require("friendly-errors-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const nodeExternals = require("webpack-node-externals");
-const TerserPlugin = require("terser-webpack-plugin");
+const webpack = require('webpack');
+const path = require('path');
+const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const nodeExternals = require('webpack-node-externals');
+const TerserPlugin = require('terser-webpack-plugin');
 
 function ifUtil(NODE_ENV) {
   return (dev_value, prod_value) => {
-    if (NODE_ENV == "development") {
+    if (NODE_ENV == 'development') {
       return dev_value;
     } else {
       return prod_value;
@@ -28,12 +28,12 @@ const plugins = [
     // Do not allow removal of current webpack assets
     protectWebpackAssets: false
   }),
-  new webpack.EnvironmentPlugin(["NODE_ENV"]),
+  new webpack.EnvironmentPlugin(['NODE_ENV']),
   new FriendlyErrorsPlugin()
 ];
 
 if (process.env.BUNDLE_ANALYZER) {
-  const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+  const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
     .BundleAnalyzerPlugin;
 
   plugins.push(
@@ -60,8 +60,8 @@ const optimization = {
   noEmitOnErrors: false,
   splitChunks: {
     hidePathInfo: true,
-    chunks: "all",
-    automaticNameDelimiter: "-",
+    chunks: 'all',
+    automaticNameDelimiter: '-',
     maxAsyncRequests: 5,
     maxInitialRequests: 3
   },
@@ -81,7 +81,8 @@ const optimization = {
           ecma: 5,
           warnings: false,
           comparisons: true,
-          inline: 2
+          inline: 2,
+          drop_console: true
         },
         mangle: {
           safari10: true
@@ -100,30 +101,30 @@ const optimization = {
 };
 
 module.exports = {
-  mode: ifDevElseProd("development", "production"),
-  target: "node",
-  devtool: ifDevElseProd("cheap-module-eval-source-map", undefined),
+  mode: ifDevElseProd('development', 'production'),
+  target: 'node',
+  devtool: ifDevElseProd('cheap-module-eval-source-map', undefined),
   entry: {
-    main: "./src/server.ts"
+    main: './src/server.ts'
   },
   resolve: {
-    extensions: [".js", ".ts"]
+    extensions: ['.js', '.ts']
   },
   module: {
     rules: [
       {
         test: /\.ts$/,
-        use: ["ts-loader"]
+        use: ['ts-loader']
       }
     ]
   },
   plugins: plugins,
   output: {
-    path: path.join(__dirname, "build"),
+    path: path.join(__dirname, 'build'),
     pathinfo: false,
-    filename: "server.js",
-    chunkFilename: "chunks/[chunkhash].chunk.js",
-    publicPath: "/"
+    filename: 'server.js',
+    chunkFilename: 'chunks/[chunkhash].chunk.js',
+    publicPath: '/'
   },
   externals: [nodeExternals()],
   optimization: ifDevElseProd({}, optimization)

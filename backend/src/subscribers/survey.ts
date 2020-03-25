@@ -17,7 +17,7 @@ export default class SurveySubscriber {
   }: {
     role: string;
     discordId: string;
-  }) {
+  }): Promise<void> {
     const discordService = Container.get(DiscordService);
     try {
       logger.debug(`${events.survey.completeSurvey} event triggered`);

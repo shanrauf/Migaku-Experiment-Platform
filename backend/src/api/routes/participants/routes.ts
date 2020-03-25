@@ -9,12 +9,11 @@ import middlewares from '../../middlewares';
 
 const route = Router();
 
-export default app => {
+export default (app) => {
   app.use('/participants', route);
 
   route.get(
     '/',
-    middlewares.ensureAuthenticated,
     validateRequestSchema(requests.ParticipantFilters, null),
     async (req: Request, res: Response, next: NextFunction) => {
       logger.debug('GET /participants with params %o', req.query);
@@ -26,14 +25,13 @@ export default app => {
         }
         return res.json(payload).status(200);
       } catch (err) {
-        return next(err);
+        next(err);
       }
     }
   );
 
   route.post(
     '/',
-    middlewares.ensureAuthenticated,
     validateRequestSchema(undefined, requests.ParticipantSignup),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
@@ -46,7 +44,7 @@ export default app => {
         return res.status(201).json({ participant });
       } catch (err) {
         logger.error(err);
-        return next(err);
+        next(err);
       }
     }
   );

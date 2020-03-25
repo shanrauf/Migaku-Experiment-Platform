@@ -1,6 +1,6 @@
 import { Service, Inject } from 'typedi';
 import winston from 'winston';
-import { randomIdGenerator, generateSequelizeFilters } from '../../../utils';
+import { generateSequelizeFilters } from '../../../utils';
 import {
   EventDispatcher,
   EventDispatcherInterface
@@ -23,21 +23,12 @@ export default class QuestionService {
 
   constructor(
     @Inject('Experiment') private experimentModel: typeof Experiment,
-    @Inject('ExperimentParticipant')
-    private experimentParticipantModel: typeof ExperimentParticipant,
     @Inject('Question') private questionModel: typeof Question,
-    @Inject('ExperimentQuestion')
-    private experimentQuestionModel: typeof ExperimentQuestion,
-    @Inject('ExperimentRequirement')
-    private experimentRequirementModel: typeof ExperimentRequirement,
     @Inject('Survey') private surveyModel: typeof Survey,
-    @Inject('Participant') private participantModel: typeof Participant,
-    @Inject('sequelize') private sqlConnection: Sequelize,
-    @Inject('logger') private logger: winston.Logger,
-    @EventDispatcher() private eventDispatcher: EventDispatcherInterface
+    @Inject('logger') private logger: winston.Logger
   ) {
     this.sequelizeFilters = {
-      experimentId: experimentId => {
+      experimentId: (experimentId) => {
         return {
           include: [
             {
@@ -50,7 +41,7 @@ export default class QuestionService {
           ]
         };
       },
-      surveyId: surveyId => {
+      surveyId: (surveyId) => {
         return {
           include: [
             {

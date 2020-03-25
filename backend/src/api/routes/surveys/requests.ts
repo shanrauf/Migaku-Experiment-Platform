@@ -5,7 +5,6 @@ import {
   IsISO8601,
   IsString,
   ArrayUnique,
-  ValidateNested,
   IsOptional,
   IsInt
 } from 'class-validator';
@@ -195,7 +194,7 @@ export class ISurveyQuestionList {
 }
 
 export class IQuestionResponse {
-  [questionId: string]: any;
+  [questionId: string]: unknown;
 }
 
 export class ISurveyResponse {

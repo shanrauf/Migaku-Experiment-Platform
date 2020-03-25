@@ -1,5 +1,4 @@
 import { Service, Inject } from 'typedi';
-import { Participant } from '../../models/participant';
 import { Client } from 'discord.js';
 import logger from '../../loaders/logger';
 import config from '../../config';
@@ -9,13 +8,10 @@ export default class DiscordClient {
 
   public async SetDiscordRole(role: string, discordId: string): Promise<void> {
     try {
-      /**
-       * TODO: Risky if bot is in multiple servers...
-       */
       const guild = this.discordClient.guilds.find(
-        discordGuild => discordGuild.id === config.discord.DISCORD_SERVER
+        (discordGuild) => discordGuild.id === config.discord.DISCORD_SERVER
       );
-      const roleObj = guild.roles.find(guildRole => guildRole.name === role);
+      const roleObj = guild.roles.find((guildRole) => guildRole.name === role);
       if (!roleObj) {
         throw new Error(`${role} doesn't exist.`);
       }

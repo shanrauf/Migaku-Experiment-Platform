@@ -7,13 +7,16 @@
     "dev": "npm run force-sync-dev && npm run seed",
     "start-prod": "cross-env NODE_ENV=production PORT=4000 node build/server.js",
     "test": "jest --detectOpenHandles --forceExit --no-cache",
-    "build": "cross-env NODE_ENV=production webpack --debug --progress --display-error-details --verbose --config webpack.config.js"
+    "setup": "./scripts/setup_dev.sh"
   },
   "author": "Shan Rauf",
   "license": "ISC",
   "dependencies": {},
   "devDependencies": {
     "husky": "^4.2.3"
+  },
+  "husky": {
+    "pre-commit": "./scripts/pre-commit.sh"
   },
   "bugs": {
     "url": "https://github.com/mass-immersion-approach"

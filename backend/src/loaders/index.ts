@@ -10,7 +10,7 @@ import discordLoader from './discord';
  */
 import './events';
 
-export default async ({ expressApp }: { expressApp }) => {
+export default async ({ expressApp }: { expressApp }): Promise<void> => {
   const passport = await passportLoader();
   const sqlConnection = await sequelizeLoader();
   const discordClient = await discordLoader();
