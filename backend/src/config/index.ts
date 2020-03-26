@@ -5,10 +5,7 @@ if (!dotenv.config()) {
 }
 
 export default {
-  port:
-    process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
-      ? 3000
-      : 3306,
+  port: 3000,
   cookieKey: process.env.JWT_SECRET,
   MAILER_KEY: process.env.MAILER_KEY,
   /**
