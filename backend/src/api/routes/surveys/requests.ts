@@ -193,8 +193,12 @@ export class ISurveyQuestionList {
   questions: string[];
 }
 
+/**
+ * TODO: Find a better way to type dynamic survey submission payloads...
+ */
 export class IQuestionResponse {
-  [questionId: string]: unknown;
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  [questionId: string]: any;
 }
 
 export class ISurveyResponse {
