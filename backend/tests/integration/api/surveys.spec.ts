@@ -18,7 +18,7 @@ beforeAll(async () => {
   await dependencyInjectorLoader({
     sqlConnection,
     discordClient: undefined,
-    emailClient: undefined,
+    // emailClient: undefined,
     passport: undefined
   });
 });

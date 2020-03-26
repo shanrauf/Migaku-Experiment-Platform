@@ -4,17 +4,17 @@ import { Client } from 'discord.js';
 
 import logger from './logger';
 import type { PassportStatic } from 'passport';
-import type MailerService from '@sendgrid/mail';
+// import type MailerService from '@sendgrid/mail';
 
 export default async ({
   sqlConnection,
   discordClient,
-  emailClient,
+  // emailClient,
   passport
 }: {
   sqlConnection: Sequelize;
   discordClient: Client;
-  emailClient: typeof MailerService;
+  // emailClient: typeof MailerService;
   passport: PassportStatic;
 }): Promise<void> => {
   try {
@@ -23,7 +23,7 @@ export default async ({
     }
 
     Container.set('sequelize', sqlConnection);
-    Container.set('emailClient', emailClient);
+    // Container.set('emailClient', emailClient);
     Container.set('discordClient', discordClient);
     Container.set('passport', passport);
     Container.set('logger', logger);

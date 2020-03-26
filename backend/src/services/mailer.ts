@@ -32,7 +32,7 @@ export default class MailerService {
     };
 
     this.SendEmail(msg);
-    this.emailClient.messages().send(data);
+    // this.emailClient.messages().send(data);
     return { delivered: 1, status: 'ok' };
   }
 

@@ -19,7 +19,7 @@ export default async ({ expressApp }: { expressApp }): Promise<void> => {
   await dependencyInjectorLoader({
     sqlConnection,
     discordClient,
-    emailClient: undefined,
+    // emailClient: undefined,
     passport
   });
 
