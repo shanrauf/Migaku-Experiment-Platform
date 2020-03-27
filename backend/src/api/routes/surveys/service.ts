@@ -321,10 +321,10 @@ export default class SurveyService {
 
   private surveyIdToRole(surveyId: string): string {
     switch (surveyId) {
-      case '5pvsnorv9xuupd7ef81hx':
-        return '信者';
+      case 'ub06buuubypun14w05c5m9':
+        return 'Acquisition Apprentice';
       default:
-        return null;
+        return '';
     }
   }
 

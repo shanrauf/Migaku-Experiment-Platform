@@ -32,7 +32,7 @@ export default async (): Promise<PassportStatic> => {
         tokenURL: 'https://discordapp.com/api/oauth2/token',
         clientID: config.discord.discordOAuthClientId,
         clientSecret: config.discord.discordOAuthClientSecret,
-        callbackURL: 'http://localhost:3000/api/auth/discord/redirect'
+        callbackURL: config.discord.discordCallbackUrl
       },
       (
         accessToken: string,

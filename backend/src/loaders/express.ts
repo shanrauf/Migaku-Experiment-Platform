@@ -3,6 +3,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cookieSession from 'cookie-session';
+// import helmet from 'helmet';
 
 import routes from '../api';
 import config from '../config';
@@ -68,6 +69,8 @@ export default async ({ app }: { app: express.Application }): Promise<void> => {
     }
     next();
   });
+
+  // app.use(helmet());
 
   /**
    * Load API routes.
