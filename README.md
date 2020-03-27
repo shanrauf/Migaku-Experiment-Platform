@@ -25,8 +25,8 @@ Using CodePipeline and CodeDeploy, the code is automatically deployed when you p
 
 ### Setup an EC2 instance
 
-1. Add `install_dependencies.sh` to root directory of instance
-2. `sudo ./install_dependencies.sh` # Installs global dependencies (Nodejs, Nginx, CodeDeploy-Agent, etc)
+1. Add `install_dependencies.sh` and `server.conf` to root directory of instance
+2. `sudo chmod u+x install_dependencies.sh && sudo ./install_dependencies.sh` # Installs global dependencies (Nodejs, Nginx, CodeDeploy-Agent, etc)
 3. `sudo rm /etc/nginx/sites-available/default`
 4. `sudo touch /etc/nginx/sites-available/default`
 5. Add contents of local `/scripts/default` to clipboard (frontend static files and /api proxy)
@@ -37,6 +37,7 @@ Using CodePipeline and CodeDeploy, the code is automatically deployed when you p
 
 ## Todo (in order of priority)
 
+- Move dev dependencies out of dependencies in package.json and only install required dependencies on deploy...
 - Complete basic test suite that covers all API routes (testing status codes, response bodies, and model validation)
 - Secure API (currently, anyone can make any request from anywhere) via authentication (add auth cases to unit tests)
 - Significantly improve frontend styling

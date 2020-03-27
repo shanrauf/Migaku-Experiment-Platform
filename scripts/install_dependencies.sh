@@ -47,8 +47,20 @@ echo "
   Nginx
 ----------------------
 "
-sudo apt-get install -y nginx
+sudo wget http://nginx.org/keys/nginx_signing.key
+sudo apt-key add nginx_signing.key
 
+# cd /etc/apt
+# sudo nano sources.list
+
+# # Add to sources.list
+# deb http://nginx.org/packages/ubuntu xenial nginx
+# deb-src http://nginx.org/packages/ubuntu xenial nginx
+# #
+
+sudo apt-get update
+sudo apt-get install nginx
+sudo service nginx start
 
 echo "
 ----------------------
@@ -77,3 +89,24 @@ cd /home/ubuntu
 wget https://aws-codedeploy-$REGION.s3.amazonaws.com/latest/install
 sudo chmod +x install
 sudo ./install auto
+
+
+echo "
+----------------------
+  Let's Encrypt
+----------------------
+"
+sudo apt-get update
+sudo apt-get install software-properties-common
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt-get update
+sudo apt-get install python-certbot-nginx
+
+cd / && sudo mv server.conf /etc/nginx/conf.d
+cd /etc/nginx/conf.d
+sudo mv default.conf default.conf.bak
+
+
+sudo certbot --nginx -d trials.massimmersionapproach.com
+
+sudo nginx -s reload
