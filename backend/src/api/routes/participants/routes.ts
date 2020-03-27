@@ -30,6 +30,16 @@ export default (app) => {
     }
   );
 
+  route.get(
+    '/me',
+    middlewares.ensureAuthenticated,
+    async (req: Request, res: Response, next: NextFunction) => {
+      logger.debug('GET /participants/me');
+      const { discordUsername, email, discordId } = req.user;
+      return res.status(200).json({ discordUsername, email, discordId });
+    }
+  );
+
   route.post(
     '/',
     validateRequestSchema(undefined, requests.ParticipantSignup),

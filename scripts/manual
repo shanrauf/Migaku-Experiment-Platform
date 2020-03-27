@@ -1,0 +1,19 @@
+echo "
+----------------------
+  Let's Encrypt
+----------------------
+"
+sudo apt-get update
+sudo apt-get install software-properties-common
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt-get update
+sudo apt-get install python-certbot-nginx
+
+cd / && sudo mv server.conf /etc/nginx/conf.d
+cd /etc/nginx/conf.d
+sudo mv default.conf default.conf.bak
+
+
+sudo certbot --nginx -d trials.massimmersionapproach.com
+
+sudo nginx -s reload

@@ -25,8 +25,16 @@ Using CodePipeline and CodeDeploy, the code is automatically deployed when you p
 
 ### Setup an EC2 instance
 
-1. Add `install_dependencies.sh` and `server.conf` to root directory of instance
-2. `sudo chmod u+x install_dependencies.sh && sudo ./install_dependencies.sh` # Installs global dependencies (Nodejs, Nginx, CodeDeploy-Agent, etc)
+1. `cd / && sudo touch install`
+2. Copy install_dependencies.sh into `sudo nano install`
+3. Installs global dependencies (Nodejs, Nginx, CodeDeploy-Agent, etc)
+
+```
+cd /
+sudo chmod u+x install
+sudo ./install
+```
+
 3. `sudo rm /etc/nginx/sites-available/default`
 4. `sudo touch /etc/nginx/sites-available/default`
 5. Add contents of local `/scripts/default` to clipboard (frontend static files and /api proxy)

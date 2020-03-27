@@ -30,16 +30,12 @@ export default (app: Router) => {
     (req: Request, res: Response, next: NextFunction) => {
       try {
         logger.debug('GET /discord/redirect with user %o', req.user);
-
         if (req.query.state?.includes('redirect')) {
           const redirectUrl = decodeURIComponent(req.query.state.split('=')[1]);
           res.status(301).redirect(redirectUrl);
         } else {
-          const defaultRedirect =
-            process.env.NODE_ENV === 'development'
-              ? 'localhost:8080'
-              : 'trials.massimmersionapproach.com';
-          res.status(301).redirect(defaultRedirect);
+          const { miaDiscord, discordUsername, email } = req.user;
+          res.status(200).json({ miaDiscord, discordUsername, email });
         }
       } catch (err) {
         logger.error(err);

@@ -12,6 +12,8 @@ declare global {
        * To implement admin accounts.
        */
       adminId: string;
+
+      miaDiscord: boolean;
     }
   }
 }

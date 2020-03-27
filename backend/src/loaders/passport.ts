@@ -8,6 +8,7 @@ import config from '../config';
 import logger from './logger';
 import { Participant } from '../models/participant';
 import { randomIdGenerator } from '../utils';
+import DiscordClient from '../services/discord/discord';
 
 type DiscordProfile = {
   id: string;
@@ -64,7 +65,13 @@ export default async (): Promise<PassportStatic> => {
               refreshToken,
               discordId: profile.id
             };
-            done(null, result);
+            const discordService = Container.get(DiscordClient);
+            discordService
+              .IsMemberOfMIADiscord(result.discordId)
+              .then((isMemberOfMIADiscord) => {
+                result['miaDiscord'] = isMemberOfMIADiscord;
+                done(null, result);
+              });
           })
           .catch((err) => {
             logger.error(err);

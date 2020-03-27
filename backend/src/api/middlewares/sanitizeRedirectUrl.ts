@@ -25,7 +25,7 @@ const sanitizeRedirectUrl = (
     }
     throw new Error(`The following is an invalid redirect url: ${href}`);
   }
-  res.status(400).json({ message: 'Missing a redirect URL' });
+  next();
 };
 
 export default sanitizeRedirectUrl;

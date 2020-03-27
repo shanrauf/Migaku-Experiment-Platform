@@ -114,6 +114,7 @@ export default (app: Router): void => {
 
   route.post(
     '/:surveyId/responses',
+    middlewares.ensureAuthenticated,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { experimentId, surveyId } = req.params;
