@@ -6,6 +6,7 @@ import logger from '../../../loaders/logger';
 import validateRequestSchema from '../../middlewares/validateRequestSchema';
 import * as requests from './requests';
 import middlewares from '../../middlewares';
+import DiscordClient from '../../../services/discord/discord';
 
 const route = Router();
 
@@ -35,8 +36,18 @@ export default (app) => {
     middlewares.ensureAuthenticated,
     async (req: Request, res: Response, next: NextFunction) => {
       logger.debug('GET /participants/me');
-      const { discordUsername, email, discordId } = req.user;
-      return res.status(200).json({ discordUsername, email, discordId });
+      const { discordUsername } = req.user;
+      return res.status(200).json({ discordUsername });
+    }
+  );
+
+  route.get(
+    '/test',
+    async (req: Request, res: Response, next: NextFunction) => {
+      logger.debug('GET /participants/me');
+      const discordService = Container.get(DiscordClient);
+      await discordService.CreateEmojis();
+      return res.status(200).json({ status: 'success' });
     }
   );
 

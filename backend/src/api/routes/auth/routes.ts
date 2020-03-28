@@ -34,8 +34,8 @@ export default (app: Router) => {
           const redirectUrl = decodeURIComponent(req.query.state.split('=')[1]);
           res.status(301).redirect(redirectUrl);
         } else {
-          const { miaDiscord, discordUsername, email } = req.user;
-          res.status(200).json({ miaDiscord, discordUsername, email });
+          const { miaDiscord, discordUsername } = req.user;
+          res.status(200).json({ miaDiscord, discordUsername });
         }
       } catch (err) {
         logger.error(err);

@@ -1,3 +1,4 @@
+import { ErrorHandler } from './../../../utils/index';
 import { Request, Response, Router, NextFunction } from 'express';
 import { Container } from 'typedi';
 
@@ -62,7 +63,7 @@ export default (app: Router): void => {
 
   route.post(
     '/',
-    middlewares.validateRequestSchema(undefined, requests.ICreateSurvey),
+    // middlewares.validateRequestSchema(undefined, requests.ICreateSurvey),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         logger.debug(`POST /surveys with body: %o`, req.body);
@@ -123,6 +124,14 @@ export default (app: Router): void => {
           req.body
         );
         const surveyService = Container.get(SurveyService);
+
+        const alreadySubmitted = await surveyService.GetSurveyCompletionStatus(
+          req.user.participantId,
+          surveyId
+        );
+        if (alreadySubmitted) {
+          throw new ErrorHandler(403, 'You already submitted this survey');
+        }
 
         const questionResponses = await surveyService.SubmitSurveyResponse(
           experimentId,
