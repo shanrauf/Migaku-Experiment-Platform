@@ -14,6 +14,7 @@ export default async (): Promise<Sequelize> => {
       dialect: 'mysql',
       dialectModule: mysql2,
       port: sequelizeConfig[process.env.NODE_ENV].port,
+      logging: false,
       pool: {
         max: 15,
         min: 5,

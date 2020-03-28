@@ -7,6 +7,9 @@ import validateRequestSchema from '../../middlewares/validateRequestSchema';
 import * as requests from './requests';
 import middlewares from '../../middlewares';
 import DiscordClient from '../../../services/discord/discord';
+import QuestionService from '../questions/service';
+
+import { questions } from './questions.js';
 
 const route = Router();
 
@@ -36,18 +39,50 @@ export default (app) => {
     middlewares.ensureAuthenticated,
     async (req: Request, res: Response, next: NextFunction) => {
       logger.debug('GET /participants/me');
-      const { discordUsername } = req.user;
-      return res.status(200).json({ discordUsername });
+      if (!req.user.discordUsername) {
+        return res.status(403).json({ status: 'error' });
+      }
+      return res.status(200).json({
+        miaDiscord: req.user.miaDiscord,
+        discordUsername: req.user.discordUsername
+      });
     }
   );
 
   route.get(
-    '/test',
+    '/test2',
     async (req: Request, res: Response, next: NextFunction) => {
-      logger.debug('GET /participants/me');
-      const discordService = Container.get(DiscordClient);
-      await discordService.CreateEmojis();
+      logger.debug('GET /participants/test2');
+      const questionService = Container.get(QuestionService);
+      let promises = [];
+      // @ts-ignore */
+      promises.push(
+        questionService.DeleteExperimentAssociations(
+          'audiovssentencecards',
+          questions
+        )
+      );
+      promises.push(questionService.DeleteQuestions(questions));
+      await Promise.all(promises);
       return res.status(200).json({ status: 'success' });
+    }
+  );
+
+  route.get(
+    '/test3',
+    async (req: Request, res: Response, next: NextFunction) => {
+      for (let questionId of questions) {
+        let counter = 0;
+        for (let questionId2 of questions) {
+          if (questionId == questionId2) {
+            counter += 1;
+          }
+        }
+        if (counter >= 2) {
+          res.status(404).json({ count: counter, questionId });
+        }
+      }
+      res.status(200).json({ status: 'Success loser' });
     }
   );
 

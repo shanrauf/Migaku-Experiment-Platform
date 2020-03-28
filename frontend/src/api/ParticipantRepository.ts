@@ -1,5 +1,5 @@
-import AxiosClient from "./axiosClient";
-const resource = "/participants";
+import AxiosClient from './axiosClient';
+const resource = '/participants';
 export default class ParticipantRepository {
   constructor() {}
 
@@ -17,5 +17,15 @@ export default class ParticipantRepository {
   }
   public static delete(participantId: string) {
     return AxiosClient.delete(`${resource}/${participantId}`);
+  }
+  public static me() {
+    return AxiosClient.get(`${resource}/me`).then(res => res.data);
+  }
+  public static signin(redirect?: string) {
+    let url: string = 'auth/discord';
+    if (redirect) {
+      url += redirect;
+    }
+    AxiosClient.get(url);
   }
 }

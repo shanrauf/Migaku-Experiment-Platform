@@ -1,10 +1,14 @@
 import { MutationTree, ActionTree, GetterTree } from 'vuex';
 import { RootState } from '@/types';
 
-const surveyData = require('@/surveyData.json');
+const experimentSurveys: any = {
+  g6cy8p0yrmnclxyv6co2o: require('@/g6cy8p0yrmnclxyv6co2o.json')
+};
 import router from '@/app-routes';
 import SurveyRepository from '@/api/SurveyRepository';
 import Vue from 'vue';
+import ParticipantRepository from '@/api/ParticipantRepository';
+import Axios from 'axios';
 const defaults = {
   surveys: [],
   currentSurvey: {
@@ -43,14 +47,25 @@ const actions: ActionTree<typeof defaults, RootState> = {
       surveys: surveys
     });
   },
-  async createCurrentSurvey({ state, commit }, payload) {
+  async createCurrentSurvey({ state, commit }, payload: any) {
     // if already submitted, then just redirect back and notify already submitted...
     // const surveyStatus = await SurveyRepository.getStatus(
     //   `latest?email=${payload.email}`
     // );
+    try {
+      const result = await ParticipantRepository.me();
+      console.log(result);
+      if (!result.miaDiscord) {
+        await ParticipantRepository.signin();
+      }
+    } catch (err) {
+      window.location.replace(
+        'https://trials.massimmersionapproach.com/api/auth/discord?redirect=https://trials.massimmersionapproach.com/experiments/mia-community-census/surveys/g6cy8p0yrmnclxyv6co2o'
+      );
+    }
     commit({
       type: 'setCurrentSurvey',
-      currentSurvey: surveyData.survey // doing manually for now
+      currentSurvey: experimentSurveys[payload.surveyId].survey // doing manually for now
     });
   },
   async submitSurvey({ commit, state }) {
@@ -93,9 +108,9 @@ const actions: ActionTree<typeof defaults, RootState> = {
         Vue.notify({
           group: 'global',
           title: 'Successfully submitted survey!',
-          text: "Don't forget to come back next week to fill out the next one"
+          text: 'The rest of the site will be updated soon!'
         });
-        router.push({ path: '/dashboard' });
+        router.push({ path: '/' });
       });
       return true;
     } else {

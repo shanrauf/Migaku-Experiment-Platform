@@ -9,6 +9,7 @@ import logger from './logger';
 import { Participant } from '../models/participant';
 import { randomIdGenerator } from '../utils';
 import DiscordClient from '../services/discord/discord';
+import ExperimentService from '../api/routes/experiments/service';
 
 type DiscordProfile = {
   id: string;
@@ -70,7 +71,22 @@ export default async (): Promise<PassportStatic> => {
               .IsMemberOfMIADiscord(result.discordId)
               .then((isMemberOfMIADiscord) => {
                 result['miaDiscord'] = isMemberOfMIADiscord;
-                done(null, result);
+                /**
+                 * TODO: FIX. Ppl should register for experiments on teh website when it's styled...
+                 */
+                const experimentService = Container.get(ExperimentService);
+                if (isMemberOfMIADiscord && participantRecord[1]) {
+                  experimentService
+                    .RegisterParticipant(
+                      'mia-community-census',
+                      participantRecord[0].participantId
+                    )
+                    .then(() => {
+                      done(null, result);
+                    });
+                } else {
+                  done(null, result);
+                }
               });
           })
           .catch((err) => {

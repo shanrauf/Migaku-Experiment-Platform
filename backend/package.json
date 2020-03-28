@@ -6,6 +6,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development nodemon",
     "setup-dev": "npm run force-sync-dev && npm run seed",
+    "debug-prod": "cross-env NODE_ENV=production node ./build/server.js",
     "start-prod": "sudo pm2 start ./build/server.js",
     "test": "jest --detectOpenHandles --forceExit --no-cache",
     "build": "cross-env NODE_ENV=production webpack --debug --progress --display-error-details --verbose --config webpack.config.js",

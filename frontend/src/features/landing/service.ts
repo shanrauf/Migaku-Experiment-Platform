@@ -22,6 +22,8 @@ export default class Service {
     });
   }
   loginWithDiscord() {
-    console.log('Integrate auth');
+    window.location.replace(
+      'https://trials.massimmersionapproach.com/api/auth/discord'
+    );
   }
 }

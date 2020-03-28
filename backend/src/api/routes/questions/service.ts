@@ -25,6 +25,9 @@ export default class QuestionService {
     @Inject('Experiment') private experimentModel: typeof Experiment,
     @Inject('Question') private questionModel: typeof Question,
     @Inject('Survey') private surveyModel: typeof Survey,
+    @Inject('ExperimentQuestion')
+    private experimentQuestionModel: typeof ExperimentQuestion,
+    @Inject('sequelize') private sqlConnection: Sequelize,
     @Inject('logger') private logger: winston.Logger
   ) {
     this.sequelizeFilters = {
@@ -84,10 +87,37 @@ export default class QuestionService {
           questions.length === 1 ? '' : 's'
         }`
       );
-      await this.questionModel.bulkCreate(questions);
+      const result = await this.sqlConnection.transaction(
+        async (transaction) => {
+          await this.questionModel.bulkCreate(questions);
+        }
+      );
     } catch (err) {
       this.logger.error(err);
       throw err;
+    }
+  }
+
+  public async DeleteQuestions(questionIds: string[]): Promise<void> {
+    try {
+      await this.questionModel.destroy({
+        where: { questionId: questionIds }
+      });
+    } catch (err) {
+      /* do nothing */
+    }
+  }
+
+  public async DeleteExperimentAssociations(
+    experimentId: string,
+    questionIds: string[]
+  ): Promise<void> {
+    try {
+      await this.experimentQuestionModel.destroy({
+        where: { experimentId, questionId: questionIds }
+      });
+    } catch (err) {
+      // do nothing
     }
   }
 }
