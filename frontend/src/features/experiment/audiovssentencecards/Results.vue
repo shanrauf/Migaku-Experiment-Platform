@@ -3,11 +3,11 @@
     <div>
       <router-link to="/dashboard">Back To Dashboard</router-link>
     </div>
-    <h1 class="article-title">Audio vs. Sentence Cards Experiment Results</h1>
+    <h1 class="article-title">Audio vs. Text Cards Experiment Results</h1>
     <div class="article-content">
       <p>
         The audio cards resulted in a significantly higher retention rate than
-        sentence cards.
+        text cards.
       </p>
 
       <div class="graph-container">
@@ -119,7 +119,7 @@ export default {
       },
       series1: [
         {
-          name: 'Audio Cards',
+          name: 'Audio',
           data: [
             81.8474,
             83.348,
@@ -135,7 +135,7 @@ export default {
           ]
         },
         {
-          name: 'Sentence Cards',
+          name: 'Text',
           data: [
             75.685,
             75.0839,
@@ -169,7 +169,7 @@ export default {
       },
       series2: [
         {
-          name: 'Sentence Cards',
+          name: 'Text',
           data: Object.values(monthsOfMIAToTextOverallRetention).map(
             participant => {
               return participant[1];
@@ -177,7 +177,7 @@ export default {
           )
         },
         {
-          name: 'Audio Cards',
+          name: 'Audio',
           data: Object.values(monthsOfMIAToAudioOverallRetention).map(
             participant => {
               return participant[1];
@@ -204,11 +204,11 @@ export default {
       },
       series3: [
         {
-          name: 'Sentence Cards',
+          name: 'Text',
           data: Object.values(avgActiveListeningToTextOverallRetention)
         },
         {
-          name: 'Audio Cards',
+          name: 'Audio',
           data: Object.values(avgActiveListeningToAudioOverallRetention)
         }
       ],
@@ -231,11 +231,11 @@ export default {
       },
       series4: [
         {
-          name: 'Sentence Cards',
+          name: 'Text',
           data: Object.values(jcatScoresToTextOverallRetention)
         },
         {
-          name: 'Audio Cards',
+          name: 'Audio',
           data: Object.values(jcatScoresToAudioOverallRetention)
         }
       ],
@@ -258,11 +258,11 @@ export default {
       },
       series5: [
         {
-          name: 'Sentence Cards',
+          name: 'Text',
           data: Object.values(avgReadingToTextOverallRetention)
         },
         {
-          name: 'Audio Cards',
+          name: 'Audio',
           data: Object.values(avgReadingToAudioOverallRetention)
         }
       ]

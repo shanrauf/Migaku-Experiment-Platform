@@ -107,7 +107,7 @@ export default {
           data: this.$options.service.testData()['avgAudioRetention']
         },
         {
-          name: 'Sentence',
+          name: 'Text',
           data: this.$options.service.testData()['avgSentenceRetention']
         }
       ]

@@ -25,7 +25,7 @@ export default {
     return {
       options: {
         title: {
-          text: 'Audio vs. Sentence Card Retention'
+          text: 'Audio vs. Text Card Retention'
         },
         chart: {
           id: 'vuechart-example'
@@ -53,7 +53,7 @@ export default {
           data: this.$options.service.testData()['avgAudioRetention']
         },
         {
-          name: 'Sentence',
+          name: 'Text',
           data: this.$options.service.testData()['avgSentenceRetention']
         }
       ]
