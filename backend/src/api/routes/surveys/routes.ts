@@ -118,6 +118,9 @@ export default (app: Router): void => {
     middlewares.ensureAuthenticated,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
+        if (!req.user.miaDiscord) {
+          throw new ErrorHandler(403, "You aren't a part of the MIA Discord");
+        }
         const { experimentId, surveyId } = req.params;
         logger.debug(
           `POST /experiments/${experimentId}/surveys/${surveyId}/responses w/ body %o`,
