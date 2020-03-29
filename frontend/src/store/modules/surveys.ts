@@ -52,17 +52,6 @@ const actions: ActionTree<typeof defaults, RootState> = {
     // const surveyStatus = await SurveyRepository.getStatus(
     //   `latest?email=${payload.email}`
     // );
-    try {
-      const result = await ParticipantRepository.me();
-      console.log(result);
-      if (!result.miaDiscord) {
-        await ParticipantRepository.signin();
-      }
-    } catch (err) {
-      window.location.replace(
-        'https://trials.massimmersionapproach.com/api/auth/discord?redirect=https://trials.massimmersionapproach.com/experiments/mia-community-census/surveys/g6cy8p0yrmnclxyv6co2o'
-      );
-    }
     commit({
       type: 'setCurrentSurvey',
       currentSurvey: experimentSurveys[payload.surveyId].survey // doing manually for now

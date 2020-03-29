@@ -7,7 +7,7 @@ const surveyRoutes = [
     meta: {
       title: 'Survey | MIA Experiments',
       layout: 'DefaultLayout',
-      isPublic: true
+      isPublic: false
     }
   }
 ];

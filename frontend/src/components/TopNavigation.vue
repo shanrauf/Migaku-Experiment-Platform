@@ -1,43 +1,42 @@
 <template>
-  <v-toolbar extended extension-height="50" color="#204f70">
-    <v-btn class="nav-icon" icon>
-      <img class="logo" src="@/assets/images/mia.png" alt="MIA Logo" />
-    </v-btn>
-
-    <v-toolbar-title style="color: white">
-      <span>Mass Immersion Approach</span>
-    </v-toolbar-title>
-
-    <v-spacer />
-    <v-toolbar-items>
-      <v-list-item-avatar>
-        <img src="@/assets/images/defaultProfile.jpg" alt="Profile Photo" />
-      </v-list-item-avatar>
-    </v-toolbar-items>
-  </v-toolbar>
+  <nav>
+    <router-link to="/">
+      <img src="@/assets/images/mia_white.png" alt="MIA Logo" class="logo" />
+    </router-link>
+  </nav>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      show: true
+      drawer: false
     };
+  },
+  methods: {
+    goTo(link) {
+      this.$router.push(link);
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.logo {
-  margin-left: 15px;
-  width: 50px;
-  height: 50px;
+nav {
+  // position: absolute;
+  // top: 0px;
+  // width: 100%;
+  background: #204f70 !important;
+  padding: 15px 30px 15px 30px;
+  text-align: right;
+  z-index: 1;
+  background: inherit;
 }
-
-.avatar {
-  border: 3px solid gray;
-  min-width: 60px;
-  width: 60px;
-  height: 60px;
+.logo {
+  width: 90px;
+  height: 35px;
+  float: left;
+  text-transform: uppercase;
+  text-align: left;
 }
 </style>
