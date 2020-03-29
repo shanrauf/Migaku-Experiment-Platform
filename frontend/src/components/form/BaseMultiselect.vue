@@ -1,26 +1,24 @@
 <template>
-<v-input
-    :messages="[`${note}`]"
-  >
-  <v-combobox
-    v-model="inputArray"
-    :rules="[...rules, whitelistRule]"
-    :placeholder="placeholder"
-    :value="value"
-    :label="label || 'Select one:'"
-    :items="items"
-    multiple
-    deletable-chips
-    :mandatory="required"
-    @change="$emit('update', inputArray)"
-  >
-  </v-combobox>
-</v-input>
+  <v-input :messages="[`${note}`]">
+    <v-combobox
+      v-model="inputArray"
+      :rules="[...rules, whitelistRule, requiredRule]"
+      :placeholder="placeholder"
+      :value="value"
+      :label="label || 'Select one:'"
+      :items="items"
+      multiple
+      deletable-chips
+      :mandatory="required"
+      @change="$emit('update', inputArray)"
+    >
+    </v-combobox>
+  </v-input>
 </template>
 
 <script>
 export default {
-  name: "BaseMultiselect",
+  name: 'BaseMultiselect',
   props: {
     label: {
       type: String,
@@ -49,7 +47,7 @@ export default {
     note: {
       type: String,
       required: false,
-      default: ""
+      default: ''
     }
   },
   data() {
@@ -70,9 +68,14 @@ export default {
           }
         });
         if (invalidInputs.length) {
-          return `These are invalid options: ${invalidInputs.join(", ")}.`;
+          return `These are invalid options: ${invalidInputs.join(', ')}.`;
         }
         return true;
+      };
+    },
+    requiredRule() {
+      if (this.required) {
+        return v => !!v.length || 'This question is required';
       }
     }
   }

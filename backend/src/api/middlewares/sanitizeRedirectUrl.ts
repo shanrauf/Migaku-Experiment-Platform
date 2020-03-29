@@ -4,7 +4,8 @@ import { URL } from 'url';
 const hostWhitelist = [
   'localhost:3000',
   'trials.massimmersionapproach.com',
-  'massimmersionapproach.com'
+  'massimmersionapproach.com',
+  'localhost:8080'
 ];
 
 /**
@@ -21,11 +22,11 @@ const sanitizeRedirectUrl = (
     const { host, href } = new URL(req.query.redirect);
 
     if (hostWhitelist.includes(host)) {
-      next();
+      return next();
     }
     throw new Error(`The following is an invalid redirect url: ${href}`);
   }
-  next();
+  return next();
 };
 
 export default sanitizeRedirectUrl;

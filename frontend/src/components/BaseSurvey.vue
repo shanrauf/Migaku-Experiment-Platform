@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="form" v-model="valid" class="form" lazy-validation>
+  <v-form ref="form" v-model="valid" class="form">
     <h1 style="margin: 20px 20px 5px 0">{{ section.title }}</h1>
     <p style="margin: 0 20px 20px 0">{{ section.description }}</p>
     <div v-for="question in section.questions" :key="question.key">
@@ -11,6 +11,7 @@
         :label="question.label"
         :placeholder="question.placeholder"
         :rules="getRules(question.rules)"
+        :required="question.required"
         :items="getItems(question.items)"
         @update="(...args) => updateQuestionValue(question, ...args)"
       />
@@ -19,13 +20,14 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import { formMixin } from "../mixins/formMixin";
-import BaseSelect from "@/components/form/BaseSelect.vue";
-import BaseRadioButtons from "@/components/form/BaseRadioButtons.vue";
-import BaseTextField from "@/components/form/BaseTextField.vue";
-import BaseMultiselect from "@/components/form/BaseMultiselect.vue";
-import BaseCreateNewCard from "@/components/BaseCreateNewCard.vue";
+import EventBus from '@/event-bus.ts';
+
+import { mapGetters } from 'vuex';
+import { formMixin } from '../mixins/formMixin';
+import BaseSelect from '@/components/form/BaseSelect.vue';
+import BaseRadioButtons from '@/components/form/BaseRadioButtons.vue';
+import BaseTextField from '@/components/form/BaseTextField.vue';
+import BaseMultiselect from '@/components/form/BaseMultiselect.vue';
 
 import {
   foreignLanguages,
@@ -34,10 +36,10 @@ import {
   fieldsOfOccupation,
   generalTimeFrames,
   countryList
-} from "@/utils/items.ts";
+} from '@/utils/items.ts';
 
 export default {
-  name: "BaseSurvey",
+  name: 'BaseSurvey',
   mixins: [formMixin],
   props: {
     section: {
@@ -49,8 +51,7 @@ export default {
     BaseSelect,
     BaseRadioButtons,
     BaseTextField,
-    BaseMultiselect,
-    BaseCreateNewCard
+    BaseMultiselect
   },
   data() {
     return {
@@ -71,45 +72,45 @@ export default {
         percentages: [...Array(101).keys()],
         zeroToOneHundred: [...Array(101).keys()],
         trueFalse: [true, false],
-        audioOrSentenceCard: ["Audio Card", "Sentence Card"],
-        yesNo: ["Yes", "No"],
-        maleOrFemale: ["male", "female"],
-        onceOrThroughoutTheDay: ["Once", "Throughout the day"],
+        audioOrSentenceCard: ['Audio Card', 'Sentence Card'],
+        yesNo: ['Yes', 'No'],
+        maleOrFemale: ['male', 'female'],
+        onceOrThroughoutTheDay: ['Once', 'Throughout the day'],
         periodsOfTheDay: [
-          "Early morning (5AM - 8AM)",
-          "Morning (8AM - 12PM)",
-          "Noon (12PM - 2PM)",
-          "Afternoon (2PM - 4PM)",
-          "Evening (4PM - 6PM)",
-          "Around sunset (6PM - 8PM)",
-          "Around nighttime (8PM - 12AM)",
-          "After midnight (12AM - 5AM)"
+          'Early morning (5AM - 8AM)',
+          'Morning (8AM - 12PM)',
+          'Noon (12PM - 2PM)',
+          'Afternoon (2PM - 4PM)',
+          'Evening (4PM - 6PM)',
+          'Around sunset (6PM - 8PM)',
+          'Around nighttime (8PM - 12AM)',
+          'After midnight (12AM - 5AM)'
         ],
         retirementIntervals: [
-          "Never",
-          "1 day",
-          "1 week",
-          "1 month",
-          "3 months",
-          "6 months",
-          "9 months",
-          "1 year",
-          "1.5 years",
-          "2 years",
-          "3+ years"
+          'Never',
+          '1 day',
+          '1 week',
+          '1 month',
+          '3 months',
+          '6 months',
+          '9 months',
+          '1 year',
+          '1.5 years',
+          '2 years',
+          '3+ years'
         ],
         daysOfTheWeek: [
-          "Sunday",
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-          "Sunday"
+          'Sunday',
+          'Monday',
+          'Tuesday',
+          'Wednesday',
+          'Thursday',
+          'Friday',
+          'Saturday',
+          'Sunday'
         ],
-        devices: ["Desktop/Laptop", "Tablet", "Smartphone"],
-        beforeDuringOrMixed: ["Before", "Mix reviews and new cards", "After"]
+        devices: ['Desktop/Laptop', 'Tablet', 'Smartphone'],
+        beforeDuringOrMixed: ['Before', 'Mix reviews and new cards', 'After']
       },
       ruleGenerators: {
         maxChar: val => v =>
@@ -117,38 +118,38 @@ export default {
         minChar: val => v =>
           (v && v.length >= val) || `Must be greater than ${val} characters`,
         email: val => {
-          if (val == "true") {
-            return v => /.+@.+\..+/.test(v) || "E-mail must be valid";
+          if (val == 'true') {
+            return v => /.+@.+\..+/.test(v) || 'E-mail must be valid';
           } else {
             return true;
           }
         },
         isNumber: val => {
           return v =>
-            /^[0-9]*$/.test(v) || "Must enter numbers only (no letters)";
+            /^[0-9]*$/.test(v) || 'Must enter numbers only (no letters)';
         },
         min: val => {
           return v =>
-            (/^[0-9]*$/.test(v) && parseFloat(v) > val) ||
+            (/^[0-9]*$/.test(v) && parseFloat(v) >= val) ||
             `Must be greater than ${val}`;
         },
         max: val => {
           return v =>
-            (/^[0-9]*$/.test(v) && parseFloat(v) < val) ||
+            (/^[0-9]*$/.test(v) && parseFloat(v) <= val) ||
             `Must be less than ${val}`;
         },
         numberOnly: val => {
-          if (val == "true") {
+          if (val == 'true') {
             return v =>
-              /^[0-9]*$/.test(v) || "Must enter numbers only (no letters)";
+              /^[0-9]*$/.test(v) || 'Must enter numbers only (no letters)';
           } else {
             return true;
           }
         },
         textOnly: val => {
-          if (val == "true") {
+          if (val == 'true') {
             return v =>
-              /^[a-zA-Z ]*$/.test(v) || "Must enter text only (no numbers)";
+              /^[a-zA-Z ]*$/.test(v) || 'Must enter text only (no numbers)';
           } else {
             return true;
           }
@@ -157,26 +158,37 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getNumberOfSections"])
+    ...mapGetters(['getNumberOfSections'])
+  },
+  created() {
+    const payload = { sectionNumber: this.section.sectionNumber, valid: false };
+    EventBus.$emit('validate', payload);
   },
   methods: {
     updateQuestionValue(question, newValue) {
       this.$store.commit({
-        type: "updateQuestionValue",
+        type: 'updateQuestionValue',
         question,
-        attributeToUpdate: "value",
+        attributeToUpdate: 'value',
         newValue
+      });
+
+      this.valid = this.$refs.form.validate();
+
+      EventBus.$emit('validate', {
+        sectionNumber: this.section.sectionNumber,
+        valid: this.valid
       });
     },
     getItems(questionItems) {
-      if (typeof questionItems == "string") {
+      if (typeof questionItems == 'string') {
         let items = this.items[questionItems];
         if (items === undefined) {
           return [];
         } else {
           return items;
         }
-      } else if (typeof questionItems == "object") {
+      } else if (typeof questionItems == 'object') {
         // if currentSurvey provides their own Array of items
         return questionItems;
       } else {

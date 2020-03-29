@@ -1,16 +1,16 @@
-const webpack = require("webpack");
-const path = require("path");
-const VueLoaderPlugin = require("vue-loader/lib/plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const FriendlyErrorsPlugin = require("friendly-errors-webpack-plugin");
-const VuetifyLoaderPlugin = require("vuetify-loader/lib/plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const TerserPlugin = require("terser-webpack-plugin");
-const fs = require("fs");
+const webpack = require('webpack');
+const path = require('path');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
+const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const fs = require('fs');
 
 function ifUtil(NODE_ENV) {
   return (dev_value, prod_value) => {
-    if (NODE_ENV == "development") {
+    if (NODE_ENV == 'development') {
       return dev_value;
     } else {
       return prod_value;
@@ -31,14 +31,14 @@ const plugins = [
     // Do not allow removal of current webpack assets
     protectWebpackAssets: false
   }),
-  new webpack.EnvironmentPlugin(["NODE_ENV", "DEBUG"]),
+  new webpack.EnvironmentPlugin(['NODE_ENV', 'DEBUG']),
   new VueLoaderPlugin(),
   new VuetifyLoaderPlugin(),
   new webpack.HotModuleReplacementPlugin(),
   new FriendlyErrorsPlugin(),
   new HtmlWebpackPlugin({
-    template: "src/index.html",
-    filename: "index.html",
+    template: 'src/index.html',
+    filename: 'index.html',
     minify: {
       collapseWhitespace: true
     },
@@ -48,17 +48,17 @@ const plugins = [
       path.join(
         __dirname,
         ifDevElseProd(
-          "./scripts/service-worker-dev.js",
-          "./scripts/service-worker-prod.js"
+          './scripts/service-worker-dev.js',
+          './scripts/service-worker-prod.js'
         )
       ),
-      "utf-8"
+      'utf-8'
     )}</script>`
   })
 ];
 
 if (process.env.BUNDLE_ANALYZER) {
-  const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+  const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
     .BundleAnalyzerPlugin;
 
   plugins.push(
@@ -82,9 +82,9 @@ if (process.env.BUNDLE_ANALYZER) {
 const devServer = {
   historyApiFallback: true,
   // contentBase: path.join(__dirname, 'build'),
-  open: "chrome",
+  open: 'chrome',
   proxy: {
-    "/api": "http://localhost:3000"
+    '/api': 'http://localhost:3000'
   },
   compress: ifDevElseProd(false, true), // gzip
   stats: {
@@ -114,12 +114,12 @@ const devServer = {
 const optimization = {
   minimize: true,
   namedModules: false,
-  runtimeChunk: "single",
+  runtimeChunk: 'single',
   noEmitOnErrors: true,
   splitChunks: {
     hidePathInfo: true,
-    chunks: "all",
-    automaticNameDelimiter: "-",
+    chunks: 'all',
+    automaticNameDelimiter: '-',
     maxAsyncRequests: 5,
     maxInitialRequests: 3
   },
@@ -158,18 +158,18 @@ const optimization = {
 };
 
 module.exports = {
-  mode: ifDevElseProd("development", "production"),
-  target: "web",
-  devtool: ifDevElseProd("cheap-module-eval-source-map", undefined),
+  mode: ifDevElseProd('development', 'production'),
+  target: 'web',
+  devtool: ifDevElseProd('cheap-module-eval-source-map', undefined),
   devServer: devServer,
   entry: {
-    main: "./src/main.ts"
+    main: './src/main.ts'
   },
   resolve: {
-    extensions: [".js", ".ts", ".vue"],
+    extensions: ['.js', '.ts', '.vue'],
     alias: {
-      vue$: "vue/dist/vue.runtime.js",
-      "@": path.resolve(__dirname, "src")
+      vue$: 'vue/dist/vue.runtime.js',
+      '@': path.resolve(__dirname, 'src')
     }
   },
   module: {
@@ -178,7 +178,7 @@ module.exports = {
         test: /\.ts$/,
         use: [
           {
-            loader: "ts-loader",
+            loader: 'ts-loader',
             options: {
               transpileOnly: true,
               experimentalWatchApi: true
@@ -188,30 +188,30 @@ module.exports = {
       },
       {
         test: /\.vue$/,
-        loader: "vue-loader"
+        loader: 'vue-loader'
       },
       {
         test: /\.js$/,
-        include: path.resolve(__dirname, "src"),
+        include: path.resolve(__dirname, 'src'),
         use: {
-          loader: "babel-loader?cacheDirectory"
+          loader: 'babel-loader?cacheDirectory'
         }
       },
       {
         test: /\.(css)$/,
-        use: ["vue-style-loader", "css-loader"]
+        use: ['vue-style-loader', 'css-loader']
       },
       {
         test: /\.s(c|a)ss$/,
         use: [
-          "vue-style-loader",
-          "css-loader",
+          'vue-style-loader',
+          'css-loader',
           {
-            loader: "sass-loader",
+            loader: 'sass-loader',
             options: {
-              implementation: require("sass"),
+              implementation: require('sass'),
               sassOptions: {
-                fiber: require("fibers")
+                fiber: require('fibers')
               }
             }
           }
@@ -221,7 +221,7 @@ module.exports = {
         test: /\.(png|svg|jpg|gif|ico|eot|ttf|woff|woff2)$/i,
         use: [
           {
-            loader: "file-loader",
+            loader: 'file-loader',
             options: {
               esModule: false // error with file loader 5.0.2, # https://github.com/webpack-contrib/html-loader/issues/203
             }
@@ -232,11 +232,11 @@ module.exports = {
   },
   plugins: plugins,
   output: {
-    path: path.join(__dirname, "build"),
+    path: path.join(__dirname, 'build'),
     pathinfo: false,
-    filename: "[name].bundle.js",
-    chunkFilename: "chunks/[chunkhash].chunk.js",
-    publicPath: "/"
+    filename: '[name].bundle.js',
+    chunkFilename: 'chunks/[chunkhash].chunk.js',
+    publicPath: '/'
   },
   optimization: ifDevElseProd({}, optimization)
 };

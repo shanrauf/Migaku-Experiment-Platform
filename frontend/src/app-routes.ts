@@ -7,6 +7,7 @@ Vue.use(VueRouter);
 
 import store from '@/store';
 import { AppPageNotFound } from '@/components';
+import config from '@/config';
 
 import landingRoutes from '@/features/landing/routes';
 import dashboardRoutes from '@/features/dashboard/routes';
@@ -45,7 +46,7 @@ function guardRoute(to: Route, from: Route, next: Function): void {
     })
     .catch(err => {
       window.location.replace(
-        'https://trials.massimmersionapproach.com/api/auth/discord?redirect=https://trials.massimmersionapproach.com/experiments/mia-community-census/surveys/g6cy8p0yrmnclxyv6co2o'
+        `${config.ROOT_API_URL}/api/auth/discord?redirect=${config.ROOT_FRONTENT_URL}${to.path}`
       );
     });
 }
@@ -57,23 +58,14 @@ routes.forEach(route => {
     store.dispatch('common/updateLayout', route.meta.layout);
 
     // Auth navigation guard.
-    if (!route.meta.isPublic) return guardRoute(to, from, next);
+    if (!route.meta.isPublic) {
+      return guardRoute(to, from, next);
+    }
 
     next();
   };
 });
 
 const router = new VueRouter({ mode: 'history', routes });
-
-// Isn't the following hook better to change document title, etc instead of looping over the routes?
-
-router.beforeEach((to, _, next) => {
-  // TODO: Implement
-  const isAuthenticated = false;
-  if (to.name === 'landing' && isAuthenticated) {
-    router.push('/dashboard');
-  }
-  next();
-});
 
 export default router;

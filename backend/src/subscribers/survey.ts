@@ -22,7 +22,6 @@ export default class SurveySubscriber {
     try {
       logger.debug(`${events.survey.completeSurvey} event triggered`);
       await discordService.SetDiscordRole(role, discordId);
-      // await discordService.SendDirectMessage(discordId);
     } catch (e) {
       logger.error(`🔥 Error on event ${events.survey.completeSurvey}: %o`, e);
       throw e;

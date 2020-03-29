@@ -1,20 +1,17 @@
 <template>
-  <v-input
-    :messages="[`${note}`]"
-  >
+  <v-input :messages="[`${note}`]">
     <v-text-field
       :value="value"
-      :rules="rules"
-      :required="required"
+      :rules="[...rules, requiredRule]"
       :label="label || 'Select one:'"
-      @input="onInput($event)"
+      @blur="onInput($event.target.value)"
     />
   </v-input>
 </template>
 
 <script>
 export default {
-  name: "BaseTextField",
+  name: 'BaseTextField',
   inheritAttrs: false,
   props: {
     label: {
@@ -24,14 +21,14 @@ export default {
     note: {
       type: String,
       required: false,
-      default: ""
+      default: ''
     },
     value: {
-      type: [String, Number],
+      type: String | Number,
       required: false
     },
     placeholder: {
-      type: [String, Number],
+      type: String | Number,
       required: false
     },
     rules: {
@@ -50,11 +47,18 @@ export default {
       } else {
         return true;
       }
+    },
+    requiredRule() {
+      if (this.required) {
+        return v => !!v || 'This question is required';
+      } else {
+        return v => true;
+      }
     }
   },
   methods: {
     onInput(newVal) {
-      this.$emit("update", newVal);
+      this.$emit('update', newVal);
     }
   }
 };

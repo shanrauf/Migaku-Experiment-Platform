@@ -54,6 +54,7 @@ export default {
 <style lang="scss" scoped>
 .copyright {
   font-size: 15px;
+  margin-left: 20px;
 }
 .social-icons {
   display: flex;

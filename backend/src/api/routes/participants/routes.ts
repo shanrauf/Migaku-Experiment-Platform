@@ -50,39 +50,12 @@ export default (app) => {
   );
 
   route.get(
-    '/test2',
+    '/deletethis',
     async (req: Request, res: Response, next: NextFunction) => {
       logger.debug('GET /participants/test2');
-      const questionService = Container.get(QuestionService);
-      let promises = [];
-      // @ts-ignore */
-      promises.push(
-        questionService.DeleteExperimentAssociations(
-          'audiovssentencecards',
-          questions
-        )
-      );
-      promises.push(questionService.DeleteQuestions(questions));
-      await Promise.all(promises);
+      const discordService = Container.get(DiscordClient);
+      await discordService.CreateEmojis();
       return res.status(200).json({ status: 'success' });
-    }
-  );
-
-  route.get(
-    '/test3',
-    async (req: Request, res: Response, next: NextFunction) => {
-      for (let questionId of questions) {
-        let counter = 0;
-        for (let questionId2 of questions) {
-          if (questionId == questionId2) {
-            counter += 1;
-          }
-        }
-        if (counter >= 2) {
-          res.status(404).json({ count: counter, questionId });
-        }
-      }
-      res.status(200).json({ status: 'Success loser' });
     }
   );
 

@@ -135,7 +135,7 @@ export default (app: Router): void => {
         if (alreadySubmitted) {
           throw new ErrorHandler(403, 'You already submitted this survey');
         }
-
+        logger.silly(req.user.participantId);
         const questionResponses = await surveyService.SubmitSurveyResponse(
           experimentId,
           surveyId,
@@ -146,7 +146,7 @@ export default (app: Router): void => {
         return res.json(questionResponses).status(200);
       } catch (err) {
         logger.error(err);
-        next(err);
+        return next(err);
       }
     }
   );

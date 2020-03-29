@@ -22,7 +22,7 @@ export default class ParticipantRepository {
     return AxiosClient.get(`${resource}/me`).then(res => res.data);
   }
   public static signin(redirect?: string) {
-    let url: string = 'auth/discord';
+    let url: string = '/auth/discord';
     if (redirect) {
       url += redirect;
     }

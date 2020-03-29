@@ -12,7 +12,8 @@
 
 <script>
 import Service from './service';
-
+import EventBus from '@/event-bus.ts';
+import Vue from 'vue';
 import { mapGetters, mapState } from 'vuex';
 import SideNavigation from '@/components/SideNavigation.vue';
 import SurveyBuilder from '@/components/SurveyBuilder.vue';
@@ -23,6 +24,11 @@ export default {
   components: {
     SurveyBuilder,
     SideNavigation
+  },
+  data() {
+    return {
+      validForm: {}
+    };
   },
   created() {
     // this component renders on surveys/:survey routes (e.x /, /edit, /view)
@@ -39,15 +45,24 @@ export default {
       // email: this.user.email, can only add when implemented auth, which idc about rn
       surveyId: this.$route.params.surveyId
     });
+    EventBus.$on('validate', validObj => {
+      this.validForm[validObj['sectionNumber']] = validObj['valid'];
+    });
   },
   computed: {
     ...mapGetters(['getCurrentSurvey', 'getCurrentSurveySectionTitles'])
   },
   methods: {
     onSubmit() {
-      let result = this.$store.dispatch('submitSurvey');
-      if (!result) {
-        this.$notify('Failed');
+      if (!Object.values(this.validForm).every(val => !!val)) {
+        Vue.notify({
+          group: 'global',
+          title: 'Failed to submit',
+          text:
+            'Check your answers to see if there is an error. Otherwise, directly message @Shan on Discord'
+        });
+      } else {
+        let result = this.$store.dispatch('submitSurvey');
       }
     }
   }
@@ -56,8 +71,7 @@ export default {
 
 <style lang="scss" scoped>
 .survey-container {
-  margin: auto;
-  margin-top: -40px;
+  margin: 30px auto;
   width: 650px;
 }
 </style>

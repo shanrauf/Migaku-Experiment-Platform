@@ -64,8 +64,14 @@ export default async (): Promise<PassportStatic> => {
               ...participantRecord[0].toJSON(),
               accessToken,
               refreshToken,
-              discordId: profile.id
+              discordId: profile.id,
+              profilePhoto: profile.avatar
             };
+
+            /**
+             * TODO: remove discordUsername from participant model since can ask Discord for the updated version
+             */
+            result['discordUsername'] = profile.username;
             const discordService = Container.get(DiscordClient);
             discordService
               .IsMemberOfMIADiscord(result.discordId)

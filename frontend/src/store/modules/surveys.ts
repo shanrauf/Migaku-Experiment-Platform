@@ -1,14 +1,13 @@
 import { MutationTree, ActionTree, GetterTree } from 'vuex';
 import { RootState } from '@/types';
+import Vue from 'vue';
 
 const experimentSurveys: any = {
   g6cy8p0yrmnclxyv6co2o: require('@/g6cy8p0yrmnclxyv6co2o.json')
 };
 import router from '@/app-routes';
 import SurveyRepository from '@/api/SurveyRepository';
-import Vue from 'vue';
-import ParticipantRepository from '@/api/ParticipantRepository';
-import Axios from 'axios';
+
 const defaults = {
   surveys: [],
   currentSurvey: {
@@ -21,7 +20,14 @@ const defaults = {
         questions: [
           {
             questionId: '',
-            value: ''
+            key: '',
+            label: '',
+            questionType: '',
+            dataType: '',
+            rules: '',
+            question: '?',
+            value: null,
+            required: true
           }
         ]
       }
@@ -58,53 +64,27 @@ const actions: ActionTree<typeof defaults, RootState> = {
     });
   },
   async submitSurvey({ commit, state }) {
-    let canSubmit = true;
-    // state.currentSurvey.sections.forEach(section => {
-    //   for (let question of section.questions) {
-    //     if (question.value == '' && canSubmit) {
-    //       console.log(question);
-    //       // doesn't allow for questioons where u allow leaving blank
-    //       canSubmit = false;
-    //       Vue.notify({
-    //         title: "You haven't filled out every question yet..",
-    //         group: 'global'
-    //       });
-    //       return false;
-    //     }
-    //   }
-    // });
-
     // formatting payload...
     let payload: any = {};
     let questionResponses: any = {};
-    if (canSubmit) {
-      state.currentSurvey.sections.forEach(section => {
-        section.questions.forEach(question => {
-          // add to payload
-
-          if (question.questionId == 'email') {
-            payload['email'] = question.value;
-          } else {
-            questionResponses[question.questionId] = question.value;
-          }
-        });
+    state.currentSurvey.sections.forEach(section => {
+      section.questions.forEach(question => {
+        // add to payload
+        questionResponses[question.questionId] = question.value;
       });
-      payload['data'] = questionResponses;
-      SurveyRepository.postResponses(
-        state.currentSurvey.surveyId,
-        payload
-      ).then(() => {
+    });
+    payload['data'] = questionResponses;
+    SurveyRepository.postResponses(state.currentSurvey.surveyId, payload).then(
+      () => {
         Vue.notify({
           group: 'global',
           title: 'Successfully submitted survey!',
           text: 'The rest of the site will be updated soon!'
         });
         router.push({ path: '/' });
-      });
-      return true;
-    } else {
-      return false;
-    }
+        return true;
+      }
+    );
   }
 };
 

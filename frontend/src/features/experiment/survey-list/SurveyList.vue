@@ -1,9 +1,6 @@
 <template>
   <v-container>
     <v-row>
-      <v-col>
-        <BaseCreateNewCard v-once />
-      </v-col>
       <v-col v-for="survey in getSurveys" :key="survey.surveyId">
         <SurveyCard v-bind="survey" />
       </v-col>
@@ -13,13 +10,11 @@
 
 <script>
 import SurveyCard from '@/components/SurveyCard.vue';
-import BaseCreateNewCard from '@/components/BaseCreateNewCard.vue';
 import { mapGetters } from 'vuex';
 
 export default {
   components: {
-    SurveyCard,
-    BaseCreateNewCard
+    SurveyCard
   },
   created() {
     this.$store.dispatch('createSurveys');

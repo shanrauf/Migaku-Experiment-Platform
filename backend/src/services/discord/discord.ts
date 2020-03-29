@@ -47,18 +47,6 @@ export default class DiscordClient {
     }
   }
 
-  public async SendDirectMessage(discordId: string) {
-    const user = await this.GetUser(discordId);
-    const emojis = [];
-    user.sendMessage(
-      `We just received your Anki submission! Thanks ${
-        user.username
-      }! As a reward, we gave you a special Discord role that comes with exclusive emojis: ${emojis.join(
-        ''
-      )}`
-    );
-  }
-
   public async GetUser(discordId: string) {
     return await this.discordClient.fetchUser(discordId, false);
   }

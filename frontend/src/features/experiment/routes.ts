@@ -26,6 +26,19 @@ const experimentRoutes: RouteConfig[] = [
       layout: 'DefaultLayout',
       isPublic: false
     }
+  },
+  {
+    name: 'results',
+    path: '/experiments/audiovssentencecards/results',
+    component: () =>
+      import(
+        /* webpackChunkName: "results" */ '@/features/experiment/audiovssentencecards/Results.vue'
+      ),
+    meta: {
+      title: 'Surveys | MIA Experiments',
+      layout: 'DefaultLayout',
+      isPublic: false
+    }
   }
 ];
 

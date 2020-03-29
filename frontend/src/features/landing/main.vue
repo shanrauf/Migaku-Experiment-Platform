@@ -40,7 +40,7 @@
             color="#ffffff"
             backgroundColor="#204f70"
             rounded
-            @click="loginWithDiscord"
+            @click="goTo('/experiments/audiovssentencecards/results')"
             >See Complete Results</BaseButton
           >
         </div>
@@ -66,6 +66,7 @@
 import BaseWave from './components/BaseWave.vue';
 import Service from './service';
 import VueApexCharts from 'vue-apexcharts';
+import config from '@/config';
 
 export default {
   name: 'Landing',
@@ -115,8 +116,11 @@ export default {
   methods: {
     loginWithDiscord() {
       window.location.replace(
-        'https://trials.massimmersionapproach.com/api/auth/discord'
+        `${config.ROOT_API_URL}/api/auth/discord?redirect=${config.ROOT_FRONTEND_URL}/dashboard`
       );
+    },
+    goTo(link) {
+      this.$router.push(link);
     }
   }
 };
@@ -176,13 +180,8 @@ export default {
   width: 40%;
 }
 .graph {
-  // width: 50%;
-  // height: 50%;
-  // display: block;
   width: 40%;
   height: auto;
-  // background: url('./assets/OverallRetentionExample.svg');
-  // background-repeat: no-repeat;
 }
 .showcase-description {
   max-width: 500px;

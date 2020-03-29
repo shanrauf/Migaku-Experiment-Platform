@@ -1,22 +1,22 @@
 <template>
   <v-input :messages="[`${note}`]">
     <v-combobox
-        v-model="inputValue"
-        :rules="[...rules, whitelistRule]"
-        :placeholder="placeholder"
-        :value="value"
-        :items="items"
-        :required="required"
-        :label="label || 'Select one:'"
-        @change="$emit('update', inputValue)"
-      >
-      </v-combobox>
+      v-model="inputValue"
+      :rules="[...rules, whitelistRule]"
+      :placeholder="placeholder"
+      :value="value"
+      :items="items"
+      :required="required"
+      :label="label || 'Select one:'"
+      @change="$emit('update', inputValue)"
+    >
+    </v-combobox>
   </v-input>
 </template>
 
 <script>
 export default {
-  name: "BaseSelect",
+  name: 'BaseSelect',
   props: {
     label: {
       type: String,
@@ -25,7 +25,7 @@ export default {
     note: {
       type: String,
       required: false,
-      default: ""
+      default: ''
     },
     value: {
       type: [String, Number],
@@ -46,7 +46,8 @@ export default {
     required: {
       type: Boolean,
       required: false
-    }},
+    }
+  },
   data() {
     return {
       menuProps: {
@@ -55,22 +56,30 @@ export default {
         openOnClick: true,
         transition: true
       },
-      inputValue: ""
+      inputValue: ''
     };
   },
   computed: {
     /**
      * This prevents user from adding items not specified as an option.
+     * TODO: Doesn't work for number[] ?
      */
     whitelistRule() {
       return v => {
         if (v === null) {
-          return this.required ? "This question is required" : true;
+          return this.required ? 'This question is required' : true;
         }
         if (!this.items.includes(v)) {
           return `${v} is an invalid option.`;
         }
         return true;
+      };
+    },
+    requiredRule() {
+      if (this.required) {
+        return v => !!v || 'This question is required';
+      } else {
+        return v => true;
       }
     }
   }
