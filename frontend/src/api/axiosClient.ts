@@ -1,4 +1,4 @@
-import config from '@/config';
+import config from '@/config/index.js';
 import axios from 'axios';
 import store from '@/store';
 

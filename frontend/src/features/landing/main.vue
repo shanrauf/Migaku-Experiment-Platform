@@ -66,7 +66,7 @@
 import BaseWave from './components/BaseWave.vue';
 import Service from './service';
 import VueApexCharts from 'vue-apexcharts';
-import config from '@/config';
+import config from '@/config/index.js';
 
 export default {
   name: 'Landing',

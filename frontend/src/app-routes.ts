@@ -7,7 +7,7 @@ Vue.use(VueRouter);
 
 import store from '@/store';
 import { AppPageNotFound } from '@/components';
-import config from '@/config';
+import config from '@/config/index.js';
 
 import landingRoutes from '@/features/landing/routes';
 import dashboardRoutes from '@/features/dashboard/routes';
@@ -46,7 +46,7 @@ function guardRoute(to: Route, from: Route, next: Function): void {
     })
     .catch(err => {
       window.location.replace(
-        `${config.ROOT_API_URL}/api/auth/discord?redirect=${config.ROOT_FRONTENT_URL}${to.path}`
+        `${config.ROOT_API_URL}/api/auth/discord?redirect=${config.ROOT_FRONTEND_URL}${to.path}`
       );
     });
 }
