@@ -23,6 +23,9 @@
                   class="text--white"
                   >See More</router-link
                 >
+                <a v-if="update.href" class="text--white" :href="update.href">{{
+                  update.hrefDesc
+                }}</a>
               </v-card-text>
             </v-card>
           </v-card>
@@ -103,8 +106,16 @@ export default {
             'We automatically registered you for the MIA Community Census experiment. You can find more information about the experiment below or see upcoming surveys to the right.'
         },
         {
+          updateId: 'anki-survey',
+          title: 'Complete the Anki survey!',
+          description:
+            'To send us your Anki statistics, follow the instructions on the YouTube video below:',
+          href: 'https://www.youtube.com/watch?v=707qS5O7BHY',
+          hrefDesc: 'YouTube Video'
+        },
+        {
           updateId: 'experiment-done',
-          title: 'Audio vs Sentence Cards Experiment Completed',
+          title: 'Audio vs Text Cards Experiment Completed',
           description:
             'We just finished administering an experiment that analyzed retention rates of audio and sentence cards.',
           to: '/experiments/audiovssentencecards/results'

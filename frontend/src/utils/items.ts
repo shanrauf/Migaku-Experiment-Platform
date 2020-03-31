@@ -1,4 +1,5 @@
 export const foreignLanguages: String[] = [
+  'N/A',
   'English',
   'Akan',
   'American Sign Language',
@@ -9,6 +10,7 @@ export const foreignLanguages: String[] = [
   'Cantonese',
   'Croatia',
   'Czech',
+  'Danish',
   'Dutch',
   'Estonian',
   'Finnish',
@@ -39,6 +41,7 @@ export const foreignLanguages: String[] = [
   'Serbian',
   'Spanish',
   'Swahili',
+  'Swedish',
   'Tajik',
   'Tibetan',
   'Turkish',

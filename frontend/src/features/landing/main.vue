@@ -32,8 +32,8 @@
           <h1>Visualize Experiment Results Anytime</h1>
           <p>
             We recently conducted an experiment testing the difference in
-            overall retention when reviewing audio and sentence cards in Anki.
-            The experiment results suggest that audio cards result in a
+            overall retention when reviewing audio and text cards in Anki. The
+            experiment results suggest that audio cards result in a
             significantly higher overall retention than sentence cards.
           </p>
           <BaseButton

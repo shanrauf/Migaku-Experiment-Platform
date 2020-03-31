@@ -118,7 +118,7 @@
             "questionType": "multiselect",
             "dataType": "varchar",
             "rules": null,
-            "question": "Select the language(s) that you have learned to fluency",
+            "question": "Select the language(s) that you have learned to fluency (excluding your native languages)",
             "note": "By fluency, we are referring to around a B2 level in the European framework based on the following chart: https://www.coe.int/en/web/common-european-framework-reference-languages/table-1-cefr-3.3-common-reference-levels-global-scale",
             "value": "",
             "items": "foreignLanguages",
@@ -318,7 +318,7 @@
             "questionType": "text",
             "dataType": "text",
             "rules": null,
-            "question": "What resources did you use to study Kanji/Hanzi (Feel free to leave blank if your target language is neither Japanese nor Chinese)",
+            "question": "What resources did you use to study Kanji/Hanzi (Feel free to answer 'N/A' if your target language is neither Japanese nor Chinese)",
             "value": "",
             "required": true
           },
