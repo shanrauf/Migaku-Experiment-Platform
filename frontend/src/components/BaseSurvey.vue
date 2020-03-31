@@ -35,7 +35,8 @@ import {
   motivationsForLearningTargetLanguage,
   fieldsOfOccupation,
   generalTimeFrames,
-  countryList
+  countryList,
+  nativeLanguages
 } from '@/utils/items.ts';
 
 export default {
@@ -59,6 +60,7 @@ export default {
       formInputs: [],
       items: {
         foreignLanguages,
+        nativeLanguages,
         levelsOfEducation,
         motivationsForLearningTargetLanguage,
         fieldsOfOccupation,

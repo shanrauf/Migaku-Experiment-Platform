@@ -13,7 +13,6 @@ module.exports = {
   cacheDirectory: '/var/folders/bw/vvybgj3d3kgb98nzjxfmpv5c0000gn/T/jest_dx',
 
   // Runs before test suite runs
-  // setupFiles: ['./setup.ts'],
   globalSetup: './setup.ts',
 
   // An array of file extensions your modules use
@@ -29,14 +28,13 @@ module.exports = {
   // The test environment that will be used for testing
   testEnvironment: 'node',
 
-  testMatch: ['**/?(*.)+(spec|test).js?(x)', '**/?(*.)+(spec|test).ts?(x)'],
+  testRegex: '\\.(test|spec)?\\.(ts|tsx)$',
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   testPathIgnorePatterns: ['/node_modules/'],
 
   // A map from regular expressions to paths to transformers
   transform: {
-    '^.+\\.js$': 'babel-jest',
     '^.+\\.ts?$': 'ts-jest'
   }
 };

@@ -24,7 +24,7 @@
             "rules": null,
             "question": "Select your native language(s) (Select all that apply)",
             "value": "",
-            "items": "foreignLanguages",
+            "items": "nativeLanguages",
             "required": true
           },
           {
