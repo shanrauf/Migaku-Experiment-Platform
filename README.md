@@ -47,25 +47,44 @@ sudo ./install
 
 ## Backend
 
+- Fix logging throughout code
+- Create way for external services to test API (e.x route for Anki to test submitting a survey - no conncetion to database, just test validation, etc)
+- Improve db schema
+  <!-- - Complete auth implementation (look into the prompt=none discord oauth ) -->
+- Protect admin routes
+- Refactor queries to allow for admin vs. user querying (e.x public experiments only when user)
 - Cleaner way to compose db calls and wrap them in transactions
 - Make Node API stateless
 - API rate limiting
 - Secure API (currently, anyone can make any request from anywhere) via authentication (add auth cases to unit tests)
+- Discord message confirming survey, rewards, etc; email if not in MIA Discord (wrap this busLogic in onSurveySubmitted event)
 - Complete basic test suite that covers all API routes (testing status codes, response bodies, and model validation)
 
 ### Frontend
 
-- Admin panel (experiments/surveys/participants/questions CRUD; data visualization)
+- Make landing page static
+- Clear old architecture (e.x global store survey/experiments modules), add new architecture
+  <!-- - Implement new stateless auth -->
+- Rewrite survey feature (% breakdown question, reduce survey q's; validation, cleaner, separate rules, pagination, save answers in local storage until submission, api calls for survey questions/sections)
+- Admin panel (data visualization; experiments/surveys/participants/questions CRUD)
 - Significantly improve frontend styling
 - Devise system to send error msgs for frontend to display (e.x backend shud return "survey alreadysubmitted" msg for frontend notif to display)
 - Create e2e test suite through the frontend (i.e filling out form inputs, etc)
+- Create unit/integration tests
 
 ### Deployment
 
 - Move dev dependencies out of dependencies in package.json and only install required dependencies on deploy... (keep in mind deps needed to compile & start server)
+- See if can run tests and compile code before deployment for free (i.e without AWS CodeBuild)
 - Cron job to renew Let's Encrypt certificates and restart Nginx with zero downtime
 - Run Node.js server in clusters, have Nginx reverse proxy redirect to them with zero downtime
 - Serve frontend files from a CDN that can be pushed to during deployment to still allow CI/CD (CloudFlare?)
+- Create system tests (ensure deployment was successful via /health endpoints, etc)
 - Blue/Green deployments
 - A//B Testing
 - Define indexes on MySQL database and MongoDB database (recommended by `agenda` and best practices)
+
+### Post-Release
+
+- Clean Git history
+- Create flexible system to create experiment results pages (similar to article dynamic content); perhaps even prerender them

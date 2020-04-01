@@ -115,6 +115,12 @@ export default (app: Router) => {
         `PUT /experiments/${req.params.experimentId}/participants/${req.params.participantId}`
       );
       try {
+        /**
+         * TODO: Enable this once tests account for authentication.
+         */
+        // if (!req.user.adminId && req.user.participantId !== req.params.participantId) {
+        //   throw new ErrorHandler(403, "You are not authorized to access this route.");
+        // }
         const experimentService = Container.get(ExperimentService);
         const payload = await experimentService.RegisterParticipant(
           req.params.experimentId,
