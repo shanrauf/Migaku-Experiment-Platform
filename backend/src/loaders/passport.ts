@@ -29,33 +29,33 @@ type DiscordProfile = {
   premium_type?: number;
 };
 
-class MockStrategy extends passport.Strategy {
-  _user: object;
-  _cb: Function;
+// class MockStrategy extends passport.Strategy {
+//   _user: object;
+//   _cb: Function;
 
-  constructor(name, strategyCallback) {
-    if (!name || name.length === 0) {
-      throw new TypeError('MockStrategy requires a Strategy name');
-    }
-    super();
-    this.name = name;
-    this._user = {};
-    this._cb = strategyCallback;
-  }
-  authenticate(req, options) {
-    this._cb(null, null, this._user, (error, user) => {
-      this.success(user);
-    });
-  }
-  authorizationParams(): object {
-    return {};
-  }
-  tokenParams(): object {
-    return {};
-  }
-}
+//   constructor(name, strategyCallback) {
+//     if (!name || name.length === 0) {
+//       throw new TypeError('MockStrategy requires a Strategy name');
+//     }
+//     super();
+//     this.name = name;
+//     this._user = {};
+//     this._cb = strategyCallback;
+//   }
+//   authenticate(req, options) {
+//     this._cb(null, null, this._user, (error, user) => {
+//       this.success(user);
+//     });
+//   }
+//   authorizationParams(): object {
+//     return {};
+//   }
+//   tokenParams(): object {
+//     return {};
+//   }
+// }
 
-const mockStrategy = new MockStrategy("mock", ())
+// const mockStrategy = new MockStrategy("mock", ())
 
 export default async (): Promise<PassportStatic> => {
   try {
@@ -158,7 +158,7 @@ export default async (): Promise<PassportStatic> => {
       done(null, user);
     });
 
-    passport.use();
+    passport.use(discordStrategy);
     logger.info('✌️ Passport initialized!');
 
     return passport;

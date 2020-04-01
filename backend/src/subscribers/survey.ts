@@ -21,7 +21,12 @@ export default class SurveySubscriber {
     const discordService = Container.get(DiscordService);
     try {
       logger.debug(`${events.survey.completeSurvey} event triggered`);
-      await discordService.SetDiscordRole(role, discordId);
+      const member = await discordService.GetMember(discordId);
+      await discordService.SetDiscordRole(member, role);
+      await discordService.SendMessage(
+        member,
+        `We just received your submission. As a reward, we gave you the ${role} role, which comes with a few exclusive emojis!`
+      );
     } catch (e) {
       logger.error(`🔥 Error on event ${events.survey.completeSurvey}: %o`, e);
       throw e;

@@ -1,6 +1,7 @@
 import { ErrorHandler } from './../../utils/index';
 import { Service, Inject } from 'typedi';
-import { Client, Guild, Role } from 'discord.js';
+import Discord from 'discord.js';
+
 import winston from 'winston';
 import { promises as fs } from 'fs';
 import path from 'path';
@@ -11,27 +12,27 @@ import config from '../../config';
 @Service()
 export default class DiscordClient {
   constructor(
-    @Inject('discordClient') private discordClient: Client,
+    @Inject('discordClient') private discordClient: Discord.Client,
     @Inject('logger') private logger: winston.Logger
   ) {}
 
-  public async SetDiscordRole(role: string, discordId: string): Promise<void> {
+  public async SetDiscordRole(
+    member: Discord.GuildMember,
+    role: string
+  ): Promise<void> {
     try {
       const guild = await this.GetMIADiscord();
       const roleObj = await this.GetRoleByName(role);
       if (!roleObj) {
         throw new Error(`${role} doesn't exist.`);
       }
-
-      const user = await this.GetUser(discordId);
-      const member = await guild.fetchMember(user);
       await member.addRole(roleObj);
     } catch (err) {
       logger.error(err);
       throw err;
     }
   }
-  private async GetMIADiscord(): Promise<Guild> {
+  private async GetMIADiscord(): Promise<Discord.Guild> {
     return this.discordClient.guilds.find(
       (discordGuild) => discordGuild.id === config.discord.DISCORD_SERVER
     );
@@ -51,7 +52,13 @@ export default class DiscordClient {
     return await this.discordClient.fetchUser(discordId, false);
   }
 
-  private async GetRoleById(roleId: string): Promise<Role> {
+  public async GetMember(discordId: string) {
+    const guild = await this.GetMIADiscord();
+    const user = await this.discordClient.fetchUser(discordId, false);
+    return await guild.fetchMember(user);
+  }
+
+  private async GetRoleById(roleId: string): Promise<Discord.Role> {
     const guild = await this.GetMIADiscord();
     const role = guild.roles.find((guildRole) => guildRole.id === roleId);
     if (!role) {
@@ -60,13 +67,20 @@ export default class DiscordClient {
     return role;
   }
 
-  private async GetRoleByName(roleName: string): Promise<Role> {
+  private async GetRoleByName(roleName: string): Promise<Discord.Role> {
     const guild = await this.GetMIADiscord();
     const role = guild.roles.find((guildRole) => guildRole.name === roleName);
     if (!role) {
       throw new ErrorHandler(404, `${roleName} doesn't exist.`);
     }
     return role;
+  }
+
+  public async SendMessage(
+    member: Discord.GuildMember,
+    message: string
+  ): Promise<void> {
+    await member.send(message);
   }
 
   public async CreateEmojis(): Promise<void> {

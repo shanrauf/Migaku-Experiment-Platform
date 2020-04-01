@@ -3,6 +3,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cookieSession from 'cookie-session';
+import morgan from 'morgan';
 // import helmet from 'helmet';
 
 import routes from '../api';
@@ -47,11 +48,13 @@ export default async ({ app }: { app: express.Application }): Promise<void> => {
 
   app.use(
     cookieParser({
-      sameSite: true, // cookie can only be sent across our domain
-      httpOnly: true // prevents client javascript from accessing cookie
-      //  secure: true // TODO: cookie can only be transmitted over HTTPS
+      sameSite: true, // cookie can only be sent across our domain (massimmersionapproach.com)
+      httpOnly: true, // prevents client-side javascript from accessing cookie
+      secure: true // cookie can only be transmitted over HTTPS
     })
   );
+
+  app.use(morgan('combined'));
 
   const passport = Container.get<PassportStatic>('passport');
   app.use(passport.initialize());
