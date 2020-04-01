@@ -7,6 +7,9 @@ const bot = new Discord.Client();
 
 const TOKEN = config.discord.DISCORD_TOKEN;
 const patreonRoleId = '384145495070736385';
+const modRoleId = '384141382949928991';
+const adminRoleId = '577986029802225664';
+const whitelistedRoles = [modRoleId, adminRoleId];
 const membersOfMIADiscordThatAreNotPatrons: {
   [id: string]: {
     member: Discord.GuildMember;
@@ -32,7 +35,11 @@ const MIADiscordMembersPruneJob = async (bot: Discord.Client) => {
 
   guild.members.forEach((member) => {
     if (
+      /** Not a bot */
       !member.user.bot &&
+      /** Not a mod/admin */
+      !member.roles.find((role) => whitelistedRoles.includes(role.id)) &&
+      /** Missing the Patron badge */
       !member.roles.find((role) => role.id === patreonRoleId)
     ) {
       /**
@@ -46,7 +53,7 @@ const MIADiscordMembersPruneJob = async (bot: Discord.Client) => {
       ) {
         member
           .kick(
-            'You are no longer pledging to the MIA Patreon. If this is a mistake, please message us on the Mass Immersion Approach Patreon.'
+            'You are no longer pledging to the MIA Patreon. If this is a mistake, please DM us on Discord or message us on the Mass Immersion Approach Patreon.'
           )
           .then(() => {
             delete membersOfMIADiscordThatAreNotPatrons[member.id];
