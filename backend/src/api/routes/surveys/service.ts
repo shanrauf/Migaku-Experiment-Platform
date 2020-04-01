@@ -143,19 +143,19 @@ export default class SurveyService {
   public async GetSurveyCompletionStatus(
     participantId: string,
     surveyId: string
-  ): Promise<boolean> {
+  ): Promise<string> {
     try {
       this.logger.silly('Fetching survey status');
-      const responseRecordExists = await this.questionResponseModel
+      const responseId = await this.questionResponseModel
         .findOne({
           where: { participantId, surveyId }
         })
-        .then((responseRecord) => !!responseRecord)
+        .then((responseRecord) => responseRecord?.responseId)
         .catch((e) => {
           this.logger.error(e);
           throw e;
         });
-      return responseRecordExists;
+      return responseId;
     } catch (e) {
       this.logger.error(e);
       throw e;
@@ -254,6 +254,18 @@ export default class SurveyService {
       questionResponses.push(result);
     }
     return questionResponses;
+  }
+
+  public async DeleteSurveyResponse(responseId?: string): Promise<void> {
+    try {
+      await this.sqlConnection.transaction(async (transaction) => {
+        await this.questionResponseModel.destroy({ where: { responseId } });
+        await this.surveyResponseModel.destroy({ where: { responseId } });
+      });
+    } catch (err) {
+      this.logger.error(err);
+      throw err;
+    }
   }
 
   /**

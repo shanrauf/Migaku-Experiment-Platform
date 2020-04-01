@@ -46,6 +46,7 @@ sudo ./install
 ## Todo (in order of priority)
 
 - Move dev dependencies out of dependencies in package.json and only install required dependencies on deploy...
+- Cleaner way to compose db calls and wrap them in transactions
 - Complete basic test suite that covers all API routes (testing status codes, response bodies, and model validation)
 - Secure API (currently, anyone can make any request from anywhere) via authentication (add auth cases to unit tests)
 - Significantly improve frontend styling

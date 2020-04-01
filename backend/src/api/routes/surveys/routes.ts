@@ -128,14 +128,20 @@ export default (app: Router): void => {
         );
         const surveyService = Container.get(SurveyService);
 
-        const alreadySubmitted = await surveyService.GetSurveyCompletionStatus(
+        const responseId = await surveyService.GetSurveyCompletionStatus(
           req.user.participantId,
           surveyId
         );
-        if (alreadySubmitted) {
-          throw new ErrorHandler(403, 'You already submitted this survey');
+        if (responseId) {
+          /**
+           * Delete their previous submission to allow for submitting again.
+           * TODO: This and SubmitSurveyResponse aren't in a transaction, so
+           * someone could delete their old submission, but then SubmitSurveyResponse
+           * could error, resulting in no submission for the user...
+           */
+          await surveyService.DeleteSurveyResponse(responseId);
         }
-        logger.silly(req.user.participantId);
+
         const questionResponses = await surveyService.SubmitSurveyResponse(
           experimentId,
           surveyId,

@@ -8,6 +8,7 @@ import QuestionService from '../../../src/api/routes/questions/service';
 import ParticipantService from '../../../src/api/routes/participants/service';
 import SurveyService from '../../../src/api/routes/surveys/service';
 import { randomIdGenerator } from '../../../src/utils';
+import logger from '../../../src/loaders/logger';
 
 /**
  * Configure the database and dependencies before testing API routes
@@ -236,7 +237,7 @@ describe('GET /experiments/:experimentId/surveys/:surveyId', () => {
   });
 });
 
-describe('POST /experiments/:experimentId/surveys/:surveyId', () => {
+describe('POST /experiments/:experimentId/surveys/:surveyId/responses', () => {
   beforeAll(async () => {
     const experimentService = Container.get(ExperimentService);
     const questionService = Container.get(QuestionService);
@@ -326,6 +327,22 @@ describe('POST /experiments/:experimentId/surveys/:surveyId', () => {
         }
       )
     ).rejects.toThrow();
+  });
+
+  it('overrides previous submissions with the new one', async () => {
+    const surveyService = Container.get(SurveyService);
+    const { questionResponses } = await surveyService.SubmitSurveyResponse(
+      'test-experiment-1',
+      'test-survey-1',
+      'test-participant-1',
+      null,
+      {
+        'test-question-1': 'newValue'
+      }
+    );
+    logger.silly(questionResponses[0]?.answerVarchar);
+    expect(questionResponses).toHaveLength(1);
+    expect(questionResponses[0]?.answerVarchar).toBe('newValue');
   });
 });
 
