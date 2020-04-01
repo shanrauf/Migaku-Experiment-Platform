@@ -45,12 +45,27 @@ sudo ./install
 
 ## Todo (in order of priority)
 
-- Move dev dependencies out of dependencies in package.json and only install required dependencies on deploy...
+## Backend
+
 - Cleaner way to compose db calls and wrap them in transactions
-- Complete basic test suite that covers all API routes (testing status codes, response bodies, and model validation)
+- Make Node API stateless
+- API rate limiting
 - Secure API (currently, anyone can make any request from anywhere) via authentication (add auth cases to unit tests)
+- Complete basic test suite that covers all API routes (testing status codes, response bodies, and model validation)
+
+### Frontend
+
+- Admin panel (experiments/surveys/participants/questions CRUD; data visualization)
 - Significantly improve frontend styling
-- Complete basic e2e test suite through the frontend (i.e filling out form inputs, etc)
 - Devise system to send error msgs for frontend to display (e.x backend shud return "survey alreadysubmitted" msg for frontend notif to display)
-- Admin dashboard (view status of site; ability to edit experiments/surveys/participants/etc)
-- Experiment data analytics/visualization
+- Create e2e test suite through the frontend (i.e filling out form inputs, etc)
+
+### Deployment
+
+- Move dev dependencies out of dependencies in package.json and only install required dependencies on deploy... (keep in mind deps needed to compile & start server)
+- Cron job to renew Let's Encrypt certificates and restart Nginx with zero downtime
+- Run Node.js server in clusters, have Nginx reverse proxy redirect to them with zero downtime
+- Serve frontend files from a CDN that can be pushed to during deployment to still allow CI/CD (CloudFlare?)
+- Blue/Green deployments
+- A//B Testing
+- Define indexes on MySQL database and MongoDB database (recommended by `agenda` and best practices)
