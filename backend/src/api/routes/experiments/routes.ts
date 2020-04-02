@@ -3,7 +3,6 @@ import { Request, Response, Router, NextFunction } from 'express';
 import { Container } from 'typedi';
 
 import ExperimentService from './service';
-import logger from '../../../loaders/logger';
 import middlewares from '../../middlewares';
 import * as requests from './requests';
 import validateRequestSchema from '../../middlewares/validateRequestSchema';
@@ -18,7 +17,6 @@ export default (app: Router) => {
     middlewares.validateRequestSchema(requests.ExperimentFilters, undefined),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        logger.debug('GET /experiments with params %o', req.query);
         const experimentService = Container.get(ExperimentService);
         const payload = await experimentService.GetExperiments(
           req.query as requests.ExperimentFilters
@@ -38,7 +36,6 @@ export default (app: Router) => {
     validateRequestSchema(undefined, requests.IExperiment),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        logger.debug('POST /experiments with body: %o', req.body);
         const experimentService = Container.get(ExperimentService);
         const payload = await experimentService.CreateExperiment(
           req.body as requests.IExperiment
@@ -56,7 +53,6 @@ export default (app: Router) => {
     '/:experimentId',
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        logger.debug(`GET /experiments/${req.params.experimentId}`);
         const experimentService = Container.get(ExperimentService);
         const payload = await experimentService.GetExperiment(
           req.params.experimentId
@@ -74,7 +70,6 @@ export default (app: Router) => {
     '/:experimentId',
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        logger.debug(`PATCH /experiments/${req.params.experimentId}`);
         const experimentService = Container.get(ExperimentService);
         const { experiment } = await experimentService.UpdateExperiment(
           req.params.experimentId,
@@ -93,7 +88,6 @@ export default (app: Router) => {
   route.delete(
     '/:experimentId',
     async (req: Request, res: Response, next: NextFunction) => {
-      logger.debug(`DELETE /experiments/${req.params.experimentId}`);
       try {
         const experimentService = Container.get(ExperimentService);
         const payload = await experimentService.DeleteExperiment(
@@ -111,9 +105,6 @@ export default (app: Router) => {
   route.put(
     '/:experimentId/participants/:participantId',
     async (req: Request, res: Response, next: NextFunction) => {
-      logger.debug(
-        `PUT /experiments/${req.params.experimentId}/participants/${req.params.participantId}`
-      );
       try {
         /**
          * TODO: Enable this once tests account for authentication.
@@ -136,9 +127,6 @@ export default (app: Router) => {
   route.delete(
     '/:experimentId/participants/:participantId',
     async (req: Request, res: Response, next: NextFunction) => {
-      logger.debug(
-        `DELETE /experiments/${req.params.experimentId}/participants/${req.params.participantId}`
-      );
       try {
         if (req.params.participantId !== req.user.participantId) {
           return res.status(403).json({
@@ -180,10 +168,6 @@ export default (app: Router) => {
     '/:experimentId/questions',
     validateRequestSchema(null, requests.IExperimentQuestions),
     async (req: Request, res: Response, next: NextFunction) => {
-      logger.debug(
-        `POST /experiments/${req.params.experimentId}/questions w/ body %o`,
-        req.body
-      );
       try {
         const experimentService = Container.get(ExperimentService);
         await experimentService.AddQuestionsToExperimentSchema(

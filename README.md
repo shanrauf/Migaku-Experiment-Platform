@@ -47,18 +47,18 @@ sudo ./install
 
 ## Backend
 
-- Fix logging throughout code
-- Create way for external services to test API (e.x route for Anki to test submitting a survey - no conncetion to database, just test validation, etc)
 - Improve db schema
-  <!-- - Complete auth implementation (look into the prompt=none discord oauth ) -->
+- Make Node API stateless, aka complete auth implementation (prompt=none discord oauth?)
 - Protect admin routes
 - Refactor queries to allow for admin vs. user querying (e.x public experiments only when user)
 - Cleaner way to compose db calls and wrap them in transactions
-- Make Node API stateless
 - API rate limiting
 - Secure API (currently, anyone can make any request from anywhere) via authentication (add auth cases to unit tests)
 - Discord message confirming survey, rewards, etc; email if not in MIA Discord (wrap this busLogic in onSurveySubmitted event)
 - Complete basic test suite that covers all API routes (testing status codes, response bodies, and model validation)
+- Refactor towards DDD architecture (validation, separate by domain, etc)
+- Improve logging
+- Create way for external services to test API (e.x route for Anki to test submitting a survey - no conncetion to database, just test validation, etc)
 
 ### Frontend
 

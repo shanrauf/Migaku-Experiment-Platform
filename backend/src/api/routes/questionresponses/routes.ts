@@ -1,7 +1,6 @@
 import { Request, Response, Router, NextFunction } from 'express';
 import { Container } from 'typedi';
 
-import logger from '../../../loaders/logger';
 import QuestionResponseService from './service';
 import middlewares from '../../middlewares';
 import * as requests from './requests';
@@ -18,7 +17,6 @@ export default (app) => {
       undefined
     ),
     async (req: Request, res: Response, next: NextFunction) => {
-      logger.debug('GET question responses with params %o', req.query);
       try {
         const questionResponseService = Container.get(QuestionResponseService);
         const payload = await questionResponseService.GetQuestionResponses(

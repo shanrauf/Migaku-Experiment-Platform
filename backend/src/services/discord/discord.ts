@@ -6,7 +6,6 @@ import winston from 'winston';
 import { promises as fs } from 'fs';
 import path from 'path';
 
-import logger from '../../loaders/logger';
 import config from '../../config';
 
 @Service()
@@ -21,14 +20,12 @@ export default class DiscordClient {
     role: string
   ): Promise<void> {
     try {
-      const guild = await this.GetMIADiscord();
       const roleObj = await this.GetRoleByName(role);
       if (!roleObj) {
         throw new Error(`${role} doesn't exist.`);
       }
       await member.addRole(roleObj);
     } catch (err) {
-      logger.error(err);
       throw err;
     }
   }

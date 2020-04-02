@@ -43,10 +43,19 @@ const MIADiscordMembersPruneJob = async (bot: Discord.Client) => {
       /** Missing the Patron badge */
       !member.roles.find((role) => role.id === patreonRoleId)
     ) {
+      if (!membersOfMIADiscordThatAreNotPatrons[member.id]) {
+        membersOfMIADiscordThatAreNotPatrons[member.id] = {
+          member,
+          warningTimestamp: Date.now()
+        };
+        logger.info(`${member.id} added to non-members cache.`);
+        member.send(
+          'We noticed that you no longer have the Patron role on Discord. The bot will automatically remove you from the MIA Discord server in 6 hours unless you become a Patron again and receive the Patron Discord role. If you believe this is a mistake, DM Matt or Yoga on Discord or on Patreon.'
+        );
+      } else if (
       /**
        * It has been 5 hours since the bot messaged the user about not being a patron.
        */
-      if (
         membersOfMIADiscordThatAreNotPatrons[member.id]?.warningTimestamp +
           fiveHours <
         Date.now()
@@ -62,15 +71,6 @@ const MIADiscordMembersPruneJob = async (bot: Discord.Client) => {
           .catch((err) => {
             logger.warn(err);
           });
-      } else {
-        membersOfMIADiscordThatAreNotPatrons[member.id] = {
-          member,
-          warningTimestamp: Date.now()
-        };
-        logger.info(`${member.id} added to non-members cache.`);
-        member.send(
-          'We noticed that you no longer have the Patron role on Discord. The bot will automatically remove you from the MIA Discord server in 6 hours unless you become a Patron again and receive the Patron Discord role. If you believe this is a mistake, DM Matt or Yoga on Discord or on Patreon.'
-        );
       }
     }
   });

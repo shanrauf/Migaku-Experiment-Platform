@@ -1,6 +1,5 @@
 import { Container } from 'typedi';
 import { Request, Response, Router, NextFunction } from 'express';
-import logger from '../../../loaders/logger';
 import middlewares from '../../middlewares';
 import { PassportStatic } from 'passport';
 
@@ -15,8 +14,10 @@ export default (app: Router) => {
     '/discord',
     middlewares.sanitizeRedirectUrl,
     (req: Request, res: Response, next: NextFunction) => {
-      logger.debug('GET /discord');
-
+      /**
+       * Allowing an optional redirect url to be passed.
+       * Otherwise, /discord/redirect responds with JSON
+       */
       const state =
         'redirect' in req.query ? `redirect=${req.query.redirect}` : null;
       const authenticator = passport.authenticate('oauth2', { state });
@@ -29,7 +30,6 @@ export default (app: Router) => {
     passport.authenticate('oauth2'),
     (req: Request, res: Response, next: NextFunction) => {
       try {
-        logger.debug('GET /discord/redirect with user %o', req.user);
         if (req.query.state?.includes('redirect')) {
           const redirectUrl = decodeURIComponent(req.query.state.split('=')[1]);
           res.status(301).redirect(redirectUrl);
@@ -38,7 +38,6 @@ export default (app: Router) => {
           res.status(200).json({ miaDiscord, discordUsername });
         }
       } catch (err) {
-        logger.error(err);
         next(err);
       }
     }

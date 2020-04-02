@@ -1,4 +1,5 @@
 import { Response } from 'express';
+import logger from '../loaders/logger';
 /**
  * Generates a random 20-22 character string
  */
@@ -76,20 +77,33 @@ export class ErrorHandler extends Error {
   }
 }
 
-export const handleError = (err: ErrorHandler, res: Response): void => {
+/**
+ * TODO: Remove duplicate code, find better way to handle errors.
+ * @param err Error
+ * @param res Response
+ */
+export const handleError = (err: any, res: Response): void => {
   const { statusCode } = err;
 
-  /**
-   * If I don't handle an error and want to hide the actual message/stack trace
-   */
-  const message =
-    statusCode >= 500
-      ? 'There was an error while processing your request.'
-      : err.message;
+  if (err instanceof ErrorHandler) {
+    res.status(statusCode).json({
+      status: 'error',
+      statusCode,
+      message:
+        statusCode >= 500
+          ? 'There was an error while processing your request.'
+          : err.message
+    });
+  } else {
+    logger.error(err);
 
-  res.status(statusCode).json({
-    status: 'error',
-    statusCode,
-    message
-  });
+    res.status(statusCode).json({
+      status: 'error',
+      statusCode,
+      message:
+        statusCode >= 500
+          ? 'There was an error while processing your request.'
+          : err.message
+    });
+  }
 };

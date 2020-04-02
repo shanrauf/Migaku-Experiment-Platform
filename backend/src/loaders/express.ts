@@ -1,10 +1,11 @@
+import { ErrorHandler } from './../utils/index';
 import { Container } from 'typedi';
 import express from 'express';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cookieSession from 'cookie-session';
 import morgan from 'morgan';
-// import helmet from 'helmet';
+import helmet from 'helmet';
 
 import routes from '../api';
 import config from '../config';
@@ -14,11 +15,11 @@ import { handleError } from '../utils';
 
 export default async ({ app }: { app: express.Application }): Promise<void> => {
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental */
-  app.get('/status', (req, res) => {
+  app.get(`${config.api.prefix}/status`, (req, res) => {
     res.status(200).end();
   });
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental */
-  app.head('/status', (req, res) => {
+  app.head(`${config.api.prefix}/status`, (req, res) => {
     res.status(200).end();
   });
 
@@ -56,6 +57,8 @@ export default async ({ app }: { app: express.Application }): Promise<void> => {
 
   app.use(morgan('combined'));
 
+  app.use(helmet());
+
   const passport = Container.get<PassportStatic>('passport');
   app.use(passport.initialize());
   app.use(passport.session());
@@ -73,8 +76,6 @@ export default async ({ app }: { app: express.Application }): Promise<void> => {
     next();
   });
 
-  // app.use(helmet());
-
   /**
    * Load API routes.
    */
@@ -83,9 +84,9 @@ export default async ({ app }: { app: express.Application }): Promise<void> => {
   /**
    * Catch 404 errors.
    */
-  // app.use((req, res, next) => {
-  //   next(new ErrorHandler(404, 'Not found.'));
-  // });
+  app.use((req, res, next) => {
+    next(new ErrorHandler(404, 'Not found.'));
+  });
 
   /**
    * Error handler middleware.
