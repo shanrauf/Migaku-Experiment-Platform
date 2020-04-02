@@ -53,9 +53,9 @@ const MIADiscordMembersPruneJob = async (bot: Discord.Client) => {
           'We noticed that you no longer have the Patron role on Discord. The bot will automatically remove you from the MIA Discord server in 6 hours unless you become a Patron again and receive the Patron Discord role. If you believe this is a mistake, DM Matt or Yoga on Discord or on Patreon.'
         );
       } else if (
-      /**
-       * It has been 5 hours since the bot messaged the user about not being a patron.
-       */
+        /**
+         * It has been 5 hours since the bot messaged the user about not being a patron.
+         */
         membersOfMIADiscordThatAreNotPatrons[member.id]?.warningTimestamp +
           fiveHours <
         Date.now()
@@ -85,7 +85,8 @@ export default async (): Promise<Discord.Client> => {
 
       /**
        * CRON job to remove MIA Discord members who are no longer patrons.
-       * TODO: How to mock this behavior during development.
+       * TODO: Mock and test this before pushing into prod.
+       * TODO: Use a Redis store for persistence in the case of server restarts
        */
       if (process.env.NODE_ENV === 'production') {
         setInterval(() => MIADiscordMembersPruneJob(bot), pruneJobInterval);

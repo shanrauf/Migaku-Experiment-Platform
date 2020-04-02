@@ -48,7 +48,8 @@ sudo ./install
 ## Backend
 
 - Improve db schema
-- Make Node API stateless, aka complete auth implementation (prompt=none discord oauth?)
+- Create stateless auth implementation (prompt=none discord oauth?)
+- Add Google auth
 - Protect admin routes
 - Refactor queries to allow for admin vs. user querying (e.x public experiments only when user)
 - Cleaner way to compose db calls and wrap them in transactions
