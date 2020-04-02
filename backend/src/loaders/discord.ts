@@ -9,7 +9,8 @@ const TOKEN = config.discord.DISCORD_TOKEN;
 const patreonRoleId = '384145495070736385';
 const modRoleId = '384141382949928991';
 const adminRoleId = '577986029802225664';
-const whitelistedRoles = [modRoleId, adminRoleId];
+const fluentRoleId = '425513975669587978';
+const whitelistedRoles = [modRoleId, adminRoleId, fluentRoleId];
 const membersOfMIADiscordThatAreNotPatrons: {
   [id: string]: {
     member: Discord.GuildMember;
@@ -43,8 +44,7 @@ const MIADiscordMembersPruneJob = async (bot: Discord.Client) => {
       !member.roles.find((role) => role.id === patreonRoleId)
     ) {
       /**
-       * The bot saw that this member was not a patron already during the last interval
-       * that this function was run.
+       * It has been 5 hours since the bot messaged the user about not being a patron.
        */
       if (
         membersOfMIADiscordThatAreNotPatrons[member.id]?.warningTimestamp +
