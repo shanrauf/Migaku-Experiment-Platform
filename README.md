@@ -45,6 +45,17 @@ sudo ./install
 
 ## Todo (in order of priority)
 
+### Frontend (look at doc)
+
+- Admin panel (data visualization; then experiments/surveys/participants/questions CRUD)
+- Clear old architecture (e.x global store survey/experiments modules), add new architecture
+- Rewrite survey feature (% breakdown question, Other option on selects w/ text input (w/ rules?), reduce survey q's; validation, cleaner, separate rules, pagination, save answers in local storage until submission, api calls for survey questions/sections, mention to answer for specific TL)
+- Make landing page static
+- Significantly improve frontend styling
+- Devise system to send error msgs for frontend to display (e.x backend shud return "survey alreadysubmitted" msg for frontend notif to display)
+- Create e2e test suite through the frontend (i.e filling out form inputs, etc)
+- Create unit/integration tests
+
 ## Backend
 
 - Improve db schema
@@ -63,18 +74,6 @@ sudo ./install
 - Agenda task scheduling (e.x schedule a Discord msg to ppl missing role x asking to do something, or schedule Discord announcement, select random ppl in Discord to test a new thing and see if they experience errors b4 public releases, etc)
 - Streamline production deployment with Docker and improved CodePipeline config
 - Streamline dev environment setup accordingly
-
-### Frontend (look at doc)
-
-- Make landing page static
-- Clear old architecture (e.x global store survey/experiments modules), add new architecture
-  <!-- - Implement new stateless auth -->
-- Rewrite survey feature (% breakdown question, reduce survey q's; validation, cleaner, separate rules, pagination, save answers in local storage until submission, api calls for survey questions/sections, mention to answer for specific TL)
-- Admin panel (data visualization; experiments/surveys/participants/questions CRUD)
-- Significantly improve frontend styling
-- Devise system to send error msgs for frontend to display (e.x backend shud return "survey alreadysubmitted" msg for frontend notif to display)
-- Create e2e test suite through the frontend (i.e filling out form inputs, etc)
-- Create unit/integration tests
 
 ### Deployment
 
