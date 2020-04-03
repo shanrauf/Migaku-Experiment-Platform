@@ -38,7 +38,7 @@ const plugins = [
   new FriendlyErrorsPlugin(),
   new HtmlWebpackPlugin({
     template: 'src/index.html',
-    filename: 'index.html',
+    favicon: 'src/assets/images/favicon.ico',
     minify: {
       collapseWhitespace: true
     },
