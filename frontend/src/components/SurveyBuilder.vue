@@ -9,7 +9,7 @@
         <h1 style="text-align: center">
           {{ currentSurvey.title }}
         </h1>
-        <p style="text-align: center">
+        <p style="text-align: center;">
           {{ currentSurvey.description }}
         </p>
       </div>

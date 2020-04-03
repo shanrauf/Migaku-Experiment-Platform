@@ -5,7 +5,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cookieSession from 'cookie-session';
 import morgan from 'morgan';
-import helmet from 'helmet';
+// import helmet from 'helmet';
 
 import routes from '../api';
 import config from '../config';
@@ -57,7 +57,8 @@ export default async ({ app }: { app: express.Application }): Promise<void> => {
 
   app.use(morgan('combined'));
 
-  app.use(helmet());
+  // TODO: Enable and ensure doesn't break Anki and stuff (xsrf, etc)
+  // app.use(helmet());
 
   const passport = Container.get<PassportStatic>('passport');
   app.use(passport.initialize());

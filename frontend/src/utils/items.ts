@@ -54,7 +54,39 @@ export const foreignLanguages: String[] = [
   'Zulu'
 ];
 
-export const nativeLanguages: String[] = [
+export const ankiVersions: string[] = [
+  '2.1.23',
+  '2.1.22',
+  '2.1.21',
+  '2.1.20',
+  '2.1.19',
+  '2.1.18',
+  '2.1.17',
+  '2.1.16',
+  'Earlier version'
+];
+
+export const ankiUpdateIntervals: string[] = [
+  'As soon as a new version is released',
+  'Only when an add-on requires that I update',
+  'About every month',
+  'About every two months',
+  'About every three months',
+  'About every four months',
+  'About every five months',
+  'About every six months',
+  'More than about every six months'
+];
+
+export const developementCycleIntervals: string[] = [
+  '4 months',
+  '5 months',
+  '6 months'
+];
+
+export const operatingSystems: string[] = ['Windows', 'Mac', 'Linux', 'Other'];
+
+export const nativeLanguages: string[] = [
   'English',
   'Akan',
   'American Sign Language',

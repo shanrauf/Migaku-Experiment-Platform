@@ -1,7 +1,14 @@
 <template>
   <v-form ref="form" v-model="valid" class="form">
     <h1 style="margin: 20px 20px 5px 0">{{ section.title }}</h1>
-    <p style="margin: 0 20px 20px 0">{{ section.description }}</p>
+    <template v-if="Array.isArray(section.description)">
+      <p style="margin: 0 20px 20px 0" v-for="paragraph in section.description">
+        {{ paragraph }}
+      </p>
+    </template>
+    <template v-else>
+      <p style="margin: 0 20px 20px 0">{{ section.description }}</p>
+    </template>
     <div v-for="question in section.questions" :key="question.key">
       <h4>{{ question.question }}</h4>
       <span v-if="question.note">(Note: {{ question.note }})</span>
@@ -36,7 +43,11 @@ import {
   fieldsOfOccupation,
   generalTimeFrames,
   countryList,
-  nativeLanguages
+  nativeLanguages,
+  ankiUpdateIntervals,
+  operatingSystems,
+  ankiVersions,
+  developementCycleIntervals
 } from '@/utils/items.ts';
 
 export default {
@@ -59,6 +70,10 @@ export default {
       valid: true,
       formInputs: [],
       items: {
+        ankiUpdateIntervals,
+        developementCycleIntervals,
+        ankiVersions,
+        operatingSystems,
         foreignLanguages,
         nativeLanguages,
         levelsOfEducation,
@@ -191,7 +206,7 @@ export default {
           return items;
         }
       } else if (typeof questionItems == 'object') {
-        // if currentSurvey provides their own Array of items
+        // if section provides their own Array of items
         return questionItems;
       } else {
         return [];

@@ -171,7 +171,7 @@ export default class ExperimentService {
     participantId: string
   ): Promise<responses.IExperimentParticipant> {
     try {
-      await this.CheckIfOpenForRegistration(experimentId);
+      // await this.CheckIfOpenForRegistration(experimentId);
       this.logger.silly(`Registering ${participantId} for ${experimentId}`);
       const result = await this.experimentParticipantModel.findOrCreate({
         where: { experimentId, participantId },

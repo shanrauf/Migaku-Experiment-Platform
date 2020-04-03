@@ -3,7 +3,8 @@ import { RootState } from '@/types';
 import Vue from 'vue';
 
 const experimentSurveys: any = {
-  g6cy8p0yrmnclxyv6co2o: require('@/g6cy8p0yrmnclxyv6co2o.json')
+  g6cy8p0yrmnclxyv6co2o: require('@/g6cy8p0yrmnclxyv6co2o.json'),
+  gpaaw7d4nuq3bzu40o0zls: require('@/gpaaw7d4nuq3bzu40o0zls.json')
 };
 import router from '@/app-routes';
 import SurveyRepository from '@/api/SurveyRepository';

@@ -60,13 +60,16 @@ sudo ./install
 - Refactor towards DDD architecture (validation, separate by domain, etc)
 - Improve logging
 - Create way for external services to test API (e.x route for Anki to test submitting a survey - no conncetion to database, just test validation, etc)
+- Agenda task scheduling (e.x schedule a Discord msg to ppl missing role x asking to do something, or schedule Discord announcement, select random ppl in Discord to test a new thing and see if they experience errors b4 public releases, etc)
+- Streamline production deployment with Docker and improved CodePipeline config
+- Streamline dev environment setup accordingly
 
-### Frontend
+### Frontend (look at doc)
 
 - Make landing page static
 - Clear old architecture (e.x global store survey/experiments modules), add new architecture
   <!-- - Implement new stateless auth -->
-- Rewrite survey feature (% breakdown question, reduce survey q's; validation, cleaner, separate rules, pagination, save answers in local storage until submission, api calls for survey questions/sections)
+- Rewrite survey feature (% breakdown question, reduce survey q's; validation, cleaner, separate rules, pagination, save answers in local storage until submission, api calls for survey questions/sections, mention to answer for specific TL)
 - Admin panel (data visualization; experiments/surveys/participants/questions CRUD)
 - Significantly improve frontend styling
 - Devise system to send error msgs for frontend to display (e.x backend shud return "survey alreadysubmitted" msg for frontend notif to display)

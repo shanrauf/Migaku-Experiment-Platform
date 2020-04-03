@@ -121,6 +121,10 @@ export default async (): Promise<PassportStatic> => {
                     .then(() => {
                       done(null, result);
                     });
+                  // TODO: FIX
+                  // .catch((err) => {
+                  //   done(null, { error: err.message });
+                  // });
                 } else {
                   done(null, result);
                 }
