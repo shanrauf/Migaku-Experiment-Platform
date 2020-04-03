@@ -71,8 +71,8 @@
         "sectionNumber": 2,
         "title": "Release Schedule",
         "description": [
-          "The Anki development team is constantly releasing breaking changes to Anki that affect MIA add-ons, forcing us to spend a large amount of time and effort to identify new issues, troubleshoot with users, and then release the fixes to everyone. This kills our productivity towards upcoming, long-term projects, and diminishes time that could be used to add new features to add-ons that would increase the value they already provide.",
-          "Since maintaining support for the latest Anki versions constantly derails our productivity, we have decided that we would like to establish a development cycle methodology in our work. In order to work on other long-term projects in the most effective way, we would need a development cycle length of at least 4-6 months. We currently have some really big plans, and a development cycle as long as 6 months would help us immensely in achieving those goals. We wanted to personally ask you for your opinion on this through the questions below.",
+          "The Anki development team is constantly releasing changes to Anki that break ours and many other add-ons. This forces us to spend a large amount of time and effort to identify new issues, troubleshoot with users, and then develop and release the fixes. This negatively impacts our productivity on larger upcoming, long-term projects, and diminishes time that could be used to add new features to our currently released add-ons that would increase the value they provide.",
+          "Since maintaining support for the latest Anki versions has a constant negative impact on our productivity, we have decided that we would like to establish a development cycle methodology in our work. In order to work on other long-term projects in the most effective way, we would need a development cycle length of at least 4-6 months. We currently have some really big plans, and therefore a development cycle of 6 months would help us the most in making rapid progress towards those goals. Although we personally prefer a 6 month cycle we want to be able to gain a better understanding on your opinions through the questions below.",
           "By development cycle, we do not mean that we won't be releasing new add-ons, fixes, or new features to existing add-ons. We mean that all add-on updates would be for the Anki version we select at the beginning of a development cycle, and after the development cycle (e.x 6 months), we would update the add-ons to the latest, stable Anki version. For example, if we chose to release add-on updates for Anki version 2.1.22, and Anki releases version 2.1.23, we would only guarantee that the addons are compatible with Anki 2.1.22 - at the end of the development cycle (e.x 6 months), we would update all of our add-ons to the latest stable Anki version and begin a new development cycle.",
           "We have some major long term projects planned and really want to expedite and deliver on them."
         ],
@@ -84,7 +84,7 @@
             "label": "Feeling about MIA Dev Cycle",
             "questionType": "text",
             "dataType": "text",
-            "question": "How do you feel about MIA moving to a development cycle methodology?",
+            "question": "How do you feel about MIA moving to a development cycle methodology as described above?",
             "value": "",
             "required": true
           },
@@ -95,7 +95,7 @@
             "label": "Preferred Dev Cycle Interval",
             "questionType": "select",
             "dataType": "varchar",
-            "question": "What interval would you prefer? (Remember that we feel a longer interval will help us deliver the most value)",
+            "question": "What interval would you prefer for development cycles.? (Remember that we feel a longer interval will help us deliver the most value)",
             "value": "",
             "items": "developementCycleIntervals",
             "required": true
