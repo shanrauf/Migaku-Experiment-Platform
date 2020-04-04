@@ -24,6 +24,7 @@ const membersOfMIADiscordThatAreNotPatrons: {
 /* 1.8e7 = Every hour */
 const pruneJobInterval = 3.6e6;
 const fiveHours = 1.8e7;
+const oneWeekTimestamp = 6.048e8;
 
 /**
  * Function that runs every hour and checks if a member has not been a patron for longer than five hours.
@@ -35,6 +36,8 @@ const MIADiscordMembersPruneJob = async (bot: Discord.Client) => {
     .fetchMembers();
 
   guild.members.forEach((member) => {
+    const oneWeekSinceJoinedMIADiscord =
+      Date.now() - member.joinedAt.getTime() > oneWeekTimestamp;
     if (
       /** Not a bot */
       !member.user.bot &&
@@ -43,7 +46,10 @@ const MIADiscordMembersPruneJob = async (bot: Discord.Client) => {
       /** Missing the Patron badge */
       !member.roles.find((role) => role.id === patreonRoleId)
     ) {
-      if (!membersOfMIADiscordThatAreNotPatrons[member.id]) {
+      if (
+        !membersOfMIADiscordThatAreNotPatrons[member.id] &&
+        oneWeekSinceJoinedMIADiscord
+      ) {
         membersOfMIADiscordThatAreNotPatrons[member.id] = {
           member,
           warningTimestamp: Date.now()

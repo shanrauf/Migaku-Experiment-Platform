@@ -58,6 +58,8 @@ sudo ./install
 
 ## Backend
 
+- Extract Discord member pruning function into a monthly lambda function (run on 2nd or 3rd of a month?)
+- Create a Discord microservice to send daily questions to Discord server (see doc)
 - Improve db schema
 - Create stateless auth implementation (prompt=none discord oauth?)
 - Add Google auth
