@@ -90,7 +90,7 @@
       <v-btn @click="fetchDataAndDisplayGraph">Analyze</v-btn>
 
       <div v-if="analyze">
-        <div style="width: 1500px; height: 800px;">
+        <div style="width: 1500px; height: 700px;">
           <VueApexCharts :options="options" :series="series"></VueApexCharts>
         </div>
       </div>
