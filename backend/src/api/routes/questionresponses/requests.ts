@@ -7,33 +7,33 @@ export class QuestionResponseFilters {
    */
   @Expose()
   @IsString()
-  key!: string;
+  questionId?: string;
 
   /**
    * Identifier for a question
    */
   @Expose()
   @IsString()
-  experimentId!: string;
+  experimentId?: string;
 
   /**
    * Identifier for a question
    */
   @Expose()
   @IsString()
-  responseId!: string;
+  responseId?: string;
 
   /**
    * Identifier for a question
    */
   @Expose()
   @IsString()
-  surveyId!: string;
+  surveyId?: string;
 
   /**
    * Identifier for a question
    */
   @Expose()
   @IsString()
-  participantId!: string;
+  participantId?: string;
 }

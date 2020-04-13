@@ -7,10 +7,15 @@ const resource = '/experiments/audiovssentencecards/surveys'; // change later wh
 class SurveyRepository {
   constructor() {}
 
-  public static async get(): Promise<responses.ISurveys> {
-    return AxiosClient.get<responses.ISurveys>(`${resource}`).then(
-      res => res.data
-    );
+  public static async get(filters: {
+    [key: string]: string;
+  }): Promise<responses.ISurveys> {
+    const queryParams: string = Object.keys(filters)
+      .map(key => key + '=' + filters[key])
+      .join('&');
+    return AxiosClient.get<responses.ISurveys>(
+      `${resource}?${queryParams}`
+    ).then(res => res.data);
   }
   public static getSurvey(surveyId: string): Promise<responses.ISurvey> {
     return AxiosClient.get<responses.ISurvey>(`${resource}/${surveyId}`).then(

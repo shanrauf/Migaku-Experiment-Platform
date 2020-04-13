@@ -18,42 +18,43 @@ import { Survey } from './survey';
 import { Participant } from './participant';
 import { SurveyResponse } from './surveyResponse';
 
-@DefaultScope(() => ({
-  attributes: [
-    'questionId',
-    'responseId',
-    'experimentId',
-    'surveyId',
-    'participantId'
-  ]
-}))
+// TODO: This used to protect data from ppl who weren't admins
+// @DefaultScope(() => ({
+//   attributes: [
+//     'questionId',
+//     'responseId',
+//     'experimentId',
+//     'surveyId',
+//     'participantId'
+//   ]
+// }))
 /* Dynamically query correct answer field using dataType
 let dataType = capitalize("smallInt"); // "SmallInt"
 return await QuestionResponse.scope(['defaultScope, `answer${dataType}`]).findAndCountAll();
 */
-@Scopes(() => ({
-  answerSmallInt: {
-    attributes: ['answerSmallInt']
-  },
-  answerInt: {
-    attributes: ['answerInt']
-  },
-  answerFloat: {
-    attributes: ['answerFloat']
-  },
-  answerBoolean: {
-    attributes: ['answerBoolean']
-  },
-  answerVarchar: {
-    attributes: ['answerVarchar']
-  },
-  answerText: {
-    attributes: ['answerText']
-  },
-  answerJSON: {
-    attributes: ['answerJSON']
-  }
-}))
+// @Scopes(() => ({
+//   answerSmallInt: {
+//     attributes: ['answerSmallInt']
+//   },
+//   answerInt: {
+//     attributes: ['answerInt']
+//   },
+//   answerFloat: {
+//     attributes: ['answerFloat']
+//   },
+//   answerBoolean: {
+//     attributes: ['answerBoolean']
+//   },
+//   answerVarchar: {
+//     attributes: ['answerVarchar']
+//   },
+//   answerText: {
+//     attributes: ['answerText']
+//   },
+//   answerJSON: {
+//     attributes: ['answerJSON']
+//   }
+// }))
 @Table({ modelName: 'QuestionResponse', tableName: 'QuestionResponses' })
 export class QuestionResponse extends Model<QuestionResponse> {
   @AutoIncrement

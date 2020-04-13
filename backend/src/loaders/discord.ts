@@ -41,7 +41,7 @@ const MIADiscordMembersPruneJob = async (bot: Discord.Client) => {
     if (
       /** Not a bot */
       !member.user.bot &&
-      /** Not a mod/admin */
+      /** Not a mod/admin/fluent */
       !member.roles.find((role) => whitelistedRoles.includes(role.id)) &&
       /** Missing the Patron badge */
       !member.roles.find((role) => role.id === patreonRoleId)

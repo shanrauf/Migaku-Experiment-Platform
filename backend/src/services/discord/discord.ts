@@ -84,7 +84,7 @@ export default class DiscordClient {
     const guild = await this.GetMIADiscord();
     const ankiSurvey = ['anki.png', 'miaYoga.png'];
     const surveyOne = ['miaMatt.png', 'miaCringe.png'];
-    const surveyTwo = ['miaThink.png', 'miaYoga2.png'];
+    const surveyTwo = ['miaThink.png', 'miaYogaSmile.png'];
     const surveyThree = ['mia.png', 'miaOld.png'];
     const rewards = [
       { emojis: ankiSurvey, role: 'SRStatistician' },

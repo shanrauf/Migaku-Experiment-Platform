@@ -11,7 +11,7 @@ const visualizationRoutes: RouteConfig[] = [
     meta: {
       title: 'Visualization | MIA Experiments',
       layout: 'DefaultLayout',
-      isPublic: true
+      isPublic: false
     }
   }
 ];

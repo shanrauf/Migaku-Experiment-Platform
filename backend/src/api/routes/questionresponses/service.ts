@@ -39,6 +39,11 @@ export default class QuestionResponseService {
           where: { participantId }
         };
       },
+      questionId: (questionId) => {
+        return {
+          where: { questionId }
+        };
+      },
       experimentId: (experimentId) => {
         return {
           where: { experimentId }
