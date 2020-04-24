@@ -2,6 +2,7 @@ import config from '@/config/index.js';
 import axios from 'axios';
 import store from '@/store';
 
+// window.location.origin = localhost:8080 on dev, which lets webpack proxy requests to backend and avoid cors issues
 const baseURL =
   process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
     ? `${window.location.origin}/api`
@@ -11,15 +12,15 @@ const axiosClient = axios.create({
   baseURL,
   headers: {
     // "Authorization": "Bearer xxxxx"
-    'Access-Control-Allow-Origin': '*'
-  }
+    'Access-Control-Allow-Origin': '*',
+  },
 });
 
 axiosClient.interceptors.response.use(
-  response => {
+  (response) => {
     return response; // can make further edits to response object if you want
   },
-  err => {
+  (err) => {
     store.commit('error', err); // perhaps create more sophisicated error handling (i.e tailored msgs based on errors/status codes)
     return Promise.reject(err);
   }

@@ -45,12 +45,7 @@ sudo ./install
 
 ## Todo (in order of priority)
 
-- Admin panel (data visualization)
-
-(building for future from here on out)
-
 - Read http://thecodebarbarian.com/node.js-task-scheduling-with-agenda-and-mongodb.html
-- Make PR: https://github.com/agenda/agenda/pull/715
 
 - (in parallel) Outline business use cases
 - Put backend in Docker container (worry about CD later)
@@ -62,8 +57,6 @@ sudo ./install
 - Improve db schema & migrate data
 - Define indexes on MySQL database and MongoDB database (recommended by `agenda` and best practices)
 - Revise API route structure if you'd like or need to
-- Control route behavior based on user auth status ("admin" vs public/general)
-- Cleaner way to compose db calls and wrap them in transactions
 - Discord message confirming survey, rewards, etc; email if not in MIA Discord (wrap this busLogic in onSurveySubmitted event)
 - Complete basic test suite that covers all API routes (testing status codes, response bodies, and model validation)
 - Improve logging for APM
@@ -71,7 +64,7 @@ sudo ./install
 - Experiment dashboard (experiments/surveys/participants/questions CRUD; rewrite analytics implementation)
 - Setup MongoDB Docker container (for Agenda job scheduling)
 - Setup a message queue for scheduling agenda jobs? e.x if i want to edit a job to emial about survey release, i hve to delete the old job & create new one w new date, but that might fail, and a message queue is only way to ensure job fully completes...
-- Create Discord microservice (see doc)
+- Create Discord service (either sep domain folder, or separate project/microservice, up to you; see doc)
 - Experiment dashboard agenda task scheduling (e.x schedule Discord msg to ppl missing role x asking to do something, schedule Discord announcements, kick inactive experiment participants periodically, etc)
 - Look into Amazon API Gateway, Varnish, etc
 - Look into AWS Amplify, Elastic Beanstalk, how to manage dev & production secret keys
@@ -86,6 +79,7 @@ sudo ./install
 
 - Clear old architecture (e.x global store survey/experiments modules), add new architecture
 - Implement frontend auth
+- Admin panel (data visualization)
 - Rewrite survey feature (% breakdown question, Other option on selects w/ text input (w/ rules?), way to manage items (sql table prob), reduce survey q's; validation, cleaner, separate rules, pagination, save answers in local storage until submission, api calls for survey questions/sections, mention to answer for specific TL)
 - Make landing page static
 - Significantly improve frontend styling

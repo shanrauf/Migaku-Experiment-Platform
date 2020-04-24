@@ -30,28 +30,27 @@ const routes: RouteConfig[] = [
     meta: {
       title: '404 Page | MIA Experiments',
       layout: 'DefaultLayout',
-      isPublic: true
-    }
-  }
+      isPublic: true,
+    },
+  },
 ];
 
 /**
  * Guard the route from unauthorized users.
  */
 function guardRoute(to: Route, from: Route, next: Function): void {
-  // work-around to get to the Vuex store (as of Vue 2.0)
   ParticipantRepository.me()
-    .then(result => {
+    .then((result) => {
       next();
     })
-    .catch(err => {
+    .catch((err) => {
       window.location.replace(
         `${config.ROOT_API_URL}/api/auth/discord?redirect=${config.ROOT_FRONTEND_URL}${to.path}`
       );
     });
 }
 
-routes.forEach(route => {
+routes.forEach((route) => {
   route.beforeEnter = (to, from, next) => {
     document.title = route.meta.title;
     store.dispatch('common/updateTitle', route.meta.title);

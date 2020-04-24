@@ -33,6 +33,7 @@ export default (app: Router) => {
   // Admin route
   route.post(
     '/',
+    middlewares.blockRoute,
     validateRequestSchema(undefined, requests.IExperiment),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
@@ -68,6 +69,7 @@ export default (app: Router) => {
 
   route.patch(
     '/:experimentId',
+    middlewares.blockRoute,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const experimentService = Container.get(ExperimentService);
@@ -87,6 +89,7 @@ export default (app: Router) => {
   // Admin route
   route.delete(
     '/:experimentId',
+    middlewares.blockRoute,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const experimentService = Container.get(ExperimentService);
@@ -104,6 +107,7 @@ export default (app: Router) => {
 
   route.put(
     '/:experimentId/participants/:participantId',
+    middlewares.blockRoute,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         /**
@@ -126,6 +130,7 @@ export default (app: Router) => {
 
   route.delete(
     '/:experimentId/participants/:participantId',
+    middlewares.blockRoute,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         if (req.params.participantId !== req.user.participantId) {
@@ -156,6 +161,7 @@ export default (app: Router) => {
 
   route.get(
     '/:experimentId/participants',
+    middlewares.blockRoute,
     async (req: Request, res: Response, next: NextFunction) => {
       res.redirect(`participants?experimentId=${req.params.experimentId}`);
     }
@@ -166,6 +172,7 @@ export default (app: Router) => {
    */
   route.post(
     '/:experimentId/questions',
+    middlewares.blockRoute,
     validateRequestSchema(null, requests.IExperimentQuestions),
     async (req: Request, res: Response, next: NextFunction) => {
       try {

@@ -12,6 +12,7 @@ export default (app: Router) => {
 
   route.get(
     '/',
+    middlewares.ensureAdmin,
     middlewares.validateRequestSchema(requests.IQuestionFilters, undefined),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
@@ -30,6 +31,7 @@ export default (app: Router) => {
   );
   route.post(
     '/',
+    middlewares.ensureAdmin,
     middlewares.validateRequestSchema(undefined, requests.ICreateQuestions),
     async (req: Request, res: Response, next: NextFunction) => {
       try {

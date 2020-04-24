@@ -12,11 +12,13 @@ export default (app) => {
 
   route.get(
     '/',
+    middlewares.ensureAdmin,
     middlewares.validateRequestSchema(
       requests.QuestionResponseFilters,
       undefined
     ),
     async (req: Request, res: Response, next: NextFunction) => {
+      console.log('HERE');
       try {
         const questionResponseService = Container.get(QuestionResponseService);
         const payload = await questionResponseService.GetQuestionResponses(

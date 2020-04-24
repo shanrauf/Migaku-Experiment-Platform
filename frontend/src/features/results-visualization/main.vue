@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="margin: auto; width: 80%;">
     <h1>Experiment Data Analysis</h1>
 
     <br />
@@ -90,9 +90,9 @@
       <v-btn @click="fetchDataAndDisplayGraph">Analyze</v-btn>
 
       <div v-if="analyze">
-        <div style="width: 1500px; height: 700px;">
-          <VueApexCharts :options="options" :series="series"></VueApexCharts>
-        </div>
+        <!-- <div style="width: 1500px; height: 700px;"> -->
+        <VueApexCharts :options="options" :series="series"></VueApexCharts>
+        <!-- </div> -->
       </div>
     </div>
   </div>
@@ -112,12 +112,12 @@ export default {
   name: 'Visualization',
   service: new Service(),
   components: {
-    VueApexCharts
+    VueApexCharts,
   },
   async created() {
     let { experiments } = await ExperimentRepository.get();
 
-    experiments.forEach(experiment => {
+    experiments.forEach((experiment) => {
       // format ISO strings into Date objects
       if (experiment.startDate) {
         experiment.startDate = new Date(experiment.startDate);
@@ -132,23 +132,6 @@ export default {
   data() {
     return {
       selectedTextQuestion: null,
-      analysisModes: [
-        {
-          key: 0,
-          value:
-            "Reading text responses (e.x manually reading through users' descriptions of their Japanese studies)"
-        },
-        {
-          key: 1,
-          value:
-            'Analyzing the changes in data over the course of the experiment (e.x observing the change in overall retention over time)'
-        }
-        // {
-        //   key: 2,
-        //   value:
-        //     'Analyzing the correlations between data (e.x observing if hours of active immersion affect overall retention)'
-        // }
-      ],
       experiments: [],
       analyze: false,
       analysisMode: null,
@@ -164,10 +147,10 @@ export default {
       changeOverTimeSeries: [],
       changeOverTimeOptions: {
         title: {
-          text: ''
+          text: '',
         },
         chart: {
-          id: ''
+          id: '',
         },
         xaxis: {
           categories: [
@@ -182,20 +165,25 @@ export default {
             'Survey 9',
             'Survey 10',
             'Survey 11',
-            'Survey 12'
-          ]
-        }
-      }
+            'Survey 12',
+          ],
+        },
+      },
+      analysisModes: [
+        {
+          key: 0,
+          value:
+            "Reading text responses (e.x manually reading through users' descriptions of their Japanese studies)",
+        },
+        {
+          key: 1,
+          value:
+            'Analyzing the changes in data over the course of the experiment (e.x observing the change in overall retention over time)',
+        },
+      ],
     };
   },
   methods: {
-    forceRerender() {
-      this.analysisMode = this.analysisMode === 1 ? 0 : 1;
-
-      this.$nextTick(() => {
-        this.analysisMode = this.analysisMode === 0 ? 1 : 0;
-      });
-    },
     async fetchDataAndDisplayGraph() {
       this.analyze = false;
       this.changeOverTimeSeries = [];
@@ -203,7 +191,7 @@ export default {
         if (!this.questionResponsesCache?.[question.questionId]) {
           let { questionresponses } = await QuestionResponseRepository.get({
             questionId: question.questionId,
-            experimentId: this.selectedExperiment
+            experimentId: this.selectedExperiment,
           });
           this.questionResponsesCache[question.questionId] = questionresponses;
         }
@@ -214,42 +202,43 @@ export default {
 
       this.changeOverTimeOptions.chart.id = 'vuechart-example';
       this.changeOverTimeOptions.xaxis.categories = this.experimentSurveys.map(
-        survey => survey.title
+        (survey) => survey.title
       );
 
-      this.selectedQuestions.forEach(question => {
+      this.selectedQuestions.forEach((question) => {
         // for everey question, get its responses, avg the values for each survey, and set that as data attribute for a series
         const responses = this.questionResponsesCache[question.questionId];
         const data = [];
 
         console.log(responses);
 
-        this.experimentSurveys.forEach(survey => {
+        this.experimentSurveys.forEach((survey) => {
           // avg values
-          let average = 0;
+          let total = 0;
           let count = 0;
 
           const responsesForThisSurvey = this.questionResponsesCache[
             question.questionId
-          ].filter(response => response.surveyId === survey.surveyId);
+          ].filter((response) => response.surveyId === survey.surveyId);
 
           for (let response of responsesForThisSurvey) {
             const { dataType } = this.selectedQuestions.find(
-              question => question.questionId === response.questionId
+              (question) => question.questionId === response.questionId
             );
-            average +=
+            total +=
               response[
                 'answer' + dataType.charAt(0).toUpperCase() + dataType.slice(1)
               ];
             count += 1;
           }
 
+          const average = total / count;
           data.push(average);
         });
 
         this.changeOverTimeSeries.push({
           name: question.questionId,
-          data
+          data,
         });
       });
 
@@ -259,30 +248,52 @@ export default {
       console.log(this.series);
 
       this.analyze = true;
-    }
+    },
   },
   computed: {
     textQuestions() {
       return this.experimentQuestions.filter(
-        question => question.dataType === 'text'
+        (question) => question.dataType === 'text'
       );
     },
     textQuestionIds() {
-      return this.textQuestions.map(question => question.questionId);
-    }
+      return this.textQuestions.map((question) => question.questionId);
+    },
   },
   watch: {
     selectedExperiment: async function(experimentId) {
-      // this.forceRerender();
+      // removing change over time for mia-community-census
+      if (experimentId === 'mia-community-census') {
+        this.analysisModes = [
+          {
+            key: 0,
+            value:
+              "Reading text responses (e.x manually reading through users' descriptions of their Japanese studies)",
+          },
+        ];
+      } else {
+        this.analysisModes = [
+          {
+            key: 0,
+            value:
+              "Reading text responses (e.x manually reading through users' descriptions of their Japanese studies)",
+          },
+          {
+            key: 1,
+            value:
+              'Analyzing the changes in data over the course of the experiment (e.x observing the change in overall retention over time)',
+          },
+        ];
+      }
+
       this.experimentQuestions = [];
       const { questions } = await QuestionRepository.get({
-        experimentId
+        experimentId,
       });
-      questions.forEach(question => {
+      questions.forEach((question) => {
         if (question?.items && question?.dataType === 'varchar') {
           question['categorical'] = true;
         }
-        // I dont want cloze or char...
 
         if (this.selectedExperiment === 'mia-community-census') {
           this.experimentQuestions.push(question);
@@ -292,6 +303,7 @@ export default {
           !question.question.includes('col') &&
           !question.question.includes('noChar')
         ) {
+          // remove questions that shouldn't be in this schema (I should just delete them from the db...)
           this.experimentQuestions.push(question);
         }
       });
@@ -305,13 +317,13 @@ export default {
     selectedTextQuestion: async function(questionId) {
       const { questionresponses } = await QuestionResponseRepository.get({
         experimentId: this.selectedExperiment,
-        questionId
+        questionId,
       });
       console.log(questionresponses);
       this.textQuestionResponses = questionresponses;
       console.log(this.textQuestionResponses);
-    }
-  }
+    },
+  },
 };
 </script>
 

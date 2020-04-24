@@ -12,6 +12,7 @@ export default (app: Router): void => {
 
   route.get(
     '/',
+    middlewares.ensureAdmin,
     middlewares.validateRequestSchema(requests.RequirementFilters, null),
     async (req: Request, res: Response, next: NextFunction) => {
       try {

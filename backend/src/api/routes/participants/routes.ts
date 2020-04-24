@@ -14,6 +14,7 @@ export default (app) => {
 
   route.get(
     '/',
+    middlewares.blockRoute,
     validateRequestSchema(requests.ParticipantFilters, null),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
@@ -45,6 +46,7 @@ export default (app) => {
 
   route.get(
     '/deletethis',
+    middlewares.blockRoute,
     async (req: Request, res: Response, next: NextFunction) => {
       const discordService = Container.get(DiscordClient);
       await discordService.CreateEmojis();
@@ -54,6 +56,7 @@ export default (app) => {
 
   route.post(
     '/',
+    middlewares.blockRoute,
     validateRequestSchema(undefined, requests.ParticipantSignup),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
@@ -71,6 +74,7 @@ export default (app) => {
 
   route.get(
     '/:participantId/experiments',
+    middlewares.blockRoute,
     async (req: Request, res: Response, next: NextFunction) => {
       res.redirect(
         `../../experiments?participantId=${req.params.participantId}`

@@ -60,6 +60,7 @@ export default (app: Router): void => {
 
   route.post(
     '/',
+    middlewares.ensureAdmin,
     // middlewares.validateRequestSchema(undefined, requests.ICreateSurvey),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
@@ -96,8 +97,10 @@ export default (app: Router): void => {
     }
   );
 
+  // shouldn't this filter by authenticated user? if so, then how to check if admin is querying and wants data for all participants?
   route.get(
     '/:surveyId/responses',
+    middlewares.ensureAdmin,
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental */
     async (req: Request, res: Response, next: NextFunction) => {
       const { experimentId, surveyId } = req.params;
