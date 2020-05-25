@@ -3,7 +3,8 @@ import AxiosClient from './axiosClient';
 import * as requests from '@/../../backend/src/api/routes/surveys/requests';
 import * as responses from '@/../../backend/src/api/routes/surveys/responses';
 
-const resource = '/experiments/audiovssentencecards/surveys'; // change later when change survey endpoiont to just /surveys w ?experimentId stuff...
+// TODO: YOU NEED TO DYNAMICALLY SET EXPERIMENTID!
+const resource = '/experiments/mia-community-census/surveys'; // change later when change survey endpoiont to just /surveys w ?experimentId stuff...
 class SurveyRepository {
   constructor() {}
 
@@ -11,15 +12,15 @@ class SurveyRepository {
     [key: string]: string;
   }): Promise<responses.ISurveys> {
     const queryParams: string = Object.keys(filters)
-      .map(key => key + '=' + filters[key])
+      .map((key) => key + '=' + filters[key])
       .join('&');
     return AxiosClient.get<responses.ISurveys>(
       `${resource}?${queryParams}`
-    ).then(res => res.data);
+    ).then((res) => res.data);
   }
   public static getSurvey(surveyId: string): Promise<responses.ISurvey> {
     return AxiosClient.get<responses.ISurvey>(`${resource}/${surveyId}`).then(
-      res => res.data
+      (res) => res.data
     );
   }
   /**
@@ -29,7 +30,7 @@ class SurveyRepository {
   public static getStatus(surveyId: string): Promise<responses.ISurveyStatus> {
     return AxiosClient.get<responses.ISurveyStatus>(
       `${resource}/${surveyId}/status`
-    ).then(res => res.data);
+    ).then((res) => res.data);
   }
   public static post(surveyId: string, payload: any) {
     return AxiosClient.post(`${resource}`, payload);

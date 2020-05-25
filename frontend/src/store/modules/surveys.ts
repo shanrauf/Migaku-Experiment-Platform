@@ -4,7 +4,8 @@ import Vue from 'vue';
 
 const experimentSurveys: any = {
   g6cy8p0yrmnclxyv6co2o: require('@/g6cy8p0yrmnclxyv6co2o.json'),
-  gpaaw7d4nuq3bzu40o0zls: require('@/gpaaw7d4nuq3bzu40o0zls.json')
+  gpaaw7d4nuq3bzu40o0zls: require('@/gpaaw7d4nuq3bzu40o0zls.json'),
+  abcde3qmvtbuqwd1abcde: require('@/abcde3qmvtbuqwd1abcde.json'),
 };
 import router from '@/app-routes';
 import SurveyRepository from '@/api/SurveyRepository';
@@ -28,21 +29,21 @@ const defaults = {
             rules: '',
             question: '?',
             value: null,
-            required: true
-          }
-        ]
-      }
-    ]
+            required: true,
+          },
+        ],
+      },
+    ],
   },
-  questions: [{}]
+  questions: [{}],
 };
 
 const getters: GetterTree<typeof defaults, RootState> = {
-  getSurveys: state => state.surveys,
-  getCurrentSurvey: state => state.currentSurvey,
-  getNumberOfSections: state => state.currentSurvey.sections.length,
-  getCurrentSurveySectionTitles: state =>
-    state.currentSurvey.sections.map(section => section.title)
+  getSurveys: (state) => state.surveys,
+  getCurrentSurvey: (state) => state.currentSurvey,
+  getNumberOfSections: (state) => state.currentSurvey.sections.length,
+  getCurrentSurveySectionTitles: (state) =>
+    state.currentSurvey.sections.map((section) => section.title),
 };
 
 const actions: ActionTree<typeof defaults, RootState> = {
@@ -51,7 +52,7 @@ const actions: ActionTree<typeof defaults, RootState> = {
 
     commit({
       type: 'setSurveys',
-      surveys: surveys
+      surveys: surveys,
     });
   },
   async createCurrentSurvey({ state, commit }, payload: any) {
@@ -61,15 +62,15 @@ const actions: ActionTree<typeof defaults, RootState> = {
     // );
     commit({
       type: 'setCurrentSurvey',
-      currentSurvey: experimentSurveys[payload.surveyId].survey // doing manually for now
+      currentSurvey: experimentSurveys[payload.surveyId].survey, // doing manually for now
     });
   },
   async submitSurvey({ commit, state }) {
     // formatting payload...
     let payload: any = {};
     let questionResponses: any = {};
-    state.currentSurvey.sections.forEach(section => {
-      section.questions.forEach(question => {
+    state.currentSurvey.sections.forEach((section) => {
+      section.questions.forEach((question) => {
         // add to payload
         questionResponses[question.questionId] = question.value;
       });
@@ -80,13 +81,13 @@ const actions: ActionTree<typeof defaults, RootState> = {
         Vue.notify({
           group: 'global',
           title: 'Successfully submitted survey!',
-          text: 'The rest of the site will be updated soon!'
+          text: 'The rest of the site will be updated soon!',
         });
         router.push({ path: '/' });
         return true;
       }
     );
-  }
+  },
 };
 
 const mutations: MutationTree<typeof defaults> = {
@@ -111,12 +112,12 @@ const mutations: MutationTree<typeof defaults> = {
   },
   setQuestions(state, payload) {
     state.questions = payload.questions;
-  }
+  },
 };
 
 export default {
   state: Object.assign({}, defaults),
   getters,
   actions,
-  mutations
+  mutations,
 };

@@ -172,7 +172,7 @@ export default (app: Router) => {
    */
   route.post(
     '/:experimentId/questions',
-    middlewares.blockRoute,
+    // middlewares.blockRoute,
     validateRequestSchema(null, requests.IExperimentQuestions),
     async (req: Request, res: Response, next: NextFunction) => {
       try {

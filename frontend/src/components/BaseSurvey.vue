@@ -47,7 +47,7 @@ import {
   ankiUpdateIntervals,
   operatingSystems,
   ankiVersions,
-  developementCycleIntervals
+  developementCycleIntervals,
 } from '@/utils/items.ts';
 
 export default {
@@ -56,14 +56,14 @@ export default {
   props: {
     section: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   components: {
     BaseSelect,
     BaseRadioButtons,
     BaseTextField,
-    BaseMultiselect
+    BaseMultiselect,
   },
   data() {
     return {
@@ -101,7 +101,7 @@ export default {
           'Evening (4PM - 6PM)',
           'Around sunset (6PM - 8PM)',
           'Around nighttime (8PM - 12AM)',
-          'After midnight (12AM - 5AM)'
+          'After midnight (12AM - 5AM)',
         ],
         retirementIntervals: [
           'Never',
@@ -114,7 +114,7 @@ export default {
           '1 year',
           '1.5 years',
           '2 years',
-          '3+ years'
+          '3+ years',
         ],
         daysOfTheWeek: [
           'Sunday',
@@ -124,58 +124,58 @@ export default {
           'Thursday',
           'Friday',
           'Saturday',
-          'Sunday'
+          'Sunday',
         ],
         devices: ['Desktop/Laptop', 'Tablet', 'Smartphone'],
-        beforeDuringOrMixed: ['Before', 'Mix reviews and new cards', 'After']
+        beforeDuringOrMixed: ['Before', 'Mix reviews and new cards', 'After'],
       },
       ruleGenerators: {
-        maxChar: val => v =>
+        maxChar: (val) => (v) =>
           (v && v.length <= val) || `Must be less than ${val} characters`,
-        minChar: val => v =>
+        minChar: (val) => (v) =>
           (v && v.length >= val) || `Must be greater than ${val} characters`,
-        email: val => {
+        email: (val) => {
           if (val == 'true') {
-            return v => /.+@.+\..+/.test(v) || 'E-mail must be valid';
+            return (v) => /.+@.+\..+/.test(v) || 'E-mail must be valid';
           } else {
             return true;
           }
         },
-        isNumber: val => {
-          return v =>
+        isNumber: (val) => {
+          return (v) =>
             /^[0-9]*$/.test(v) || 'Must enter numbers only (no letters)';
         },
-        min: val => {
-          return v =>
+        min: (val) => {
+          return (v) =>
             (/^[0-9]*$/.test(v) && parseFloat(v) >= val) ||
-            `Must be greater than ${val}`;
+            `Must be greater than or equal to ${val}`;
         },
-        max: val => {
-          return v =>
+        max: (val) => {
+          return (v) =>
             (/^[0-9]*$/.test(v) && parseFloat(v) <= val) ||
             `Must be less than ${val}`;
         },
-        numberOnly: val => {
+        numberOnly: (val) => {
           if (val == 'true') {
-            return v =>
+            return (v) =>
               /^[0-9]*$/.test(v) || 'Must enter numbers only (no letters)';
           } else {
             return true;
           }
         },
-        textOnly: val => {
+        textOnly: (val) => {
           if (val == 'true') {
-            return v =>
+            return (v) =>
               /^[a-zA-Z ]*$/.test(v) || 'Must enter text only (no numbers)';
           } else {
             return true;
           }
-        }
-      }
+        },
+      },
     };
   },
   computed: {
-    ...mapGetters(['getNumberOfSections'])
+    ...mapGetters(['getNumberOfSections']),
   },
   created() {
     const payload = { sectionNumber: this.section.sectionNumber, valid: false };
@@ -187,14 +187,14 @@ export default {
         type: 'updateQuestionValue',
         question,
         attributeToUpdate: 'value',
-        newValue
+        newValue,
       });
 
       this.valid = this.$refs.form.validate();
 
       EventBus.$emit('validate', {
         sectionNumber: this.section.sectionNumber,
-        valid: this.valid
+        valid: this.valid,
       });
     },
     getItems(questionItems) {
@@ -230,8 +230,8 @@ export default {
         }
       }
       return rulesArray;
-    }
-  }
+    },
+  },
 };
 </script>
 

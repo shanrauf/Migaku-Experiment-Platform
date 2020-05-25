@@ -335,7 +335,7 @@ export default class SurveyService {
     switch (surveyId) {
       case 'g6cy8p0yrmnclxyv6co2o':
         return 'Acquisition Apprentice';
-      case '8gcov3qmvtbuqwd1a1ph6':
+      case 'abcde3qmvtbuqwd1abcde':
         return 'SRSergeant';
       case 'fmqisvqe9z64dndlk6xkpg':
         return 'Immmersionaut';

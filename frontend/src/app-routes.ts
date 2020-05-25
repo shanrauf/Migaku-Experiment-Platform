@@ -10,7 +10,7 @@ import { AppPageNotFound } from '@/components';
 import config from '@/config/index.js';
 
 import landingRoutes from '@/features/landing/routes';
-import dashboardRoutes from '@/features/dashboard/routes';
+// import dashboardRoutes from '@/features/dashboard/routes';
 import surveyRoutes from '@/features/survey/routes';
 import experimentRoutes from '@/features/experiment/routes';
 import adminRoutes from '@/features/admin/routes';
@@ -18,7 +18,7 @@ import visualizationRoutes from '@/features/results-visualization/routes';
 
 const routes: RouteConfig[] = [
   ...landingRoutes,
-  ...dashboardRoutes,
+  // ...dashboardRoutes,
   ...surveyRoutes,
   ...experimentRoutes,
   ...adminRoutes,

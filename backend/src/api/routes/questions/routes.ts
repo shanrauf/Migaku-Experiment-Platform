@@ -31,7 +31,7 @@ export default (app: Router) => {
   );
   route.post(
     '/',
-    middlewares.ensureAdmin,
+    // middlewares.ensureAdmin,
     middlewares.validateRequestSchema(undefined, requests.ICreateQuestions),
     async (req: Request, res: Response, next: NextFunction) => {
       try {

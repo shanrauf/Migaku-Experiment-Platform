@@ -325,15 +325,26 @@ export default class ExperimentService {
     transaction?: Transaction
   ): Promise<void> {
     try {
-      await this.experimentQuestionModel.bulkCreate(
-        questionIds.map((questionId) => {
-          return {
+      // await this.experimentQuestionModel.bulkCreate(
+      //   questionIds.map((questionId) => {
+      //     return {
+      //       experimentId,
+      //       questionId
+      //     };
+      //   }),
+      //   { transaction }
+      // );
+
+      for (const questionId of questionIds) {
+        try {
+          await this.experimentQuestionModel.create({
             experimentId,
             questionId
-          };
-        }),
-        { transaction }
-      );
+          });
+        } catch (err) {
+          this.logger.info(err);
+        }
+      }
     } catch (err) {
       this.logger.error(err);
       throw err;

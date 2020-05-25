@@ -60,7 +60,7 @@ export default (app: Router): void => {
 
   route.post(
     '/',
-    middlewares.ensureAdmin,
+    // middlewares.ensureAdmin,
     // middlewares.validateRequestSchema(undefined, requests.ICreateSurvey),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
@@ -115,9 +115,10 @@ export default (app: Router): void => {
     middlewares.ensureAuthenticated,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        if (!req.user.miaDiscord) {
-          throw new ErrorHandler(403, "You aren't a part of the MIA Discord");
-        }
+        // todo, errors for me?
+        // if (!req.user.miaDiscord) {
+        //   throw new ErrorHandler(403, "You aren't a part of the MIA Discord");
+        // }
         const { experimentId, surveyId } = req.params;
         const surveyService = Container.get(SurveyService);
 

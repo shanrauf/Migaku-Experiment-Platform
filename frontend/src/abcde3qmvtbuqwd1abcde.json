@@ -1,0 +1,806 @@
+{
+  "survey": {
+    "experimentId": "mia-community-census",
+    "surveyId": "abcde3qmvtbuqwd1abcde",
+    "title": "MIA Community Census Survey Two: Anki",
+    "description": "This is the second survey of the experiment!",
+    "startDate": "2020-5-24 00:00:00",
+    "endDate": null,
+    "surveyCategory": "regular",
+    "visibility": "public",
+    "sections": [
+      {
+        "sectionId": "7j1ovkszm5vjnagokm8dgk",
+        "sectionNumber": 1,
+        "title": "General Anki Questions",
+        "description": "This section asks general questions about how you use Anki.",
+        "questions": [
+          {
+            "questionId": "usedAnkiBefore",
+            "key": "usedAnkiBefore",
+            "label": "Used Anki Before",
+            "questionType": "select",
+            "dataType": "varchar",
+            "rules": null,
+            "question": "Have you used Anki before?",
+            "value": "",
+            "items": "yesNo",
+            "required": true
+          },
+          {
+            "questionId": "usingAnkiInStudies",
+            "key": "usingAnkiInStudies",
+            "label": "Using Anki In Studies",
+            "questionType": "select",
+            "dataType": "varchar",
+            "rules": null,
+            "question": "Are you currently using Anki in your studies?",
+            "value": "",
+            "items": "yesNo",
+            "required": true
+          },
+          {
+            "questionId": "timeStudyingWithAnki",
+            "key": "timeStudyingWithAnki",
+            "label": "Time Studying With Anki",
+            "questionType": "select",
+            "dataType": "varchar",
+            "rules": null,
+            "question": "Roughly how long have you been using Anki (even if you do not use Anki anymore, please count the time where you have studied with Anki)",
+            "value": "",
+            "note": "If your answer is not an option, such as 1.5 years, simply round down to the closest option, such as 1 year",
+            "items": "generalTimeFrames",
+            "required": true
+          },
+          {
+            "questionId": "languagesStudiedWithAnki",
+            "key": "languagesStudiedWithAnki",
+            "label": "Languages Studied With Anki",
+            "questionType": "multiselect",
+            "dataType": "varchar",
+            "rules": null,
+            "question": "What languages have you studied with Anki? (Select all that apply)",
+            "value": "",
+            "items": "foreignLanguages",
+            "required": true
+          },
+          {
+            "questionId": "collectionContainsActiveCardsAsideFromTargetLanguage",
+            "key": "collectionContainsActiveCardsAsideFromTargetLanguage",
+            "label": "Collection Contains Active Cards Aside from Target Language",
+            "questionType": "select",
+            "dataType": "varchar",
+            "rules": null,
+            "question": "Does your Anki collection contain active cards aside from cards related to your target language?",
+            "value": "",
+            "items": "yesNo",
+            "note": "This question is simply for us to know if your Anki collection not only contain your Japanese cards, for example, but also contains your Spanish cards or computer science cards",
+            "required": true
+          },
+          {
+            "questionId": "dailyNewCardGoal",
+            "key": "dailyNewCardGoal",
+            "label": "Daily New Card Goal",
+            "questionType": "text",
+            "dataType": "int",
+            "rules": "isNumber=true&min=0",
+            "question": "How many new cards do you aim to learn daily?",
+            "note": "This question is not asking how many new cards you ACTUALLY study every day. The question is asking the amount of new cards you AIM to learn.",
+            "required": true
+          },
+          {
+            "questionId": "otherTypesOfCards",
+            "key": "otherTypesOfCards",
+            "label": "Other Types of Cards",
+            "questionType": "text",
+            "dataType": "text",
+            "question": "Do you make any other types of cards aside from vocabulary, sentence, kanji, and production/active recall cards?",
+            "value": "",
+            "required": true
+          },
+          {
+            "questionId": "enjoyReviewingSentenceCards",
+            "key": "enjoyReviewingSentenceCards",
+            "label": "Enjoy Reviewing Sentence Cards",
+            "questionType": "select",
+            "dataType": "smallInt",
+            "question": "Do you enjoy reviewing sentence cards? (1 - hate it; 5 - love it)",
+            "items": "oneToFiveScale",
+            "required": true
+          },
+          {
+            "questionId": "enjoyReviewingVocabularyCards",
+            "key": "enjoyReviewingVocabularyCards",
+            "label": "Enjoy Reviewing Vocabulary Cards",
+            "questionType": "select",
+            "dataType": "smallInt",
+            "question": "Do you enjoy reviewing vocabulary cards? (1 - hate it; 5 - love it)",
+            "items": "oneToFiveScale",
+            "required": true
+          },
+          {
+            "questionId": "enjoyReviewingKanjiHanziCards",
+            "key": "enjoyReviewingKanjiHanziCards",
+            "label": "Enjoy Reviewing Kanji/Hanzi Cards",
+            "questionType": "select",
+            "dataType": "smallInt",
+            "question": "Do you enjoy reviewing kanji/hanzi cards? (1 - hate it; 5 - love it) (select 1 if Japanese/Chinese isn't your target language)",
+            "items": "oneToFiveScale",
+            "required": true
+          },
+          {
+            "questionId": "enjoyReviewingActiveRecallCards",
+            "key": "enjoyReviewingActiveRecallCards",
+            "label": "Enjoy Reviewing Production/Active Recall Cards",
+            "questionType": "select",
+            "dataType": "smallInt",
+            "question": "Do you enjoy reviewing production/active recall cards? (1 - hate it; 5 - love it)",
+            "items": "oneToFiveScale",
+            "note": "An example of active recall cards are PRTK cards, previously known as traditional RTK cards",
+            "required": true
+          },
+          {
+            "questionId": "enjoyMakingSentenceCards",
+            "key": "enjoyMakingSentenceCards",
+            "label": "Enjoy Making Sentence Cards",
+            "questionType": "select",
+            "dataType": "smallInt",
+            "question": "Do you enjoy making sentence cards? (1 - hate it; 5 - love it)",
+            "items": "oneToFiveScale",
+            "required": true
+          },
+          {
+            "questionId": "enjoyMakingVocabularyCards",
+            "key": "enjoyMakingVocabularyCards",
+            "label": "Enjoy Making Vocabulary Cards",
+            "questionType": "select",
+            "dataType": "smallInt",
+            "question": "Do you enjoy making vocabulary cards? (1 - hate it; 5 - love it)",
+            "items": "oneToFiveScale",
+            "required": true
+          },
+          {
+            "questionId": "enjoyMakingKanjiHanziCards",
+            "key": "enjoyMakingKanjiHanziCards",
+            "label": "Enjoy Making Kanji/Hanzi Cards",
+            "questionType": "select",
+            "dataType": "smallInt",
+            "question": "Do you enjoy making kanji/hanzi cards? (1 - hate it; 5 - love it)",
+            "items": "oneToFiveScale",
+            "required": true
+          },
+          {
+            "questionId": "enjoyMakingActiveRecallCards",
+            "key": "enjoyMakingActiveRecallCards",
+            "label": "Enjoy Making Production/Active Recall Cards",
+            "questionType": "select",
+            "dataType": "smallInt",
+            "question": "Do you enjoy making production/active recall cards? (1 - hate it; 5 - love it)",
+            "items": "oneToFiveScale",
+            "required": true
+          },
+          {
+            "questionId": "feelingAboutAnki",
+            "key": "feelingAboutAnki",
+            "label": "Feeling About Anki",
+            "questionType": "select",
+            "dataType": "smallInt",
+            "question": "How do you feel about Anki overall? (1 - extremely negatively; 5 - extremely positively)",
+            "items": "oneToFiveScale",
+            "required": true
+          },
+          {
+            "questionId": "feelsAnkiIsTooComplex",
+            "key": "feelsAnkiIsTooComplex",
+            "label": "Feels Anki is Too Complex",
+            "questionType": "select",
+            "dataType": "smallInt",
+            "question": "Do you feel like Anki is too complex for you? (1 - it is not complex at all; 5 - extremely complex)",
+            "items": "oneToFiveScale",
+            "required": true
+          },
+          {
+            "questionId": "prefersAnkiToBeLessComplex",
+            "key": "prefersAnkiToBeLessComplex",
+            "label": "Prefers Anki To Be Less Complex",
+            "questionType": "select",
+            "dataType": "smallInt",
+            "question": "Do you prefer Anki to be less complex? (1 - No I am satisfied with Anki; 5 - Ideally Anki was much simpler)",
+            "items": "oneToFiveScale",
+            "required": true
+          },
+          {
+            "questionId": "oftenGetsBehindOnAnkiReps",
+            "key": "oftenGetsBehindOnAnkiReps",
+            "label": "Often Gets Behind on Anki Reps",
+            "questionType": "select",
+            "dataType": "smallInt",
+            "question": "Do you often get behind on Anki reviews? (1 - Never; 5 - Always)",
+            "items": "oneToFiveScale",
+            "required": true
+          },
+          {
+            "questionId": "skipsNewCardsDueToDailyRepBurden",
+            "key": "skipsNewCardsDueToDailyRepBurden",
+            "label": "Skips Reps Due To Daily Rep Burden",
+            "questionType": "select",
+            "dataType": "smallInt",
+            "question": "Do you often forego learning new cards due to the burden of reviewing new cards daily? (1 - Never; 5 - Always)",
+            "value": "",
+            "items": "oneToFiveScale",
+            "required": true
+          },
+          {
+            "questionId": "repsOnceOrThroughoutTheDay",
+            "key": "repsOnceOrThroughoutTheDay",
+            "label": "Reps Once Or Throughout the Day",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "Do you do your Anki reviews all at once or throughout the day?",
+            "value": "",
+            "items": "onceOrThroughoutTheDay",
+            "required": true
+          },
+          {
+            "questionId": "timeOfDayYouDoAnkiReviews",
+            "key": "timeOfDayYouDoAnkiReviews",
+            "label": "Time of Day You Review",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "Around what time of day do you normally do your Anki reviews?",
+            "value": "",
+            "items": "periodsOfTheDay",
+            "required": true
+          },
+          {
+            "questionId": "doesTimeboxing",
+            "key": "doesTimeboxing",
+            "label": "Does Timeboxing",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "Do you timebox during Anki reviews?",
+            "value": "",
+            "items": "yesNo",
+            "required": true
+          },
+          {
+            "questionId": "usesAnkiSubdeckFeature",
+            "key": "usesAnkiSubdeckFeature",
+            "label": "Uses Anki subdecks",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "Do you use the Anki subdeck feature?",
+            "value": "",
+            "items": "yesNo",
+            "note": "Example image: https://gyazo.com/3a309cc19a48dd928aafb2d5a7a0caab",
+            "required": true
+          },
+          {
+            "questionId": "usesAnkiTagFeature",
+            "key": "usesAnkiTagFeature",
+            "label": "Uses Anki tags",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "Do you use the Anki tag feature? (Note: The tags automatically created by subs2srs do not count)",
+            "value": "",
+            "items": "yesNo",
+            "note": "This question is simply for us to understand how you organize your Anki collection and if you personally create tags to organize it",
+            "required": true
+          },
+          {
+            "questionId": "preferredDeviceForAnkiReviews",
+            "key": "preferredDeviceForAnkiReviews",
+            "label": "Preferred Device for Anki Reviews",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "Which device would you prefer to do reviews on?",
+            "value": "",
+            "items": "devices",
+            "required": true
+          },
+          {
+            "questionId": "percentOfCardsCreatedWhileImmersing",
+            "key": "percentOfCardsCreatedWhileImmersing",
+            "label": "% Of Cards Craeted While Immersing",
+            "questionType": "text",
+            "dataType": "smallInt",
+            "question": "What percent of your Anki cards do you create while in the middle of immersing?",
+            "rules": "isNumber=true&min=0&max=100",
+            "required": true
+          },
+          {
+            "questionId": "percentOfCardsCreatedWhileReading",
+            "key": "percentOfCardsCreatedWhileReading",
+            "label": "% Of Cards Craeted While Reading",
+            "questionType": "text",
+            "dataType": "smallInt",
+            "question": "Out of the cards you create while immersing, what percent of your Anki cards do you create while reading?",
+            "value": "",
+            "rules": "isNumber=true&min=0&max=100",
+            "required": true
+          },
+          {
+            "questionId": "percentOfCardsCreatedWhileAudioVisualImmersionAndSubtitles",
+            "key": "percentOfCardsCreatedWhileAudioVisualImmersionAndSubtitles",
+            "label": "% Of Cards Craeted During Audio/Video Immersion With Subtitles",
+            "questionType": "text",
+            "dataType": "smallInt",
+            "question": "Out of the cards you create while immersing, what percent of your Anki cards do you create while immersing with audio/visual content with subtitles?",
+            "rules": "isNumber=true&min=0&max=100",
+            "required": true
+          },
+          {
+            "questionId": "percentOfCardsCreatedWhileActiveImmersionNoSubtitles",
+            "key": "percentOfCardsCreatedWhileActiveImmersionNoSubtitles",
+            "label": "% Of Cards Craeted During Active Immersion Without Subtitles",
+            "questionType": "text",
+            "dataType": "smallInt",
+            "question": "Out of the cards you create while immersing, what percent of your Anki cards do you create during active immersion without subtitles?",
+            "rules": "isNumber=true&min=0&max=100",
+            "required": true
+          },
+          {
+            "questionId": "cardCreationWorkflowDescription",
+            "key": "cardCreationWorkflowDescription",
+            "label": "Card Creation Workflow Description",
+            "questionType": "text",
+            "dataType": "text",
+            "question": "Please describe your workflow for creating cards while immersing (include how you insert audio into your cards if you do)",
+            "value": "",
+            "required": true
+          },
+          {
+            "questionId": "percentOfCardsCreatedInBulkOutsideOfImmersionTime",
+            "key": "percentOfCardsCreatedInBulkOutsideOfImmersionTime",
+            "label": "% Of Cards Craeted In Bulk Outside Immersion Time",
+            "questionType": "text",
+            "dataType": "smallInt",
+            "question": "What percent of your Anki cards do you create in bulk outside of immersion time?",
+            "value": "",
+            "rules": "isNumber=true&min=0&max=100",
+            "required": true
+          },
+          {
+            "questionId": "percentOfMonolingualCards",
+            "key": "percentOfMonolingualCards",
+            "label": "% Of Monolingual Cards",
+            "questionType": "text",
+            "dataType": "smallInt",
+            "question": "What percent of your Anki cards are monolingual (as opposed to bilingual)?",
+            "rules": "isNumber=true&min=0&max=100",
+            "required": true
+          },
+          {
+            "questionId": "percentOfAudioSentenceCards",
+            "key": "percentOfAudioSentenceCards",
+            "label": "% Of Audio-based Sentence Cards",
+            "questionType": "text",
+            "dataType": "smallInt",
+            "question": "What percent of your Anki cards are audio-based sentence cards?",
+            "rules": "isNumber=true&min=0&max=100",
+            "required": true
+          },
+          {
+            "questionId": "percentOfSentenceCardsWithAudio",
+            "key": "percentOSentenceCardsWithAudio",
+            "label": "% Of Sentence Cards With Audio",
+            "questionType": "text",
+            "dataType": "smallInt",
+            "question": "What percent of your Anki cards are sentence-based but have native sentence audio on the back?",
+            "rules": "isNumber=true&min=0&max=100",
+            "required": true
+          },
+          {
+            "questionId": "percentOfSentenceCardsWithOriginalSentence",
+            "key": "percentOSentenceCardsWithOriginalSentence",
+            "label": "% Of Sentence Cards With Original Sentence",
+            "questionType": "text",
+            "dataType": "smallInt",
+            "question": "What percent of your Anki cards use the original sentence that you came across the target word in?",
+            "rules": "isNumber=true&min=0&max=100",
+            "required": true
+          },
+          {
+            "questionId": "alternateSentenceSources",
+            "key": "alternateSentenceSources",
+            "label": "Alternate Sentence Sources",
+            "questionType": "text",
+            "dataType": "text",
+            "question": "If applicable, where do you usually find alternate sentences for Anki cards? (provide links)",
+            "value": "",
+            "required": true
+          },
+          {
+            "questionId": "percentOf1TCards",
+            "key": "percentOf1TCards",
+            "label": "% of 1T Cards",
+            "questionType": "text",
+            "dataType": "smallInt",
+            "question": "What percent of your sentence cards are 1T? (as opposed to mulit-target sentences)",
+            "rules": "isNumber=true&min=0&max=100",
+            "note": "1T sentence cards contain only one unknown word",
+            "required": true
+          },
+          {
+            "questionId": "learnsNewCardsBeforeDuringOrAfterReviews",
+            "key": "learnsNewCardsBeforeDuringOrAfterReviews",
+            "label": "When New Cards",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "Do you learn new cards before your reviews, after your reviews, or do you mix your new cards with your learning/mature cards?",
+            "value": "",
+            "items": "beforeDuringOrMixed",
+            "required": true
+          },
+          {
+            "questionId": "usesLowkeyAnki",
+            "key": "usesLowkeyAnki",
+            "label": "Uses Low-key Anki",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "Do you use Low-Key Anki?",
+            "value": "",
+            "items": "yesNo",
+            "required": true
+          }
+        ]
+      },
+      {
+        "sectionId": "cscmd93iz852mv2b4rodz",
+        "sectionNumber": 2,
+        "title": "MIA Dictionary Addon",
+        "description": "This section specifically asks about how you use the MIA Dictionary addon.",
+        "questions": [
+          {
+            "questionId": "usesDictionaryAddon",
+            "key": "usesDictionaryAddon",
+            "label": "Uses Dictionary Addon",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "Do you use the MIA Dictionary addon?",
+            "items": "yesNo",
+            "required": true
+          },
+          {
+            "questionId": "dictionariesUsedWithDictionaryAddon",
+            "key": "dictionariesUsedWithDictionaryAddon",
+            "label": "Dictionaries Used With Dictionary Addon",
+            "questionType": "text",
+            "dataType": "text",
+            "question": "What dictionaries do you use with the MIA Dictionary addon?",
+            "required": true
+          },
+          {
+            "questionId": "usesDictionariesOtherThanIncludedDictionaries",
+            "key": "usesDictionariesOtherThanIncludedDictionaries",
+            "label": "Uses Dictionaries Other Than Included Ones",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "Do you use dictionaries other than that open source dictionaries included with the addon?",
+            "items": "yesNo",
+            "required": true
+          },
+          {
+            "questionId": "usesOtherDictionarySourcesOnComputer",
+            "key": "usesOtherDictionarySourcesOnComputer",
+            "label": "Uses Other Dictionary Sources on Computer",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "Do you use other dictionary applications/websites on your computer?",
+            "items": "yesNo",
+            "required": true
+          },
+          {
+            "questionId": "percentOfLookupsWithDictionaryAddon",
+            "key": "percentOfLookupsWithDictionaryAddon",
+            "label": "% of Lookups With Dictionary Addon",
+            "questionType": "text",
+            "dataType": "smallInt",
+            "question": "What percentage of lookups on your computer are with the MIA Dictionary addon?",
+            "rules": "isNumber=true&min=0&max=100",
+            "required": true
+          },
+          {
+            "questionId": "makesNewCardsWithCardExporter",
+            "key": "makesNewCardsWithCardExporter",
+            "label": "Makes New Cards with Card Exporter",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "Do you make new cards with the dictionary addon's card exporter?",
+            "items": "yesNo",
+            "required": true
+          },
+          {
+            "questionId": "usesMassDefinitionFeature",
+            "key": "usesMassDefinitionFeature",
+            "label": "Uses Mass Definition Feature",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "Do you use the mass definition exporting feature?",
+            "items": "yesNo",
+            "required": true
+          }
+        ]
+      },
+      {
+        "sectionId": "izfyoegazwo6c0hy3voa1q",
+        "sectionNumber": 3,
+        "title": "MIA Japanese Addon",
+        "description": "This section specifically asks about how you use the MIA Japanese addon.",
+        "questions": [
+          {
+            "questionId": "usesMIAJapaneseAddon",
+            "key": "usesMIAJapaneseAddon",
+            "label": "Uses MIA Japanese Addon",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "Do you use the MIA Japanese addon?",
+            "items": "yesNo",
+            "required": true
+          },
+          {
+            "questionId": "feelingAboutMIAJapaneseSyntax",
+            "key": "feelingAboutMIAJapaneseSyntax",
+            "label": "Feeling About MIA Japanese syntax",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "How do you feel about the MIA Japanese addon syntax (e.x 分[わ,わかる;k2]からない)? (1 - hate it; 5 - do not have an issue with it)",
+            "items": "yesNo",
+            "required": true
+          },
+          {
+            "questionId": "usesPitchAccentHighlighting",
+            "key": "usesPitchAccentHighlighting",
+            "label": "Uses pitch accent highlighting",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "Do you use pitch accent highlighting with the MIA Japanese addon?",
+            "items": "yesNo",
+            "required": true
+          },
+          {
+            "questionId": "usesNoteTypesAsideFromMIAJapanese",
+            "key": "usesNoteTypesAsideFromMIAJapanese",
+            "label": "Uses Note Types Aside From MIA Japanese Note Type",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "Do you use custom note types aside from the MIA Japanese note type that comes with the addon?",
+            "items": "yesNo",
+            "required": true
+          }
+        ]
+      },
+      {
+        "sectionId": "4mpycb9ih0pfstj1dfputb",
+        "sectionNumber": 4,
+        "title": "MIA Retirement Addon",
+        "description": "This section specifically asks about how you use the MIA Retirement addon.",
+        "questions": [
+          {
+            "questionId": "usesRetirementAddon",
+            "key": "usesRetirementAddon",
+            "label": "Uses MIA Retirement Addon",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "Do you use the MIA Retirement addon?",
+            "items": "yesNo",
+            "required": true
+          },
+          {
+            "questionId": "sentenceCardRetiringInterval",
+            "key": "sentenceCardRetiringIntervals",
+            "label": "Sentence Card Retiring Interval",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "What retiring interval do you use for sentence cards?",
+            "items": "retirementIntervals",
+            "note": "Select the retiring interval closest to your actual retiring interval",
+            "required": true
+          },
+          {
+            "questionId": "vocabularyCardRetiringInterval",
+            "key": "vocabularyCardRetiringInterval",
+            "label": "Vocabulary Card Retiring Interval",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "What retiring interval do you use for vocabulary cards?",
+            "items": "retirementIntervals",
+            "note": "Select the retiring interval closest to your actual retiring interval",
+            "required": true
+          },
+          {
+            "questionId": "KanjiHanziCardRetiringInterval",
+            "key": "KanjiHanziCardRetiringInterval",
+            "label": "Kanji/Hanzi Card Retiring Interval",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "What retiring interval do you use for kanji/hanzi cards?",
+            "items": "retirementIntervals",
+            "note": "Select Never if Japanese/Chinese is not your target language",
+            "required": true
+          },
+          {
+            "questionId": "activeRecallCardRetiringInterval",
+            "key": "activeRecallCardRetiringInterval",
+            "label": "Active Recall Card Retiring Interval",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "What retiring interval do you use for production/active recall cards?",
+            "items": "retirementIntervals",
+            "note": "Select the retiring interval closest to your actual retiring interval",
+            "required": true
+          },
+          {
+            "questionId": "recallsRetiredCardWordsDuringImmersion",
+            "key": "recallsRetiredCardWordsDuringImmersion",
+            "label": "Recalls Retired Card Words During Immersion",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "How well do you recall words from your retired cards when you are immersing? (1 - not well at all; 5 - very frequently (over half the time)",
+            "items": "oneToFiveScale",
+            "required": true
+          }
+        ]
+      },
+      {
+        "sectionId": "c77tlyj826riueh1yqmfw9",
+        "sectionNumber": 5,
+        "title": "MIA Vacation Addon",
+        "description": "This section specifically asks about how you use the MIA Vacation addon.",
+        "questions": [
+          {
+            "questionId": "usesVacationAddon",
+            "key": "usesVacationAddon",
+            "label": "Uses Vacation Addon",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "Do you use the MIA Vacation addon?",
+            "items": "yesNo",
+            "required": true
+          },
+          {
+            "questionId": "hasUsedVacationFeature",
+            "key": "hasUsedVacationFeature",
+            "label": "Has Used Vacation Feature",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "Have you used the vacation feature of the addon? (scheduling a vacation, or period of time to have no Anki reviews)",
+            "items": "yesNo",
+            "required": true
+          },
+          {
+            "questionId": "hasUsedReviewScheduleFeature",
+            "key": "hasUsedReviewScheduleFeature",
+            "label": "Has Used Review Schedule Feature",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "Have you used the review schedule feature of the addon? (selecting which days to review)",
+            "items": "yesNo",
+            "required": true
+          },
+          {
+            "questionId": "vacationAddonReviewSchedule",
+            "key": "vacationAddonReviewSchedule",
+            "label": "Review Schedule",
+            "questionType": "multiselect",
+            "dataType": "varchar",
+            "question": "Which days of the week do you have Anki reviews (as determined by the Vacation addon review schedule feature; Select ALL that apply)",
+            "items": "daysOfTheWeek",
+            "required": true
+          },
+          {
+            "questionId": "vacationAddonReviewScheduleFeatureEffective",
+            "key": "vacationAddonReviewScheduleFeatureEffective",
+            "label": "Review Schedule Feature Effective",
+            "questionType": "select",
+            "dataType": "smallInt",
+            "question": "Do you find the review schedule feature to be effective? (1 - not at all; 5 - it is perfect)",
+            "items": "oneToFiveScale",
+            "note": "Simply answer 1 if you do not use this feature",
+            "required": true
+          },
+          {
+            "questionId": "hasUsedSickDayFeature",
+            "key": "hasUsedSickDayFeature",
+            "label": "Has Used Sick Day Feature",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "Have you used the sick day feature of the addon?",
+            "items": "yesNo",
+            "required": true
+          },
+          {
+            "questionId": "vacationAddonSickDayFeatureEffective",
+            "key": "vacationAddonSickDayFeatureEffective",
+            "label": "Sick Day Feature Effective",
+            "questionType": "select",
+            "dataType": "smallInt",
+            "question": "Do you find the sick day feature to be effective? (1 - not at all; 5 - it is perfect)",
+            "items": "oneToFiveScale",
+            "note": "Simply answer 1 if you do not use this feature",
+            "required": true
+          },
+          {
+            "questionId": "hasUsedCatchUpFeature",
+            "key": "hasUsedCatchUpFeature",
+            "label": "Has Used Catch Up Feature",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "Have you used the catch up feature of the addon?",
+            "items": "yesNo",
+            "required": true
+          },
+          {
+            "questionId": "vacationAddonCatchUpFeatureEffective",
+            "key": "vacationAddonCatchUpFeatureEffective",
+            "label": "Catch Up Feature Effective",
+            "questionType": "select",
+            "dataType": "smallInt",
+            "question": "Do you find the catch up feature to be effective? (1 - not at all; 5 - it is perfect)",
+            "items": "oneToFiveScale",
+            "note": "Simply answer 1 if you do not use this feature",
+            "required": true
+          }
+        ]
+      },
+      {
+        "sectionId": "kn32k64z4cuywuw3dgxh9",
+        "sectionNumber": 6,
+        "title": "MorphMan Addon",
+        "description": "This section specifically asks about how you use MorphMan.",
+        "questions": [
+          {
+            "questionId": "usesMorphman",
+            "key": "usesMorphman",
+            "label": "Uses Morphman",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "Do you use Morphman?",
+            "items": "yesNo",
+            "required": true
+          },
+          {
+            "questionId": "usesMorphmanWithSubs2SrsDecks",
+            "key": "usesMorphmanWithSubs2SrsDecks",
+            "label": "Uses Morphman With Subs2Srs Decks",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "Do you use Morphman with a bank of subs2srs cards?",
+            "items": "yesNo",
+            "required": true
+          },
+          {
+            "questionId": "totalCardsInSubs2SrsBank",
+            "key": "totalCardsInSubs2SrsBank",
+            "label": "Total Cards in Subs2Srs Card Bank",
+            "questionType": "text",
+            "dataType": "int",
+            "question": "How many cards are in your subs2srs card bank? (Answer 0 if you don't use subs2srs card banks)",
+            "rules": "isNumber=true&min=0",
+            "required": true
+          },
+          {
+            "questionId": "percentageOfSubs2SrsDecksYouCreated",
+            "key": "percentageOfSubs2SrsDecksYouCreated",
+            "label": "% of subs2srs Decks You Created For Card Bank",
+            "questionType": "text",
+            "dataType": "smallInt",
+            "question": "What percentage of the subs2srs decks for your card bank were made by you? (as opposed to using public, premade subs2srs decks) (answer 0 if you don't use subs2srs card banks)",
+            "rules": "isNumber=true&min=0&max=100",
+            "required": true
+          },
+          {
+            "questionId": "letsMorphmanChooseWordsToLearn",
+            "key": "letsMorphmanChooseWordsToLearn",
+            "label": "Lets Morphman Choose Words to Learn",
+            "questionType": "select",
+            "dataType": "varchar",
+            "question": "Do you let Morphman choose which words for you to learn?",
+            "items": "yesNo",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}
