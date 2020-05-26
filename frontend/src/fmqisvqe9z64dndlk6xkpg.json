@@ -49,7 +49,7 @@
             "label": "% Of Content Consumed With Translations in Native Language",
             "questionType": "text",
             "dataType": "smallInt",
-            "question": "What percentage of your active listening content did you consume with subtitles/translations in your native language?",
+            "question": "What percentage of your active listening content do you consume with subtitles/translations in your native language?",
             "rules": "isNumber=true&min=0&max=100",
             "required": true
           }
@@ -221,11 +221,11 @@
           },
           {
             "questionId": "percentageOfActiveListeningWithAudiobooks",
-            "key": "percentageOfActiveListeningWithPodcasts",
-            "label": "% Of Active Listening With Podcasts",
+            "key": "percentageOfActiveListeningWithAudiobooks",
+            "label": "% Of Active Listening With Audiobooks",
             "questionType": "text",
             "dataType": "smallInt",
-            "question": "What percentage of your active listening content is done with podcasts/radio shows?",
+            "question": "What percentage of your active listening content is done with audiobooks?",
             "rules": "isNumber=true&min=0&max=100",
             "required": true
           },
@@ -321,7 +321,7 @@
             "label": "% Of Active Listening With Native Speaker Conversations",
             "questionType": "text",
             "dataType": "smallInt",
-            "question": "What percentage of your active listening content is done with native speaker conversations? (e.x a YT video or podcast with a native Japanese speaker",
+            "question": "What percentage of your active listening content is done with native speaker conversations? (e.g a YT video or podcast with a native Japanese speaker",
             "rules": "isNumber=true&min=0&max=100",
             "required": true
           },
@@ -423,7 +423,7 @@
             "label": "Sources of Streaming Content",
             "questionType": "text",
             "dataType": "text",
-            "question": "Where do you stream from? (e.x Netflix, YouTube, Hulu, N/A, etc)",
+            "question": "Where do you stream from? (e.g Netflix, YouTube, Hulu, N/A, etc)",
             "required": true
           },
           {
@@ -514,7 +514,7 @@
             "label": "Content With TL Subtitles",
             "questionType": "text",
             "dataType": "text",
-            "question": "What type of content do you watch with target language subtitles and where do you get/consume this content (e.x Netflix, Crunchyroll, downloading mp4s)? (Feel free to put N/A if this question doesn't apply to you)",
+            "question": "What type of content do you watch with target language subtitles and where do you get/consume this content (e.g Netflix, Crunchyroll, downloading mp4s)? (Feel free to put N/A if this question doesn't apply to you)",
             "required": true
           },
           {
@@ -533,7 +533,7 @@
             "label": "Reason For Immersion With Native Language Subtitles",
             "questionType": "text",
             "dataType": "text",
-            "question": "What is your reason for immersing with native language subtitles? (e.x comprehension; beginner in TL; etc)",
+            "question": "What is your reason for immersing with native language subtitles? (e.g comprehension; beginner in TL; etc)",
             "required": true
           }
         ]
@@ -829,7 +829,7 @@
             "label": "Where You Read Ebooks",
             "questionType": "text",
             "dataType": "text",
-            "question": "Where do you read ebooks? (e.x kindle device, computer, specific website or app, etc)",
+            "question": "Where do you read ebooks? (e.g kindle device, computer, specific website or app, etc)",
             "required": true
           }
         ]
@@ -913,7 +913,7 @@
             "label": "Where You Output",
             "questionType": "text",
             "dataType": "text",
-            "question": "Where do you output in your target language? (e.x italki, with friends in person, on Discord servers, etc)",
+            "question": "Where do you output in your target language? (e.g italki, with friends in person, on Discord servers, etc)",
             "required": true
           },
           {
