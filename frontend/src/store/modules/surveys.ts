@@ -6,6 +6,7 @@ const experimentSurveys: any = {
   g6cy8p0yrmnclxyv6co2o: require('@/g6cy8p0yrmnclxyv6co2o.json'),
   gpaaw7d4nuq3bzu40o0zls: require('@/gpaaw7d4nuq3bzu40o0zls.json'),
   abcde3qmvtbuqwd1abcde: require('@/abcde3qmvtbuqwd1abcde.json'),
+  fmqisvqe9z64dndlk6xkpg: require('@/fmqisvqe9z64dndlk6xkpg.json'),
 };
 import router from '@/app-routes';
 import SurveyRepository from '@/api/SurveyRepository';
@@ -60,9 +61,33 @@ const actions: ActionTree<typeof defaults, RootState> = {
     // const surveyStatus = await SurveyRepository.getStatus(
     //   `latest?email=${payload.email}`
     // );
+    let currentSurvey = experimentSurveys[payload.surveyId].survey;
+
+    // Load the user's cached answers (e.x if they reloaded the page, restore their answers)
+    const cachedSurveyStr = window.localStorage.getItem(payload.surveyId);
+
+    if (cachedSurveyStr) {
+      const cachedSurvey = JSON.parse(cachedSurveyStr);
+      // Iterate over every question in the cached survey
+      cachedSurvey.sections.forEach((section: any, sectionIdx: number) => {
+        section.questions.forEach((question: any, questionIdx: number) => {
+          const currentSurveyQuestion =
+            currentSurvey.sections[sectionIdx].questions[questionIdx];
+          const questionIndexExists = !!currentSurveyQuestion;
+          const questionIdsMatch =
+            currentSurveyQuestion?.questionId === question.questionId;
+          const cachedValueExists = question?.value;
+          // Set the cached value to the current survey's value as long as the questionId is the same
+          if (questionIndexExists && questionIdsMatch && cachedValueExists) {
+            currentSurveyQuestion.value = question.value;
+          }
+        });
+      });
+    }
+
     commit({
       type: 'setCurrentSurvey',
-      currentSurvey: experimentSurveys[payload.surveyId].survey, // doing manually for now
+      currentSurvey, // doing manually for now
     });
   },
   async submitSurvey({ commit, state }) {
@@ -78,6 +103,8 @@ const actions: ActionTree<typeof defaults, RootState> = {
     payload['data'] = questionResponses;
     SurveyRepository.postResponses(state.currentSurvey.surveyId, payload).then(
       () => {
+        // clear survey cache in case they want to submit the survey again
+        window.localStorage.removeItem(state.currentSurvey.surveyId);
         Vue.notify({
           group: 'global',
           title: 'Successfully submitted survey!',
@@ -97,9 +124,14 @@ const mutations: MutationTree<typeof defaults> = {
   setCurrentSurvey(state, payload) {
     state.currentSurvey = payload.currentSurvey;
   },
-  updateQuestionValue(_, payload) {
+  updateQuestionValue(state, payload) {
     // don't need state param since question is a reference to that value in state, and vuex doesn't complain since the mutating is happening in a mutation
     payload.question[payload.attributeToUpdate] = payload.newValue;
+    // cache current version of survey
+    window.localStorage.setItem(
+      state.currentSurvey.surveyId,
+      JSON.stringify(state.currentSurvey)
+    );
   },
   setCurrentSurveyTitle(state, newTitle) {
     state.currentSurvey.title = newTitle;

@@ -20,32 +20,37 @@ export default {
   props: {
     label: {
       type: String,
-      required: false
+      required: false,
     },
     note: {
       type: String,
       required: false,
-      default: ''
+      default: '',
     },
     value: {
-      type: [String, Number],
-      required: false
+      type: String | Number,
+      required: false,
     },
     placeholder: {
       type: [String, Number],
-      required: false
+      required: false,
     },
     items: {
       type: Array,
-      required: true
+      required: true,
     },
     rules: {
       type: Array,
-      required: false
+      required: false,
     },
     required: {
       type: Boolean,
-      required: false
+      required: false,
+    },
+  },
+  created() {
+    if (this.value) {
+      this.inputValue = this.value;
     }
   },
   data() {
@@ -54,9 +59,9 @@ export default {
         closeOnClick: true,
         closeOnContentClick: true,
         openOnClick: true,
-        transition: true
+        transition: true,
       },
-      inputValue: ''
+      inputValue: '',
     };
   },
   computed: {
@@ -65,11 +70,12 @@ export default {
      * TODO: Doesn't work for number[] ?
      */
     whitelistRule() {
-      return v => {
-        if (v === null) {
+      return (v) => {
+        if (v === null || v === undefined || v === '') {
           return this.required ? 'This question is required' : true;
         }
-        if (!this.items.includes(v)) {
+        const stringVersionOfItemExists = this.items.includes(parseInt(v));
+        if (!this.items.includes(v) && !stringVersionOfItemExists) {
           return `${v} is an invalid option.`;
         }
         return true;
@@ -77,12 +83,12 @@ export default {
     },
     requiredRule() {
       if (this.required) {
-        return v => !!v || 'This question is required';
+        return (v) => !!v || 'This question is required';
       } else {
-        return v => true;
+        return (v) => true;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

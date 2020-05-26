@@ -182,6 +182,16 @@ export default {
     EventBus.$emit('validate', payload);
   },
   methods: {
+    // parentQuestionAnswered(dependentQuestion, section) {
+    //   const parentQuestion = section.questions.find(
+    //     (question) => question.questionId === dependentQuestion.dependent
+    //   );
+    //   console.log(parentQuestion.value);
+    //   if (parentQuestion.value > 0) {
+    //     return true;
+    //   }
+    //   return false;
+    // },
     updateQuestionValue(question, newValue) {
       this.$store.commit({
         type: 'updateQuestionValue',
@@ -190,6 +200,7 @@ export default {
         newValue,
       });
 
+      // Problems with this: 1) Answering one question triggers the whole section's validation; 2) Validation fails when using cached localstorage values and not updating a single question in the section.
       this.valid = this.$refs.form.validate();
 
       EventBus.$emit('validate', {

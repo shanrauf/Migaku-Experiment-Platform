@@ -12,7 +12,7 @@
       {
         "sectionId": "7j1ovkszm5vjnagokm8dgk",
         "sectionNumber": 1,
-        "title": "General Anki Questions",
+        "title": "General",
         "description": "This section asks general questions about how you use Anki.",
         "questions": [
           {
@@ -448,7 +448,7 @@
       {
         "sectionId": "cscmd93iz852mv2b4rodz",
         "sectionNumber": 2,
-        "title": "MIA Dictionary Addon",
+        "title": "MIA Dictionary",
         "description": "This section specifically asks about how you use the MIA Dictionary addon.",
         "questions": [
           {
@@ -459,6 +459,7 @@
             "dataType": "varchar",
             "question": "Do you use the MIA Dictionary addon?",
             "items": "yesNo",
+            "note": "If you answer No, then you can simply put random answers for the remainder of the questions in this section",
             "required": true
           },
           {
@@ -525,7 +526,7 @@
       {
         "sectionId": "izfyoegazwo6c0hy3voa1q",
         "sectionNumber": 3,
-        "title": "MIA Japanese Addon",
+        "title": "MIA Japanese",
         "description": "This section specifically asks about how you use the MIA Japanese addon.",
         "questions": [
           {
@@ -536,6 +537,7 @@
             "dataType": "varchar",
             "question": "Do you use the MIA Japanese addon?",
             "items": "yesNo",
+            "note": "If you answer No, then you can simply put random answers for the remainder of the questions in this section",
             "required": true
           },
           {
@@ -545,7 +547,7 @@
             "questionType": "select",
             "dataType": "varchar",
             "question": "How do you feel about the MIA Japanese addon syntax (e.x 分[わ,わかる;k2]からない)? (1 - hate it; 5 - do not have an issue with it)",
-            "items": "yesNo",
+            "items": "oneToFiveScale",
             "required": true
           },
           {
@@ -573,7 +575,7 @@
       {
         "sectionId": "4mpycb9ih0pfstj1dfputb",
         "sectionNumber": 4,
-        "title": "MIA Retirement Addon",
+        "title": "MIA Retirement",
         "description": "This section specifically asks about how you use the MIA Retirement addon.",
         "questions": [
           {
@@ -584,6 +586,7 @@
             "dataType": "varchar",
             "question": "Do you use the MIA Retirement addon?",
             "items": "yesNo",
+            "note": "If you answer No, then you can simply put random answers for the remainder of the questions in this section",
             "required": true
           },
           {
@@ -645,7 +648,7 @@
       {
         "sectionId": "c77tlyj826riueh1yqmfw9",
         "sectionNumber": 5,
-        "title": "MIA Vacation Addon",
+        "title": "MIA Vacation",
         "description": "This section specifically asks about how you use the MIA Vacation addon.",
         "questions": [
           {
@@ -656,6 +659,7 @@
             "dataType": "varchar",
             "question": "Do you use the MIA Vacation addon?",
             "items": "yesNo",
+            "note": "If you answer No, then you can simply put random answers for the remainder of the questions in this section",
             "required": true
           },
           {
@@ -746,7 +750,7 @@
       {
         "sectionId": "kn32k64z4cuywuw3dgxh9",
         "sectionNumber": 6,
-        "title": "MorphMan Addon",
+        "title": "MorphMan",
         "description": "This section specifically asks about how you use MorphMan.",
         "questions": [
           {
@@ -756,6 +760,7 @@
             "questionType": "select",
             "dataType": "varchar",
             "question": "Do you use Morphman?",
+            "note": "If you answer No, then you can simply put random answers for the remainder of the questions in this section",
             "items": "yesNo",
             "required": true
           },
