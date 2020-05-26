@@ -177,8 +177,12 @@ export default {
   computed: {
     ...mapGetters(['getNumberOfSections']),
   },
-  created() {
-    const payload = { sectionNumber: this.section.sectionNumber, valid: false };
+  mounted() {
+    const payload = {
+      sectionNumber: this.section.sectionNumber,
+      valid: this.$refs.form.validate(),
+    };
+    console.log(payload);
     EventBus.$emit('validate', payload);
   },
   methods: {

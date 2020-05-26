@@ -443,7 +443,7 @@
             "label": "% Of Passive Listening With Already-Consumed Content",
             "questionType": "text",
             "dataType": "smallInt",
-            "question": "What % of your passive listening is done with content that you ahve already actively listened to at least once?",
+            "question": "What % of your passive listening is done with content that you have already actively listened to at least once?",
             "rules": "isNumber=true&min=0&max=100",
             "required": true
           },
