@@ -103,8 +103,6 @@ const actions: ActionTree<typeof defaults, RootState> = {
     payload['data'] = questionResponses;
     SurveyRepository.postResponses(state.currentSurvey.surveyId, payload).then(
       () => {
-        // clear survey cache in case they want to submit the survey again
-        window.localStorage.removeItem(state.currentSurvey.surveyId);
         Vue.notify({
           group: 'global',
           title: 'Successfully submitted survey!',
