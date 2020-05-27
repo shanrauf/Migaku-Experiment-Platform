@@ -338,7 +338,7 @@ export default class SurveyService {
       case 'abcde3qmvtbuqwd1abcde':
         return 'SRSergeant';
       case 'fmqisvqe9z64dndlk6xkpg':
-        return 'Immmersionaut';
+        return 'Immersionaut';
       case 'd9u5dvc74s5arz0hqe634a':
         return 'SRStatistician';
       default:

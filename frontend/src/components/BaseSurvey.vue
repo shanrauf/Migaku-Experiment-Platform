@@ -182,7 +182,6 @@ export default {
       sectionNumber: this.section.sectionNumber,
       valid: this.$refs.form.validate(),
     };
-    console.log(payload);
     EventBus.$emit('validate', payload);
   },
   methods: {
