@@ -11,9 +11,12 @@ import { Experiment } from '../../../models/experiment';
 import { Sequelize } from 'sequelize-typescript';
 import { QuestionResponse } from '../../../models/questionResponse';
 import { Question } from '../../../models/question';
-import { generateSequelizeFilters } from '../../../utils';
+import { generateSequelizeFilters, capitalize } from '../../../utils';
 import * as requests from './requests';
 import * as responses from './responses';
+
+// Bad; not dependecy injection
+import { Op } from 'sequelize';
 
 @Service()
 export default class QuestionResponseService {
@@ -34,34 +37,69 @@ export default class QuestionResponseService {
     @EventDispatcher() private eventDispatcher: EventDispatcherInterface
   ) {
     this.sequelizeFilters = {
-      participantId: (participantId) => {
+      participantId: (participantId: string) => {
         return {
           where: { participantId }
         };
       },
-      questionId: (questionId) => {
+      questionId: (questionId: string) => {
         return {
           where: { questionId }
         };
       },
-      experimentId: (experimentId) => {
+      experimentId: (experimentId: string) => {
         return {
           where: { experimentId }
         };
       },
-      surveyId: (surveyId) => {
+      surveyId: (surveyId: string) => {
         return {
           where: { surveyId }
         };
       },
-      responseId: (responseId) => {
+      responseId: (responseId: string) => {
         return {
           where: { responseId }
         };
+      },
+      group: (group: string) => {
+        return {
+          group: [group]
+        };
+      },
+      filters: (arrayOfFilters: any[]) => {
+        const arrayOfSequelizeFilters = [];
+        arrayOfFilters.forEach((filter) => {
+          const operator = Op[filter.operator];
+          const result = {
+            include: [
+              {
+                model: this.participantModel,
+                required: true,
+                where: {
+                  questionId: filter.questionId,
+                  [operator]: { [filter.dataType]: filter.value }
+                }
+              }
+            ]
+          };
+
+          if (filter?.not) {
+            // wrap the filter in NOT
+            // @ts-ignore
+            result.include[0].where = { [Op.not]: [result.include[0].where] };
+          }
+
+          arrayOfSequelizeFilters.push(result);
+        });
+        return arrayOfSequelizeFilters;
       }
     };
   }
 
+  /**
+   * Returns all question responses for the questionId
+   */
   public async GetQuestionResponses(
     filters?: requests.QuestionResponseFilters
   ): Promise<responses.IQuestionResponses> {
@@ -74,6 +112,41 @@ export default class QuestionResponseService {
       const result = await this.questionResponseModel.findAndCountAll(
         sequelizeFilters
       );
+      return {
+        questionresponses: result.rows,
+        totalCount: result.count
+      };
+    } catch (e) {
+      this.logger.error(e);
+      throw e;
+    }
+  }
+
+  public async GetQuestionDistribution(
+    filters?: requests.QuestionResponseFilters
+  ): Promise<responses.IQuestionResponses> {
+    try {
+      this.logger.silly('Fetching question distribution');
+      const sequelizeFilters = generateSequelizeFilters(
+        this.sequelizeFilters,
+        filters
+      );
+
+      const question = await this.questionModel.findByPk(filters.questionId);
+      const dataType = 'answer' + capitalize(question.dataType);
+
+      const attributes: any = [
+        dataType,
+        this.sqlConnection.Sequelize.fn(
+          'COUNT',
+          this.sqlConnection.Sequelize.col(dataType)
+        )
+      ];
+      sequelizeFilters['group'] = [dataType];
+      const result = await this.questionResponseModel.findAndCountAll({
+        ...sequelizeFilters,
+        attributes
+      });
       return {
         questionresponses: result.rows,
         totalCount: result.count

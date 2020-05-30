@@ -42,13 +42,18 @@ export function generateSequelizeFilters(
 ): object {
   const filters = {
     where: {},
-    include: []
+    include: [],
+    group: null
   };
   if (!reqQuery) {
     return null;
   }
+  console.log(reqQuery);
   Object.keys(reqQuery).forEach((key) => {
     const sequelizeFilter = sequelizeFilters[key](reqQuery[key]);
+    if (key === 'filters') {
+      filters['include'].push(...sequelizeFilter);
+    }
     Object.keys(sequelizeFilter).forEach((filterKey) => {
       switch (filterKey) {
         case 'where':
@@ -57,9 +62,12 @@ export function generateSequelizeFilters(
             ...sequelizeFilter[filterKey]
           };
           break;
-
         case 'include':
           filters['include'].push(...sequelizeFilter[filterKey]);
+          break;
+        case 'group':
+          filters['group'].push(...sequelizeFilter[filterKey]);
+        default:
           break;
       }
     });

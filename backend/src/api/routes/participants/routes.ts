@@ -46,7 +46,7 @@ export default (app) => {
 
   route.get(
     '/deletethis',
-    middlewares.blockRoute,
+    // middlewares.blockRoute,
     async (req: Request, res: Response, next: NextFunction) => {
       const discordService = Container.get(DiscordClient);
       await discordService.CreateEmojis();
