@@ -10,32 +10,39 @@ export class QuestionResponseFilters {
   questionId?: string;
 
   /**
-   * Identifier for a question
+   * Identifier for a experiment
    */
   @Expose()
   @IsString()
   experimentId?: string;
 
   /**
-   * Identifier for a question
+   * Identifier for a response
    */
   @Expose()
   @IsString()
   responseId?: string;
 
   /**
-   * Identifier for a question
+   * Identifier for a survey
    */
   @Expose()
   @IsString()
   surveyId?: string;
 
   /**
-   * Identifier for a question
+   * Identifier for a participant
    */
   @Expose()
   @IsString()
   participantId?: string;
+
+  /**
+   * The attribute to group responses by (usually equals "surveyId" to look at changes in data over the course of every survey)
+   */
+  @Expose()
+  @IsOptional()
+  group?: string[];
 
   @Expose()
   @IsOptional()
@@ -70,4 +77,8 @@ export class QuestionResponseFilter {
   @Expose()
   @IsString()
   not: boolean;
+
+  @Expose()
+  @IsOptional()
+  value: any;
 }

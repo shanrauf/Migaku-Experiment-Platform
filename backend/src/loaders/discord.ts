@@ -95,7 +95,7 @@ export default async (): Promise<Discord.Client> => {
        * TODO: Use a Redis store for persistence in the case of server restarts
        */
       if (process.env.NODE_ENV === 'production') {
-        setInterval(() => MIADiscordMembersPruneJob(bot), pruneJobInterval);
+        // setInterval(() => MIADiscordMembersPruneJob(bot), pruneJobInterval);
         logger.info('MIA Discord Patreon prune job initialized.');
       }
     });

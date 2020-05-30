@@ -122,6 +122,45 @@ export default class QuestionResponseService {
     }
   }
 
+  /**
+   * Returns the average response to a question for every survey
+   */
+  public async GetAverageQuestionResponses(
+    filters?: requests.QuestionResponseFilters
+  ): Promise<responses.IQuestionResponses> {
+    try {
+      this.logger.silly('Fetching question responses');
+      const sequelizeFilters = generateSequelizeFilters(
+        this.sequelizeFilters,
+        filters
+      );
+      const question = await this.questionModel.findByPk(filters.questionId);
+      const dataType = 'answer' + capitalize(question.dataType);
+      const attributes: any = [
+        dataType,
+        this.sqlConnection.Sequelize.fn(
+          'AVG',
+          this.sqlConnection.Sequelize.col(dataType)
+        )
+      ];
+      sequelizeFilters['group'] = ['surveyId'];
+      const result = await this.questionResponseModel.findAndCountAll({
+        ...sequelizeFilters,
+        attributes
+      });
+      return {
+        questionresponses: result.rows,
+        totalCount: result.count
+      };
+    } catch (e) {
+      this.logger.error(e);
+      throw e;
+    }
+  }
+
+  /**
+   * Returns the occurences of every possible answer for the question.
+   */
   public async GetQuestionDistribution(
     filters?: requests.QuestionResponseFilters
   ): Promise<responses.IQuestionResponses> {
@@ -148,7 +187,8 @@ export default class QuestionResponseService {
         attributes
       });
       return {
-        questionresponses: result.rows,
+        // questionresponses: result.rows,
+        questionresponses: [],
         totalCount: result.count
       };
     } catch (e) {

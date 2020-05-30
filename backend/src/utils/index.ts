@@ -66,7 +66,12 @@ export function generateSequelizeFilters(
           filters['include'].push(...sequelizeFilter[filterKey]);
           break;
         case 'group':
-          filters['group'].push(...sequelizeFilter[filterKey]);
+          if (!filters?.group) {
+            filters.group = sequelizeFilter[filterKey];
+          } else {
+            filters['group'].concat(sequelizeFilter[filterKey]);
+          }
+          break;
         default:
           break;
       }
