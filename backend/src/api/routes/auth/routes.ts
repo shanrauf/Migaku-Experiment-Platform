@@ -30,7 +30,9 @@ export default (app: Router) => {
     passport.authenticate('oauth2'),
     (req: Request, res: Response, next: NextFunction) => {
       try {
+        // @ts-ignore
         if (req.query.state?.includes('redirect')) {
+          // @ts-ignore
           const redirectUrl = decodeURIComponent(req.query.state.split('=')[1]);
           res.status(301).redirect(redirectUrl);
         } else {

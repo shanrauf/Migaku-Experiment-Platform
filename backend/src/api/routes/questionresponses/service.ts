@@ -66,33 +66,6 @@ export default class QuestionResponseService {
         return {
           group: [group]
         };
-      },
-      filters: (arrayOfFilters: any[]) => {
-        const arrayOfSequelizeFilters = [];
-        arrayOfFilters.forEach((filter) => {
-          const operator = Op[filter.operator];
-          const result = {
-            include: [
-              {
-                model: this.participantModel,
-                required: true,
-                where: {
-                  questionId: filter.questionId,
-                  [operator]: { [filter.dataType]: filter.value }
-                }
-              }
-            ]
-          };
-
-          if (filter?.not) {
-            // wrap the filter in NOT
-            // @ts-ignore
-            result.include[0].where = { [Op.not]: [result.include[0].where] };
-          }
-
-          arrayOfSequelizeFilters.push(result);
-        });
-        return arrayOfSequelizeFilters;
       }
     };
   }

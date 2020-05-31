@@ -96,7 +96,7 @@ export default async (): Promise<Discord.Client> => {
        */
       if (process.env.NODE_ENV === 'production') {
         // setInterval(() => MIADiscordMembersPruneJob(bot), pruneJobInterval);
-        logger.info('MIA Discord Patreon prune job initialized.');
+        // logger.info('MIA Discord Patreon prune job initialized.');
       }
     });
 

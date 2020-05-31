@@ -48,12 +48,8 @@ export function generateSequelizeFilters(
   if (!reqQuery) {
     return null;
   }
-  console.log(reqQuery);
   Object.keys(reqQuery).forEach((key) => {
     const sequelizeFilter = sequelizeFilters[key](reqQuery[key]);
-    if (key === 'filters') {
-      filters['include'].push(...sequelizeFilter);
-    }
     Object.keys(sequelizeFilter).forEach((filterKey) => {
       switch (filterKey) {
         case 'where':

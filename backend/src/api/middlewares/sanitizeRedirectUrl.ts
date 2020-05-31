@@ -19,7 +19,7 @@ const sanitizeRedirectUrl = (
   next: NextFunction
 ): void => {
   if ('redirect' in req.query) {
-    const { host, href } = new URL(req.query.redirect);
+    const { host, href } = new URL(req.query.redirect as any);
 
     if (hostWhitelist.includes(host)) {
       return next();

@@ -40,6 +40,7 @@ const validateRequestSchema = (reqQueryClass?, reqBodyClass?) => {
         /**
          * Removes undefined key-value pairs from above.
          */
+        // @ts-ignore
         req.query = classToPlain(query);
         Object.keys(req.query).forEach((key) =>
           req.query[key] === undefined ? delete req.query[key] : {}

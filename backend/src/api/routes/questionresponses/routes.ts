@@ -4,6 +4,7 @@ import { Container } from 'typedi';
 import QuestionResponseService from './service';
 import middlewares from '../../middlewares';
 import * as requests from './requests';
+import logger from '../../../loaders/logger';
 
 const route = Router();
 
@@ -25,7 +26,7 @@ export default (app) => {
       try {
         const questionResponseService = Container.get(QuestionResponseService);
         const payload = await questionResponseService.GetQuestionResponses(
-          filters
+          filters as any
         );
         if (!payload) {
           return res.status(404);
@@ -40,19 +41,20 @@ export default (app) => {
   route.get(
     '/distribution',
     // middlewares.ensureAdmin,
-    middlewares.validateRequestSchema(
-      requests.QuestionResponseFilters,
-      undefined
-    ),
+    // middlewares.validateRequestSchema(
+    //   requests.QuestionResponseFilters,
+    //   undefined
+    // ),
     async (req: Request, res: Response, next: NextFunction) => {
       const filters = { ...req.query };
       if (req.body?.filters?.length) {
         filters['filters'] = req.body.filters;
       }
+      logger.silly(filters);
       try {
         const questionResponseService = Container.get(QuestionResponseService);
         const payload = await questionResponseService.GetQuestionDistribution(
-          filters
+          filters as any
         );
         if (!payload) {
           return res.status(404);
@@ -79,7 +81,7 @@ export default (app) => {
       try {
         const questionResponseService = Container.get(QuestionResponseService);
         const payload = await questionResponseService.GetAverageQuestionResponses(
-          filters
+          filters as any
         );
         if (!payload) {
           return res.status(404);
