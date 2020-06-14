@@ -43,7 +43,8 @@ export function generateSequelizeFilters(
   const filters = {
     where: {},
     include: [],
-    group: null
+    group: null,
+    order: null
   };
   if (!reqQuery) {
     return null;
@@ -66,6 +67,14 @@ export function generateSequelizeFilters(
             filters.group = sequelizeFilter[filterKey];
           } else {
             filters['group'].concat(sequelizeFilter[filterKey]);
+          }
+          break;
+        case 'order':
+          // order is an array of arrays
+          if (!filters?.order) {
+            filters.order = sequelizeFilter[filterKey];
+          } else {
+            filters['order'].push(...sequelizeFilter[filterKey]);
           }
           break;
         default:

@@ -16,7 +16,7 @@ import * as requests from './requests';
 import * as responses from './responses';
 
 // Bad; not dependecy injection
-import { Op } from 'sequelize';
+const { QueryTypes } = require('sequelize');
 
 @Service()
 export default class QuestionResponseService {
@@ -111,12 +111,15 @@ export default class QuestionResponseService {
       const dataType = 'answer' + capitalize(question.dataType);
       const attributes: any = [
         dataType,
-        this.sqlConnection.Sequelize.fn(
-          'AVG',
-          this.sqlConnection.Sequelize.col(dataType)
-        )
+        [
+          this.sqlConnection.Sequelize.fn(
+            'AVG',
+            this.sqlConnection.Sequelize.col(dataType)
+          ),
+          dataType
+        ]
       ];
-      sequelizeFilters['group'] = ['surveyId'];
+      // sequelizeFilters['group'] = ['surveyId'];
       const result = await this.questionResponseModel.findAndCountAll({
         ...sequelizeFilters,
         attributes
@@ -134,39 +137,48 @@ export default class QuestionResponseService {
   /**
    * Returns the occurences of every possible answer for the question.
    */
-  public async GetQuestionDistribution(
-    filters?: requests.QuestionResponseFilters
-  ): Promise<responses.IQuestionResponses> {
-    try {
-      this.logger.silly('Fetching question distribution');
-      const sequelizeFilters = generateSequelizeFilters(
-        this.sequelizeFilters,
-        filters
-      );
-
-      const question = await this.questionModel.findByPk(filters.questionId);
-      const dataType = 'answer' + capitalize(question.dataType);
-
-      const attributes: any = [
-        dataType,
-        this.sqlConnection.Sequelize.fn(
-          'COUNT',
-          this.sqlConnection.Sequelize.col(dataType)
-        )
-      ];
-      sequelizeFilters['group'] = [dataType];
-      const result = await this.questionResponseModel.findAndCountAll({
-        ...sequelizeFilters,
-        attributes
-      });
-      return {
-        // questionresponses: result.rows,
-        questionresponses: [],
-        totalCount: result.count
-      };
-    } catch (e) {
-      this.logger.error(e);
-      throw e;
-    }
-  }
+  // public async GetQuestionDistribution(
+  //   filters?: requests.QuestionResponseFilters
+  // ): Promise<responses.IQuestionResponses> {
+  //   try {
+  //     this.logger.silly('Fetching question distribution');
+  //     const acceptableExperiments = [
+  //       'audiovssentencecards',
+  //       'mia-community-census'
+  //     ];
+  //     if (!acceptableExperiments.includes(filters.experimentId)) {
+  //       return {
+  //         questionresponses: [],
+  //         totalCount: 0
+  //       };
+  //     }
+  //     const { experimentId } = filters;
+  //     // const question = await this.questionModel.findByPk(filters.questionId);
+  //     // if (question === null) {
+  //     //   return {
+  //     //     questionresponses: [],
+  //     //     totalCount: 0
+  //     //   };
+  //     // }
+  //     const { questionId } = filters;
+  //     // could be numbers too like 1-5 questions, age, hours in a week questions, etc
+  //     const dataType = 'answerVarchar';
+  //     // const dataType = 'answer' + capitalize(question.dataType);
+  //     this.logger.silly('Executing raw query');
+  //     const queryStr = `SELECT ${dataType}, COUNT(*) as count FROM mia_experiment.QuestionResponses as questionresponses INNER JOIN mia_experiment.Participants as participants ON participants.participantId = questionresponses.participantId WHERE questionId= :questionId AND experimentId= :experimentId GROUP BY ${dataType}`;
+  //     const result = await this.sqlConnection.query(queryStr, {
+  //       replacements: { experimentId, questionId }
+  //     });
+  //     // return {
+  //     //   questionresponses: result[0],
+  //     //   totalCount: result[1]
+  //     // } as any;
+  //     this.logger.silly(queryStr);
+  //     this.logger.silly(result);
+  //     return result[0] as any;
+  //   } catch (e) {
+  //     this.logger.error(e);
+  //     throw e;
+  //   }
+  // }
 }

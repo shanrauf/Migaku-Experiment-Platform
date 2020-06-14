@@ -6,5 +6,5 @@ export default {
   ROOT_API_URL:
     process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
       ? 'http://localhost:3000'
-      : 'https://trials.massimmersionapproach.com'
+      : 'https://trials.massimmersionapproach.com',
 };

@@ -73,16 +73,16 @@ export default {
   service: new Service(),
   components: {
     BaseWave,
-    VueApexCharts
+    VueApexCharts,
   },
   data() {
     return {
       options: {
         title: {
-          text: 'Overall Card Retention'
+          text: 'Overall Card Retention',
         },
         chart: {
-          id: 'vuechart-example'
+          id: 'vuechart-example',
         },
         xaxis: {
           categories: [
@@ -97,32 +97,31 @@ export default {
             'Survey 9',
             'Survey 10',
             'Survey 11',
-            'Survey 12'
-          ]
-        }
+            'Survey 12',
+          ],
+        },
       },
       series: [
         {
           name: 'Audio',
-          data: this.$options.service.testData()['avgAudioRetention']
+          data: this.$options.service.testData()['avgAudioRetention'],
         },
         {
           name: 'Text',
-          data: this.$options.service.testData()['avgSentenceRetention']
-        }
-      ]
+          data: this.$options.service.testData()['avgSentenceRetention'],
+        },
+      ],
     };
   },
   methods: {
     loginWithDiscord() {
-      window.location.replace(
-        `${config.ROOT_API_URL}/api/auth/discord?redirect=${config.ROOT_FRONTEND_URL}/dashboard`
-      );
+      const authUrl = `${config.ROOT_API_URL}/api/auth/discord?redirect=${config.ROOT_FRONTEND_URL}/dashboard`;
+      window.location.replace(authUrl);
     },
     goTo(link) {
       this.$router.push(link);
-    }
-  }
+    },
+  },
 };
 </script>
 
