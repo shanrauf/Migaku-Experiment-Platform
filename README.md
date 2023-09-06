@@ -1,6 +1,6 @@
-# MIA Experiment
+# Migaku Experiment Platform
 
-Platform for Migaku (previously Mass Immersion Approach, or MIA) to manage foreign language learning experiments.
+Platform for Migaku (previously Mass Immersion Approach, or M.I.A.) to manage foreign language learning experiments.
 
 ## Features
 
@@ -8,7 +8,7 @@ Platform for Migaku (previously Mass Immersion Approach, or MIA) to manage forei
 - Backend  enables concurrent experiments, Anki integration to collect/analyze user card collections, and data analysis across experiments/surveys
 - Discord integration for authentication (allows for restricting experiment participation to members of the Discord community)
 
-## Selected Images
+## Selected Media
 
 ### High-level MySQL Schema
 
@@ -24,6 +24,9 @@ Platform for Migaku (previously Mass Immersion Approach, or MIA) to manage forei
 
 ![MIA Community Census Survey](public/census.png)
 
+### Anki Integration Usage Guide (YouTube Video)
+
+[![Watch the video](https://img.youtube.com/vi/707qS5O7BHY/default.jpg)](https://youtu.be/707qS5O7BHY)
 
 ## Development Environment Setup
 
