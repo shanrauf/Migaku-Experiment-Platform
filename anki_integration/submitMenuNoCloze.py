@@ -1,0 +1,367 @@
+# -*- coding: utf-8 -*-
+# 
+from os.path import  join, dirname
+import re
+import aqt
+from anki.hooks import addHook, wrap
+from aqt import mw
+import anki.find
+from aqt.qt import QAction
+from aqt.utils import showInfo, shortcut
+from aqt.qt import *
+import json
+from . import Pyperclip
+from datetime import datetime
+from aqt.browser import DataModel
+import time
+from anki.sched import Scheduler
+import anki.schedv2
+import math
+from .miutils import miInfo, miAsk
+import anki.find
+import json
+from .accentExporter import AccentDictionaryParser
+import requests 
+
+
+class SubmitGui(QWidget):
+    def __init__(self, mw, path, processor):
+        super(SubmitGui, self).__init__()
+        self.mw = mw
+        self.path = path
+        self.processor = processor
+        self.tabs = QTabWidget()
+        self.layout = QVBoxLayout()
+        self.layout.addWidget(self.tabs)
+        self.setWindowIcon(QIcon(join(self.path, 'icons', 'mia.png')))
+        self.setWindowTitle("Anki Stats Processer")
+        self.setLayout(self.layout)
+        self.initTooltips()
+        self.decksNoteCard = self.getNoteCardByDeck()
+        self.guideTab = self.getGuideTab()
+        self.submitTab = self.getSubmitTab()
+        self.tabs.addTab(self.guideTab, "Instructions")
+        self.tabs.addTab(self.submitTab, "Submit Stats")
+        self.initHandlers()
+        self.cardTypeRows = []
+        self.setMinimumSize(700,500)
+        self.show()
+
+    def initTooltips(self):
+        pass
+
+    def getConfig(self):
+        return self.mw.addonManager.getConfig(__name__)
+        
+    def loadConfig(self):
+        pass
+       
+    def saveConfig(self):
+        pass
+        nc = self.getConfig()
+        self.mw.addonManager.writeConfig(__name__, nc)
+        self.hide()
+        self.mw.refreshMIADictConfig()
+   
+
+
+    def initHandlers(self):
+        pass 
+
+
+    def setupLayout(self):
+        pass
+        groupLayout = QHBoxLayout()
+        dictsLayout = QVBoxLayout()
+        exportsLayout = QVBoxLayout()
+
+
+    def getGuideTab(self):
+        guideTab = QScrollArea(self)
+        return guideTab
+
+    def bold(self, text):
+        return '<b>' + text + '</b>'
+
+    def getHeaderAndIgnoreCheckBox(self, name, deckBox):
+        deckName = 'Deck: ' + name
+        header = QHBoxLayout()
+        header.addWidget(QLabel(self.bold(deckName)))
+        header.addStretch()
+        ignore = QCheckBox('Ignore this deck.')
+        ignore.deckBox = deckBox
+        header.addWidget(ignore)
+        header.setContentsMargins(12,0,12,0)
+        return header, ignore
+
+    def getDeckBox(self, dnc):
+        deckBox = QGroupBox()
+        groupLayout = QVBoxLayout()
+        groupLayout.setContentsMargins(5,5,5,5)
+        header, ignore = self.getHeaderAndIgnoreCheckBox(dnc[0], deckBox)
+        groupLayout.addLayout(header)
+        models = dnc[2]
+        cardTypesRows = [] 
+        for m in models:
+            mName,mid,cardTypes = m
+            ngb = QGroupBox()
+            nvbox = QVBoxLayout()
+            nvbox.setContentsMargins(5,0,5,5)
+            nvbox.addWidget(QLabel(self.bold('Note Type: ' + mName)))
+            for ct in cardTypes:
+                layout, widgets = self.getNoteTypeEntryRow(mName, ct[0], deckBox)
+                nvbox.addLayout(layout)
+                cardTypesRows.append({'widgets': widgets, 'id' : self.getStringDeckNoteCardIds(dnc[1], mid, ct[1])})
+            ngb.setLayout(nvbox)
+            groupLayout.addWidget(ngb)
+        deckBox.rowInfo =  {'ignoreDeck': ignore, 'rows': cardTypesRows}
+        self.cardTypeRows.append(deckBox)
+        deckBox.setLayout(groupLayout)
+        return deckBox
+
+    def getStringDeckNoteCardIds(self, did, mid, cid):
+        return str(did) + '-' + str(mid) + '-'+ str(cid)
+
+    def getNoteTypeEntryRow(self, noteType, cardType, deckBox):
+        layout = QHBoxLayout()
+        widgets = {}
+        layout.setContentsMargins(5,5,5,5)
+        layout.addWidget(QLabel('Card Type: '+ cardType +':'))
+        layout.addWidget(self.getCharGroupBox(widgets, deckBox))
+        layout.addWidget(self.getVocabSentenceGroupBox(widgets, deckBox))
+        layout.addWidget(self.getIgnoreCheckBox(widgets, deckBox))
+        return layout, widgets
+
+    def getIgnoreCheckBox(self, widgets, deckBox):
+        widgets['ignore'] = QCheckBox('Ignore this card type')
+        widgets['ignore'].deckBox = deckBox
+        return widgets['ignore']
+
+    def getVocabSentenceGroupBox(self, widgets, deckBox):
+        gb = QFrame()
+        gb.setStyleSheet('border:1px solid gray; border-radius: 3px; padding:2px;')
+        layout = QHBoxLayout()
+        layout.setContentsMargins(2,2,2,2)
+        widgets['vocab'] = QCheckBox('Vocabulary')
+        widgets['sentence'] = QCheckBox('Sentence')
+        widgets['vocab'].setStyleSheet('border:none;')
+        widgets['sentence'].setStyleSheet('border:none;')
+        widgets['vocab'].deckBox = deckBox
+        widgets['sentence'].deckBox = deckBox
+        layout.addWidget(widgets['vocab'])
+        layout.addWidget(widgets['sentence'])
+        gb.setLayout(layout)
+        return gb
+
+    def getCharGroupBox(self, widgets, deckBox):
+        gb = QFrame()
+        gb.setStyleSheet('border:1px solid gray; border-radius: 3px; padding:2px;')
+        layout = QHBoxLayout()
+        layout.setContentsMargins(2,2,2,2)
+        widgets['recChar'] = QRadioButton('RRTK/RRTH')
+
+        widgets['prodChar'] = QRadioButton('PRTK/PRTH')
+        widgets['recChar'].deckBox = deckBox
+        widgets['prodChar'].deckBox = deckBox
+        widgets['recChar'].setStyleSheet('border:none;')
+        widgets['prodChar'].setStyleSheet('border:none;')
+        layout.addWidget(widgets['recChar'])
+        layout.addWidget(widgets['prodChar'])
+        gb.setLayout(layout)
+        return gb
+
+    def getSubmitTab(self):
+        self.cardTypeRows = []
+        submitTab = QWidget(self)
+        scroller = QScrollArea()
+        scroller.setWidget(submitTab)
+        vBox = QVBoxLayout()
+        for dnc in self.decksNoteCard:
+            if len(dnc[2]) == 0:
+                continue
+            vBox.addWidget(self.getDeckBox(dnc))
+        self.submitStats = QPushButton('Submit Stats')
+        vBox.addWidget(self.submitStats)
+        submitTab.setLayout(vBox)
+        submitTab.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        scroller.setWidgetResizable(True)
+        scroller.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        scroller.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.initDeckNoteCardHandles()
+        return scroller
+
+
+    def beginProcessing(self, cardTypeRows):
+        cardTypeInstructions = {}
+        for deckBox in cardTypeRows:
+            rows = deckBox.rowInfo['rows']
+            for r in rows:
+                ctid = r['id']
+                instructions = self.getRowInstructions(r['widgets'])
+                cardTypeInstructions[ctid] = instructions
+        Pyperclip.copy(json.dumps(cardTypeInstructions))
+        miInfo('processing')
+        self.processor.loopCol(cardTypeInstructions)
+
+
+    def getRowInstructions(self, widgets):
+        recChar, prodChar, vocab, sentence, ignoreRow = self.splitWidgets(widgets)
+        if ignoreRow.isChecked() or (not recChar.isChecked() and not prodChar.isChecked() and not vocab.isChecked() and not sentence.isChecked()):
+            return False
+        else:
+            if recChar.isChecked():
+                return ['RecChar']
+            elif prodChar.isChecked():
+                return ['ProdChar']
+            elif sentence.isChecked() and vocab.isChecked():
+                return ['Vocab', 'Sentence']
+            elif sentence.isChecked():
+                return ['Sentence']
+            elif vocab.isChecked():
+                return ['Vocab']
+        return False
+
+    def initDeckNoteCardHandles(self):
+        ctr = self.cardTypeRows
+        for deckBox in ctr:
+            ignoreDeckCB = deckBox.rowInfo['ignoreDeck']
+            rows = deckBox.rowInfo['rows']
+            ignoreDeckCB.stateChanged.connect(self.deckIgnoreEvent(ignoreDeckCB, rows))
+            self.setDeckRowEvents(rows, ignoreDeckCB)
+            ignoreDeckCB.setChecked(True)
+        self.submitStats.clicked.connect(lambda: self.beginProcessing(ctr))
+
+
+    def setDeckRowEvents(self, rows, ignoreDeck):
+        for r in rows:
+            widgets = r['widgets']
+            recChar, prodChar, vocab, sentence, ignoreRow = self.splitWidgets(widgets)
+            recChar.toggled.connect(self.charEvent(recChar, prodChar, vocab, sentence, ignoreRow, ignoreDeck))
+            prodChar.toggled.connect(self.charEvent(recChar, prodChar, vocab, sentence, ignoreRow, ignoreDeck))
+            vocab.stateChanged.connect(self.vocabEvent(recChar, prodChar, vocab, sentence, ignoreRow, ignoreDeck))
+            sentence.stateChanged.connect(self.sentenceEvent(recChar, prodChar, vocab, sentence, ignoreRow, ignoreDeck))
+            ignoreRow.stateChanged.connect(self.ignoreRowEvent(recChar, prodChar, vocab, sentence, ignoreRow, ignoreDeck, rows))
+
+
+    def ignoreRowEvent(self, recChar, prodChar, vocab, sentence, ignoreRow, ignoreDeck, rows):
+        return lambda: self.disableAppropriateCheckBoxes(recChar, prodChar, vocab, sentence, ignoreRow, ignoreDeck, rows)
+
+    def disableAppropriateCheckBoxes(self, recChar, prodChar, vocab, sentence, ignoreRow, ignoreDeck, rows):
+        if ignoreRow.isChecked():
+            self.uncheckAll(recChar, prodChar, vocab, sentence)
+            if self.allRowsChecked(rows) and not ignoreDeck.isChecked():
+                ignoreDeck.setChecked(True)
+        else:
+            if not recChar.isChecked() and not prodChar.isChecked() and not vocab.isChecked() and not sentence.isChecked():
+                sentence.setChecked(True)
+
+    def allRowsChecked(self, rows):
+        for r in rows:
+            if not r['widgets']['ignore'].isChecked():
+                return False
+        return True
+
+    def uncheckAll(self, recChar, prodChar, vocab, sentence):
+        vocab.setChecked(False)
+        sentence.setChecked(False)
+        self.uncheckRadioButtons(recChar, prodChar)
+
+
+    def splitWidgets(self, widgets):
+        recChar = widgets['recChar']
+        prodChar = widgets['prodChar']
+        vocab = widgets['vocab']
+        sentence = widgets['sentence']
+        ignoreRow = widgets['ignore']
+        return recChar, prodChar, vocab, sentence, ignoreRow
+
+
+    def sentenceEvent(self, recChar, prodChar, vocab, sentence, ignoreRow, ignoreDeck):
+        return lambda: self.clearIgnoreAndChars(sentence, vocab, recChar, prodChar, ignoreRow, ignoreDeck)
+
+    def vocabEvent(self, recChar, prodChar, vocab, sentence, ignoreRow, ignoreDeck):
+        return lambda: self.clearIgnoreAndChars(vocab, sentence, recChar, prodChar, ignoreRow, ignoreDeck)
+
+    def clearIgnoreAndChars(self, target, other, recChar, prodChar, ignoreRow, ignoreDeck):
+        if target.isChecked():
+            self.uncheckRadioButtons(recChar, prodChar)
+            ignoreRow.setChecked(False)
+            ignoreDeck.setChecked(False)
+        if not target.isChecked() and not other.isChecked() and not recChar.isChecked() and not prodChar.isChecked():
+            ignoreRow.setChecked(True)
+
+    def uncheckRadioButtons(self, recChar, prodChar):
+        recChar.setAutoExclusive(False)
+        prodChar.setAutoExclusive(False)
+        recChar.setChecked(False)
+        prodChar.setChecked(False)
+        recChar.setAutoExclusive(True)
+        prodChar.setAutoExclusive(True)
+
+    def charEvent(self, recChar, prodChar, vocab, sentence, ignoreRow, ignoreDeck):
+        return lambda: self.clearCheckBoxes(recChar, prodChar, vocab, sentence, ignoreRow, ignoreDeck)
+
+    def clearCheckBoxes(self, recChar, prodChar, vocab, sentence, ignoreRow, ignoreDeck):
+        if recChar.isChecked() or prodChar.isChecked():
+            vocab.setChecked(False)
+            sentence.setChecked(False)
+            ignoreRow.setChecked(False)
+            ignoreDeck.setChecked(False)
+
+    def ignoreAllCardTypes(self, cb, rows):
+        if cb.isChecked():
+            for r in rows:
+                r['widgets']['ignore'].setChecked(True)
+
+    def deckIgnoreEvent(self, cb, rows):
+        return lambda: self.ignoreAllCardTypes(cb, rows)
+
+    def getDecks(self):
+        decksRaw = self.mw.col.decks.decks
+        decks = []
+        for did, deck in decksRaw.items():
+            if not deck['dyn']:
+                decks.append([deck['name'], did])
+        return self.getSorted(decks)
+
+    def getNoteCardByDeck(self):
+        decks = self.getDecks()
+        deckNoteCard = []
+        for entry in decks:
+            name, did = entry
+            mids = self.mw.col.db.list("SELECT DISTINCT notes.mid FROM cards INNER JOIN notes ON notes.id=cards.nid WHERE cards.did = " + str(did))
+            modelsCards = self.getNoteCards(mids)
+            deckNoteCard.append([name, did, modelsCards])
+        return deckNoteCard
+    
+    def getSorted(self, unsorted):      
+        unsorted.sort(key=lambda x:x[0].lower())
+        return unsorted
+
+    def getNoteCards(self, mids):
+        modelList = []
+        for mid in mids:
+            model = self.mw.col.models.get(mid)
+            if model:
+                mName = model['name']
+                cardTypes = model['tmpls']
+                cardList = []
+                for ct in cardTypes:
+                    cName = ct['name']
+                    cOrd = ct['ord']
+                    cardList.append([cName, cOrd])
+                    cardList = self.getSorted(cardList)
+                modelList.append([mName, mid, cardList])
+        return self.getSorted(modelList)
+
+    def getCardTypes(self, noteType):
+        pass
+
+    def getIgnoreDeckCB(self):
+        pass
+
+    def getCardTypeOptions(self):
+        pass
+
+    def initCardTypeOptionHandles(self):
+        pass
