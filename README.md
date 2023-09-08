@@ -30,7 +30,7 @@ Platform for Migaku (previously Mass Immersion Approach, or M.I.A.) to manage fo
 
 ## Development Environment Setup
 
-1. `git clone https://github.com/shanrauf/mia-experiment.git`
+1. `git clone https://github.com/shanrauf/Migaku-Experiment-Platform.git`
 2. Ask Shan for .env files
 3. Setup MySQL local server is running (see Shan's config [here](public/shan_mysql_config.png))
 4. `npm run setup` # Installs dependencies, migrates developemt database, etc
