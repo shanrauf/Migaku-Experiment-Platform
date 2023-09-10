@@ -4,9 +4,9 @@ Platform for Migaku (previously Mass Immersion Approach, or M.I.A.) to manage fo
 
 ## Features
 
-- Frontend for experiment participants to register for experiments, complete custom surveys, and view past experiment results
-- Backend  enables concurrent experiments, Anki integration to collect/analyze user card collections, and data analysis across experiments/surveys
-- Discord integration for authentication (allows for restricting experiment participation to members of the Discord community)
+- Front-end for experiment participants to register for experiments, complete custom surveys, and view past experiment results
+- Backend design enables us to run concurrent experiments, re-use surveys across experiments, integrate with software like Anki (to collect/analyze more data, like user card collections), and query data across experiments/surveys for analysis
+- Discord integration allows for restricting experiment participation to members of the Discord community and allows us to programmatically direct-message participants
 
 ## Selected Media
 
@@ -14,7 +14,7 @@ Platform for Migaku (previously Mass Immersion Approach, or M.I.A.) to manage fo
 
 (excluding many-to-many intermediary tables)
 
-![High-level MySQL schema of experimnet platform](public/experiment_platform.png)
+![High-level MySQL schema of experiment platform](public/experiment_platform.png)
 
 ### Audio vs Text Cards Experiment Results
 
@@ -31,13 +31,13 @@ Platform for Migaku (previously Mass Immersion Approach, or M.I.A.) to manage fo
 ## Development Environment Setup
 
 1. `git clone https://github.com/shanrauf/Migaku-Experiment-Platform.git`
-2. Ask Shan for .env files
-3. Setup MySQL local server is running (see Shan's config [here](public/shan_mysql_config.png))
-4. `npm run setup` # Installs dependencies, migrates developemt database, etc
+2. Ask Shan for .env credentials
+3. Setup MySQL local server (see Shan's config [here](public/shan_mysql_config.png))
+4. `npm run setup` # Installs dependencies, migrates development database, etc
 
 ## Develop
 
-To run the frontend or backend cd into the directory, run `npm install` and then `npm start`
+To run the frontend or back-end, enter the relevant directory and run `npm install && npm start`
 
 ## Deploy
 
