@@ -32,18 +32,13 @@ export default {
       socialLinks: [
         {
           icon: '$vuetify.icons.twitter',
-          link: 'https://twitter.com/massimmersion',
+          link: 'https://twitter.com/MigakuOfficial',
           color: '#00acee'
         },
         {
           icon: '$vuetify.icons.youtube',
-          link: 'https://www.youtube.com/user/MATTvsJapan',
+          link: 'https://www.youtube.com/@MigakuOfficial',
           color: '#c4302b'
-        },
-        {
-          icon: '$vuetify.icons.facebook',
-          link: 'https://www.facebook.com/MassImmersionApproach/',
-          color: '#3b5998'
         }
       ]
     };

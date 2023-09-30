@@ -46,19 +46,6 @@
         </div>
       </div>
     </section>
-
-    <section class="signup-section">
-      <h1 class="signup-title">
-        Sign up for an experiment now!
-      </h1>
-      <BaseButton
-        color="#7289DA"
-        backgroundColor="#7289DA"
-        rounded
-        @click="loginWithDiscord"
-        ><span style="color: #ffffff">Sign In With Discord</span></BaseButton
-      >
-    </section>
   </div>
 </template>
 
