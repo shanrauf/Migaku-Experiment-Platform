@@ -54,16 +54,7 @@ export default {
   },
   methods: {
     onSubmit() {
-      if (!Object.values(this.validForm).every(val => !!val)) {
-        Vue.notify({
-          group: 'global',
-          title: 'Failed to submit',
-          text:
-            'Check your answers to see if there is an error. Otherwise, directly message @Shan on Discord'
-        });
-      } else {
-        let result = this.$store.dispatch('submitSurvey');
-      }
+      this.$store.dispatch('submitSurvey');
     }
   }
 };

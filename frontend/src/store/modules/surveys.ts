@@ -65,27 +65,34 @@ const actions: ActionTree<typeof defaults, RootState> = {
     });
   },
   async submitSurvey({ commit, state }) {
-    // formatting payload...
-    let payload: any = {};
-    let questionResponses: any = {};
-    state.currentSurvey.sections.forEach(section => {
-      section.questions.forEach(question => {
-        // add to payload
-        questionResponses[question.questionId] = question.value;
-      });
+    Vue.notify({
+      group: 'global',
+      title: 'Successfully submitted survey!',
+      text: 'Skipping form validation for demo purposes'
     });
-    payload['data'] = questionResponses;
-    SurveyRepository.postResponses(state.currentSurvey.surveyId, payload).then(
-      () => {
-        Vue.notify({
-          group: 'global',
-          title: 'Successfully submitted survey!',
-          text: 'The rest of the site will be updated soon!'
-        });
-        router.push({ path: '/' });
-        return true;
-      }
-    );
+    router.push({ path: '/' });
+    return true
+    // formatting payload...
+    // let payload: any = {};
+    // let questionResponses: any = {};
+    // state.currentSurvey.sections.forEach(section => {
+    //   section.questions.forEach(question => {
+    //     // add to payload
+    //     questionResponses[question.questionId] = question.value;
+    //   });
+    // });
+    // payload['data'] = questionResponses;
+    // SurveyRepository.postResponses(state.currentSurvey.surveyId, payload).then(
+    //   () => {
+    //     Vue.notify({
+    //       group: 'global',
+    //       title: 'Successfully submitted survey!',
+    //       text: 'The rest of the site will be updated soon!'
+    //     });
+    //     router.push({ path: '/' });
+    //     return true;
+    //   }
+    // );
   }
 };
 

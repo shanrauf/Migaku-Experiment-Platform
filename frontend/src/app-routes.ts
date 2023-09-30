@@ -58,9 +58,9 @@ routes.forEach(route => {
     store.dispatch('common/updateLayout', route.meta.layout);
 
     // Auth navigation guard.
-    if (!route.meta.isPublic) {
-      return guardRoute(to, from, next);
-    }
+    // if (!route.meta.isPublic) {
+    //   return guardRoute(to, from, next);
+    // }
 
     next();
   };

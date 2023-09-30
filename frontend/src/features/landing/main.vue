@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import BaseWave from './components/BaseWave.vue';
 import Service from './service';
 import VueApexCharts from 'vue-apexcharts';
@@ -115,9 +116,16 @@ export default {
   },
   methods: {
     loginWithDiscord() {
-      window.location.replace(
-        `${config.ROOT_API_URL}/api/auth/discord?redirect=${config.ROOT_FRONTEND_URL}/dashboard`
-      );
+      this.$router.push('/experiments/mia-community-census/surveys/g6cy8p0yrmnclxyv6co2o')
+      Vue.notify({
+          group: 'global',
+          title: 'Login Disabled',
+          text:
+            'Here is a sample survey from 2020 (for demo purposes)'
+        });
+      // window.location.replace(
+      //   `${config.ROOT_API_URL}/api/auth/discord?redirect=${config.ROOT_FRONTEND_URL}/dashboard`
+      // );
     },
     goTo(link) {
       this.$router.push(link);

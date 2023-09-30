@@ -1,7 +1,7 @@
 <template>
   <div class="article-container">
     <div>
-      <router-link to="/dashboard">Back To Dashboard</router-link>
+      <router-link to="/">Back To Homepage</router-link>
     </div>
     <h1 class="article-title">Audio vs. Text Cards Experiment Results</h1>
     <div class="article-content">
