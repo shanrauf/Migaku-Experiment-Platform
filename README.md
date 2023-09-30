@@ -2,6 +2,10 @@
 
 Platform for Migaku (previously Mass Immersion Approach, or M.I.A.) to manage foreign language learning experiments.
 
+## Demo
+
+- See demo here: https://migaku-experiment-platform.netlify.app/
+
 ## Features
 
 - Front-end for experiment participants to register for experiments, complete custom surveys, and view past experiment results
